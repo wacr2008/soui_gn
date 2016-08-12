@@ -1,0 +1,9 @@
+gn demo 
+
+1.windows vs2013 测试OK
+2.支持yasm，但暂不支持调用系统的yasm，也许后续有空会支持
+3.有两个例子，分别为
+  gndemo
+  包含完整的gn测试样例。
+  soui_gn
+  包含soui的gn脚本。考虑到google已开始在用gn替换gyp，此项目也将完全不再使用gyp。

@@ -1,0 +1,89 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//build/config/android/config.gni")
+import("//build/config/arm.gni")
+import("//build/config/features.gni")
+import("//build/config/linux/pkg_config.gni")
+import("../../build/app.gni") 
+ 
+if (current_cpu == "x86" || current_cpu == "x64") {
+  import("//third_party/yasm/yasm_assemble.gni")
+  yasm_assemble("misc_yasm") {
+    sources = [
+      "colorspace_rgb_mmx.asm",
+      "colorspace_yuyv_mmx.asm", 
+      "cpuid.asm", 
+    ]
+ 
+
+    yasm_flags = [
+      "-DCHROMIUM",
+
+      # In addition to the same path as source asm, let yasm %include
+      # search path be relative to src/ per Chromium policy.
+      "-I",
+      rebase_path("..", root_build_dir),
+    ]
+
+    if (is_component_build) {
+      yasm_flags += [ "-DEXPORT_SYMBOLS" ]
+    }
+
+    inputs = [
+      "colorspace_mmx.inc",
+      "nasm.inc",
+    ]
+
+    if (current_cpu == "x86") {
+      yasm_flags += [ "-DARCH_X86_32" ]
+    } else if (current_cpu == "x64") {
+      yasm_flags += [ "-DARCH_X86_64" ] 
+    }
+
+    if (is_mac || is_ios) {
+      yasm_flags += [
+        "-DPREFIX",
+        "-DMACHO",
+      ]
+    } else {
+      if (is_posix) {
+        yasm_flags += [ "-DELF" ]
+        if (current_cpu == "x64") {
+          # TODO(ajwong): Why isn't this true in mac?
+          yasm_flags += [ "-DPIC" ]
+        }
+      }
+    }
+  }
+}
+
+ 
+static_library("misc") {
+  deps = [
+      ":misc_yasm",
+    ]
+
+  sources = [ 
+    "dllmain.cpp",
+    "colorspace.c", 
+    "emms.c", 
+    "sqlite3.c", 
+    "stb_image.c",
+  ]
+
+  allow_circular_includes_from = []
+  defines  = [  "BASE_IMPLEMENTATION",
+                "ARCH_IS_32BIT",
+                "ARCH_IS_IA32",
+                "_CRT_NON_CONFORMING_SWPRINTFS",
+                "_CRT_SECURE_NO_WARNINGS",
+                "__STDC_CONSTANT_MACROS",
+                "_DYNAMIC_LOAD_LOG_LIBRARY_",
+                "COMPONENT_BUILD", ]
+  
+  libs = []  
+   
+}  
+ 

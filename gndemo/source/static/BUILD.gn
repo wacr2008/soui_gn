@@ -1,0 +1,8 @@
+import("../../build/app.gni")
+   
+static_library("hello_static") {
+  sources = [
+    "hello_static.cc",
+    "hello_static.h",
+  ]
+}

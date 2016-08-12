@@ -1,0 +1,53 @@
+This document contains instructions to recreate this archive.
+
+Overview:
+- First python is installed.
+- The necessary system dlls are copied into the python27 directory.
+- Then easy-install, pip, pywin32 and psutil are installed.
+- Cleanup to reduce package size.
+- Packaging and cleanup.
+
+Exact steps:
+- http://www.python.org/download, chose "Python 2.7.5 Windows Installer"
+  - Install for all uses, deselect "Tcl/Tk", "Documentation", "Test suite"
+- http://www.dependencywalker.com, load python.exe into depends.exe to figure
+  which dependencies are needed
+  - Copy c:\windows\syswow64\python27.dll to c:\python27
+  - Copy c:\windows\winsxs\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.6161_none_50934f2ebcb7eb57\MSVCR90.DLL
+    to c:\python27. Note the exact path may change in the future.
+- http://www.pip-installer.org/en/latest/installing.html#python-os-support
+  Exact url was https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
+  - Run "c:\python27\python ez_setup.py" under Elevated prompt (run as admin)
+- Download pip from https://github.com/pypa/pip/tree/master/contrib
+  Exact url is https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+  - Run "c:\python27\python.exe get-pip.py" under Elevated prompt (run as admin)
+- Take latest build at http://sourceforge.net/projects/pywin32/files/pywin32/
+  Exact url is http://sourceforge.net/projects/pywin32/files/pywin32/Build%20218/pywin32-218.win32-py2.7.exe/download
+  - Choose pywin32-218.win32-py2.7.exe and run it.
+  - Move c:\python27\Lib\site-packages\pywin32_system32 back to c:\python27
+- Install psutil from pypi; https://pypi.python.org/pypi?:action=display&name=psutil#downloads
+  Exact url is https://pypi.python.org/packages/2.7/p/psutil/psutil-1.1.3.win32-py2.7.exe#md5=98d2fb34eed500d2eb52ed09c87234ba
+  - Run it.
+- Copy this file (README.chromium) into C:\python27
+- Copy python.exe to python_slave.exe; chromium specific for buildbot slaves
+- Delete psutil-wininst.log, pywin32-wininst.log, Removepsutil.exe,
+  Removepywin32.exe, w9xpopen.exe.
+- Delete lib\test, lib\lib-tk, lib\site-packages\PyWin32.chm
+- Run "del /s c:\python27\*.pyc"
+- For each script in c:\python27\Scripts\*.py:
+  - Replace the shebang with "#!python.exe" to remove the absolute path.
+- Copy (not rename) c:\python27 to python276_bin somewhere else and use Windows
+  Explorer to compress the directory
+- Control Panel, Programs and Features, uninstall:
+  - Python 2.7 psutil (it'll fail but it's fine)
+  - Python 2.7 pywin32 (it'll fail but it's fine)
+  - Python 2.7.6
+- Delete all files starting with python in c:\windows\syswow64.
+  - Watch out to not mess your installation up.
+- Delete c:\python27
+- Make sure it works, go in your copy and run:
+  - python -c "import win32api, psutil"
+
+If running on a vanilla Windows XP installation, the
+"Microsoft Visual C++ 2008 Redistributable Package (x86)" must be installed.
+https://microsoft.com/download/details.aspx?id=29

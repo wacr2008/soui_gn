@@ -1,0 +1,11 @@
+import("../../build/app.gni")
+ 
+
+shared_library("hello_shared") {
+  sources = [
+    "hello_shared.cc",
+    "hello_shared.h",
+  ]
+
+  defines = [ "HELLO_SHARED_IMPLEMENTATION" ]
+} 

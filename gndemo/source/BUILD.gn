@@ -1,0 +1,12 @@
+# gn demo
+
+import("../build/app.gni")
+
+group("App") {
+  deps = [
+    "misc:misc",
+    "app:hello",
+    "static:hello_static",
+    "shared:hello_shared",
+  ] 
+}

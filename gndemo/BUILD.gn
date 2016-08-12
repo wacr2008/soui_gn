@@ -1,0 +1,10 @@
+# gn demo
+
+import("./build/app.gni")
+
+group("All") {
+
+  deps = ["//source:App",
+         ]   
+}
+ 
