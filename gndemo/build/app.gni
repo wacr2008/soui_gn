@@ -89,6 +89,10 @@ declare_args() {
     rtc_use_openmax_dl = false
   }
 
+
+  # Use system yasm instead of bundled one.
+  use_system_yasm = false
+
   # Determines whether NEON code will be built.
   rtc_build_with_neon =
       (current_cpu == "arm" && arm_use_neon) || current_cpu == "arm64"

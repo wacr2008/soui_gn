@@ -17,7 +17,6 @@ if (current_cpu == "x86" || current_cpu == "x64") {
       "cpuid.asm", 
     ]
  
-
     yasm_flags = [
       "-DCHROMIUM",
 
@@ -32,6 +31,7 @@ if (current_cpu == "x86" || current_cpu == "x64") {
     }
 
     inputs = [
+      rebase_path("//", root_build_dir) +"third_party/yasm/binaries/win/yasm.exe",
       "colorspace_mmx.inc",
       "nasm.inc",
     ]
