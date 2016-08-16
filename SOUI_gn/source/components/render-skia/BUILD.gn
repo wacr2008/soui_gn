@@ -1,0 +1,46 @@
+import("//build/common.gni")
+ 
+
+component("render-skia") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+    #include files  
+    "drawtext-skia.h",
+    "render-skia.h",
+    "render-skia2-i.h",
+    "render-skia2.h",
+    "skia2rop2.h",
+    
+    #source files 
+    "drawtext-skia.cpp",
+    "render-skia.cpp",
+    "render-skia2.cpp",
+    "skia2rop2.cpp",
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+    "../../third-part/skia",
+    "../../third-part/skia/include",
+    "../../third-part/skia/include/config",
+    "../../third-part/skia/include/core",
+  ]
+
+  deps = [ 
+    "../../utilities",
+    "../../third-part/skia",
+  ]
+
+  libs = ["Opengl32.lib",]
+
+  if (is_component_build) {
+     sources += [ "render-skia.rc",]
+  }
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 

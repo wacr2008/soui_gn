@@ -1,0 +1,17 @@
+
+import("//build/common.gni")
+
+group("components") {
+  deps = [
+    "imgdecoder-gdip",
+    "imgdecoder-png",
+    "imgdecoder-stb",
+    "imgdecoder-wic",
+    "log4z",
+    "render-gdi",
+    "render-skia",
+    "resprovider-zip",
+    "ScriptModule-LUA",
+    "translator",
+  ] 
+}

@@ -1,0 +1,21 @@
+import("//build/common.gni")
+ 
+
+static_library("smiley") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+     #include files    
+     "../../controls.extend/smiley/SSmileyCtrl.h",
+     "SSmileyCtrl.cpp",
+  ]
+
+  include_dirs = [
+    ".",
+    "../zlib",
+  ]
+
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 

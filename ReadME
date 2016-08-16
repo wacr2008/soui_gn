@@ -7,3 +7,8 @@ gn demo
   包含完整的gn测试样例。
   soui_gn
   包含soui的gn脚本。考虑到google已开始在用gn替换gyp，此项目也将完全不再使用gyp。
+
+
+
+  1.goto win_toolchain dir, run python package_from_installed.py 2013
+  2.unzip  **.zip to c:\\vs2013_files

@@ -1,0 +1,68 @@
+import("//build/common.gni")
+ 
+
+component("ScriptModule-LUA") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+    #include files  
+    #"src/require.h",
+    "src/ScriptModule-Lua.h",
+    "src/exports/exp_app.h",
+    "src/exports/exp_Basic.h",
+    "src/exports/exp_eventArgs.h",
+    "src/exports/exp_hostwnd.h",
+    "src/exports/exp_msgbox.h",
+    "src/exports/exp_pugixml.h",
+    "src/exports/exp_ResProvider.h",
+    "src/exports/exp_ScriptModule.h",
+    "src/exports/exp_strcpcvt.h",
+    "src/exports/exp_string.h",
+    "src/exports/exp_Window.h",
+    "src/exports/exp_Object.h",
+    "src/exports/exp_ctrls.h",
+    "lua_tinker/lua_tinker.h",
+    
+    #source files 
+    "src/ScriptModule-Lua.cpp",
+    "src/exports/exp_soui.cpp",
+    "lua_tinker/lua_tinker.cpp",
+    
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+    "../../third-part/lua-52/src",
+  ]
+
+  deps = [ 
+    "../../utilities",
+    "../../third-part/lua-52",
+    "../../SOUI",
+  ]
+
+  if (is_component_build) {
+     sources += [ "src/ScriptModule-Lua.rc",]
+
+
+  }
+
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4201",
+    ]
+
+    cflags_cc = [
+      "/EHsc",
+    ]
+  }  
+
+
+  defines = ["_CRT_SECURE_NO_WARNINGS","exports","_USE_UI_LIBRAY"] 
+
+} 

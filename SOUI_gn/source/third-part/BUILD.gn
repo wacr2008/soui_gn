@@ -1,0 +1,12 @@
+import("//build/common.gni")
+
+group("third-part") {
+  deps = [
+    "lua-52",
+    "mhook",
+    "png",
+    "skia",
+    "smiley", 
+    "zlib",
+  ] 
+}

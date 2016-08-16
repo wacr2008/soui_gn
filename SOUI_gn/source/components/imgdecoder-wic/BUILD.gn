@@ -1,0 +1,35 @@
+import("//build/common.gni")
+ 
+
+component("imgdecoder-wic") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+    #include files  
+    "imgdecoder-wic.h",
+    "targetver.h",
+  
+    #source files 
+    "dllmain.cpp",
+    "imgdecoder-wic.cpp",
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../utilities/include",
+    "../../SOUI/include",
+  ]
+
+  deps = [ 
+    "../../third-part/zlib",
+    "../../third-part/png",
+  ]
+
+  if (is_component_build) {
+     sources += [ "imgdecoder-wic.rc",]
+  }
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 

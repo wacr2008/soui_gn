@@ -1,0 +1,46 @@
+import("//build/common.gni")
+ 
+
+static_library("png") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+     #include files    
+     "png.h",
+     "pngconf.h",
+     "pngdebug.h",
+     "pnginfo.h",
+     "pnglibconf.h",
+     "pngpriv.h",
+     "pngstruct.h",
+
+     #source files 
+     "png.c",
+     "pngerror.c",
+     "pngget.c",
+     "pngmem.c",
+     "pngpread.c",
+     "pngread.c",
+     "pngrio.c",
+     "pngrtran.c",
+     "pngrutil.c",
+     "pngset.c",
+     "pngtrans.c",
+     "pngwio.c",
+     "pngwrite.c",
+     "pngwtran.c",
+     "pngwutil.c",
+  ]
+
+  include_dirs = [
+    ".",
+    "../zlib", 
+  ]
+
+  deps = [ 
+    "../../utilities", 
+  ]
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 

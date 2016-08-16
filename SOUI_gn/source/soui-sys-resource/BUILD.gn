@@ -1,0 +1,34 @@
+import("//build/common.gni")
+ 
+
+shared_library("soui-sys-resource") {
+  configs += [ "//build/config:precompiled_headers" ]
+  #configs -= [ "//build/config/win:console" ]
+  #configs += [ "//build/config/win:windowed" ]
+   
+  deps = [
+    "../utilities", 
+  ]
+
+  if (is_debug) {
+    libs = ["msvcrtd.lib"]
+  }
+  else
+  {
+    libs = ["msvcrt.lib"]  
+  }
+
+  sources = [
+    #include files	
+    "soui-sys-resource.rc",
+    "resource.h",
+  ]
+
+  include_dirs = [
+    "./",
+    "../../utilities/include",
+    "../../SOUI/include", 
+  ] 
+
+  defines = [ ]
+} 

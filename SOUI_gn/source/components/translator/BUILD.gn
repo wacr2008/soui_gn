@@ -1,0 +1,36 @@
+import("//build/common.gni")
+ 
+
+component("translator") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+    #include files  
+    "translator.h",
+    "targetver.h",
+    
+    
+    #source files 
+    "dllmain.cpp",
+    "translator.cpp",
+    
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+  ]
+
+  deps = [ 
+    "../../utilities",
+  ]
+
+  if (is_component_build) {
+     sources += [ "translator.rc",]
+  }
+
+  defines = ["_CRT_SECURE_NO_WARNINGS","exports"] 
+
+} 

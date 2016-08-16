@@ -1,0 +1,46 @@
+import("//build/common.gni")
+ 
+
+static_library("zlib") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+     #include files  
+     "crc32.h",
+     "deflate.h",
+     "inffast.h",
+     "inffixed.h",
+     "inflate.h",
+     "inftrees.h",
+     "trees.h",
+     "zconf.h",
+     "zconf.in.h",
+     "zlib.h",
+     "zutil.h",
+     
+     #source files
+     "adler32.c",
+     "compress.c",
+     "crc32.c",
+     "deflate.c",
+     "gzio.c",
+     "infback.c",
+     "inffast.c",
+     "inflate.c",
+     "inftrees.c",
+     "trees.c",
+     "uncompr.c",
+     "zutil.c",
+  ]
+
+  include_dirs = [
+    ".",
+    "../zlib",
+  ]
+
+
+  cflags = ["/wd4131",]
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 

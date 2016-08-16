@@ -1,0 +1,14 @@
+# gn demo
+
+import("//build/common.gni")
+
+group("App") {
+  deps = [
+    "SOUI",
+    "third-part",
+    "components",
+    "soui-sys-resource",
+    "demos",
+    "tools",
+  ] 
+}

@@ -1,0 +1,41 @@
+import("//build/common.gni")
+ 
+
+component("resprovider-zip") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+    #include files  
+    "SResProviderZip.h",
+    "ZipArchive.h",
+      
+    #source files 
+    "cursoricon.cpp",
+    "SResProviderZip.cpp",
+    "zipArchive.cpp",
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../third-part/zlib",
+    "../../utilities/include",
+    "../../third-part/skia",
+    "../../third-part/skia/include",
+    "../../third-part/skia/include/config",
+    "../../third-part/skia/include/core",
+  ]
+
+  deps = [ 
+    "../../utilities",
+    "../../third-part/zlib",
+  ]
+
+  if (is_component_build) {
+     sources += [ "ResProvider-Zip.rc",]
+  }
+
+  defines = ["_CRT_SECURE_NO_WARNINGS","RESPROVIDERZIP_EXPORTS",] 
+
+} 

@@ -1,0 +1,34 @@
+import("//build/common.gni")
+ 
+
+component("imgdecoder-stb") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+    #include files  
+    "imgdecoder-stb.h",
+    "stb_image.h",
+  
+    #source files 
+    "imgdecoder-stb.cpp",
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../utilities/include",
+    "../../SOUI/include",
+  ]
+
+  deps = [ 
+    "../../third-part/zlib",
+    "../../third-part/png",
+  ]
+
+  if (is_component_build) {
+     sources += [ "imgdecoder-stb.rc",]
+  }
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 

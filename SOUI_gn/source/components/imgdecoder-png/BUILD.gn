@@ -1,0 +1,37 @@
+import("//build/common.gni")
+ 
+
+component("imgdecoder-png") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+    #include files 
+    "imgdecoder-png.h",
+    "decoder-apng.h",
+      
+    #source files 
+    "imgdecoder-png.cpp",
+    "decoder-apng.cpp",
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../third-part/zlib",
+    "../../third-part/png",
+    "../../utilities/include",
+    "../../SOUI/include",
+  ]
+
+  deps = [ 
+    "../../third-part/zlib",
+    "../../third-part/png",
+  ]
+
+  if (is_component_build) {
+     sources += [ "imgdecoder-png.rc",]
+  }
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 

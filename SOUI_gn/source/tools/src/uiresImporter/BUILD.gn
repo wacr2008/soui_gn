@@ -1,0 +1,24 @@
+import("//build/common.gni")
+
+ 
+executable("uiresImporter") { 
+  configs += [ "//build/config:precompiled_headers" ]
+ 
+  sources = [
+    #include files
+    "pugixml/pugiconfig.hpp",
+    "XGetopt.h",
+    
+    #source files  
+    "pugixml/pugixml.cpp",
+    "uiresImporter.cpp",
+    "XGetopt.cpp",
+  ]
+
+  defines  = [  "_CONSOLE", ]
+
+  include_dirs = [
+    ".",
+    "./pugixml", 
+  ] 
+}

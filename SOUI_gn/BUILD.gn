@@ -1,0 +1,195 @@
+# gn demo
+
+import("//build/common.gni")
+
+declare_args() {
+   
+}
+
+action("preBuild_360_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_360_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w source/demos/360demo/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
+action("preBuild_360Preview_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_360Preview_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w source/demos/360Preview/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
+
+action("preBuild_demo_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_demo_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w source/demos/demo/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
+
+action("preBuild_mclistview_demo_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_mclistview_demo_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w source/demos/mclistview_demo/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
+action("preBuild_PCManager_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_PCManager_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w source/demos/PCManager/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
+action("preBuild_QQLogin_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_QQLogin_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w source/demos/QQLogin/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
+action("preBuild_SoTool_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_SoTool_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w source/demos/SoTool/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
+action("preBuild_souispy_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_souispy_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w source/demos/souispy/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+ 
+
+group("gen_demo_resource") {
+  deps = [":preBuild_360_resource",
+          ":preBuild_360Preview_resource",
+          ":preBuild_demo_resource",
+          ":preBuild_mclistview_demo_resource",
+          ":preBuild_PCManager_resource",
+          ":preBuild_QQLogin_resource",
+          ":preBuild_SoTool_resource",
+          ":preBuild_souispy_resource",
+         ]  
+}
+
+action("pack_app_dynamic_files") {
+  script = "package.py"
+  outputs = [ "$target_gen_dir/pack_app_dynamic_files.out" ]
+  args = [ rebase_path("package.py", root_build_dir)]
+}
+
+
+action("pack_app_static_files") {
+  script = "package_static.py"
+  outputs = [ "$target_gen_dir/pack_app_static_files.out" ]
+  args = [ rebase_path("package_static.py", root_build_dir)]
+}
+
+group("post_build") {
+  deps = [":pack_app_dynamic_files"]  
+}
+
+group("post_build_static") {
+  deps = [":pack_app_static_files"]  
+}
+
+group("All") {
+  deps = [
+          ":gen_demo_resource",
+          "//source:App",   
+         ]   
+}
+ 

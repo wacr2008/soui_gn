@@ -1,0 +1,29 @@
+import("//build/common.gni")
+
+ 
+executable("uiresbuilder") { 
+  configs -= ["//build/config/win:unicode",]
+  configs += [ "//build/config:precompiled_headers" ]
+ 
+  sources = [
+    #include files
+    "tinyxml/tinystr.h",
+    "tinyxml/tinyxml.h",
+    "XGetopt.h",
+    
+    #source files  
+    "tinyxml/tinystr.cpp",
+    "tinyxml/tinyxml.cpp",
+    "tinyxml/tinyxmlerror.cpp",
+    "tinyxml/tinyxmlparser.cpp",
+    "residbuilder.cpp",
+    "XGetopt.cpp",
+  ]
+
+  defines  = [  "_CONSOLE", ]
+
+  include_dirs = [
+    ".",
+    "./tinyxml", 
+  ] 
+}

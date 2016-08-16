@@ -1,0 +1,51 @@
+import("//build/common.gni")
+ 
+
+executable("360demo") {
+  configs += [ "//build/config:precompiled_headers" ]
+  configs -= [ "//build/config/win:console" ]
+  configs += [ "//build/config/win:windowed" ]
+
+  sources = [
+    #include files  
+    "MainDlg.h",
+    "resource.h",
+    "sanimimg.h",
+    "stabctrl2.h",
+    
+    "360demo.cpp",
+    "MainDlg.cpp",
+    "sanimimg.cpp",
+    "stabctrl2.cpp",
+    
+    "360demo.rc",
+    
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+    "../../components",
+  ]
+
+  deps = [ 
+    "../../utilities",
+    "../../SOUI",
+    "../../third-part",
+    "../../components",
+  ]
+
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4201",
+      "/wd4239",
+    ]
+  }
+ 
+  defines = ["_CRT_SECURE_NO_WARNINGS","_USE_UI_LIBRAY",] 
+
+} 

@@ -1,0 +1,52 @@
+import("//build/common.gni")
+ 
+
+executable("PCManager") {
+  configs += [ "//build/config:precompiled_headers" ]
+  configs -= [ "//build/config/win:console" ]
+  configs += [ "//build/config/win:windowed" ]
+
+  sources = [
+    #include files  
+    "resource.h",
+    "MainDlg.h",
+    "Switch/SSwitch.h",
+    "Toolbox/SToolbox.h",
+      
+    #source files 
+    "PCManager.cpp",
+    "MainDlg.cpp",
+    "Switch/SSwitch.cpp",
+    "Toolbox/SToolbox.cpp",
+    "PCManager.rc",
+    
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+    "../../components",
+  ]
+
+  deps = [ 
+    "../../utilities",
+    "../../SOUI",
+    "../../third-part",
+    "../../components",
+  ]
+ 
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4201",
+      "/wd4239",
+      "/wd4189",
+    ]
+  }
+  
+  defines = ["_CRT_SECURE_NO_WARNINGS","_USE_UI_LIBRAY",] 
+
+
+} 

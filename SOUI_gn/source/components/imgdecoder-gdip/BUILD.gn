@@ -1,0 +1,40 @@
+import("//build/common.gni")
+ 
+
+component("imgdecoder-gdip") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  if (is_win) 
+  {
+    configs -= [ "//build/config/win:nominmax" ]
+  } 
+
+  sources = [
+     #include files    
+     "imgdecoder-gdip.cpp",
+     #source files 
+     "imgdecoder-gdip.h",
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../third-part/zlib",
+    "../../third-part/png",
+    "../../utilities/include",
+    "../../SOUI/include",
+  ]
+
+  deps = [ 
+    "../../third-part/zlib",
+    "../../third-part/png",
+  ]
+
+  if (is_component_build) {
+     sources += [ "imgdecoder-gdip.rc",]
+  }
+
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 

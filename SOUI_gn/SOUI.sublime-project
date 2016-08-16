@@ -1,0 +1,48 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"name": "src",
+			"file_exclude_patterns": [
+			"*.vcproj",
+			"*.vcxproj",
+			"*.sln",
+			"*.gitignore",
+			"*.gitmodules",
+			"*.vcxproj.*"
+			],
+			"folder_exclude_patterns": [
+			   "3rd",
+			   "svncheck", 
+			   "buildtools",
+			   "ipch", 
+			   "out",
+			   "third_party",
+			   ".git",
+			   "Debug",
+			   "Release"
+			]
+		}
+	],
+
+	"build_systems":
+	[
+	    {
+	      "name": "Build App",
+	      "cmd": ["ninja", "-j", "5", "-C", "out/Debug", "All"],
+	      "working_dir": "${project_path}",
+	      "file_regex": "^[.\\\\/]*([a-z]?:?[\\w.\\\\/]+)[(:]([0-9]+)[):]([0-9]+)?:?(.*)$",
+	      "variants": [
+	      	{
+		      "name": "gen_resource",
+		      "cmd": ["ninja", "-j", "5", "-C", "out/Debug", "gen_demo_resource"],
+		    },
+		    {
+		      "name": "pre_build ",
+		      "cmd": ["ninja", "-j", "5", "-C", "out/Debug", "pre_build"],
+		    },
+	      ],
+	    },
+	],
+}

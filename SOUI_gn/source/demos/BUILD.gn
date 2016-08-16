@@ -1,0 +1,15 @@
+
+import("//build/common.gni")
+
+group("demos") {
+  deps = [
+    "360demo",
+    "360Preview",
+    "demo",
+    "mclistview_demo",
+    "PCManager",
+    "QQLogin",
+    "SoTool",
+    "souispy",
+  ] 
+}

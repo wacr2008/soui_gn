@@ -1,0 +1,34 @@
+import("//build/common.gni")
+ 
+
+component("render-gdi") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+    #include files  
+    "GradientFillHelper.h",
+    "render-gdi.h",
+  
+    #source files 
+    "GradientFillHelper.cpp",
+    "render-gdi.cpp",
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../utilities/include",
+    "../../SOUI/include",
+  ]
+
+  deps = [ 
+    "../../utilities",
+  ]
+
+  if (is_component_build) {
+     sources += [ "render-gdi.rc",]
+  }
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 

@@ -1,0 +1,38 @@
+import("//build/common.gni")
+ 
+
+static_library("mhook") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [
+     #include files    
+     "disasm-lib/cpu.h",
+     "disasm-lib/disasm.h",
+     "disasm-lib/disasm_x86.h",
+     "disasm-lib/disasm_x86_tables.h",
+     "disasm-lib/misc.h",
+     "mhook-lib/mhook.h",
+     
+     #source files 
+     "disasm-lib/cpu.c",
+     "disasm-lib/disasm.c",
+     "disasm-lib/disasm_x86.c",
+     "disasm-lib/misc.c",
+     "mhook-lib/mhook.cpp",
+  ]
+
+  include_dirs = [
+    ".",
+    "../../utilities/include",
+    "../../SOUI/include",
+  ]
+
+  cflags = ["/wd4214","/wd4324","/wd4115","/wd4201","/wd4245","/wd4702","/wd4310","/wd4706"]
+
+  deps = [ 
+    "../../utilities", 
+  ]
+
+  defines = ["_CRT_SECURE_NO_WARNINGS",] 
+
+} 
