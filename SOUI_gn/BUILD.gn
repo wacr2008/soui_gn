@@ -166,16 +166,16 @@ group("gen_demo_resource") {
 }
 
 action("pack_app_dynamic_files") {
-  script = "package.py"
+  script = "//package.py"
   outputs = [ "$target_gen_dir/pack_app_dynamic_files.out" ]
-  args = [ rebase_path("package.py", root_build_dir)]
+  args = [ rebase_path("//package.py", root_build_dir)]
 }
 
 
 action("pack_app_static_files") {
-  script = "package_static.py"
+  script = "//package_static.py"
   outputs = [ "$target_gen_dir/pack_app_static_files.out" ]
-  args = [ rebase_path("package_static.py", root_build_dir)]
+  args = [ rebase_path("//package_static.py", root_build_dir)]
 }
 
 group("post_build") {
