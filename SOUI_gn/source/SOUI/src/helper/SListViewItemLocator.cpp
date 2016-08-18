@@ -95,9 +95,13 @@ namespace SOUI
         SASSERT(hItem);
         int idx = Branch2Index(hItem);
         int offset = Branch2Offset(hItem);
-        //BranchInfo &bi = m_itemPosIndex.GetItemRef(hItem);
-        SASSERT(bi.nBranchHei>=position-offset);
+#ifdef DEBUG
+		BranchInfo &bi = m_itemPosIndex.GetItemRef(hItem);
+		SASSERT(bi.nBranchHei >= position - offset);
 
+#endif // DEBUG
+
+        
         int iSeg = idx/SEGMENT_SIZE;
         int nRemain = position - offset;
 

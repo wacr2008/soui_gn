@@ -20,6 +20,16 @@ executable("uiresbuilder") {
     "XGetopt.cpp",
   ]
 
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3. 
+    ]
+  }
+
+
+
+
   defines  = [  "_CONSOLE", ]
 
   include_dirs = [
