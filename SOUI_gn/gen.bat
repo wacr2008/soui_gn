@@ -1,7 +1,7 @@
 call env.bat
 
-call python %~dp0source\config\com_gen.py shared_library 
-call python %~dp0source\config\core_gen.py shared_library 
+call python %~dp0src\config\com_gen.py shared_library 
+call python %~dp0src\config\core_gen.py shared_library 
 
 
 if "%VM_BUILD%" == "" goto devBuild
