@@ -7,6 +7,7 @@ import("//build/config/compiler/compiler.gni")
 import("//build/config/sanitizers/sanitizers.gni")
 import("//build/config/win/visual_studio_version.gni")
 import("//build/toolchain/toolchain.gni")
+import("//build_overrides/build.gni")
 
 assert(is_win)
 
@@ -19,6 +20,32 @@ declare_args() {
 
   # Turn this on to have the linker output extra timing information.
   win_linker_timing = false
+}
+
+config("mtd_runtime") {
+     cflags = [ "/MTd" ]
+}
+ 
+config("mt_runtime") {
+     cflags = [ "/MT" ]
+}
+
+config("mdd_runtime") {
+    ldflags = [
+      "/NODEFAULTLIB:libcmt",
+      "/NODEFAULTLIB:libcmtd",
+    ] 
+
+    cflags = [ "/MDd" ]
+} 
+
+config("md_runtime") {
+    ldflags = [
+      "/NODEFAULTLIB:libcmt",
+      "/NODEFAULTLIB:libcmtd",
+    ] 
+
+    cflags = [ "/MD" ]    
 }
 
 # This is included by reference in the //build/config/compiler config that
@@ -101,8 +128,11 @@ config("compiler") {
   # Ensures that the PDB file contains FIXUP information (growing the PDB file
   # by about 5%) but does not otherwise alter the output binary. This
   # information is used by the Syzygy optimization tool when decomposing the
-  # release image.
-  if (!is_debug && !is_win_fastlink && !is_clang) {
+  # release image. It is enabled for syzyasan builds and opportunistically for
+  # other builds where it is not prohibited (not supported when incrementally
+  # linking, using /debug:fastlink, or building with clang).
+  if (is_syzyasan ||
+      (!is_debug && !is_component_build && !is_win_fastlink && !is_clang)) {
     ldflags = [ "/PROFILE" ]
   }
 
@@ -180,7 +210,6 @@ config("runtime_library") {
     "_ATL_NO_OPENGL",
     "_WINDOWS",
     "CERT_CHAIN_PARA_HAS_EXTRA_FIELDS",
-    "NTDDI_VERSION=0x0A000000",
     "PSAPI_VERSION=1",
     "WIN32",
     "_SECURE_ATL",
@@ -224,6 +253,7 @@ config("runtime_library") {
 # targets need to manually override it for their compiles.
 config("winver") {
   defines = [
+    "NTDDI_VERSION=0x0A000000",
     "_WIN32_WINNT=0x0A00",
     "WINVER=0x0A00",
   ]
@@ -241,9 +271,24 @@ config("sdk_link") {
   } else {
     ldflags = [
       "/MACHINE:X86",
-      "/SAFESEH",  # Not compatible with x64 so use only for x86.
+      #"/SAFESEH",  # Not compatible with x64 so use only for x86.
       "/largeaddressaware",
     ]
+    
+    if(enable_safeseh)
+    {
+     ldflags += [
+      "/SAFESEH",  # Not compatible with x64 so use only for x86.
+      "/EHsc",
+     ]
+    }
+    else
+    {
+      cflags_cc = [
+       
+      ]
+    }
+
     lib_dirs = [
       "$windows_sdk_path\Lib\winv6.3\um\x86",
       "$visual_studio_path\VC\lib",
@@ -261,13 +306,6 @@ config("common_linker_setup") {
     "/ignore:4199",
     "/ignore:4221",
     "/NXCOMPAT",
-
-    # Suggested by Microsoft Devrel to avoid
-    #   LINK : fatal error LNK1248: image size (80000000)
-    #   exceeds maximum allowable size (80000000)
-    # which started happening more regularly after VS2013 Update 4.
-    # Needs to be a bit lower for VS2015, or else errors out.
-    "/maxilksize:0x7ff00000",
   ]
 
   ldflags += [
@@ -319,8 +357,9 @@ config("windowed") {
 incremental_linking_on_switch = [ "/INCREMENTAL" ]
 incremental_linking_off_switch = [ "/INCREMENTAL:NO" ]
 
-# Disable incremental linking for syzyasan
-if (is_debug && !is_syzyasan) {
+# Disable incremental linking for syzyasan, enable for debug builds and all
+# component builds - any builds where performance is not job one.
+if ((is_debug || is_component_build) && !is_syzyasan) {
   default_incremental_linking_switch = incremental_linking_on_switch
 } else {
   default_incremental_linking_switch = incremental_linking_off_switch

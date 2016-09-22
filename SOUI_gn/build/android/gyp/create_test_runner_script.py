@@ -80,7 +80,7 @@ def main(args):
   test_runner_path_args = []
   if args.additional_apk_list:
     args.additional_apks.extend(
-        build_utils.ParseGypList(args.additional_apk_list))
+        build_utils.ParseGnList(args.additional_apk_list))
   if args.additional_apks:
     test_runner_path_args.extend(
         ('--additional-apk', RelativizePathToScript(a))
@@ -123,9 +123,7 @@ def main(args):
   os.chmod(args.script_output_path, 0750)
 
   if args.depfile:
-    build_utils.WriteDepfile(
-        args.depfile,
-        build_utils.GetPythonDependencies())
+    build_utils.WriteDepfile(args.depfile, args.script_output_path)
 
 if __name__ == '__main__':
   sys.exit(main(sys.argv[1:]))

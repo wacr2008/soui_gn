@@ -80,7 +80,7 @@ class LocalDeviceEnvironment(environment.Environment):
                        else None)
     self._device_serial = args.test_device
     self._devices_lock = threading.Lock()
-    self._devices = []
+    self._devices = None
     self._concurrent_adb = args.enable_concurrent_adb
     self._enable_device_cache = args.enable_device_cache
     self._logcat_monitors = []
@@ -93,6 +93,9 @@ class LocalDeviceEnvironment(environment.Environment):
 
   #override
   def SetUp(self):
+    pass
+
+  def _InitDevices(self):
     device_arg = 'default'
     if self._target_devices_file:
       device_arg = device_list.GetPersistentDeviceList(
@@ -149,6 +152,10 @@ class LocalDeviceEnvironment(environment.Environment):
 
   @property
   def devices(self):
+    # Initialize lazily so that host-only tests do not fail when no devices are
+    # attached.
+    if self._devices is None:
+      self._InitDevices()
     if not self._devices:
       raise device_errors.NoDevicesError()
     return self._devices
@@ -171,6 +178,8 @@ class LocalDeviceEnvironment(environment.Environment):
 
   #override
   def TearDown(self):
+    if self._devices is None:
+      return
     @handle_shard_failures_with(on_failure=self.BlacklistDevice)
     def tear_down_device(d):
       # Write the cache even when not using it so that it will be ready the
@@ -188,14 +197,24 @@ class LocalDeviceEnvironment(environment.Environment):
       try:
         m.Stop()
         m.Close()
+        _, temp_path = tempfile.mkstemp()
+        with open(m.output_file, 'r') as infile:
+          with open(temp_path, 'w') as outfile:
+            for line in infile:
+              outfile.write('Device(%s) %s' % (m.adb.GetDeviceSerial(), line))
+        shutil.move(temp_path, m.output_file)
       except base_error.BaseError:
         logging.exception('Failed to stop logcat monitor for %s',
+                          m.adb.GetDeviceSerial())
+      except IOError:
+        logging.exception('Failed to locate logcat for device %s',
                           m.adb.GetDeviceSerial())
 
     if self._logcat_output_file:
       file_utils.MergeFiles(
           self._logcat_output_file,
-          [m.output_file for m in self._logcat_monitors])
+          [m.output_file for m in self._logcat_monitors
+           if os.path.exists(m.output_file)])
       shutil.rmtree(self._logcat_output_dir)
 
   def BlacklistDevice(self, device, reason='local_device_failure'):

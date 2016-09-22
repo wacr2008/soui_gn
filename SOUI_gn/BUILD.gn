@@ -15,7 +15,7 @@ action("preBuild_360_resource") {
   # to pass it.
   args = [
           rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w source/demos/360demo/",
+          "-w src/demos/360demo/",
           "-i uires/uires.idx",
           "-p uires",
           "-r res/soui_res.rc2",
@@ -33,7 +33,7 @@ action("preBuild_360Preview_resource") {
   # to pass it.
   args = [
           rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w source/demos/360Preview/",
+          "-w src/demos/360Preview/",
           "-i uires/uires.idx",
           "-p uires",
           "-r res/soui_res.rc2",
@@ -52,7 +52,7 @@ action("preBuild_demo_resource") {
   # to pass it.
   args = [
           rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w source/demos/demo/",
+          "-w src/demos/demo/",
           "-i uires/uires.idx",
           "-p uires",
           "-r res/soui_res.rc2",
@@ -71,7 +71,7 @@ action("preBuild_mclistview_demo_resource") {
   # to pass it.
   args = [
           rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w source/demos/mclistview_demo/",
+          "-w src/demos/mclistview_demo/",
           "-i uires/uires.idx",
           "-p uires",
           "-r res/soui_res.rc2",
@@ -89,7 +89,7 @@ action("preBuild_PCManager_resource") {
   # to pass it.
   args = [
           rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w source/demos/PCManager/",
+          "-w src/demos/PCManager/",
           "-i uires/uires.idx",
           "-p uires",
           "-r res/soui_res.rc2",
@@ -107,7 +107,7 @@ action("preBuild_QQLogin_resource") {
   # to pass it.
   args = [
           rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w source/demos/QQLogin/",
+          "-w src/demos/QQLogin/",
           "-i uires/uires.idx",
           "-p uires",
           "-r res/soui_res.rc2",
@@ -125,7 +125,7 @@ action("preBuild_SoTool_resource") {
   # to pass it.
   args = [
           rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w source/demos/SoTool/",
+          "-w src/demos/SoTool/",
           "-i uires/uires.idx",
           "-p uires",
           "-r res/soui_res.rc2",
@@ -143,7 +143,7 @@ action("preBuild_souispy_resource") {
   # to pass it.
   args = [
           rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w source/demos/souispy/",
+          "-w src/demos/souispy/",
           "-i uires/uires.idx",
           "-p uires",
           "-r res/soui_res.rc2",
@@ -189,7 +189,7 @@ group("post_build_static") {
 group("All") {
   deps = [
           ":gen_demo_resource",
-          "//source:App",   
+          "//src:App",   
          ]   
 }
  

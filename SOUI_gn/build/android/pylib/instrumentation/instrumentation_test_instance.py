@@ -130,6 +130,8 @@ def GenerateTestResults(
           current_result.SetType(base_test_result.ResultType.SKIP)
         elif current_result.GetType() == base_test_result.ResultType.UNKNOWN:
           current_result.SetType(base_test_result.ResultType.PASS)
+      elif status_code == instrumentation_parser.STATUS_CODE_SKIP:
+        current_result.SetType(base_test_result.ResultType.SKIP)
       else:
         if status_code not in (instrumentation_parser.STATUS_CODE_ERROR,
                                instrumentation_parser.STATUS_CODE_FAILURE):
@@ -393,6 +395,9 @@ class InstrumentationTestInstance(test_instance.TestInstance):
     self._coverage_directory = None
     self._initializeTestCoverageAttributes(args)
 
+    self._store_tombstones = False
+    self._initializeTombstonesAttributes(args)
+
   def _initializeApkAttributes(self, args, error_func):
     if args.apk_under_test:
       apk_under_test_path = args.apk_under_test
@@ -401,6 +406,10 @@ class InstrumentationTestInstance(test_instance.TestInstance):
             constants.GetOutDirectory(), constants.SDK_BUILD_APKS_DIR,
             '%s.apk' % args.apk_under_test)
 
+      # TODO(jbudorick): Move the realpath up to the argument parser once
+      # APK-by-name is no longer supported.
+      apk_under_test_path = os.path.realpath(apk_under_test_path)
+
       if not os.path.exists(apk_under_test_path):
         error_func('Unable to find APK under test: %s' % apk_under_test_path)
 
@@ -408,12 +417,22 @@ class InstrumentationTestInstance(test_instance.TestInstance):
 
     if args.test_apk.endswith('.apk'):
       self._suite = os.path.splitext(os.path.basename(args.test_apk))[0]
+      test_apk_path = args.test_apk
       self._test_apk = apk_helper.ToHelper(args.test_apk)
     else:
       self._suite = args.test_apk
-      self._test_apk = apk_helper.ToHelper(os.path.join(
+      test_apk_path = os.path.join(
           constants.GetOutDirectory(), constants.SDK_BUILD_APKS_DIR,
-          '%s.apk' % args.test_apk))
+          '%s.apk' % args.test_apk)
+
+    # TODO(jbudorick): Move the realpath up to the argument parser once
+    # APK-by-name is no longer supported.
+    test_apk_path = os.path.realpath(test_apk_path)
+
+    if not os.path.exists(test_apk_path):
+      error_func('Unable to find test APK: %s' % test_apk_path)
+
+    self._test_apk = apk_helper.ToHelper(test_apk_path)
 
     self._apk_under_test_incremental_install_script = (
         args.apk_under_test_incremental_install_script)
@@ -516,6 +535,8 @@ class InstrumentationTestInstance(test_instance.TestInstance):
         args.strict_mode and
         args.strict_mode != 'off'):
       self._flags.append('--strict-mode=' + args.strict_mode)
+    if hasattr(args, 'regenerate_goldens') and args.regenerate_goldens:
+      self._flags.append('--regenerate-goldens')
 
   def _initializeDriverAttributes(self):
     self._driver_apk = os.path.join(
@@ -534,6 +555,9 @@ class InstrumentationTestInstance(test_instance.TestInstance):
 
   def _initializeTestCoverageAttributes(self, args):
     self._coverage_directory = args.coverage_dir
+
+  def _initializeTombstonesAttributes(self, args):
+    self._store_tombstones = args.store_tombstones
 
   @property
   def additional_apks(self):
@@ -574,6 +598,10 @@ class InstrumentationTestInstance(test_instance.TestInstance):
   @property
   def screenshot_dir(self):
     return self._screenshot_dir
+
+  @property
+  def store_tombstones(self):
+    return self._store_tombstones
 
   @property
   def suite(self):

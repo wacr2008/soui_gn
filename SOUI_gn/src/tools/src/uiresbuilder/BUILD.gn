@@ -1,0 +1,49 @@
+import("//build/common.gni")
+
+ 
+executable("uiresbuilder") { 
+  configs -= ["//build/config/win:unicode",]
+  configs += [ "//build/config:precompiled_headers" ]
+ 
+  if(is_debug) {
+    #configs += [ "//build/config/win:mdd_runtime" ] 
+    configs += [ "//build/config/win:mtd_runtime" ] 
+  }
+  else
+  {
+    #configs += [ "//build/config/win:md_runtime" ]  
+    configs += [ "//build/config/win:mt_runtime" ]  
+  } 
+
+  sources = [
+    #include files
+    "tinyxml/tinystr.h",
+    "tinyxml/tinyxml.h",
+    "XGetopt.h",
+    
+    #source files  
+    "tinyxml/tinystr.cpp",
+    "tinyxml/tinyxml.cpp",
+    "tinyxml/tinyxmlerror.cpp",
+    "tinyxml/tinyxmlparser.cpp",
+    "residbuilder.cpp",
+    "XGetopt.cpp",
+  ]
+
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3. 
+    ]
+  }
+
+
+
+
+  defines  = [  "_CONSOLE", ]
+
+  include_dirs = [
+    ".",
+    "./tinyxml", 
+  ] 
+}

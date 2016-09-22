@@ -1,0 +1,8 @@
+<editmenu trCtx="editmenu" iconSkin="_skin.sys.icons" itemHeight="26" iconMargin="4" textMargin="8" >
+  <item id="1" icon="3">剪切</item>
+  <item id="2" icon="4">复制</item>
+  <item id="3" icon="5">粘贴</item>
+  <item id="4" >删除</item>
+  <sep/>
+  <item id="5">全选</item>
+</editmenu>

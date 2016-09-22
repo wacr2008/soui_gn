@@ -58,9 +58,6 @@ tool_versions =
                             root_build_dir),
                 "trim scope")
 
-# Work around for unused variable warning in template https://crbug.com/395883.
-assert(tool_versions != "")
-
 # Shared toolchain definition. Invocations should set current_os to set the
 # build args in this definition.
 template("mac_toolchain") {
@@ -406,7 +403,7 @@ template("mac_toolchain") {
       command = "rm -f {{output}} && " +
                 "TOOL_VERSION=${tool_versions.compile_xcassets} " +
                 "python $_tool -p $_sdk_name -t $_min_deployment_target " +
-                "-o {{output}} {{inputs}}"
+                "-T {{bundle_product_type}} -o {{output}} {{inputs}}"
 
       description = "COMPILE_XCASSETS {{output}}"
       pool = ":bundle_pool($default_toolchain)"

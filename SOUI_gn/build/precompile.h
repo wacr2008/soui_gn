@@ -61,12 +61,12 @@
 #ifdef _USE_UI_LIBRAY
 
 #include "souistd.h"
+#include "SApp.h"
 #include "core/SHostDialog.h"
 #include "core/SMsgLoop.h"
 #include "control/SMessageBox.h"
 #include "control/souictrls.h" 
 
-using namespace SOUI;
 
 #endif
 
