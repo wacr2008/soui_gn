@@ -32,4 +32,4 @@ tsan_suppressions_file = "//build/sanitizers/tsan_suppressions.cc"
 
 # Uncomment these to specify a different lint suppressions file for android
 # lint_suppressions_file = path/to/your/suppressions/file/suppressions.xml
-
+enable_safeseh =true
