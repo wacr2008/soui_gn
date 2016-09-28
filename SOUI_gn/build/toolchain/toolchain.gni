@@ -42,7 +42,7 @@ declare_args() {
   use_xcode_clang = is_ios && is_official_build
 
   #wuding 20160928
-  enable_safeseh =true;
+  enable_safeseh =true
 }
 
 declare_args() {
