@@ -40,6 +40,9 @@ declare_args() {
   # with the build. Used on iOS to ship official builds (as they are built
   # with the version of clang shipped with Xcode).
   use_xcode_clang = is_ios && is_official_build
+
+  #wuding 20160928
+  enable_safeseh =true;
 }
 
 declare_args() {
