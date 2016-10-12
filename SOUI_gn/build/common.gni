@@ -125,6 +125,9 @@ declare_args() {
   # Build sources requiring GTK. NOTICE: This is not present in Chrome OS
   # build environments, even if available for Chromium builds.
   rtc_use_gtk = !build_with_chromium
+
+  #wuding 20160928
+  enable_safeseh =true
 }
 
 # A second declare_args block, so that declarations within it can

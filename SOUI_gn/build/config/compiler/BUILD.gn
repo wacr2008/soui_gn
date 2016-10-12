@@ -80,6 +80,16 @@ declare_args() {
   # of binutils can cause linker warning.
   # See: https://bugs.chromium.org/p/chromium/issues/detail?id=457359
   fatal_linker_warnings = true
+
+  # AFDO (Automatic Feedback Directed Optimizer) is a form of profile-guided
+  # optimization that GCC supports. It used by ChromeOS in their official
+  # builds. To use it, set auto_profile_path to the path to a file containing
+  # the needed gcov profiling data.
+  auto_profile_path = ""
+
+  # Optimize for coverage guided fuzzing (balance between speed and number of
+  # branches)
+  optimize_for_fuzzing = false
 }
 
 if (is_clang && !is_nacl) {
@@ -1084,9 +1094,7 @@ config("chromium_code") {
       defines += [ "_FORTIFY_SOURCE=2" ]
     }
 
-    if (is_mac) {
-      # Warn if automatic synthesis is triggered. This triggers numerous
-      # warnings for internal iOS directories.
+    if (is_mac || is_ios) {
       cflags_objc = [ "-Wobjc-missing-property-synthesis" ]
       cflags_objcc = [ "-Wobjc-missing-property-synthesis" ]
     }
@@ -1352,6 +1360,8 @@ config("optimize_no_wpo") {
   } else if (optimize_for_size) {
     # Favor size over speed.
     cflags = [ "-Os" ] + common_optimize_on_cflags
+  } else if (optimize_for_fuzzing) {
+    cflags = [ "-O1" ] + common_optimize_on_cflags
   } else {
     cflags = [ "-O2" ] + common_optimize_on_cflags
   }
@@ -1368,15 +1378,7 @@ config("no_optimize") {
   } else if (is_android && !android_full_debug) {
     # On Android we kind of optimize some things that don't affect debugging
     # much even when optimization is disabled to get the binary size down.
-    cflags = [
-      "-Os",
-      "-fdata-sections",
-      "-ffunction-sections",
-    ]
-
-    # Don't use gc-sections since it can cause links to succeed when they
-    # actually shouldn't. http://crbug.com/159847
-    ldflags = common_optimize_on_ldflags - [ "-Wl,--gc-sections" ]
+    cflags = [ "-Os" ]
   } else {
     cflags = [ "-O0" ]
     ldflags = []
@@ -1416,6 +1418,8 @@ config("optimize_max") {
           "/wd4702",
         ]
       }
+    } else if (optimize_for_fuzzing) {
+      cflags = [ "-O1" ] + common_optimize_on_cflags
     } else {
       cflags = [ "-O2" ] + common_optimize_on_cflags
     }
@@ -1459,10 +1463,18 @@ config("optimize_speed") {
           "/wd4702",
         ]
       }
+    } else if (optimize_for_fuzzing) {
+      cflags = [ "-O1" ] + common_optimize_on_cflags
     } else {
       cflags = [ "-O3" ] + common_optimize_on_cflags
     }
   }
+}
+
+config("optimize_fuzzing") {
+  cflags = [ "-O1" ] + common_optimize_on_cflags
+  ldflags = common_optimize_on_ldflags
+  visibility = [ ":default_optimization" ]
 }
 
 # The default optimization applied to all targets. This will be equivalent to
@@ -1474,8 +1486,23 @@ config("default_optimization") {
     configs = [ "//build/config/nacl:irt_optimize" ]
   } else if (is_debug) {
     configs = [ ":no_optimize" ]
+  } else if (optimize_for_fuzzing) {
+    assert(!is_win, "Fuzzing optimize level not supported on Windows")
+    configs = [ ":optimize_fuzzing" ]
   } else {
     configs = [ ":optimize" ]
+  }
+}
+
+# GCC supports a form of profile-guided optimization called AFDO, which
+# is used by ChromeOS in their official builds. However,
+# //base/allocator:tcmalloc currently doesn't work correctly with AFDO
+# so we provide separate config so that the flag can be disabled per-target.
+# TODO(crbug.com/633719): Remove this config once tcmalloc works with AFDO
+# or we remove tcmalloc or we stop using AFDO.
+config("afdo") {
+  if (auto_profile_path != "" && current_toolchain == default_toolchain) {
+    cflags = [ "-fauto-profile=${auto_profile_path}" ]
   }
 }
 

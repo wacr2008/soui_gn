@@ -67,10 +67,6 @@ declare_args() {
 
   enable_remoting = !is_ios && !is_chromecast
 
-  # Enables browser side Content Decryption Modules. Required for embedders
-  # (e.g. Android and ChromeCast) that use a browser side CDM.
-  enable_browser_cdms = is_android || is_chromecast
-
   # Hangout services is an extension that adds extra features to Hangouts.
   # For official GYP builds, this flag is set.
   enable_hangout_services_extension = false
@@ -121,7 +117,7 @@ declare_args() {
 
   # Enable WebVR support by default on Android
   # Still requires command line flag to access API
-  enable_webvr = is_android && is_component_build &&
+  enable_webvr = is_android && is_component_build && is_debug &&
                  (current_cpu == "x86" || current_cpu == "x64" ||
                   current_cpu == "arm" || current_cpu == "arm64")
 }
@@ -163,8 +159,6 @@ enable_themes = !is_android && !is_ios
 # rlz codes for searches but do not use the library.
 enable_rlz_support = is_win || is_mac || is_ios || is_chromeos
 enable_rlz = is_chrome_branded && enable_rlz_support
-
-enable_service_discovery = enable_mdns || is_mac
 
 # Image loader extension is enabled on ChromeOS only.
 enable_image_loader_extension = is_chromeos

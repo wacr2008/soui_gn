@@ -4,16 +4,11 @@ import("//build/common.gni")
 executable("uiresbuilder") { 
   configs -= ["//build/config/win:unicode",]
   configs += [ "//build/config:precompiled_headers" ]
+   
+  configs -= [ "//build/config/win:default_crt" ] 
+  configs += [ "//build/config/win:static_crt" ] 
+
  
-  if(is_debug) {
-    #configs += [ "//build/config/win:mdd_runtime" ] 
-    configs += [ "//build/config/win:mtd_runtime" ] 
-  }
-  else
-  {
-    #configs += [ "//build/config/win:md_runtime" ]  
-    configs += [ "//build/config/win:mt_runtime" ]  
-  } 
 
   sources = [
     #include files
