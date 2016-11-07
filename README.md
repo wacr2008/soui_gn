@@ -1,8 +1,13 @@
 gn for soui &amp; gn demo,vs2013 and yasm 
 
+特性
 1.vs2013,vs2015 测试OK
 2.支持yasm，并且支持调用系统的yasm
 3.支持gtest单元测试
+4.支持7z打包资源，支持加密压缩文件目录树
+5.支持protobuf类自动生成
+
+
 
 目录说明
   gndemo
@@ -20,4 +25,3 @@ gn for soui &amp; gn demo,vs2013 and yasm
    再自行安装wdk，然后将wdk的安装文件拷到c:\\vs2013_files\\wdk　目录里面，比如将C:\Program Files (x86)\Windows Kits\10下面的所有文件拷到c:\\vs2013_files\\wdk
   b.想使用系统安装的vs2013进行编绎?
    直接将SOUI_gn/env.bat中 Set DEPOT_TOOLS_WIN_TOOLCHAIN=1 改为 Set DEPOT_TOOLS_WIN_TOOLCHAIN=0
-
