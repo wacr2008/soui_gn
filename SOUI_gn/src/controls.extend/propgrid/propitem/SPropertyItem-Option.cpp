@@ -64,11 +64,14 @@ namespace SOUI
             xmlNode.append_attribute(L"dropHeght").set_value(m_nDropHeight);
             xmlNode.append_attribute(L"dropDown").set_value(1);
             m_pOwner->OnInplaceActiveWndCreate(this,m_pCombobox,xmlNode);
+			
             for(UINT i=0;i<m_options.GetCount();i++)
             {
                 m_pCombobox->InsertItem(i,m_options[i],0,i);
             }
             m_pCombobox->SetCurSel(m_nValue);
+
+			m_pCombobox->SetFocus();/////
         }else
         {
             if(m_pCombobox)
@@ -99,9 +102,19 @@ namespace SOUI
 
     void SPropertyItemOption::SetString( const SStringT & strValue )
     {
-        m_nValue = _ttoi(strValue);
-        OnValueChanged();
+		if (m_nValue !=_ttoi(strValue))
+		{
+			m_nValue = _ttoi(strValue);
+			OnValueChanged();
+		}
+		
+
     }
+
+	void SPropertyItemOption::SetStringOnly( const SStringT & strValue )
+	{
+		m_nValue = _ttoi(strValue);
+	}
 
     HRESULT SPropertyItemOption::OnAttrOptions( const SStringW & strValue,BOOL bLoading )
     {

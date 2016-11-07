@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <caption pos="0,0,-0,-0">
+    <text name="pg_unstalling_text" pos="20,25">unstalling</text>
+    <progress name="pg_unstalling" pos="20,50,459,60"  showPercent="0"/>
+  </caption>
+</include>

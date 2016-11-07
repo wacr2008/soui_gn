@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <caption pos="0,0,-0,-0">
+    <text  pos="28,55">Choose the installation location：</text>
+    <window pos="28,75"   width="314" height="19" class="css_edit_window" colorBkgnd="#ffffff">
+      <edit name="edit_choose_url"  pos="2,0,-0,-0" readonly="1" enable="1"/>
+    </window>
+    <imgbtn name="btn_choose_changedir"  skin="img_custom_button" pos="348,71"  animate="1" >change</imgbtn>
+
+    <text pos="28,105">Space required:</text>
+    <text pos="28,125">Available space:</text>
+    <text name="txt_choose_requiredspace" pos="100,105"></text>
+    <text name="txt_choose_freespace" pos="100,125"></text>
+    
+    <imgbtn name="btn_choose_install"  skin="img_custom_button" pos="-100,-33"  animate="1" >install</imgbtn>
+    <imgbtn name="btn_choose_previous"  skin="img_custom_button" pos="-200,-33"  animate="1" >previous</imgbtn>
+  </caption>
+</include>

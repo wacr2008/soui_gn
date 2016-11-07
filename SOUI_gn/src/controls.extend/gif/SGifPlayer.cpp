@@ -117,6 +117,10 @@ BOOL SGifPlayer::_PlayFile( LPCTSTR pszFileName, BOOL bGif )
     {
         GetParent()->UpdateChildrenPosition();
     }
+	if(IsVisible(TRUE))
+	{
+		GetContainer()->RegisterTimelineHandler(this);
+	}
     return TRUE;
 }
 

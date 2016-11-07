@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <caption pos="0,0,-0,-0">
+    <text  pos="20,25">guide tip2</text>
+    <text  pos="20,55">choose file</text>
+    <window pos="20,75"   width="420" height="19" class="css_edit_window" colorBkgnd="#ffffff">
+      <edit name="edit_unstallchoose_url"  pos="2,0,-0,-0"   mouseRelay="1" enable="0"/>
+    </window>
+    <check  name="chk_unstallchoose_delete" pos="20,105" skin="_skin.sys.checkbox" checked="0">delete info</check>
+    
+    <imgbtn name="btn_unstallchoose_unnstall"  skin="img_custom_button" pos="-100,-33"  animate="1" >unstall</imgbtn>
+    <imgbtn name="btn_unstallchoose_previous"  skin="img_custom_button" pos="-200,-33"  animate="1" >cancel</imgbtn>
+  </caption>
+</include>

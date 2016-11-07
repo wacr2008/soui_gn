@@ -1,0 +1,42 @@
+﻿<SOUI title="mesagebox" width="404" height="194"  appwin="0" frameSize="40,40,10,60" minSize="404,194" resize="0" translucent="1" trCtx="messagebox">
+  <style>
+    <class name="normalbtn" skin="_skin.sys.btn.normal" font="" colorText="#666666" colorTextDisable="#666666" textMode="0x25" cursor="hand" margin-x="0"/>
+    <class name="font:title_text"  colorText="#666666" font="face:微软雅黑,bold:0,size:12"  />
+    <class name="font:text_hint" colorText="#6d6d6d" font="face:微软雅黑,bold:0,size:14" />
+  </style>
+  <buttonText>
+    <ok>确定</ok>
+    <cancel>取消</cancel>
+    <abort>中止</abort>
+    <retry>重试</retry>
+    <yes>是</yes>
+    <no>否</no>
+    <ignore>忽略</ignore>
+  </buttonText>
+
+  <root skin="_skin.sys.window.bkgnd">
+    <caption id="101" pos="8,9,-8,@40" skin="_skin.title_bkground">
+      <text pos="10,11" class="font:title_text" name="msgtitle" >title</text>
+      <imgbtn id="2" skin="_skin.sys_btn_close"  pos="-32,6,@26,@26" tip="关闭"/>
+    </caption>
+
+    <window pos="5,40,-5,-60">
+      <icon name="msgicon" pos="8,0,@32,@32" display="0" show="0"/>
+      <text name="msgtext" pos="[10,0" colorText="#6d6d6d" multilines="1" valign="middle" maxWidth="390" class="font:text_hint"/>
+    </window>
+    <tabctrl name="btnSwitch" pos="0,-50,-0,-0" tabHeight="0">
+      <page>
+        <button pos="|-50,10,|50,-10" name="button1st" focusable="0"  class="normalbtn" skin="_skin.common.button.normal" >button1</button>
+      </page>
+      <page>
+        <button pos="|-100,10,|-10,-10" name="button1st" focusable="0"  class="normalbtn" skin="_skin.common.button.normal">button1</button>
+        <button pos="|10,10,|100,-10" name="button2nd" focusable="0"  class="normalbtn" skin="_skin.common.button.normal">button2</button>
+      </page>
+      <page>
+        <button pos="|-140,10,|-50,-10" name="button1st" focusable="0"  class="normalbtn" skin="_skin.common.button.normal">button1</button>
+        <button pos="|-45,10,|45,-10" name="button2nd" focusable="0"  class="normalbtn" skin="_skin.common.button.normal">button2</button>
+        <button pos="|50,10,|140,-10" name="button3rd" focusable="0"  class="normalbtn" skin="_skin.common.button.normal">button3</button>
+      </page>
+    </tabctrl>
+  </root>
+</SOUI>

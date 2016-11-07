@@ -1,4 +1,4 @@
-#include "SPropertyGrid.h"
+﻿#include "SPropertyGrid.h"
 #include "propitem/SPropertyItem-Text.h"
 #include "propitem/SPropertyItem-Option.h"
 #include "propitem/SPropertyItem-Color.h"
@@ -6,11 +6,11 @@
 
 const int KPropItemIndent   = 10;
 
-const COLORREF KColorHead  = RGBA(128,128,128,255);
-const COLORREF KColorGroup = RGBA(128,128,128,255);
-const COLORREF KColorItem  = RGBA(255,255,255,255);
-const COLORREF KColorItemSel  = RGBA(0,0,128,255);
-const COLORREF KColorBorder = RGBA(0,0,0,255);
+const COLORREF KColorHead  = RGBA(128,128,128,255);   //头的颜色             灰色
+const COLORREF KColorGroup = RGBA(128,128,128,255);   //组的颜色             灰色
+const COLORREF KColorItem  = RGBA(255,255,255,255);   //未选中的颜色         白色
+const COLORREF KColorItemSel  = RGBA(0,0,128,255);    //选中时item的颜色     暗蓝
+const COLORREF KColorBorder = RGBA(0,0,0,255);        //边框颜色             黑色
 
 namespace SOUI
 {
@@ -26,6 +26,22 @@ namespace SOUI
     
     SPropItemMap::SPropItemMap()
     {
+		//注册每一个Item类型和Item的创建方式
+		//如
+/* 
+    <groups>
+		 <propgroup name="group1" description="desc of group1">
+				<propcolor name="color2.1" value="#00ff00" format="#%02x%02x%02x%02x"/>
+				<propsize name="size2.1" value="200,300" childrenNames="宽|高"/>
+				<proptext name="text2.2" value="value 2.2"></proptext>
+				<propoption name="option2.1" value="1" options="true|false|empty"/>
+		</propgroup 
+	</groups>
+*/
+
+		//当发现xmlNode.name = propcolor  propsize proptext时，分别调用对应的CreatePropItem
+
+
         SetAt(SPropertyItemText::GetClassName(),SPropertyItemText::CreatePropItem);
         SetAt(SPropertyItemOption::GetClassName(),SPropertyItemOption::CreatePropItem);
         SetAt(SPropertyItemColor::GetClassName(),SPropertyItemColor::CreatePropItem);
@@ -51,8 +67,20 @@ namespace SOUI
     ,m_switchSkin(NULL)
     ,m_bDraging(FALSE)
     ,m_pInplaceActiveWnd(NULL)
+	,m_crGroup(CR_INVALID)
+	,m_crItem(CR_INVALID)
+	,m_crItemText(CR_INVALID)
+	,m_crItemSel(CR_INVALID)
+	,m_strEditBkgndColor(_T("#FFFFFF00"))
+	,m_strEditTextColor(_T("#FFFFFF"))
+	,m_crBorder(CR_INVALID)
+	,m_strEnableAutoWordSel(_T("1"))
     {
+		//注册事件   
+		//1、item的值改变的时候响应
+		//2、Sel改变的时候响应
         GetEventSet()->addEvent(EVENTID(EventPropGridValueChanged));
+        GetEventSet()->addEvent(EVENTID(EventPropGridItemClick));
         GetEventSet()->subscribeEvent(EventLBSelChanged::EventID,Subscriber(&SPropertyGrid::OnSelChanged,this));
     }
 
@@ -154,7 +182,7 @@ namespace SOUI
                     InsertString(-1,NULL,-1,(LPARAM)pChild);
                     pChild = pChild->GetItem(IPropertyItem::GPI_NEXTSIBLING);
                 }
-                //չ������s
+                //展开子项s
                 pChild=pGroup->GetItem(IPropertyItem::GPI_FIRSTCHILD);
                 while(pChild)
                 {
@@ -185,7 +213,7 @@ namespace SOUI
                     SortInsert(pChild);
                     pChild = pChild->GetItem(IPropertyItem::GPI_NEXTSIBLING);
                 }
-                //չ������s
+                //展开子项s
                 pChild=pGroup->GetItem(IPropertyItem::GPI_FIRSTCHILD);
                 while(pChild)
                 {
@@ -254,46 +282,46 @@ namespace SOUI
 
     void SPropertyGrid::DrawItem( IRenderTarget *pRT, CRect &rc, int iItem )
     {
-        IPropertyItem *pItem = (IPropertyItem*)GetItemData(iItem);
-        
-        CRect rcSwitch = rc;
-        CRect rcNameBack = rc;
-        rcSwitch.right = rcSwitch.left +rcSwitch.Height();
-        rcNameBack.left = rcSwitch.right;
-        rcNameBack.right = rcNameBack.left + m_nNameWidth;
-        pRT->FillSolidRect(rcSwitch,KColorGroup);
-        pRT->FillSolidRect(rcNameBack,iItem == SListBox::GetCurSel()? KColorItemSel:(pItem->IsGroup()?KColorGroup:KColorItem));
-        int iLevel = pItem->GetLevel();
-        if(iLevel>1) rcSwitch.OffsetRect(rcSwitch.Width()*(iLevel-1),0);
-        if(pItem->ChildrenCount() && m_switchSkin)
-        {
-            int iState = pItem->IsExpand()?GROUP_EXPANDED:GROUP_COLLAPSED;
-            if(!pItem->IsGroup()) iState += 2;
-            CRect rcDraw = rcSwitch;
-            rcDraw.DeflateRect((rcSwitch.Size()-m_switchSkin->GetSkinSize())/2);
-            m_switchSkin->Draw(pRT,rcDraw,iState);
-        }
-        
-        CRect rcName = rcNameBack;
-        rcName.left = rcSwitch.right;
-        
-        SStringT strName = S_CW2T(pItem->GetName2());
-        pRT->DrawText(strName,strName.GetLength(),rcName,DT_SINGLELINE|DT_VCENTER);
-        CRect rcItem = rc;
-        rcItem.left= rcNameBack.right;
-        if(pItem->HasButton()) rcItem.right -= rcItem.Height();
-        
-        pItem->DrawItem(pRT,rcItem);
-        
-        CAutoRefPtr<IPen> pen,oldPen;
-        pRT->CreatePen(PS_SOLID,KColorBorder,1,&pen);
-        pRT->SelectObject(pen,(IRenderObj**)&oldPen);
-        CPoint pts[2]={CPoint(rc.left+rc.Height(),rc.bottom-1),CPoint(rc.right,rc.bottom-1)};
-        pRT->DrawLines(pts,2);
-        CPoint pts2[2]={CPoint(rcNameBack.right,rcNameBack.top),rcNameBack.BottomRight()};
-        pRT->DrawLines(pts2,2);
-        pRT->SelectObject(oldPen);
+		IPropertyItem *pItem = (IPropertyItem*)GetItemData(iItem);
 
+		CRect rcSwitch = rc;
+		CRect rcNameBack = rc;
+		rcSwitch.right = rcSwitch.left +rcSwitch.Height();
+		rcNameBack.left = rcSwitch.right;
+		rcNameBack.right = rcNameBack.left + m_nNameWidth;
+		pRT->FillSolidRect(rcSwitch,m_crGroup);
+		pRT->FillSolidRect(rcNameBack,iItem == SListBox::GetCurSel()? m_crItemSel:(pItem->IsGroup()?m_crGroup:m_crItem));
+		int iLevel = pItem->GetLevel();
+		if(iLevel>1) rcSwitch.OffsetRect(rcSwitch.Width()*(iLevel-1),0);
+		if(pItem->ChildrenCount() && m_switchSkin)
+		{
+			int iState = pItem->IsExpand()?GROUP_EXPANDED:GROUP_COLLAPSED;
+			if(!pItem->IsGroup()) iState += 2;
+			CRect rcDraw = rcSwitch;
+			rcDraw.DeflateRect((rcSwitch.Size()-m_switchSkin->GetSkinSize())/2);
+			m_switchSkin->Draw(pRT,rcDraw,iState);
+		}
+
+		CRect rcName = rcNameBack;
+		rcName.left = rcSwitch.right;
+
+		SStringT strName = S_CW2T(pItem->GetName1());
+		pRT->DrawText(strName,strName.GetLength(),rcName,DT_SINGLELINE|DT_VCENTER);
+		CRect rcItem = rc;
+		rcItem.left= rcNameBack.right;
+		if(pItem->HasButton()) rcItem.right -= rcItem.Height();
+
+
+		pItem->DrawItem(pRT,rcItem); //绘制Item
+
+		CAutoRefPtr<IPen> pen,oldPen;
+		pRT->CreatePen(PS_SOLID,m_crBorder,1,&pen);
+		pRT->SelectObject(pen,(IRenderObj**)&oldPen);
+		CPoint pts[2]={CPoint(rc.left+rc.Height(),rc.bottom-1),CPoint(rc.right,rc.bottom-1)};
+		pRT->DrawLines(pts,2);
+		CPoint pts2[2]={CPoint(rcNameBack.right,rcNameBack.top),rcNameBack.BottomRight()};
+		pRT->DrawLines(pts2,2);
+		pRT->SelectObject(oldPen);
     }
 
     void SPropertyGrid::OnLButtonDbClick( UINT nFlags, CPoint point )
@@ -499,18 +527,22 @@ namespace SOUI
 
     void SPropertyGrid::OnInplaceActiveWndCreate( IPropertyItem *pItem,SWindow *pWnd ,pugi::xml_node xmlInit)
     {
-        SASSERT(m_pInplaceActiveWnd == NULL);
-        InsertChild(pWnd);
-        pWnd->InitFromXml(xmlInit);
 
-        CRect rcItem = GetItemRect(pItem);
-        CRect rcValue= rcItem;
-        rcValue.left += rcItem.Height()+m_nNameWidth;
-        if(pItem->HasButton()) rcValue.right -= rcValue.Height();
-        pItem->AdjustInplaceActiveWndRect(rcValue);
-        pWnd->Move(rcValue);
-        pWnd->SetFocus();
-        m_pInplaceActiveWnd = pWnd;
+		xmlInit.attribute(L"colorBkgnd").set_value(m_strEditBkgndColor);
+		xmlInit.append_attribute(L"autoWordSel").set_value(m_strEnableAutoWordSel);
+
+		SASSERT(m_pInplaceActiveWnd == NULL);
+		InsertChild(pWnd);
+		pWnd->InitFromXml(xmlInit);
+
+		CRect rcItem = GetItemRect(pItem);
+		CRect rcValue= rcItem;
+		rcValue.left += rcItem.Height()+m_nNameWidth;
+		if(pItem->HasButton()) rcValue.right -= rcValue.Height();
+		pItem->AdjustInplaceActiveWndRect(rcValue);
+		pWnd->Move(rcValue);
+		//pWnd->SetFocus();/////////////////////////////
+		m_pInplaceActiveWnd = pWnd;
     }
 
     void SPropertyGrid::OnInplaceActiveWndDestroy( IPropertyItem *pItem,SWindow *pWnd )
@@ -560,6 +592,60 @@ namespace SOUI
         evt.pItem = pItem;
         FireEvent(evt);
     }
+
+
+//add
+BOOL SPropertyGrid::AddGridItem(IPropertyItem* Item)
+{
+	m_mapItem[Item->GetName2().MakeLower()] = Item;
+	return TRUE;
+}
+BOOL SPropertyGrid::RemoveGridItem(IPropertyItem *Item)
+{
+	m_mapItem.RemoveKey(Item->GetName2().MakeLower());
+	return TRUE;
+}
+
+BOOL SPropertyGrid::RemoveAllGridItem()
+{
+	m_mapItem.RemoveAll();
+	return TRUE;
+}
+
+//SMap<SStringT, IPropertyItem*>* SPropertyGrid::GetItemMap()
+//{
+//	return &m_mapItem;
+//}
+void SPropertyGrid::ClearAllGridItemValue()
+{
+	SPOSITION pos = m_mapItem.GetStartPosition();
+	IPropertyItem* pItem;
+
+	while (pos)
+	{
+		SMap<SStringT, IPropertyItem*>::CPair *p = m_mapItem.GetNext(pos);
+		pItem = p->m_value;
+		pItem->SetStringOnly(_T(""));
+	}
+}
+IPropertyItem * SPropertyGrid::GetGridItem(SStringT strName2)
+{
+	SMap<SStringT, IPropertyItem*>::CPair *p = m_mapItem.Lookup(strName2.MakeLower());
+	if (p)
+	{
+		return p->m_value;
+	}
+
+	return NULL;
+}
+
+void SPropertyGrid::OnItemButtonClick(IPropertyItem *pItem, SStringT strType)
+{
+	EventPropGridItemClick evt(this);
+	evt.pItem = pItem;
+	evt.strType = strType;
+	FireEvent(evt);
+}
 
 
 }

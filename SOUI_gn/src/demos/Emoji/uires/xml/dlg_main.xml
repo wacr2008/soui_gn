@@ -1,0 +1,68 @@
+<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="335" height="248" resizable="0" wndType="appMain" appWnd="1" translucent="1" sendWheel2Hover="1">
+  <root skin="skin.border" cache="1">
+    <window pos="1,1,-1,-1" colorBkgnd="#caeaff">
+      <tabctrl name="tab_emoji" tabPos="0" tabAlign="bottom" font="face:宋体,size:12" pos="0,0,-0,-0" show="1" curSel="0" focusable="0" tabHeight="28" tabWidth="55" tabInterSize="0" tabSkin="skin.tabbtn" iconSkin="skin.emoji_bottom" icon-x="3">
+        <page colorBkgnd="#e9f6fe" tip="中威动态表情" name="twEmoji">
+          <text pos="6,8">中威动态表情</text>
+          <window pos="6,26,-6,-5" colorBkgnd="#ffffff">
+            <tileview pos="0,0,-0,-0" name="tile_emoji1" wantTab="1" marginSize="0" colorBkgnd="#FFFFFF" sbSkin="skin_vscrollbar" margin="1,1,1,1" colorBorder="#dfe6f6">
+              <template itemHeight="62" itemWidth="62" colorSelected="#ffffff" trackMouseEvent="1">
+                <myimg pos="6,6,-6,-6" name="img_file_img" />
+              </template>
+            </tileview>
+          </window>
+        </page>
+        <page colorBkgnd="#e9f6fe" tip="中威静态表情">
+          <text pos="6,8">中威静态表情</text>
+          <window pos="6,26,-6,-5" colorBkgnd="#ffffff">
+            <tileview pos="0,0,-0,-0" name="tile_emoji2" wantTab="1" marginSize="0" colorBkgnd="#FFFFFF" sbSkin="skin_vscrollbar" margin="1,1,1,1" colorBorder="#dfe6f6">
+              <template itemHeight="62" itemWidth="62" colorSelected="#ffffff" trackMouseEvent="1">
+                <myimg pos="6,6,-6,-6" name="img_file_img" />
+              </template>
+            </tileview>
+          </window>
+        </page>
+        <page colorBkgnd="#e9f6fe" tip="小可爱">
+          <text pos="6,8">小可爱</text>
+          <window pos="6,26,-6,-5" colorBkgnd="#ffffff">
+            <tileview pos="0,0,-0,-0" name="tile_emoji3" wantTab="1" marginSize="0" colorBkgnd="#FFFFFF" sbSkin="skin_vscrollbar" margin="1,1,1,1" colorBorder="#dfe6f6">
+              <template itemHeight="62" itemWidth="62" colorSelected="#ffffff" trackMouseEvent="1">
+                <myimg pos="6,6,-6,-6" name="img_file_img" />
+              </template>
+            </tileview>
+          </window>
+        </page>
+        <page colorBkgnd="#e9f6fe" tip="系统表情">
+          <text pos="6,8">系统表情</text>
+          <window pos="6,26,-6,-5" colorBkgnd="#ffffff">
+            <tileview pos="0,0,-0,-0" name="tile_emoji4" wantTab="1" marginSize="0" colorBkgnd="#FFFFFF" sbSkin="skin_vscrollbar">
+              <template itemHeight="31" itemWidth="31" colorSelected="#ffffff" trackMouseEvent="1">
+                <myimg pos="|0,|0" offset="-0.5,-0.5" name="img_file_img" />
+              </template>
+            </tileview>
+          </window>
+        </page>
+        <page colorBkgnd="#e9f6fe" tip="我的收藏">
+          <caption name="myFavorite" pos="6,8">我的收藏</caption>
+          <window pos="0,0,-0,30" name="managerWnd" show="0">
+            <imgbtn name="btnSelectAll" skin="skin.btnSelectAll" pos="5,4" />
+            <imgbtn name="btnDel" skin="skin.btnDel" pos="[10,4" />
+            <imgbtn name="quitManage" skin="skin.btnQuitManage" pos="-5,4" offset="-1,0" />
+          </window>
+          <window pos="6,26,-6,-5" colorBkgnd="#ffffff">
+            <tileview pos="0,0,-0,-0" name="tile_emoji5" wantTab="1" marginSize="0" colorBkgnd="#ffffff" sbSkin="skin_vscrollbar" margin="1,1,1,1" colorBorder="#dfe6f6">
+              <template itemHeight="62" itemWidth="62" colorNormal="#ffffff" colorSelected="#ffffff" trackMouseEvent="1">
+                <myimg pos="6,6,-6,-6" name="img_file_img"/>
+                <img name="selectd" pos="0,0,-0,-0" skin="skin.selectd" show="0"/>
+              </template>
+            </tileview>
+          </window>
+        </page>
+      </tabctrl>
+      <imgbtn name="btnset" pos="-14,-3" offset="-1,-1" skin="skin.BtnSet" tip="表情设置" />
+    </window>
+    <window name="play" pos="4,30,@110,@110" colorBkgnd="#FFFFFF" margin="1,1,1,1" colorBorder="#008AFF" show="0">
+      <mygifplayer name="gifplayer" pos="|0,|0" offset="-0.5,-0.5" />
+    </window>
+  </root>
+</SOUI>

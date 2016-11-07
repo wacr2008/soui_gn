@@ -13,8 +13,14 @@ import("//build_overrides/build.gni")
 
 declare_args() {
 
-  # Use system yasm instead of bundled one.
+  #wuding 20160521  Use system yasm instead of bundled one.
   use_system_yasm = true
+
+  #wuding 20160928
+  enable_safeseh =true
+
+  #wuding 20161012
+  use_system_protobuf =false
 
   # Variable that can be used to support multiple build scenarios, like having
   # Chromium specific targets in a client project's GN file etc.
@@ -125,9 +131,6 @@ declare_args() {
   # Build sources requiring GTK. NOTICE: This is not present in Chrome OS
   # build environments, even if available for Chromium builds.
   rtc_use_gtk = !build_with_chromium
-
-  #wuding 20160928
-  enable_safeseh =true
 }
 
 # A second declare_args block, so that declarations within it can

@@ -56,9 +56,10 @@ namespace SOUI
             m_pEdit = new TplPropEmbedWnd<SPropEdit>(this);
             pugi::xml_document xmlDoc;
             pugi::xml_node xmlNode=xmlDoc.append_child(L"root");
-            xmlNode.append_attribute(L"colorBkgnd").set_value(L"#ffffff");
+            xmlNode.append_attribute(L"colorBkgnd").set_value(L"#000000");
             m_pOwner->OnInplaceActiveWndCreate(this,m_pEdit,xmlNode);
             m_pEdit->SetWindowText(GetString());
+			m_pEdit->SetFocus();
         }else
         {
             if(m_pEdit)
@@ -78,8 +79,33 @@ namespace SOUI
 
     void SPropertyItemText::SetString( const SStringT & strValue )
     {
-        m_strValue = strValue;
-        OnValueChanged();
+		//如果值没有改变，就不发送通知
+		if (m_strValue.CompareNoCase(strValue) != 0)
+		{
+			m_strValue = strValue;
+			OnValueChanged();
+		}
+		
     }
 
+	void SPropertyItemText::SetStringOnly( const SStringT & strValue )
+	{
+		m_strValue = strValue;
+	}
+
+
+    void SPropertyItemText::OnButtonClick()
+	{
+		GetOwner()->OnItemButtonClick(this, m_strButtonType);
+	}
+
+    BOOL SPropertyItemText::HasButton() const 
+	{
+		if (m_strButtonType.IsEmpty())
+		{
+			return FALSE;
+		}
+		
+		return TRUE;
+	}
 }

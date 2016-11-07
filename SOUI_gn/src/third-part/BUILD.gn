@@ -8,5 +8,6 @@ group("third-part") {
     "skia",
     "smiley", 
     "zlib",
+    "7z",
   ] 
 }

@@ -7,10 +7,13 @@ namespace SOUI
 {
     class SPropertyItemOption : public SPropertyItemBase
     {
-        SOUI_CLASS_NAME(SPropertyItemOption,L"propoption")
+        SOUI_CLASS_NAME(SPropertyGroup,L"propoption")
     public:
         virtual void DrawItem(IRenderTarget *pRT,CRect rc);
         
+		//add
+        virtual void SetStringOnly(const SStringT & strValue);
+
         virtual void SetValue(void *pValue);
         virtual const void * GetValue() const;
         virtual void SetString(const SStringT & strValue);

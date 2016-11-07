@@ -12,12 +12,12 @@ namespace SOUI
     {
         IPropertyItem *pWidth = SPropertyItemText::CreatePropItem(pOwner);
         pWidth->SetID(CHILD_WIDTH);
-        pWidth->SetName(TR(L"width",GetOwner()->GetContainer()->GetTranslatorContext()));
+        pWidth->SetName1(TR(L"width",GetOwner()->GetContainer()->GetTranslatorContext()));
         InsertChild(pWidth);
         pWidth->Release();
         IPropertyItem *pHeight = SPropertyItemText::CreatePropItem(pOwner);
         pHeight->SetID(CHILD_HEIGHT);
-        pHeight->SetName(TR(L"height",GetOwner()->GetContainer()->GetTranslatorContext()));
+        pHeight->SetName1(TR(L"height",GetOwner()->GetContainer()->GetTranslatorContext()));
         InsertChild(pHeight);
         pHeight->Release();
         m_szValue.cx=m_szValue.cy=0;
@@ -39,10 +39,34 @@ namespace SOUI
         SIZE sz;
         if(_stscanf(strValue,_T("%d,%d"),&sz.cx,&sz.cy)==2)
         {
-            m_szValue = sz;
-            OnValueChanged();
+			//如果值有变化，就发送通知
+			if (sz.cy != m_szValue.cy || sz.cy != m_szValue.cy)
+			{
+
+				m_szValue = sz;
+				OnValueChanged();
+			}
+			
+
         }
     }
+
+	void SPropertyItemSize::SetStringOnly( const SStringT & strValue )
+	{
+		if (strValue.IsEmpty())
+		{
+			/*m_szValue.cy = 0;
+			m_szValue.cx = 0;*/
+			return ;
+		}
+		
+
+		SIZE sz;
+		if(_stscanf(strValue,_T("%d,%d"),&sz.cx,&sz.cy)==2)
+		{
+			m_szValue = sz;
+		}
+	}
 
     void SPropertyItemSize::OnChildValueChanged( IPropertyItem *pChild )
     {
@@ -88,8 +112,8 @@ namespace SOUI
         SplitString(TR(strValue,GetOwner()->GetContainer()->GetTranslatorContext()),L'|',strNames);
         if(strNames.GetCount()==2)
         {
-            GetItem(GPI_FIRSTCHILD)->SetName(strNames[0]);
-            GetItem(GPI_LASTCHILD)->SetName(strNames[1]);
+            GetItem(GPI_FIRSTCHILD)->SetName1(strNames[0]);
+            GetItem(GPI_LASTCHILD)->SetName1(strNames[1]);
         }
         return S_FALSE;
     }

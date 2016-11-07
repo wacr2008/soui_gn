@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <caption pos="0,0,-0,-0">
+    
+    <imgbtn skin="img_finish_ads" pos="|0,|-100" offset="-0.5,-0.5" animate="1" />
+    <imgbtn name="btn_finish_feel" skin="img_finish_feel" pos="37,140"  animate="1" />
+    <imgbtn name="btn_finish_finish" skin="img_finish_finish" pos="266,140"  animate="1" />
+
+    <check  name="chk_finish_1" pos="37,205" skin="_skin.sys.checkbox" checked="1">chk_finish_1</check>
+    <check  name="chk_finish_2" pos="266,205" skin="_skin.sys.checkbox" >chk_finish_2</check>
+    <check  name="chk_finish_3" pos="37,235" skin="_skin.sys.checkbox" >chk_finish_3</check>
+    <check  name="chk_finish_4" pos="266,235" skin="_skin.sys.checkbox" >chk_finish_4</check>
+    <check  name="chk_finish_5" pos="37,265" skin="_skin.sys.checkbox" >chk_finish_5</check>
+    <check  name="chk_finish_6" pos="266,265" skin="_skin.sys.checkbox" >chk_finish_6</check>
+
+  </caption>
+</include>

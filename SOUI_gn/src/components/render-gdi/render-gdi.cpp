@@ -7,9 +7,9 @@
 #include <math.h>
 #include <trace.h>
 #include <tchar.h>
-
 namespace SOUI
 {
+
 
     //////////////////////////////////////////////////////////////////////////
     // SRenderFactory_GDI
@@ -19,9 +19,10 @@ namespace SOUI
         return TRUE;
     }
 
-    BOOL SRenderFactory_GDI::CreateFont( IFont ** ppFont , const LOGFONT &lf ,LPCTSTR pszPropEx)
+    BOOL SRenderFactory_GDI::CreateFont( IFont ** ppFont , const LOGFONT &lf ,const IPropBag * pPropBag)
     {
-        *ppFont = new SFont_GDI(this,&lf,pszPropEx);
+        *ppFont = new SFont_GDI(this,&lf);
+		(*ppFont)->SetProps(pPropBag);
         return TRUE;
     }
 

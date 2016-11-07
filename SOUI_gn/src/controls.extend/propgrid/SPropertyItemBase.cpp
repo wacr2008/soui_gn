@@ -87,12 +87,33 @@ namespace SOUI
 
     BOOL SPropertyItemBase::InsertChild( IPropertyItem * pChild,IPropertyItem * pInsertAfter/*=IC_LAST*/ )
     {
-        if(pInsertAfter == IC_LAST) m_childs.InsertAfter(NULL,pChild);
-        else if(pInsertAfter == IC_FIRST) m_childs.InsertBefore(NULL,pChild);
+		SPropertyGrid* grid = GetOwner();
+        if(pInsertAfter == IC_LAST)
+		{
+			if (!(pChild->GetName2().IsEmpty()))
+			{
+				grid->AddGridItem(pChild);
+			}
+			
+			m_childs.InsertAfter(NULL,pChild);
+		}
+        else if(pInsertAfter == IC_FIRST)
+		{
+			if (!(pChild->GetName2().IsEmpty()))
+			{
+				grid->AddGridItem(pChild);
+			}
+			m_childs.InsertBefore(NULL,pChild);
+		}
         else
         {
             SPOSITION pos = m_childs.Find(pInsertAfter);
             if(!pos) return FALSE;
+
+			if (!(pChild->GetName2().IsEmpty()))
+			{
+				grid->AddGridItem(pChild);
+			}
             m_childs.InsertAfter(pos,pChild);            
         }
         pChild->SetParent(this);
@@ -109,6 +130,11 @@ namespace SOUI
     {
         SPOSITION pos = m_childs.Find(pChild);
         if(!pos) return FALSE;
+		SPropertyGrid* grid = GetOwner();
+		if (!(pChild->GetName2().IsEmpty()))
+		{
+			grid->RemoveGridItem(pChild);
+		}
         m_childs.RemoveAt(pos);
         pChild->Release();
         return TRUE;
@@ -122,7 +148,10 @@ namespace SOUI
             IPropertyItemPtr pChild = m_childs.GetNext(pos);
             pChild->Release();
         }
+		SPropertyGrid* grid = GetOwner();
+		grid->RemoveAllGridItem();
         m_childs.RemoveAll();
+
     }
 
     BOOL SPropertyItemBase::InitFromXml( pugi::xml_node xmlNode )
@@ -162,3 +191,4 @@ namespace SOUI
     }
 
 }
+

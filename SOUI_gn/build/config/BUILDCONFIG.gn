@@ -538,7 +538,8 @@ if (is_win) {
 
     # Default to console-mode apps. Most of our targets are tests and such
     # that shouldn't use the windows subsystem.
-    "//build/config/win:console",
+    #"//build/config/win:console",
+    "//build/config/win:windowed",    
   ]
 } else if (is_mac || is_ios) {
   _linker_configs = [ "//build/config/mac:strip_all" ]

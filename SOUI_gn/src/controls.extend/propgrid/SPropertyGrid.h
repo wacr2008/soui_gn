@@ -7,6 +7,8 @@
 namespace SOUI
 {
     #define EVT_PG_VALUECHANGED (EVT_EXTERNAL_BEGIN+100)
+	//ADD
+    #define EVT_PG_ITEMCLICK (EVT_EXTERNAL_BEGIN+110)
 
     class EventPropGridValueChanged : public TplEventArgs<EventPropGridValueChanged>
     {
@@ -17,6 +19,17 @@ namespace SOUI
 
         IPropertyItem * pItem;
     };
+
+	class EventPropGridItemClick : public TplEventArgs<EventPropGridItemClick>
+	{
+		SOUI_CLASS_NAME(EventPropGridItemClick,L"on_propgrid_item_click")
+	public:
+		EventPropGridItemClick(SObject *pWnd):TplEventArgs<EventPropGridItemClick>(pWnd){}
+		enum{EventID=EVT_PG_ITEMCLICK};
+
+		IPropertyItem * pItem;
+		SStringT strType;
+	};
 
     class SPropertyGroup : public SPropertyItemBase
     {
@@ -87,6 +100,15 @@ namespace SOUI
         void SortInsert(IPropertyItem *pItem);
         
         BOOL InsertGroup(SPropertyGroup * pGroup,SPropertyGroup* pInertAfter=IG_LAST);
+
+		//add
+		 BOOL AddGridItem(IPropertyItem* Item);
+		 BOOL RemoveGridItem(IPropertyItem *Item);
+		 BOOL RemoveAllGridItem();
+		 void ClearAllGridItemValue();
+		 IPropertyItem * GetGridItem(SStringT strName2);
+
+		 //SMap<SStringT, IPropertyItem*>* GetItemMap();
         
         SOUI_ATTRS_BEGIN()
             ATTR_INT(L"indent",m_nIndent,TRUE)
@@ -97,6 +119,15 @@ namespace SOUI
                 ATTR_ENUM_VALUE(L"name",OT_NAME)
             ATTR_ENUM_END(m_orderType)
             ATTR_SKIN(L"switchSkin",m_switchSkin,TRUE)
+			ATTR_COLOR(L"ColorGroup",m_crGroup,FALSE)
+			ATTR_COLOR(L"ColorItem",m_crItem,FALSE)
+			ATTR_COLOR(L"ColorItemText",m_crItemText,FALSE)
+			ATTR_COLOR(L"ColorItemText",m_crItemText,FALSE)
+			ATTR_COLOR(L"ColorItemSel",m_crItemSel,FALSE)
+			ATTR_STRINGT(L"EditBkgndColor",m_strEditBkgndColor,FALSE)
+			ATTR_STRINGT(L"EditTextColor",m_strEditTextColor,FALSE)
+			ATTR_COLOR(L"ColorBorder",m_crBorder,FALSE)
+			ATTR_STRINGT(L"autoWordSel",m_strEnableAutoWordSel,FALSE)
         SOUI_ATTRS_END()
         
     protected:
@@ -116,6 +147,10 @@ namespace SOUI
         virtual UINT OnGetDlgCode(){return SC_WANTALLKEYS;}
         virtual BOOL OnSetCursor(const CPoint &pt);
         virtual BOOL OnScroll(BOOL bVertical,UINT uCode,int nPos);
+
+
+
+
         
         void OnLButtonDown(UINT nFlags,CPoint pt);
         void OnLButtonUp(UINT nFlags,CPoint pt);
@@ -133,6 +168,7 @@ namespace SOUI
         void OnInplaceActiveWndCreate(IPropertyItem *pItem,SWindow *pWnd,pugi::xml_node xmlInit);
         void OnInplaceActiveWndDestroy(IPropertyItem *pItem,SWindow *pWnd);
         void OnItemValueChanged(IPropertyItem *pItem);
+        void OnItemButtonClick(IPropertyItem *pItem, SStringT strType);
     protected:
         SWindow *   m_pInplaceActiveWnd;    //属性内嵌的窗口
         
@@ -156,8 +192,18 @@ namespace SOUI
                 
         CPoint      m_ptDrag;
         BOOL        m_bDraging;
+
+		COLORREF m_crGroup;       //Group背景颜色
+		COLORREF m_crItem;        //Item背景颜色
+		COLORREF m_crItemText;    //Item文本颜色
+		COLORREF m_crItemSel;     //Item选中时的背景色
+		SStringT m_strEditBkgndColor; //edit的背景色;
+		SStringT m_strEditTextColor; //edit的文本颜色;
+		COLORREF m_crBorder;      //边框颜色
+		SStringT    m_strEnableAutoWordSel;    /**< enable Word style auto word selection?  */
         
-        
+		//add
+        SMap<SStringT, IPropertyItem*> m_mapItem;
         static SMap<SStringW, FunCreatePropItem> s_mapProps;
     };
     

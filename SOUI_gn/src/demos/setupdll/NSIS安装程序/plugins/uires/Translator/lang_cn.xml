@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<language name="ch" guid="{0DAEDE3C-6B94-4a81-9A55-C304FDD69D98}">
+  <context>
+    <!--没有上下文的翻译-->
+  </context>
+  <context name="messagebox">
+    <message>
+      <source>ok</source>
+      <translation>确定</translation>
+    </message>
+    <message>
+      <source>cancel</source>
+      <translation>取消</translation>
+    </message>
+    <message>
+      <source>retry</source>
+      <translation>重试</translation>
+    </message>
+  </context>
+  <context name="mainWindow">
+    <message>
+      <source>Sha Monk MM Install Guide</source>
+      <translation>%title%%ver%安装程序</translation>
+    </message>
+    <message>
+      <source>Sha Monk MM UnInstall Guide</source>
+      <translation>%title%%ver%卸载程序</translation>
+    </message>
+    <message>
+      <source>close</source>
+      <translation>关闭窗口</translation>
+    </message>
+    <message>
+      <source>custom</source>
+      <translation>自定义安装</translation>
+    </message>
+    <message>
+      <source>I have read and agree to</source>
+      <translation>我已阅读并同意</translation>
+    </message>
+    <message>
+      <source>The software license agreement</source>
+      <translation>软件许可协议</translation>
+    </message>
+    <message>
+      <source>sure</source>
+      <translation>确认</translation>
+    </message>
+    <message>
+      <source>previous</source>
+      <translation>上一步</translation>
+    </message>
+    <message>
+      <source>next</source>
+      <translation>下一步</translation>
+    </message>
+    <message>
+      <source>finish</source>
+      <translation>完成</translation>
+    </message>
+
+    <message>
+      <source>install</source>
+      <translation>立即安装</translation>
+    </message>
+    <message>
+      <source>Choose the installation location：</source>
+      <translation>选择安装位置：</translation>
+    </message>
+    <message>
+      <source>change</source>
+      <translation>选择文件</translation>
+    </message>
+    <message>
+      <source>Space required:</source>
+      <translation>所需空间：</translation>
+    </message>
+    <message>
+      <source>Available space:</source>
+      <translation>可用空间：</translation>
+    </message>
+    <message>
+      <source>chk_finish_1</source>
+      <translation>显示新特性，了解阿里旺旺</translation>
+    </message>
+    <message>
+      <source>chk_finish_2</source>
+      <translation>确保网购安全，体验UC浏览器</translation>
+    </message>
+    <message>
+      <source>chk_finish_3</source>
+      <translation>将UC123网址导航设为浏览器首页</translation>
+    </message>
+    <message>
+      <source>chk_finish_4</source>
+      <translation>体验如意淘，最佳比价工具</translation>
+    </message>
+    <message>
+      <source>chk_finish_5</source>
+      <translation>淘宝手机助手，保障手机安全</translation>
+    </message>
+    <message>
+      <source>chk_finish_6</source>
+      <translation>亲淘，贴心懂你的购物助手</translation>
+    </message>
+
+    <message>
+      <source>guide tip</source>
+      <translation>这个向导将指引你完成“%title%%ver%”的卸载</translation>
+    </message>
+    <message>
+      <source>guide tip2</source>
+      <translation>欢迎使用“%title%%ver%”卸载向导</translation>
+    </message>
+    <message>
+      <source>unstall</source>
+      <translation>卸载</translation>
+    </message>
+    <message>
+      <source>cancel</source>
+      <translation>取消</translation>
+    </message>
+    <message>
+      <source>choose file</source>
+      <translation>选择文件</translation>
+    </message>
+    <message>
+      <source>delete info</source>
+      <translation>卸载时删除所有的个人配置信息和消息记录，请谨慎勾选。</translation>
+    </message>
+    <message>
+      <source>guide finish</source>
+      <translation>成功完成“%title%%ver%”卸载。</translation>
+    </message>
+
+  </context>
+</language>

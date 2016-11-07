@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <caption pos="0,12,-0,-0">
+    <richedit name="agreement_edit" colorBkgnd="#ffffff" pos="5,[5,-5,-40" bkgndBlend="1" class="cls_edit" enableDragdrop="1" multiLines="1" vscrollBar="1" wordWrap="1"  autoVscroll="1" hscrollBar="0" wantReturn="1"  rtf="rtf:rtf_agreement"/>
+    <imgbtn name="btn_agreement_sure"  skin="img_custom_button" pos="-100,-33"  animate="1" >sure</imgbtn>
+  </caption>
+</include>

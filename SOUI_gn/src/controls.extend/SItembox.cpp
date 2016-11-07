@@ -5,7 +5,6 @@
 //     Version: 2011.7.8 - 1.0 - Create
 //////////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
 #include "sitembox.h"
 
 namespace SOUI

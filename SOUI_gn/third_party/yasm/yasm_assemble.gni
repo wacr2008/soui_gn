@@ -41,7 +41,7 @@
 #     include_dirs = [ "assembly_include" ]
 #   }
 
-import("//build/app.gni")
+import("//build/common.gni")
 
 if (is_mac || is_ios) {
   if (current_cpu == "x86") {

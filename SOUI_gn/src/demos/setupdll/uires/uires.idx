@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resource>
+  <UIDEF>
+    <file name="XML_INIT" path="app\init.xml"  />
+  </UIDEF>
+  <LAYOUT>
+    <file name="XML_MAINWND" path="xml\dlg_main.xml"  />
+    <file name="XML_WELCOME" path="xml\page_welcome.xml"  />
+    <file name="XML_AGREEMENT" path="xml\page_agreement.xml"  />
+    <file name="XML_CHOOSE" path="xml\page_choose.xml"  />
+    <file name="XML_INSTALLING" path="xml\page_installing.xml"  />
+    <file name="XML_FINISH" path="xml\page_finish.xml"  />
+    <file name="XML_MSGBOX" path="xml\msgbox.xml"  />
+
+    <!--unstall-->
+    <file name="XML_UNSTALLSTART" path="xml\page_unstallstart.xml"  />
+    <file name="XML_UNSTALLCHOOSE" path="xml\page_unstallchoose.xml"  />
+    <file name="XML_UNSTALLING" path="xml\page_unstalling.xml"  />
+    <file name="XML_UNSTALLFINISH" path="xml\page_unstallfinish.xml"  />
+
+  </LAYOUT>
+  <IMG>
+        <file name="traymenu_icons" path="image\traymenu_icons.png"  />
+  </IMG>
+  <IMG.MAIN>
+      <file name="bg" path="image\bg.png"/>
+      <file name="welcome_center" path="image\welcome_center.png"/>
+      <file name="install" path="image\install.png"/>
+      <file name="custom_button" path="image\custom_button.png"/>
+      <file name="png_vscroll"  path="image\vscrollbar.png" />
+        
+      <!--进度条-->
+      <file name="prog_bar"  path="image\prog_bar.png" />
+      <file name="prog_bkgnd"  path="image\prog_bkgnd.png" />
+      <!---安装中导航视图素材-->
+      <file name="setup1"  path="image\setup1.png" />
+      <file name="setup2"  path="image\setup2.png" />
+      <file name="setup3"  path="image\setup3.png" />
+      <file name="setup4"  path="image\setup4.png" />
+      <file name="setup_tab"  path="image\tab.png" />
+    
+      <file name="finish_ads"  path="image\finish_ads.png" />
+      <file name="finish_feel"  path="image\finish_feel.png" />
+      <file name="finish_finish"  path="image\finish_finish.png" />
+
+  </IMG.MAIN>
+  
+
+  <ICON>
+    <file name="LOGO"  path="image\logo.ico"    />
+  </ICON>
+    <translator>
+    <file name="lang_cn"  path="translator\lang_cn.xml"    />
+  </translator>
+      <SMENU>
+    <file name="menu_tray" path="xml\menu_tray.xml"  />
+  </SMENU>
+
+  <rtf>
+    <file name="rtf_agreement"	path="rtf\软件协议.rtf"/>
+  </rtf>
+  
+  </resource>

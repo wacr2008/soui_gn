@@ -3,8 +3,6 @@ import("//build/common.gni")
 
 executable("demo") {
   configs += [ "//build/config:precompiled_headers" ]
-  configs -= [ "//build/config/win:console" ]
-  configs += [ "//build/config/win:windowed" ]
 
   sources = [
     #include files  

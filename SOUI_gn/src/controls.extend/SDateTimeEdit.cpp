@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "SDateTimeEdit.h"
 
 namespace SOUI{

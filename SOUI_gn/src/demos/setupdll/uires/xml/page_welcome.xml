@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <caption pos="0,0,-0,-0">
+    <!--<text pos="|0,|0" offset="-0.5,-0.5">这是一个由SOUI向导生成的APP框架</text>-->
+    <img name="img_welcome_center" skin="img_welcome_center" pos="|0,|-60" offset="-0.5,-0.5" animate="1" />
+    <!--立即安装-->
+    <imgbtn name="btn_install" skin="img_install" pos="|0,|80" offset="-0.5,-0.5" animate="1" />
+    <!--协议-->
+    <check  name="chk_agreement" pos="30,-30" skin="_skin.sys.checkbox" >I have read and agree to</check>
+    <link name="link_agreement" pos="145,-29" cursor="hand" >The software license agreement</link>
+    <!--自定义安装-->
+    
+    <imgbtn name="btn_custominstall"  skin="img_custom_button" pos="-100,-33"  animate="1" >custom</imgbtn>
+  </caption>
+</include>

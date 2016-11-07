@@ -1,0 +1,69 @@
+import("//build/common.gni") 
+
+
+action("gen_setupdll_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/gen_setupdll_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w src/demos/setupdll/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+ 
+
+shared_library("setupdll") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  sources = [ 
+    "dllmain.cpp", 
+    "api.h", 
+    "event.h", 
+    "MainDlg.cpp", 
+    "MainDlg.h", 
+    "pluginapi.cpp", 
+    "pluginapi.h", 
+    "setupdll.cpp", 
+    "Utils.h", 
+
+    "trayicon/SShellNotifyIcon.cpp",
+    "trayicon/SShellNotifyIcon.h",
+    
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+    "../../components",
+  ]
+
+  deps = [ 
+    ":gen_setupdll_resource",
+    "../../utilities",
+    "../../SOUI",
+    "../../third-part",
+    "../../components",
+  ]
+
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4201",
+      "/wd4239",
+    ]
+  }
+ 
+  defines = ["_CRT_SECURE_NO_WARNINGS","_USE_UI_LIBRAY",] 
+
+} 

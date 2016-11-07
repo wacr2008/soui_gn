@@ -32,13 +32,18 @@ namespace SOUI
         virtual BOOL RemoveChild(IPropertyItem * pChild)=0;
         virtual int ChildrenCount() const =0;
 
+        virtual SStringW GetName1() const =0;
         virtual SStringW GetName2() const =0;
-        virtual void SetName(const SStringW & strName) =0;
+        virtual void SetName1(const SStringW & strName) =0;
+        virtual void SetName2(const SStringW & strName) =0;
         virtual void SetID(int nID) =0;
         virtual SStringT GetDescription() const =0;
         virtual void SetDescription(const SStringT & strDescription) =0;
         virtual SStringT GetString() const =0;
         virtual void SetString(const SStringT & strValue) =0;
+        //add
+        virtual void SetStringOnly(const SStringT & strValue)=0;
+
         virtual const void* GetValue() const =0;
         virtual void SetValue(void *pValue)=0;
         virtual void DrawItem(IRenderTarget *pRT,CRect rc) =0;

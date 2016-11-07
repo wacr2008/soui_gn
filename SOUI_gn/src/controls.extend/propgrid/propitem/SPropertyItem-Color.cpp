@@ -41,8 +41,8 @@ namespace SOUI
         SPropertyItemText::OnInplaceActive(bActive);
         if(bActive)
         {
-			//LRESULT lr = ;
-			m_pEdit->SSendMessage(EM_SETEVENTMASK, 0, ENM_CHANGE);
+            LRESULT lr=m_pEdit->SSendMessage(EM_SETEVENTMASK,0,ENM_CHANGE);
+			(void)lr;	
             m_pEdit->GetEventSet()->subscribeEvent(EventRENotify::EventID,Subscriber(&SPropertyItemColor::OnReNotify,this));
         }
     }
@@ -84,17 +84,31 @@ namespace SOUI
         int r,g,b,a;
         if(_stscanf(strValue,m_strFormat,&r,&g,&b,&a)==4)
         {
-            m_crValue = RGBA(r,g,b,a);
-            OnValueChanged();
+			if (m_crValue != RGBA(r,g,b,a))
+			{
+				m_crValue = RGBA(r,g,b,a);
+				OnValueChanged();
+			}
+			
+
         }
     }
+
+	void SPropertyItemColor::SetStringOnly( const SStringT & strValue )
+	{
+		int r,g,b,a;
+		if(_stscanf(strValue,m_strFormat,&r,&g,&b,&a)==4)
+		{
+			m_crValue = RGBA(r,g,b,a);
+		}
+	}
 
     void SPropertyItemColor::OnButtonClick()
     {
         CHOOSECOLOR cc;                 // common dialog box structure 
         static COLORREF acrCustClr[16]; // array of custom colors 
 
-        // Initialize CHOOSECOLOR 
+         //Initialize CHOOSECOLOR 
         ZeroMemory(&cc, sizeof(cc));
         cc.lStructSize = sizeof(cc);
         cc.hwndOwner = GetOwner()->GetContainer()->GetHostHwnd();

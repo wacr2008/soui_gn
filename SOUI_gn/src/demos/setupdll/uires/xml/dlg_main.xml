@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SOUI name="mainWindow" title="%title%%ver%" bigIcon="LOGO:32" smallIcon="LOGO:16" width="481" height="351"  margin="20,5,5,5"  resizable="0" 
+toolWindow="0"
+translucent="1"
+appWnd="1"
+trCtx="mainWindow">
+  <root skin="img_bg" cache="1">
+    <caption pos="0,0,-0,25" show="1" font="">
+      <!--<icon pos="10,8" src="LOGO:16"/>-->
+      <text name="txt_titlename" pos="10,8" colorText="#6C8BA9">Sha Monk MM Install Guide</text>
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-83,0" animate="1" />
+    </caption>
+
+     <caption pos="5,[2,-5,-5">
+      <tabctrl name="tab_main" pos="0,0,-0,-0" show="1" curSel="0" focusable="0" animateSteps="0" tabHeight="0" animate="1" >
+        <page title="welcome">
+            <include src="LAYOUT:XML_WELCOME"/>
+        </page>
+         <page title="agreement">
+              <include src="LAYOUT:XML_AGREEMENT"/>
+         </page>
+        <page title="choose">
+          <include src="LAYOUT:XML_CHOOSE"/>
+        </page>
+        <page title="installing">
+          <include src="LAYOUT:XML_INSTALLING"/>
+        </page>
+        <page title="finish">
+          <include src="LAYOUT:XML_FINISH"/>
+        </page>
+        <page title="unstallstart">
+          <include src="LAYOUT:XML_UNSTALLSTART"/>
+        </page>
+        <page title="unstallchoose">
+          <include src="LAYOUT:XML_UNSTALLCHOOSE"/>
+        </page>
+        <page title="unstalling">
+          <include src="LAYOUT:XML_UNSTALLING"/>
+        </page>
+        <page title="unstallfinish">
+          <include src="LAYOUT:XML_UNSTALLFINISH"/>
+        </page>
+        
+
+      </tabctrl>
+    </caption>
+  </root>
+</SOUI>

@@ -11,5 +11,8 @@ group("demos") {
     "QQLogin",
     "SoTool",
     "souispy",
+    "Emoji",
+    "setupdll",
+    "UiEditor",
   ] 
 }

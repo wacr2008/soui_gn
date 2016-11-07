@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "SComboBoxEx.h"
 
 namespace SOUI

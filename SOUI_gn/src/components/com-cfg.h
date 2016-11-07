@@ -1,4 +1,4 @@
-//SOUI×é¼şÅäÖÃ
+ï»¿//SOUIç»„ä»¶é…ç½®
 
 #pragma  once
 
@@ -12,6 +12,7 @@
 #define COM_SCRIPT_LUA _T("scriptmodule-lua.dll")
 #define COM_TRANSLATOR _T("translator.dll")
 #define COM_ZIPRESPROVIDER _T("resprovider-zip.dll")
+#define COM_7ZIPRESPROVIDER _T("resprovider-7zip.dll")
 #define COM_LOG4Z   _T("log4z.dll") 
 
 #ifdef LIB_SOUI_COM
@@ -79,6 +80,10 @@ namespace SOUI
     {
         BOOL SCreateInstance(IObjRef **);
     }
+	namespace RESPROVIDER_7ZIP
+	{
+		BOOL SCreateInstance(IObjRef **);
+	} 
     namespace LOG4Z
     {
         BOOL SCreateInstance(IObjRef **);
@@ -133,6 +138,11 @@ public:
     {
         return SOUI::RESPROVIDER_ZIP::SCreateInstance(ppObj);
     }
+
+	BOOL CreateResProvider_7ZIP(IObjRef **ppObj)
+	{
+		return SOUI::RESPROVIDER_7ZIP::SCreateInstance(ppObj);
+	}
     
     BOOL CreateLog4z(IObjRef **ppObj)
     {
@@ -189,18 +199,25 @@ public:
         return zipResLoader.CreateInstance(COM_ZIPRESPROVIDER,ppObj);
     }
 
+	BOOL CreateResProvider_7ZIP(IObjRef **ppObj)
+	{
+		return zip7ResLoader.CreateInstance(COM_7ZIPRESPROVIDER, ppObj);
+	}
+
+	
     BOOL CreateLog4z(IObjRef **ppObj)
     {
         return log4zLoader.CreateInstance(COM_LOG4Z,ppObj);
     }
 protected:
-    //SComLoaderÊµÏÖ´ÓDLLµÄÖ¸¶¨º¯Êı´´½¨·ûºÅSOUIÒªÇóµÄÀàCOM×é¼ş¡£
+    //SComLoaderå®ç°ä»DLLçš„æŒ‡å®šå‡½æ•°åˆ›å»ºç¬¦å·SOUIè¦æ±‚çš„ç±»COMç»„ä»¶ã€‚
     SComLoader imgDecLoader;
     SComLoader renderLoader;
     SComLoader transLoader;
     SComLoader scriptLoader;
     SComLoader zipResLoader;
     SComLoader log4zLoader;
+    SComLoader zip7ResLoader;
     
     SOUI::SStringT m_strImgDecoder;
 };

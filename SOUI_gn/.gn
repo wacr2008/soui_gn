@@ -1,2 +1,4 @@
 # The location of the build configuration file.
 buildconfig = "//build/config/BUILDCONFIG.gn"
+
+secondary_source = "//build/secondary/"

@@ -1,0 +1,27 @@
+<resource>
+  <UIDEF>
+    <file name="XML_INIT" path="uidef\init.xml" />
+  </UIDEF>
+  <LAYOUT>
+    <file name="XML_MAINWND" path="xml\dlg_main.xml" />
+  </LAYOUT>
+  <values>
+    <file name="string" path="values\string.xml" />
+    <file name="color" path="values\color.xml" />
+    <file name="skin" path="values\skin.xml" />
+  </values>
+  <IMGX>
+    <file name="Skinicon" path="image\emojiTab.png" />
+    <file name="BtnSet" path="image\6-set.png" />
+    <file name="tabbtn" path="image\tabbtn.png" />
+    <file name="border" path="image\border.png" />
+    <file name="btnDel" path="image\delete.png" />
+    <file name="btnQuitManage" path="image\quitManage.png" />
+    <file name="btnSelectAll" path="image\selectAll.png" />
+    <file name="png_vscroll" path="image\vscrollbar.png" />
+    <file name="selectd" path="image\selectd.png" />
+  </IMGX>
+  <SMENUEX>
+    <file name="menuex_setting" path="xml\menuex_setting.xml" />
+  </SMENUEX>
+</resource>
