@@ -7,11 +7,11 @@ namespace SevenZip
 	SevenZipArchive::SevenZipArchive()
 		: m_compressionFormat(CompressionFormat::SevenZip)
         , m_compressionLevel(CompressionLevel::Default)
-		, m_ReadMetadata(false)
-		, m_OverrideCompressionFormat(false)
+        , m_ReadMetadata(false)
+        , m_OverrideCompressionFormat(false)
+        , m_numberofitems(0)
 		, m_EncryptFileName(false)
 	{
-		 
 	}
 
 	SevenZipArchive::~SevenZipArchive()

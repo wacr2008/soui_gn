@@ -35,7 +35,7 @@ source_7z_file = [
     "C/Threads.h",
     "C/Xz.h",
     "C/XzCrc64.h",
-    "C/XzEnc.h",    
+    "C/XzEnc.h",
     "SevenZip/ArchiveExtractCallback.h",
     "SevenZip/ArchiveOpenCallback.h",
     "SevenZip/ArchiveUpdateCallback.h",

@@ -39,12 +39,13 @@ namespace SevenZip
 		TString m_archivePath;
 		CompressionFormatEnum m_compressionFormat;
 		CompressionLevelEnum m_compressionLevel;
-		size_t m_numberofitems = 0;
+		size_t m_numberofitems;
 		std::vector<TString> m_itemnames;
 		std::vector<size_t> m_origsizes;
 	private:
 		bool pri_GetNumberOfItems();
 		bool pri_GetItemsNames();
         bool pri_DetectCompressionFormat(CompressionFormatEnum& format);
+
 	};
 }

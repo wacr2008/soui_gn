@@ -44,6 +44,14 @@ executable("UiEditor") {
     "../../controls.extend/SScrollText.cpp",
     "../../controls.extend/SScrollText.h",
 
+    "../../controls.extend/colorpicker/ColourPopup.cpp",
+    "../../controls.extend/colorpicker/ColourPopup.h",
+    "../../controls.extend/colorpicker/SColorPicker.cpp",
+    "../../controls.extend/colorpicker/SColorPicker.h",
+    "../../controls.extend/colorpicker/Tooltipctrl.h",
+
+
+
     "../../controls.extend/SAnimator.h",
     "../../controls.extend/SAnimImg.cpp",
     "../../controls.extend/SAnimImg.h",
@@ -136,6 +144,8 @@ executable("UiEditor") {
     "CNewGuid.h",
     "DesignerView.cpp",
     "DesignerView.h",
+    "DlgFontSelect.cpp",
+    "DlgFontSelect.h",
     "DlgAbout.cpp",
     "DlgAbout.h",
     "DlgCreatePro.cpp",

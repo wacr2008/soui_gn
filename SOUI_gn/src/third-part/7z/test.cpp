@@ -45,7 +45,7 @@ public:
 		decompress.SetArchivePath(L"D:\\test.7z");
 
 		HRESULT ret = S_OK;
-		if (ret != decompress.ExtractArchive(L"D:\\test", NULL, &pwd, fileStreams))
+		if (ret != decompress.ExtractArchive(fileStreams, NULL, &pwd))
 		{
 			wprintf_s(L"decompress 7z to dir failed\n");
 		}
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 {
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
-
+	 
 //    
 }
 

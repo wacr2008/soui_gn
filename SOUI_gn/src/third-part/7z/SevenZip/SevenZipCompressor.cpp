@@ -1,4 +1,4 @@
-ï»¿#include "SevenZipCompressor.h"
+#include "SevenZipCompressor.h"
 #include "GUIDs.h"
 #include "FileSys.h"
 #include "ArchiveUpdateCallback.h"
@@ -83,7 +83,7 @@ CMyComPtr< IStream > SevenZipCompressor::OpenArchiveStream()
 
 HRESULT SevenZipCompressor::FindAndCompressFiles(const TString& directory, const TString& searchPattern, const TString& pathPrefix_, bool recursion, ProgressCallback* callback, SevenZipPassword *pSevenZipPassword)
 {
-    //ä¿®æ­£å‹ç¼©åŒ…é‡Œé¢æœ‰ç©ºçš„é¡¶çº§æ–‡ä»¶å¤¹çš„çš„æƒ…å†µ
+    //ĞŞÕıÑ¹Ëõ°üÀïÃæÓĞ¿ÕµÄ¶¥¼¶ÎÄ¼ş¼ĞµÄµÄÇé¿ö
     TString pathPrefix = pathPrefix_;
     if (*pathPrefix.rbegin() != L'/'&&*pathPrefix.rbegin() != L'\\')
         pathPrefix += L'\\';
@@ -103,14 +103,16 @@ HRESULT SevenZipCompressor::FindAndCompressFiles(const TString& directory, const
 	std::vector< FilePathInfo > files = FileSys::GetFilesInDirectory( directory, searchPattern, recursion );
     if (callback)
     {
-        if (callback->OnFileCount(files.size()))
+        if (callback->OnFileCount((unsigned int)files.size()))
         {
             std::vector<std::wstring> itemNames;
             itemNames.reserve(files.size());
             std::vector<unsigned __int64> itemSizes;
             itemSizes.reserve(files.size());
-            for (auto&a : files)
+            
+            for (size_t i = 0; i< files.size(); ++i)
             {
+                FilePathInfo& a = files[i];
                 itemNames.push_back(a.FilePath);
                 itemSizes.push_back(a.Size);
             }

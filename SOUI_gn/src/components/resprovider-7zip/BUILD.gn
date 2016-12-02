@@ -29,8 +29,15 @@ component("resprovider-7zip") {
 
   deps = [ 
     "../../utilities",
-    "../../third-part/7z:7zunzip",
   ]
+
+  if (is_component_build) 
+  {
+      deps += [         
+        "../../third-part/7z:7zunzip",
+      ] 
+  }
+  
 
   if (is_component_build) {
      sources += [ "ResProvider-7Zip.rc",]

@@ -1,4 +1,4 @@
-ï»¿#include "FileSys.h"
+#include "FileSys.h"
 #include "PathScanner.h"
 #include <ShlObj.h>
 #include <Shlwapi.h>
@@ -184,28 +184,28 @@ bool FileSys::RemovePath(const TString& path)
         return false;
     }
 
-    //ç¡®ä¿æ–‡ä»¶æˆ–è€…ç›®å½•å­˜åœ¨
+    //È·±£ÎÄ¼ş»òÕßÄ¿Â¼´æÔÚ
     if (!PathExists(path))
         return true;
 
-    //ç›®å½•çš„è·¯å¾„ä»¥2ä¸ª\0ç»“å°¾
+    //Ä¿Â¼µÄÂ·¾¶ÒÔ2¸ö\0½áÎ²
     TString tmp_path = path;
     tmp_path.resize(tmp_path.size() + 2);
 
     SHFILEOPSTRUCT FileOp;
     ZeroMemory(&FileOp, sizeof(SHFILEOPSTRUCT));
-    FileOp.fFlags |= FOF_SILENT;        /*ä¸æ˜¾ç¤ºè¿›åº¦*/
-    FileOp.fFlags |= FOF_NOERRORUI;        /*ä¸æŠ¥å‘Šé”™è¯¯ä¿¡æ¯*/
-    FileOp.fFlags |= FOF_NOCONFIRMATION;/*ç›´æ¥åˆ é™¤ï¼Œä¸è¿›è¡Œç¡®è®¤*/
-    FileOp.fFlags &= ~FOF_ALLOWUNDO; /*ç›´æ¥åˆ é™¤ï¼Œä¸æ”¾å…¥å›æ”¶ç«™*/
+    FileOp.fFlags |= FOF_SILENT;        /*²»ÏÔÊ¾½ø¶È*/
+    FileOp.fFlags |= FOF_NOERRORUI;        /*²»±¨¸æ´íÎóĞÅÏ¢*/
+    FileOp.fFlags |= FOF_NOCONFIRMATION;/*Ö±½ÓÉ¾³ı£¬²»½øĞĞÈ·ÈÏ*/
+    FileOp.fFlags &= ~FOF_ALLOWUNDO; /*Ö±½ÓÉ¾³ı£¬²»·ÅÈë»ØÊÕÕ¾*/
     FileOp.hNameMappings = NULL;
     FileOp.hwnd = NULL;
     FileOp.lpszProgressTitle = NULL;
     FileOp.wFunc = FO_DELETE;
-    FileOp.pFrom = &tmp_path[0]; /*è¦åˆ é™¤çš„ç›®å½•ï¼Œå¿…é¡»ä»¥2ä¸ª\0ç»“å°¾*/
+    FileOp.pFrom = &tmp_path[0]; /*ÒªÉ¾³ıµÄÄ¿Â¼£¬±ØĞëÒÔ2¸ö\0½áÎ²*/
     FileOp.pTo = NULL;
 
-    /*åˆ é™¤ç›®å½•*/
+    /*É¾³ıÄ¿Â¼*/
     if (0 == SHFileOperation(&FileOp))
     {
         return true;
@@ -231,15 +231,15 @@ bool FileSys::BackupFile(const TString&orignal, const TString&backup)
 
 static std::wstring path_without_extension(const std::wstring& lpszOriginalPath)
 {
-    auto pos_base_name = lpszOriginalPath.find_last_of(L"/\\");
-    auto pos_dot = lpszOriginalPath.find(L'.', pos_base_name);
+    size_t pos_base_name = lpszOriginalPath.find_last_of(L"/\\");
+    size_t pos_dot = lpszOriginalPath.find(L'.', pos_base_name);
     return lpszOriginalPath.substr(0, pos_dot);
 }
 
 static std::wstring path_without_extension(const std::wstring& lpszOriginalPath, std::wstring& ext)
 {
-    auto pos_base_name = lpszOriginalPath.find_last_of(L"/\\");
-    auto pos_dot = lpszOriginalPath.find(L'.', pos_base_name);
+    size_t pos_base_name = lpszOriginalPath.find_last_of(L"/\\");
+    size_t pos_dot = lpszOriginalPath.find(L'.', pos_base_name);
     ext =
         (pos_dot != std::wstring::npos)
         ? lpszOriginalPath.substr(pos_dot) : L"";
@@ -263,7 +263,7 @@ static std::wstring get_unique_path_with_dt(const std::wstring&path)
     std::wstring ext;
     std::wstring base_name = path_without_extension(path, ext);
 
-    // æ‰¾ç¬¬ä¸€ä¸ªä¸å­˜åœ¨çš„è·¯å¾„
+    // ÕÒµÚÒ»¸ö²»´æÔÚµÄÂ·¾¶
     std::wstring save_path = path;
     while (FileSys::PathExists(save_path))
     {
@@ -277,7 +277,7 @@ TString FileSys::GetUniquePath(const TString& path)
     std::wstring ext;
     std::wstring base_name = path_without_extension(path, ext);
 
-    // æ‰¾ç¬¬ä¸€ä¸ªä¸å­˜åœ¨çš„è·¯å¾„
+    // ÕÒµÚÒ»¸ö²»´æÔÚµÄÂ·¾¶
     std::wstring save_path = path;
     while (PathExists(save_path))
     {

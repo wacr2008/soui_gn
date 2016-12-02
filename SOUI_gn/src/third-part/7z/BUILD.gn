@@ -16,8 +16,8 @@ source_set("7zunzip") {
               "SevenZip/ArchiveExtractCallbackMemory.h",  
               "SevenZip/OutStreamWrapperMemory.cpp",        
               "SevenZip/OutStreamWrapperMemory.h",  
-              "SevenZip/BlobBuffer.cpp",
-              "SevenZip/BlobBuffer.h",
+              "SevenZip/MemoryStream.cpp",
+              "SevenZip/MemoryStream.h",
               "SevenZip/ErpExcept.cpp",
               "SevenZip/ErpExcept.h",
               "SevenZip/FileStream.cpp",
@@ -38,8 +38,7 @@ source_set("7zunzip") {
   }
   
 
-  defines = [
-    "_M_IX86",
+  defines = [ 
     "_CRT_NON_CONFORMING_SWPRINTFS",
     "_CRT_SECURE_NO_WARNINGS", 
     "EXTRACT_ONLY", 
@@ -48,6 +47,15 @@ source_set("7zunzip") {
     "_7ZIP_LARGE_PAGES",
     "_7ZIP_ST_9",
     ]
+  
+  if (target_cpu == "x86" )
+  {
+      defines +=["_M_IX86"]
+  }
+  else if(target_cpu == "x64") 
+  {
+      defines +=["_M_X64","x64"] 
+  }
 } 
 
 source_set("7z") {
@@ -62,8 +70,8 @@ source_set("7z") {
               "SevenZip/ArchiveExtractCallbackMemory.h",   
               "SevenZip/OutStreamWrapperMemory.cpp",        
               "SevenZip/OutStreamWrapperMemory.h",       
-              "SevenZip/BlobBuffer.cpp",
-              "SevenZip/BlobBuffer.h",
+              "SevenZip/MemoryStream.cpp",
+              "SevenZip/MemoryStream.h",
               "SevenZip/ErpExcept.cpp",
               "SevenZip/ErpExcept.h",
               "SevenZip/FileStream.cpp",
@@ -84,8 +92,7 @@ source_set("7z") {
   }
   
 
-  defines = [
-    "_M_IX86",
+  defines = [ 
     "_CRT_NON_CONFORMING_SWPRINTFS",
     "_CRT_SECURE_NO_WARNINGS", 
     "EXTERNAL_CODECS", 
@@ -94,6 +101,15 @@ source_set("7z") {
     "_7ZIP_LARGE_PAGES",
     "_7ZIP_ST_9",    
     ]
+
+  if (target_cpu == "x86" )
+  {
+      defines +=["_M_IX86"]
+  }
+  else if(target_cpu == "x64") 
+  {
+      defines +=["_M_X64","x64"] 
+  }
 } 
 
  

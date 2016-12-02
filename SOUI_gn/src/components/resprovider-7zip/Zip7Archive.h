@@ -47,9 +47,9 @@ public:
 
 	BOOL Attach(LPBYTE pData, DWORD dwSize);
 	void Detach();
-	BlobBuffer &getBlob();
+	MemoryStream &getBlob();
 protected: 
-	BlobBuffer m_blob;
+	MemoryStream m_blob;
 };
 
 //	ZIP Archive class, load files from a zip archive

@@ -1,4 +1,4 @@
-ï»¿#include "DesignerView.h"
+#include "DesignerView.h"
 #include "SMoveWnd.h"
 #include "CNewGuid.h"
 #include "helper\SplitString.h"
@@ -6,11 +6,11 @@
 #include "DlgStyleManage.h"
 #include "core/SWnd.h"
 #include "MainDlg.h"
+#include "DlgFontSelect.h"
 
 #define  MARGIN 20
 
 using namespace SOUI;
-
 BOOL SDesignerView::NewLayout(SStringT strResName, SStringT strPath)
 {
 	SStringT strShortPath = strPath.Mid(m_strProPath.GetLength() + 1);
@@ -49,23 +49,17 @@ SDesignerView::SDesignerView(SHostDialog *pMainHost, SWindow *pContainer, STreeC
 	pugi::xml_parse_result result = doc.load_file(_T("Config\\Ctrl.xml"));
 	if (!result)
 	{
-		Debug(_T("åŠ è½½Ctrl.xmlå¤±è´¥"));
+		Debug(_T("¼ÓÔØCtrl.xmlÊ§°Ü"));
 		return;
 	}
 
-	pugi::xml_node node = doc.child(_T("root")).child(_T("å®¹å™¨æ§ä»¶")).first_child();
+	pugi::xml_node node = doc.child(_T("root")).child(_T("ÈİÆ÷¿Ø¼ş")).first_child();
 	while (node)
 	{
 		m_lstContainerCtrl.AddTail(node.name());
 		node = node.next_sibling();
 	}
 
-	SPOSITION pos = m_lstContainerCtrl.GetHeadPosition();
-	while (pos)
-	{
-		SStringT strTemp = m_lstContainerCtrl.GetNext(pos);
-
-	}
 	m_privateStylePool.Attach(new SStylePool);
 	m_privateSkinPool.Attach(new SSkinPool);
 }
@@ -87,7 +81,7 @@ BOOL SDesignerView::OpenProject(SStringT strFileName)
 	CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
 	if (!pResProvider->Init((LPARAM)s, 0))
 	{
-		Debug(_T("CreateResProviderå¤±è´¥"));
+		Debug(_T("CreateResProviderÊ§°Ü"));
 		return FALSE;
 	}
 	SApplication::getSingletonPtr()->AddResProvider(pResProvider);
@@ -115,6 +109,7 @@ BOOL SDesignerView::InsertLayoutToMap(SStringT strFileName)
 
 	m_strCurFile = strFileName;
 	RenameChildeWnd(xmlDoc1->first_child());
+	m_strCurFile.Empty();
 	return TRUE;
 }
 
@@ -141,13 +136,13 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 
 	if (S_CW2T(xmlroot.name()) != _T("SOUI"))
 	{
-		//includeæ–‡ä»¶
+		//includeÎÄ¼ş
 		xmlnode = xmlroot;
 		bIsInclude = TRUE;
 	}
 	else
 	{
-		//åŠ è½½ç§æœ‰çš®è‚¤
+		//¼ÓÔØË½ÓĞÆ¤·ô
 		if (m_privateStylePool->GetCount())
 		{
 			m_privateStylePool->RemoveAll();
@@ -163,7 +158,7 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 			m_privateSkinPool->RemoveAll();
 			GETSKINPOOLMGR->PopSkinPool(m_privateSkinPool);
 		}
-		int skincount=m_privateSkinPool->LoadSkins(xmlroot.child(L"skin"));//ä»xmlNodeåŠ åŠ è½½ç§æœ‰skin
+		int skincount=m_privateSkinPool->LoadSkins(xmlroot.child(L"skin"));//´ÓxmlNode¼Ó¼ÓÔØË½ÓĞskin
 		if (skincount)
 		{
 			GETSKINPOOLMGR->PushSkinPool(m_privateSkinPool);
@@ -200,25 +195,25 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 		pugi::xml_attribute attr = m_CurrentLayoutNode.first_attribute();
 		while (attr)
 		{
-			// width heightå•ç‹¬å¤„ç†ï¼Œè§£å†³marginçš„é—®é¢˜
+			// width heightµ¥¶À´¦Àí£¬½â¾ömarginµÄÎÊÌâ
 			if (strSize.CompareNoCase(attr.name()) == 0)
 			{
-				//sizeå±æ€§
+				//sizeÊôĞÔ
 				SStringT strVal = attr.value();
 				swscanf(strVal,L"%d,%d",&nWidth,&nHeight);
 
 				bHasSize = TRUE;
 			}else if (strWidth.CompareNoCase(attr.name()) == 0)
 			{     
-				//widthå±æ€§
+				//widthÊôĞÔ
 				::StrToIntExW(attr.value(),STIF_SUPPORT_HEX,&nWidth);               
 			}else if (strHeight.CompareNoCase(attr.name()) == 0)
 			{  
-				//heightå±æ€§
+				//heightÊôĞÔ
 				::StrToIntExW(attr.value(),STIF_SUPPORT_HEX,&nHeight);
 			}else if (strMargin.CompareNoCase(attr.name()) == 0)
 			{  
-				//å¿½ç•¥marginå±æ€§
+				//ºöÂÔmarginÊôĞÔ
 
 			}else
 			{
@@ -244,7 +239,7 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 		s2 = L"<window pos=\"20,20\" " +  s2 + strAttrSize + L"></window>";
 
 
-		//åˆ é™¤size æ”¹æˆwidth height
+		//É¾³ısize ¸Ä³Éwidth height
 		if (bHasSize)
 		{
 			m_CurrentLayoutNode.remove_attribute(_T("size"));
@@ -268,7 +263,7 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 
 	}else
 	{
-		//includeæ–‡ä»¶
+		//includeÎÄ¼ş
 
 		int nWidth = 0, nHeight = 0;
 
@@ -304,7 +299,7 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 	//wchar_t *s = L"<window pos=\"20,20,@500,@500\" colorBkgnd=\"#d0d0d0\"></window>";
 	wchar_t *s3 = L"<movewnd pos=\"20,20,@500,@500\" ></movewnd>";
 
-	////åˆ›å»ºå¸ƒå±€çª—å£çš„æ ¹çª—å£
+	////´´½¨²¼¾Ö´°¿ÚµÄ¸ù´°¿Ú
 
 	m_pRealWndRoot = m_pContainer->CreateChildren(s2);
  	m_pMoveWndRoot = (SMoveWnd *)m_pContainer->CreateChildren(s3);
@@ -334,13 +329,13 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 
 void SDesignerView::CreateAllChildWnd(SWindow *pRealWnd, SMoveWnd *pMoveWnd)
 {
-	////å¾—åˆ°ç¬¬ä¸€ä¸ªå­çª—å£
+	////µÃµ½µÚÒ»¸ö×Ó´°¿Ú
 	SWindow *pSibReal = pRealWnd->GetWindow(GSW_FIRSTCHILD);
 	for (; pSibReal; pSibReal = pSibReal->GetWindow(GSW_NEXTSIBLING))
 	{
 		wchar_t *s1 = L"<movewnd pos=\"0,0,@100,@100\" ></movewnd>";
 
-		//åˆ›å»ºå¸ƒå±€çª—å£çš„æ ¹çª—å£
+		//´´½¨²¼¾Ö´°¿ÚµÄ¸ù´°¿Ú
 		SMoveWnd *pSibMove = (SMoveWnd *)pMoveWnd->CreateChildren(s1);
 		pSibMove->m_pRealWnd = pSibReal;
 		pSibMove->SetVisible(pSibReal->IsVisible());
@@ -358,12 +353,12 @@ void SDesignerView::CreateAllChildWnd(SWindow *pRealWnd, SMoveWnd *pMoveWnd)
 void SDesignerView::UpdateAllLayout(SMoveWnd* pMoveWndRoot)
 {
 	//int b = pMoveWndRoot->GetChildrenCount();
-	////å¾—åˆ°ç¬¬ä¸€ä¸ªå­çª—å£
+	////µÃµ½µÚÒ»¸ö×Ó´°¿Ú
 	SMoveWnd *pSibMove = (SMoveWnd*)pMoveWndRoot->GetWindow(GSW_FIRSTCHILD);
 	for (; pSibMove; pSibMove = (SMoveWnd*)pSibMove->GetWindow(GSW_NEXTSIBLING))
 	{
 
-		//æ›´æ–°ä¸¤ä¸ªçª—å£çš„å¸ƒå±€
+		//¸üĞÂÁ½¸ö´°¿ÚµÄ²¼¾Ö
 		SwndLayout *pMoveWndLayout = pSibMove->GetLayout();
 		SwndLayout *pRealWndLayout = pSibMove->m_pRealWnd->GetLayout();
 
@@ -421,26 +416,27 @@ BOOL SDesignerView::SaveAll()
 		if(DocSave.load_buffer(*strxmlWnd,wcslen(*strxmlWnd)*sizeof(wchar_t),pugi::parse_default,pugi::encoding_utf16)) 
 		{
 			pugi::xml_node NodeSave = DocSave.first_child();
+			TrimXmlNodeTextBlank(NodeSave);
 			RemoveWndName(NodeSave, FALSE, strFileName);
 
 			FullFileName = m_strProPath + _T("\\") + strFileName;
 			DocSave.save_file(FullFileName);
 		}else
 		{
-			Debug(_T("ä¿å­˜æ–‡ä»¶å¤±è´¥ï¼š") + FullFileName);
+			Debug(_T("±£´æÎÄ¼şÊ§°Ü£º") + FullFileName);
 		}
 		delete strxmlWnd;
 
 	}
 
 	m_xmlDocUiRes.save_file(m_strUIResFile);
-	Debug(_T("ä¿å­˜æˆåŠŸ"));
+	Debug(_T("±£´æ³É¹¦"));
 
 
 	return TRUE;
 }
 
-//ä¿å­˜å½“å‰æ‰“å¼€çš„å¸ƒå±€æ–‡ä»¶
+//±£´æµ±Ç°´ò¿ªµÄ²¼¾ÖÎÄ¼ş
 BOOL SDesignerView::SaveLayoutFile()
 {
 	if (m_strCurFile.IsEmpty())
@@ -465,13 +461,14 @@ BOOL SDesignerView::SaveLayoutFile()
 	if(DocSave.load_buffer(*strxmlWnd,wcslen(*strxmlWnd)*sizeof(wchar_t),pugi::parse_default,pugi::encoding_utf16))
 	{
 		pugi::xml_node NodeSave = DocSave.root();
+		TrimXmlNodeTextBlank(NodeSave);
 	    RemoveWndName(NodeSave, FALSE);
 
 		FullFileName = m_strProPath + _T("\\") + strFileName;
 		DocSave.save_file(FullFileName);
 	}else
 	{
-		Debug(_T("ä¿å­˜å¤±è´¥"));
+		Debug(_T("±£´æÊ§°Ü"));
 	}
 
 	delete strxmlWnd;
@@ -481,13 +478,13 @@ BOOL SDesignerView::SaveLayoutFile()
 	return TRUE;
 }
 
-//å…³é—­å½“å‰æ‰“å¼€çš„å¸ƒå±€æ–‡ä»¶
+//¹Ø±Õµ±Ç°´ò¿ªµÄ²¼¾ÖÎÄ¼ş
 BOOL SDesignerView::CloseLayoutFile()
 {
 	return TRUE;
 }
 
-//åˆ›å»ºçª—å£
+//´´½¨´°¿Ú
 SMoveWnd* SDesignerView::CreateWnd(SWindow *pContainer,LPCWSTR pszXml)
 {
 
@@ -503,7 +500,7 @@ void SDesignerView::RenameWnd(pugi::xml_node xmlNode, BOOL force)
 	pugi::xml_attribute xmlAttr = xmlNode.attribute(L"data", false);
 	pugi::xml_attribute xmlAttr1 = xmlNode.attribute(L"uidesiner_data", false);
 
-	SStringT strName = _T("item"); //ä¸å¤„ç†itemèŠ‚ç‚¹
+	SStringT strName = _T("item"); //²»´¦Àíitem½Úµã
 	if (strName.CompareNoCase(xmlNode.name()) == 0)
 	{
 		return;
@@ -584,7 +581,7 @@ void SDesignerView::RemoveWndName(pugi::xml_node xmlNode, BOOL bClear, SStringT 
 
 		}else
 		{
-			Debug(_T("æ›¿æ¢includeå‡ºé”™"));
+			Debug(_T("Ìæ»»include³ö´í"));
 		}
 
 
@@ -592,11 +589,11 @@ void SDesignerView::RemoveWndName(pugi::xml_node xmlNode, BOOL bClear, SStringT 
 		
 
 		if (p1)
-		{//å¦‚æœè¿™ä¸ªæ§ä»¶æ˜¯include
+		{//Èç¹ûÕâ¸ö¿Ø¼şÊÇinclude
 
 			if(!doc.load_buffer(p1->m_value,wcslen(p1->m_value)*sizeof(wchar_t),pugi::parse_default,pugi::encoding_utf16)) 
 			{	
-				Debug(_T("RemoveWndNameå‡ºé”™äº†"));
+				Debug(_T("RemoveWndName³ö´íÁË"));
 			}
 			else
 			{
@@ -651,7 +648,7 @@ void SDesignerView::RenameChildeWnd(pugi::xml_node xmlNode)
 
 	while (NodeChild)
 	{  
-		//æ›¿æ¢Include
+		//Ìæ»»Include
 		if(_wcsicmp(NodeChild.name(),L"include")==0 && NodeChild.attribute(L"src"))
 		{
 			SStringT strInclude = NodeToStr(NodeChild);
@@ -672,7 +669,7 @@ void SDesignerView::RenameChildeWnd(pugi::xml_node xmlNode)
 				(*pMap)[NodeChild.attribute(L"data").as_int()] = strInclude;
 			}else
 			{
-				Debug(_T("æ›¿æ¢includeå‡ºé”™"));
+				Debug(_T("Ìæ»»include³ö´í"));
 			}
 
 
@@ -689,7 +686,7 @@ void SDesignerView::RenameChildeWnd(pugi::xml_node xmlNode)
 
 
 
-		////åˆ¤æ–­NodeChild.name()ç±»å‹çš„æ§ä»¶æ˜¯å¦æ³¨å†Œ
+		////ÅĞ¶ÏNodeChild.name()ÀàĞÍµÄ¿Ø¼şÊÇ·ñ×¢²á
   //      if (!static_cast<SWindowFactoryMgr*>(SApplication::getSingletonPtr())->HasKey(NodeChild.name()))
 		//{
 		//	RenameChildeWnd(NodeChild);
@@ -698,7 +695,7 @@ void SDesignerView::RenameChildeWnd(pugi::xml_node xmlNode)
 		//	continue;
 		//}
 
-		//å°†<button data = "1"/> ä¿®æ”¹ä¸º
+		//½«<button data = "1"/> ĞŞ¸ÄÎª
 		//  <button data = "xxx" uidesiner_data = "1"/> 
 		RenameWnd(NodeChild);
 
@@ -852,7 +849,7 @@ void SDesignerView::UpdatePosToXmlNode(SWindow *pRealWnd, SMoveWnd* pMoveWnd)
 
 	if (attrPos2type)
 	{
-		//åˆ é™¤Pos2Type,æ”¹æˆattrOffset
+		//É¾³ıPos2Type,¸Ä³ÉattrOffset
 		xmlNode.remove_attribute(L"pos2type");
 		if (!attrOffset)
 		{
@@ -895,33 +892,33 @@ SStringW SDesignerView::GetPosFromLayout(SwndLayout *pLayout, INT nPosIndex)
 	switch (pLayout->pos[nPosIndex].pit)
 	{
 	case PIT_NULL: 
-		strPos = L"";        //æ— æ•ˆå®šä¹‰
+		strPos = L"";        //ÎŞĞ§¶¨Òå
 		break;
-	case PIT_NORMAL:        //é”šç‚¹åæ ‡
+	case PIT_NORMAL:        //Ãªµã×ø±ê
 		strPos = L"";
 		break;
-	case PIT_CENTER:        //å‚è€ƒçˆ¶çª—å£ä¸­å¿ƒç‚¹,ä»¥"|"å¼€å§‹
+	case PIT_CENTER:        //²Î¿¼¸¸´°¿ÚÖĞĞÄµã,ÒÔ"|"¿ªÊ¼
 		strPos = L"|";
 		break;
-	case PIT_PERCENT:       //æŒ‡å®šåœ¨çˆ¶çª—å£åæ ‡çš„ä¸­çš„ç™¾åˆ†æ¯”,ä»¥"%"å¼€å§‹
+	case PIT_PERCENT:       //Ö¸¶¨ÔÚ¸¸´°¿Ú×ø±êµÄÖĞµÄ°Ù·Ö±È,ÒÔ"%"¿ªÊ¼
 		strPos = L"%";
 		break;
-	case PIT_PREV_NEAR:     //å‚è€ƒå‰ä¸€ä¸ªå…„å¼Ÿçª—å£ä¸è‡ªå·±è¿‘çš„è¾¹,ä»¥"["å¼€å§‹
+	case PIT_PREV_NEAR:     //²Î¿¼Ç°Ò»¸öĞÖµÜ´°¿ÚÓë×Ô¼º½üµÄ±ß,ÒÔ"["¿ªÊ¼
 		strPos = L"[";
 		break;
-	case PIT_NEXT_NEAR:     //å‚è€ƒä¸‹ä¸€ä¸ªå…„å¼Ÿçª—å£ä¸è‡ªå·±è¿‘çš„è¾¹,ä»¥"]"å¼€å§‹
+	case PIT_NEXT_NEAR:     //²Î¿¼ÏÂÒ»¸öĞÖµÜ´°¿ÚÓë×Ô¼º½üµÄ±ß,ÒÔ"]"¿ªÊ¼
 		strPos = L"]";
 		break;
-	case PIT_PREV_FAR:     //å‚è€ƒå‰ä¸€ä¸ªå…„å¼Ÿçª—å£ä¸è‡ªå·±è¿œçš„è¾¹,ä»¥"{"å¼€å§‹
+	case PIT_PREV_FAR:     //²Î¿¼Ç°Ò»¸öĞÖµÜ´°¿ÚÓë×Ô¼ºÔ¶µÄ±ß,ÒÔ"{"¿ªÊ¼
 		strPos = L"{";
 		break;
-	case PIT_NEXT_FAR:      //å‚è€ƒä¸‹ä¸€ä¸ªå…„å¼Ÿçª—å£ä¸è‡ªå·±è¿œçš„è¾¹,ä»¥"}"å¼€å§‹
+	case PIT_NEXT_FAR:      //²Î¿¼ÏÂÒ»¸öĞÖµÜ´°¿ÚÓë×Ô¼ºÔ¶µÄ±ß,ÒÔ"}"¿ªÊ¼
 		strPos = L"}";
 		break;
-	case PIT_SIZE:          //æŒ‡å®šçª—å£çš„å®½æˆ–è€…é«˜,ä»¥"@"å¼€å§‹
+	case PIT_SIZE:          //Ö¸¶¨´°¿ÚµÄ¿í»òÕß¸ß,ÒÔ"@"¿ªÊ¼
 		strPos = L"@";
 		break;
-	case PIT_SIB_LEFT:      //å…„å¼Ÿç»“ç‚¹çš„left,ç”¨äºX
+	case PIT_SIB_LEFT:      //ĞÖµÜ½áµãµÄleft,ÓÃÓÚX
 		if (0 == nPosIndex)
 		{
 			strPos = strPos.Format(L"sib.left@%d:", pLayout->pos[nPosIndex].nRefID);
@@ -933,10 +930,10 @@ SStringW SDesignerView::GetPosFromLayout(SwndLayout *pLayout, INT nPosIndex)
 
 		break;
 
-		//case PIT_SIB_TOP:      //å…„å¼Ÿç»“ç‚¹çš„topï¼Œä¸leftç›¸åŒï¼Œç”¨äºY
+		//case PIT_SIB_TOP:      //ĞÖµÜ½áµãµÄtop£¬ÓëleftÏàÍ¬£¬ÓÃÓÚY
 		//	break;
 
-	case PIT_SIB_RIGHT:      //å…„å¼Ÿç»“ç‚¹çš„right,ç”¨äºX 
+	case PIT_SIB_RIGHT:      //ĞÖµÜ½áµãµÄright,ÓÃÓÚX 
 		if (2 == nPosIndex)
 		{
 			strPos = strPos.Format(L"sib.right@%d:", pLayout->pos[nPosIndex].nRefID);
@@ -948,7 +945,7 @@ SStringW SDesignerView::GetPosFromLayout(SwndLayout *pLayout, INT nPosIndex)
 
 		break;
 
-		//case PIT_SIB_BOTTOM:      //å…„å¼Ÿç»“ç‚¹çš„bottom,ä¸rightç›¸åŒ,ç”¨äºY 
+		//case PIT_SIB_BOTTOM:      //ĞÖµÜ½áµãµÄbottom,ÓërightÏàÍ¬,ÓÃÓÚY 
 		//	break;
 
 	default:
@@ -968,31 +965,31 @@ SStringW SDesignerView::GetPosFromLayout(SwndLayout *pLayout, INT nPosIndex)
 
 
 
-void SDesignerView::InitProperty(SWindow *pPropertyContainer)   //åˆå§‹åŒ–å±æ€§åˆ—è¡¨
+void SDesignerView::InitProperty(SWindow *pPropertyContainer)   //³õÊ¼»¯ÊôĞÔÁĞ±í
 {
 	m_pPropertyContainer = pPropertyContainer;
 	/*
 
-	<é€šç”¨æ ·å¼>
-		<id style="proptext" name ="çª—å£ID(id)" value="" />
-		<name style="proptext" name ="çª—å£åç§°(name)" value="" />	
-		<skin style="proptext" name ="çš®è‚¤(skin)" value="" />		
-	</é€šç”¨æ ·å¼>
+	<Í¨ÓÃÑùÊ½>
+		<id style="proptext" name ="´°¿ÚID(id)" value="" />
+		<name style="proptext" name ="´°¿ÚÃû³Æ(name)" value="" />	
+		<skin style="proptext" name ="Æ¤·ô(skin)" value="" />		
+	</Í¨ÓÃÑùÊ½>
 
 	<Button>
-		<åˆ†ç»„ name="åŸºæœ¬">
+		<·Ö×é name="»ù±¾">
 		<id/>
 		<name/>
 		<skin/>
 		<pos/>
 		<size/>
 		<offset/>
-		</åˆ†ç»„>
+		</·Ö×é>
 
-		<åˆ†ç»„ name="æ‹“å±•">
-		<accel style="proptext" name ="å¿«æ·é”®(accel)" value="ctrl+alt+f9" />
-		<animate style="propoption" name ="åŠ¨ç”»(animate)" value="0" options="æ— (0)|æœ‰(1)"/>	
-		</åˆ†ç»„>
+		<·Ö×é name="ÍØÕ¹">
+		<accel style="proptext" name ="¿ì½İ¼ü(accel)" value="ctrl+alt+f9" />
+		<animate style="propoption" name ="¶¯»­(animate)" value="0" options="ÎŞ(0)|ÓĞ(1)"/>	
+		</·Ö×é>
 
 	</Button>
 	*/
@@ -1000,7 +997,8 @@ void SDesignerView::InitProperty(SWindow *pPropertyContainer)   //åˆå§‹åŒ–å±æ€
 	SStringW s = L"<propgrid name=\"NAME_UIDESIGNER_PROPGRID_MAIN\" pos=\"0,0,-4,-4\" switchSkin=\"SKIN_UIDESIGNER_PROPGRID_SWITCH\"                      \
 		nameWidth=\"100\" orderType=\"group\"   itemHeight=\"30\"   ColorGroup=\"RGB(96,112,138)\"                                          \
 		ColorItemSel=\"rgb(234,128,16)\" colorItemSelText=\"#FF0000\" EditBkgndColor=\"rgb(87,104,132)\"                                    \
-		autoWordSel=\"1\"> <cmdbtnstyle skin=\"_skin.sys.btn.normal\">...</cmdbtnstyle> </propgrid>";
+		autoWordSel=\"1\"> <cmdbtnstyle skin=\"_skin.sys.btn.normal\" colorText=\"RGB(96,112,138)\">...</cmdbtnstyle> </propgrid>";
+
 
 
 	pugi::xml_document m_xmlDocProperty;
@@ -1008,17 +1006,17 @@ void SDesignerView::InitProperty(SWindow *pPropertyContainer)   //åˆå§‹åŒ–å±æ€
 	pugi::xml_parse_result result = m_xmlDocProperty.load_file(L"Config\\property.xml");
 	if (!result)
 	{
-			Debug(_T("InitPropertyå¤±è´¥"));
+			Debug(_T("InitPropertyÊ§°Ü"));
 	}
 
 	
 
-	pugi::xml_node NodeCom = m_xmlDocProperty.child(L"root").child(L"é€šç”¨æ ·å¼");
+	pugi::xml_node NodeCom = m_xmlDocProperty.child(L"root").child(L"Í¨ÓÃÑùÊ½");
 
-	pugi::xml_node NodeCtrlList = m_xmlDocProperty.child(L"root").child(L"å±æ€§åˆ—è¡¨");
+	pugi::xml_node NodeCtrlList = m_xmlDocProperty.child(L"root").child(L"ÊôĞÔÁĞ±í");
 
 
-	//hostwndèŠ‚ç‚¹å¤„ç†
+	//hostwnd½Úµã´¦Àí
 	pugi::xml_node NodeCtrl = NodeCtrlList.child(_T("hostwnd")).first_child();
 	m_lstSouiProperty.RemoveAll();
 	pugi::xml_node NodeCtrlChild = NodeCtrl.first_child();
@@ -1039,7 +1037,7 @@ void SDesignerView::InitProperty(SWindow *pPropertyContainer)   //åˆå§‹åŒ–å±æ€
 
 
 
-	NodeCtrl = NodeCtrlList.first_child();  //NodeCtrl = ButtonèŠ‚ç‚¹
+	NodeCtrl = NodeCtrlList.first_child();  //NodeCtrl = Button½Úµã
 	while (NodeCtrl)
 	{
 		InitCtrlProperty(NodeCom, NodeCtrl);
@@ -1052,7 +1050,7 @@ void SDesignerView::InitProperty(SWindow *pPropertyContainer)   //åˆå§‹åŒ–å±æ€
 
 		if(!doc->load_buffer(s,wcslen(s)*sizeof(wchar_t),pugi::parse_default,pugi::encoding_utf16))
 		{
-			Debug(_T("InitPropertyå¤±è´¥1"));
+			Debug(_T("InitPropertyÊ§°Ü1"));
 		}
 
 		doc->child(L"propgrid").append_copy(NodeCtrl);
@@ -1074,26 +1072,26 @@ void SDesignerView::InitProperty(SWindow *pPropertyContainer)   //åˆå§‹åŒ–å±æ€
 void SDesignerView::InitCtrlProperty(pugi::xml_node NodeCom, pugi::xml_node NodeCtrl)
 {
 	/*
-	<é€šç”¨æ ·å¼>
-		<id style="proptext" name ="çª—å£ID(id)" value="" />
-		<name style="proptext" name ="çª—å£åç§°(name)" value="" />	
-		<skin style="proptext" name ="çš®è‚¤(skin)" value="" />		
-	</é€šç”¨æ ·å¼>
+	<Í¨ÓÃÑùÊ½>
+		<id style="proptext" name ="´°¿ÚID(id)" value="" />
+		<name style="proptext" name ="´°¿ÚÃû³Æ(name)" value="" />	
+		<skin style="proptext" name ="Æ¤·ô(skin)" value="" />		
+	</Í¨ÓÃÑùÊ½>
 
 	<Button>
-		<åˆ†ç»„ name="åŸºæœ¬">
+		<·Ö×é name="»ù±¾">
 			<id/>
 			<name/>
 			<skin/>
 			<pos/>
 			<size/>
 			<offset/>
-		</åˆ†ç»„>
+		</·Ö×é>
 
-		<åˆ†ç»„ name="æ‹“å±•">
-			<accel style="proptext" name ="å¿«æ·é”®(accel)" value="ctrl+alt+f9" />
-			<animate style="propoption" name ="åŠ¨ç”»(animate)" value="0" options="æ— (0)|æœ‰(1)"/>	
-		</åˆ†ç»„>
+		<·Ö×é name="ÍØÕ¹">
+			<accel style="proptext" name ="¿ì½İ¼ü(accel)" value="ctrl+alt+f9" />
+			<animate style="propoption" name ="¶¯»­(animate)" value="0" options="ÎŞ(0)|ÓĞ(1)"/>	
+		</·Ö×é>
 
 	</Button>
 
@@ -1107,7 +1105,7 @@ void SDesignerView::InitCtrlProperty(pugi::xml_node NodeCom, pugi::xml_node Node
 
 	while (NodeChild)
 	{
-		if (_wcsicmp(NodeChild.name(), L"åˆ†ç»„") == 0)
+		if (_wcsicmp(NodeChild.name(), L"·Ö×é") == 0)
 		{
 			NodeChild.set_name(L"propgroup");
 			InitCtrlProperty(NodeCom, NodeChild);
@@ -1146,9 +1144,9 @@ void SDesignerView::CreatePropGrid(SStringT strCtrlType)
 			m_pPropgrid = (SPropertyGrid *)m_pPropertyContainer->GetWindow(GSW_FIRSTCHILD);
 			if (m_pPropgrid)
 			{
-				//è¿™æ˜¯ä¸€ä¸ªå‘å•Šï¼Œè¦å…ˆè¿™æ ·æ‰ä¸æŠ¥é”™ï¼Œå› ä¸ºç‚¹æŒ‰é’®çš„æ—¶å€™ï¼ŒPropGridå¹¶æ²¡æœ‰å¤±å»ç„¦ç‚¹ï¼Œ
-				//æ²¡æœ‰æ‰§è¡ŒKillfocusæ“ä½œé”€æ¯Edit,åœ¨DestroyChildä»¥åPropGridå·²ç»é”€æ¯äº†ï¼Œè¿™æ—¶å€™åœ¨æ‰§è¡ŒPropGridä¸­editçš„killfocusä¼šæŠ¥é”™		
-				
+				//ÕâÊÇÒ»¸ö¿Ó°¡£¬ÒªÏÈÕâÑù²Å²»±¨´í£¬ÒòÎªµã°´Å¥µÄÊ±ºò£¬PropGrid²¢Ã»ÓĞÊ§È¥½¹µã£¬
+				//Ã»ÓĞÖ´ĞĞKillfocus²Ù×÷Ïú»ÙEdit,ÔÚDestroyChildÒÔºóPropGridÒÑ¾­Ïú»ÙÁË£¬ÕâÊ±ºòÔÚÖ´ĞĞPropGridÖĞeditµÄkillfocus»á±¨´í		
+				m_pPropgrid-> GetEventSet()->unsubscribeEvent(EventPropGridValueChanged::EventID,Subscriber(&SDesignerView::OnPropGridValueChanged,this));
 				m_pPropgrid->SetFocus();
 
 
@@ -1160,7 +1158,7 @@ void SDesignerView::CreatePropGrid(SStringT strCtrlType)
 			strTemp = m_CurrentLayoutNode.name();
 
 			if (strCtrlType.CompareNoCase(_T("hostwnd")) == 0 && strTemp.CompareNoCase(_T("SOUI")) !=0 )
-			{   //include æ–‡ä»¶
+			{   //include ÎÄ¼ş
 
 				strCtrlType = _T("include");
 				//return;
@@ -1179,11 +1177,14 @@ void SDesignerView::CreatePropGrid(SStringT strCtrlType)
 
 				m_pPropgrid-> GetEventSet()->subscribeEvent(EventPropGridValueChanged::EventID,Subscriber(&SDesignerView::OnPropGridValueChanged,this));
 				m_pPropgrid-> GetEventSet()->subscribeEvent(EventPropGridItemClick::EventID,Subscriber(&SDesignerView::OnPropGridItemClick,this));
+				m_pPropgrid-> GetEventSet()->subscribeEvent(EventPropGridItemActive::EventID,Subscriber(&SDesignerView::OnPropGridItemActive,this));
 
 
 			}
 
 			m_strCurrentCtrlType = strCtrlType;
+
+			((CMainDlg*)m_pMainHost)->m_edtDesc->SetWindowText(_T(""));
 
 	//}
 }
@@ -1195,6 +1196,7 @@ void SDesignerView::UpdatePropGrid(pugi::xml_node xmlNode)
 	{
 		return;
 	}
+
 
 	m_pPropgrid->ClearAllGridItemValue();
 
@@ -1249,7 +1251,9 @@ void SDesignerView::UpdatePropGrid(pugi::xml_node xmlNode)
 		IPropertyItem *pItem = m_pPropgrid->GetGridItem(_T("UiEdit_windowText"));
 		if (pItem)
 		{
-			pItem->SetStringOnly(xmlNode.text().get());
+			SStringT strTemp = xmlNode.text().get();
+			strTemp.TrimBlank();
+			pItem->SetStringOnly(strTemp);
 		};
 
 		while (xmlAttr)
@@ -1284,16 +1288,16 @@ bool SDesignerView::OnPropGridValueChanged( EventArgs *pEvt )
 	BOOL bRoot = FALSE;
 
 	IPropertyItem* pItem = ((EventPropGridValueChanged*)pEvt)->pItem;
-	SStringT s = pItem->GetName2();  //å±æ€§åï¼špos skin name id ç­‰ç­‰
+	SStringT s = pItem->GetName2();  //ÊôĞÔÃû£ºpos skin name id µÈµÈ
 
-	SStringT s1 = pItem->GetString();   //å±æ€§çš„å€¼
+	SStringT s1 = pItem->GetString();   //ÊôĞÔµÄÖµ
 
 	if (s.IsEmpty())
 	{
 		return false;
 	}
 
-	//å¦‚æœå½“å‰é€‰æ‹©çš„æ˜¯å¸ƒå±€æ ¹çª—å£ï¼Œéœ€è¦ç‰¹æ®Šå¤„ç†
+	//Èç¹ûµ±Ç°Ñ¡ÔñµÄÊÇ²¼¾Ö¸ù´°¿Ú£¬ĞèÒªÌØÊâ´¦Àí
 	if (m_CurSelCtrl == m_pMoveWndRoot)
 	{
 
@@ -1423,7 +1427,7 @@ bool SDesignerView::OnPropGridValueChanged( EventArgs *pEvt )
 			m_CurSelCtrl = p->m_value;
 		}else
 		{
-			Debug(_T("å‡ºé”™äº†"));
+			Debug(_T("³ö´íÁË"));
 		}
 	}
 
@@ -1446,7 +1450,7 @@ void SDesignerView::RefreshRes()
 	CreateResProvider(RES_FILE, (IObjRef**)&pResProvider1);
 	if (!pResProvider1->Init((LPARAM)s, 0))
 	{
-		Debug(_T("ResProvideråˆå§‹åŒ–å¤±è´¥")); 
+		Debug(_T("ResProvider³õÊ¼»¯Ê§°Ü")); 
 		return ;
 	}
 	SApplication::getSingletonPtr()->AddResProvider(pResProvider1);
@@ -1460,12 +1464,14 @@ bool SDesignerView::OnPropGridItemClick( EventArgs *pEvt )
 	IPropertyItem* pItem = pEvent->pItem;
 	SStringT strType = pEvent->strType;
 
+
+
 	if (strType.CompareNoCase(_T("skin")) == 0)
 	{
 		SDlgSkinSelect DlgSkin(_T("layout:UIDESIGNER_XML_SKIN_SELECT"), pItem->GetString(), m_strUIResFile);
 		if (DlgSkin.DoModal(m_pMainHost->m_hWnd) == IDOK)
 		{
-			SStringT s1 = pItem->GetString();   //å±æ€§çš„å€¼
+			SStringT s1 = pItem->GetString();   //ÊôĞÔµÄÖµ
 
 			if (s1.CompareNoCase(DlgSkin.m_strSkinName) != 0)
 			{
@@ -1478,18 +1484,23 @@ bool SDesignerView::OnPropGridItemClick( EventArgs *pEvt )
 		
 	    
 
-		//è°ƒç”¨çš®è‚¤å¯¹è¯æ¡†
+		//µ÷ÓÃÆ¤·ô¶Ô»°¿ò
 	}
 	else if (strType.CompareNoCase(_T("font")) == 0)
 	{
 	
-		//è°ƒç”¨ç±»å‹å¯¹è¯æ¡†
-	
-			//((CMainDlg*)m_pMainHost)->test();
+		//µ÷ÓÃ×ÖÌå¶Ô»°¿ò
+			SDlgFontSelect DlgFont(pItem->GetString());
+			if (DlgFont.DoModal(m_pMainHost->m_hWnd) == IDOK)
+			{
+				pItem->SetString(DlgFont.m_strFont);
+			}
+
 
 
 	}	else if (strType.CompareNoCase(_T("class")) == 0)
 	{
+
 	}
 
 
@@ -1516,7 +1527,7 @@ BOOL SDesignerView::ReLoadLayout()
 	}
 	else
 	{
-		////åŠ è½½ç§æœ‰çš®è‚¤
+		////¼ÓÔØË½ÓĞÆ¤·ô
 		//if (m_privateStylePool->GetCount())
 		//{
 		//	m_privateStylePool->RemoveAll();
@@ -1532,7 +1543,7 @@ BOOL SDesignerView::ReLoadLayout()
 		//	m_privateSkinPool->RemoveAll();
 		//	GETSKINPOOLMGR->PopSkinPool(m_privateSkinPool);
 		//}
-		//int skincount=m_privateSkinPool->LoadSkins(m_CurrentLayoutNode.child(L"skin"));//ä»xmlNodeåŠ åŠ è½½ç§æœ‰skin
+		//int skincount=m_privateSkinPool->LoadSkins(m_CurrentLayoutNode.child(L"skin"));//´ÓxmlNode¼Ó¼ÓÔØË½ÓĞskin
 		//if (skincount)
 		//{
 		//	GETSKINPOOLMGR->PushSkinPool(m_privateSkinPool);
@@ -1566,23 +1577,23 @@ BOOL SDesignerView::ReLoadLayout()
 		pugi::xml_attribute attr = m_CurrentLayoutNode.first_attribute();
 		while (attr)
 		{
-			// width heightå•ç‹¬å¤„ç†ï¼Œè§£å†³marginçš„é—®é¢˜
+			// width heightµ¥¶À´¦Àí£¬½â¾ömarginµÄÎÊÌâ
 			if (strSize.CompareNoCase(attr.name()) == 0)
 			{
-				//sizeå±æ€§
+				//sizeÊôĞÔ
 				SStringT strVal = attr.value();
 				swscanf(strVal,L"%d,%d",&nWidth,&nHeight);
 			}else if (strWidth.CompareNoCase(attr.name()) == 0)
 			{     
-				//widthå±æ€§
+				//widthÊôĞÔ
 				::StrToIntExW(attr.value(),STIF_SUPPORT_HEX,&nWidth);               
 			}else if (strHeight.CompareNoCase(attr.name()) == 0)
 			{  
-				//heightå±æ€§
+				//heightÊôĞÔ
 				::StrToIntExW(attr.value(),STIF_SUPPORT_HEX,&nHeight);
 			}else if (strMargin.CompareNoCase(attr.name()) == 0)
 			{  
-				//å¿½ç•¥marginå±æ€§
+				//ºöÂÔmarginÊôĞÔ
 
 			}else
 			{
@@ -1645,7 +1656,7 @@ BOOL SDesignerView::ReLoadLayout()
 	//wchar_t *s = L"<window pos=\"20,20,@500,@500\" colorBkgnd=\"#d0d0d0\"></window>";
 	wchar_t *s3 = L"<movewnd pos=\"20,20,@500,@500\" ></movewnd>";
 
-	////åˆ›å»ºå¸ƒå±€çª—å£çš„æ ¹çª—å£
+	////´´½¨²¼¾Ö´°¿ÚµÄ¸ù´°¿Ú
 
 	m_pRealWndRoot = m_pContainer->CreateChildren(s2);
 	m_pMoveWndRoot = (SMoveWnd *)m_pContainer->CreateChildren(s3);
@@ -1673,7 +1684,7 @@ BOOL SDesignerView::ReLoadLayout()
 
 
 
-BOOL SDesignerView::bIsContainerCtrl(SStringT strCtrlName) //åˆ¤æ–­æ§ä»¶æ˜¯å¦æ˜¯å®¹å™¨æ§ä»¶
+BOOL SDesignerView::bIsContainerCtrl(SStringT strCtrlName) //ÅĞ¶Ï¿Ø¼şÊÇ·ñÊÇÈİÆ÷¿Ø¼ş
 {
 	SStringT s;
 	SPOSITION pos = m_lstContainerCtrl.GetHeadPosition();
@@ -1690,7 +1701,7 @@ BOOL SDesignerView::bIsContainerCtrl(SStringT strCtrlName) //åˆ¤æ–­æ§ä»¶æ˜¯å¦æ
 }
 
 
-void SDesignerView::AddCodeToEditor(CScintillaWnd* pSciWnd)  //å¤åˆ¶xmlä»£ç åˆ°ä»£ç ç¼–è¾‘å™¨
+void SDesignerView::AddCodeToEditor(CScintillaWnd* pSciWnd)  //¸´ÖÆxml´úÂëµ½´úÂë±à¼­Æ÷
 {
 	m_strCurFileEditor = m_strCurFile;
 
@@ -1716,6 +1727,7 @@ void SDesignerView::AddCodeToEditor(CScintillaWnd* pSciWnd)  //å¤åˆ¶xmlä»£ç åˆ
 	//Debug(doc.root().first_child());
 
 	RemoveWndName(doc.root(), TRUE);
+	TrimXmlNodeTextBlank(doc.root());
 
 
 	pugi::xml_writer_buff writer;
@@ -1729,7 +1741,7 @@ void SDesignerView::AddCodeToEditor(CScintillaWnd* pSciWnd)  //å¤åˆ¶xmlä»£ç åˆ
 }
 
 
-void SDesignerView::GetCodeFromEditor(CScintillaWnd* pSciWnd)//ä»ä»£ç ç¼–è¾‘å™¨è·å–xmlä»£ç 
+void SDesignerView::GetCodeFromEditor(CScintillaWnd* pSciWnd)//´Ó´úÂë±à¼­Æ÷»ñÈ¡xml´úÂë
 {
 	if (m_strCurFile.IsEmpty())
 	{
@@ -1757,16 +1769,20 @@ void SDesignerView::GetCodeFromEditor(CScintillaWnd* pSciWnd)//ä»ä»£ç ç¼–è¾‘å™
 
 	SStringA s(chText);
 	SStringW s1 = S_CA2W(s, CP_UTF8);
+	delete chText;
 
 
 	pugi::xml_document doc;
 	if(!doc.load_buffer(s1,wcslen(s1)*sizeof(wchar_t),pugi::parse_default,pugi::encoding_utf16))
 	{
-		Debug(_T("XMLæœ‰è¯­æ³•é”™è¯¯ï¼"));
+		Debug(_T("XMLÓĞÓï·¨´íÎó£¡"));
 		return;
 	}
 
+
+
 	RenameChildeWnd(doc.root());
+	TrimXmlNodeTextBlank(doc.root());
 
 
 
@@ -1824,7 +1840,7 @@ void SDesignerView::GetCodeFromEditor(CScintillaWnd* pSciWnd)//ä»ä»£ç ç¼–è¾‘å™
 	//		m_CurSelCtrl = p->m_value;
 	//	}else
 	//	{
-	//		Debug(_T("å‡ºé”™äº†"));
+	//		Debug(_T("³ö´íÁË"));
 	//	}
 	//}
 
@@ -1849,7 +1865,7 @@ void SDesignerView::SetSelCtrlNode(pugi::xml_node xmlNode)
 		delete strxmlWnd;
 	}else
 	{
-		Debug(_T("é€‰æ‹©æ§ä»¶å¼‚å¸¸"));
+		Debug(_T("Ñ¡Ôñ¿Ø¼şÒì³£"));
 	}
 
 	return;
@@ -1862,7 +1878,7 @@ void SDesignerView::NewWnd(CPoint pt, SMoveWnd *pM)
 
 	m_xmlNode = m_xmlSelCtrlNode.first_child();
 
-	//æ›¿æ¢Include
+	//Ìæ»»Include
 	if(_wcsicmp(m_xmlNode.name(),L"include")==0 && m_xmlNode.attribute(L"src"))
 	{
 		bIsInclude = TRUE;
@@ -1884,14 +1900,14 @@ void SDesignerView::NewWnd(CPoint pt, SMoveWnd *pM)
 			(*pMap)[m_xmlNode.attribute(L"data").as_int()] = strInclude;
 		}else
 		{
-			Debug(_T("æ›¿æ¢includeå‡ºé”™"));
+			Debug(_T("Ìæ»»include³ö´í"));
 		}
 
 
 	}else
 	{
 
-		//é‡å‘½åæ§ä»¶
+		//ÖØÃüÃû¿Ø¼ş
 		RenameWnd(m_xmlNode, TRUE);
 		RenameChildeWnd(m_xmlNode);
 
@@ -1931,7 +1947,7 @@ void SDesignerView::NewWnd(CPoint pt, SMoveWnd *pM)
 		SStringT strPos;
 		/*strPos.Format(_T("%d,%d"), pt.x - rect.left, pt.y - rect.top);*/
 
-		//8 å¯¹é½
+		//8 ¶ÔÆë
 		strPos.Format(_T("%d,%d"), (pt.x - rect.left)/8*8, (pt.y - rect.top)/8*8);
 
 		if (!m_xmlNode.attribute(L"pos"))
@@ -1970,7 +1986,7 @@ void SDesignerView::NewWnd(CPoint pt, SMoveWnd *pM)
 	CreateAllChildWnd(Wnd, Wnd1);
 
 
-	//æ‰¾åˆ°m_realWndæ§ä»¶å¯¹åº”çš„xmlèŠ‚ç‚¹
+	//ÕÒµ½m_realWnd¿Ø¼ş¶ÔÓ¦µÄxml½Úµã
 	if(pRealWnd == m_pRealWndRoot)
 	{
 		SStringT s(_T("SOUI"));
@@ -1986,12 +2002,12 @@ void SDesignerView::NewWnd(CPoint pt, SMoveWnd *pM)
 	else
 	{
 
-		//æ‰¾åˆ°m_realWndæ§ä»¶å¯¹åº”çš„xmlèŠ‚ç‚¹
+		//ÕÒµ½m_realWnd¿Ø¼ş¶ÔÓ¦µÄxml½Úµã
 		SStringT s;
 		s.Format(_T("%d"), pRealWnd->GetUserData());
 		pugi::xml_node xmlNodeRealWnd = FindNodeByAttr(m_CurrentLayoutNode, L"data", s);
 
-		//å°†æ–°åˆ›å»ºçš„æ§ä»¶å†™å…¥çˆ¶æ§ä»¶çš„xmlèŠ‚ç‚¹
+		//½«ĞÂ´´½¨µÄ¿Ø¼şĞ´Èë¸¸¿Ø¼şµÄxml½Úµã
 		SetCurrentCtrl(xmlNodeRealWnd.append_copy(m_xmlNode), Wnd1);
 		//m_Desiner->m_xmlNode = xmlNodeRealWnd.append_copy(m_Desiner->m_xmlNode);
 	}
@@ -2073,7 +2089,7 @@ BOOL SDesignerView::GoToXmlStructItem(int  data, HSTREEITEM item)
 bool SDesignerView::OnTCSelChanged(EventArgs *pEvt)
 {
 	if (!m_pContainer->GetParent()->IsVisible())
-	{   //å…ˆè¿™æ ·å†™å§ï¼Œæœ‰æ—¶é—´å†æ”¹
+	{   //ÏÈÕâÑùĞ´°É£¬ÓĞÊ±¼äÔÙ¸Ä
 		return true;
 	}
 
@@ -2178,7 +2194,7 @@ void SDesignerView::ShowYSGLDlg()
 	{
 		return;
 	}
-	SDlgStyleManage dlg;
+	SDlgStyleManage dlg(_T(""), m_strUIResFile, FALSE);
 	if (dlg.DoModal(m_pMainHost->m_hWnd) == IDOK)
 	{
 		RefreshRes();
@@ -2230,4 +2246,50 @@ SWindow* SDesignerView::FindChildByUserData(SWindow* pWnd, int data)
 	}
 
 	return NULL;
+}
+
+
+void SDesignerView::TrimXmlNodeTextBlank(pugi::xml_node xmlNode)
+{
+	if (!xmlNode)
+	{
+		return;
+	}
+
+	pugi::xml_node NodeSib = xmlNode;
+	while (NodeSib)
+	{
+
+		SStringT strText = NodeSib.text().get();
+		strText.TrimBlank();
+		if (!strText.IsEmpty())
+		{
+			NodeSib.text().set(strText);
+		}
+
+		TrimXmlNodeTextBlank(NodeSib.first_child());
+		NodeSib = NodeSib.next_sibling();
+
+	}
+}
+
+
+bool SDesignerView::OnPropGridItemActive( EventArgs *pEvt )
+{
+	EventPropGridItemActive *pEvent = (EventPropGridItemActive*)pEvt;
+	IPropertyItem* pItem = pEvent->pItem;
+
+	SStringT strDesc = pItem->GetDescription();
+	SStringT strName = pItem->GetName1();
+
+	if (strDesc.IsEmpty())
+	{
+		((CMainDlg*)m_pMainHost)->m_edtDesc->SetWindowText(strName);
+	}else
+	{
+
+		((CMainDlg*)m_pMainHost)->m_edtDesc->SetWindowText(strDesc);
+	}
+
+	return true;
 }

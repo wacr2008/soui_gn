@@ -1,4 +1,4 @@
-ï»¿#include "SevenZipExtractor.h"
+#include "SevenZipExtractor.h"
 #include "GUIDs.h"
 #include "FileSys.h"
 #include "ArchiveOpenCallback.h"
@@ -98,7 +98,7 @@ namespace SevenZip
                     }
 
                     unsigned __int64 size = prop.uhVal.QuadPart;
-                    origsizes.emplace_back(size);
+                    origsizes.push_back(size);
 
                     // Get name of file
                     hr = archive->GetProperty(i, kpidPath, &prop);
@@ -107,7 +107,7 @@ namespace SevenZip
                         succ = false;
                         break;
                     }
-                    itemnames.emplace_back(prop.vt == VT_BSTR?prop.bstrVal:L"");
+                    itemnames.push_back(prop.vt == VT_BSTR?prop.bstrVal:L"");
                 }
 
                 if (!succ)
@@ -119,7 +119,7 @@ namespace SevenZip
 
                 if (!callback->OnFileItems(itemnames, origsizes))
                 {
-                    //åªä¸ºäº†å–å¾—æ–‡ä»¶ä¿¡æ¯,æ‰€ä»¥ç›´æŽ¥è¿”å›ž.
+                    //Ö»ÎªÁËÈ¡µÃÎÄ¼þÐÅÏ¢,ËùÒÔÖ±½Ó·µ»Ø.
                     archive->Close();
                     return S_OK;
                 }

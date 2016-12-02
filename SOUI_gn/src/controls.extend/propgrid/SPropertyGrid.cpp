@@ -2,8 +2,7 @@
 #include "propitem/SPropertyItem-Text.h"
 #include "propitem/SPropertyItem-Option.h"
 #include "propitem/SPropertyItem-Color.h"
-#include "propitem/SPropertyItem-Size.h"
-
+#include "propitem/SPropertyItem-Size.h" 
 const int KPropItemIndent   = 10;
 
 const COLORREF KColorHead  = RGBA(128,128,128,255);   //头的颜色             灰色
@@ -81,6 +80,7 @@ namespace SOUI
 		//2、Sel改变的时候响应
         GetEventSet()->addEvent(EVENTID(EventPropGridValueChanged));
         GetEventSet()->addEvent(EVENTID(EventPropGridItemClick));
+        GetEventSet()->addEvent(EVENTID(EventPropGridItemActive));
         GetEventSet()->subscribeEvent(EventLBSelChanged::EventID,Subscriber(&SPropertyGrid::OnSelChanged,this));
     }
 
@@ -418,7 +418,15 @@ namespace SOUI
                 }else if(ip==IP_VALUE)
                 {
                     IPropertyItem *pItem = (IPropertyItem*)GetItemData(iItem);
+
+					
+					EventPropGridItemActive evt(this);
+					evt.pItem = pItem;
+					FireEvent(evt);
+
                     pItem->OnInplaceActive(true);
+
+
                 }
             }
         }
@@ -594,58 +602,57 @@ namespace SOUI
     }
 
 
-//add
-BOOL SPropertyGrid::AddGridItem(IPropertyItem* Item)
-{
-	m_mapItem[Item->GetName2().MakeLower()] = Item;
-	return TRUE;
-}
-BOOL SPropertyGrid::RemoveGridItem(IPropertyItem *Item)
-{
-	m_mapItem.RemoveKey(Item->GetName2().MakeLower());
-	return TRUE;
-}
 
-BOOL SPropertyGrid::RemoveAllGridItem()
-{
-	m_mapItem.RemoveAll();
-	return TRUE;
-}
-
-//SMap<SStringT, IPropertyItem*>* SPropertyGrid::GetItemMap()
-//{
-//	return &m_mapItem;
-//}
-void SPropertyGrid::ClearAllGridItemValue()
-{
-	SPOSITION pos = m_mapItem.GetStartPosition();
-	IPropertyItem* pItem;
-
-	while (pos)
+	//add
+	BOOL SPropertyGrid::AddGridItem(IPropertyItem* Item)
 	{
-		SMap<SStringT, IPropertyItem*>::CPair *p = m_mapItem.GetNext(pos);
-		pItem = p->m_value;
-		pItem->SetStringOnly(_T(""));
+		m_mapItem[Item->GetName2().MakeLower()] = Item;
+		return TRUE;
 	}
-}
-IPropertyItem * SPropertyGrid::GetGridItem(SStringT strName2)
-{
-	SMap<SStringT, IPropertyItem*>::CPair *p = m_mapItem.Lookup(strName2.MakeLower());
-	if (p)
+	BOOL SPropertyGrid::RemoveGridItem(IPropertyItem *Item)
 	{
-		return p->m_value;
+		m_mapItem.RemoveKey(Item->GetName2().MakeLower());
+		return TRUE;
 	}
 
-	return NULL;
-}
+	BOOL SPropertyGrid::RemoveAllGridItem()
+	{
+		m_mapItem.RemoveAll();
+		return TRUE;
+	}
 
-void SPropertyGrid::OnItemButtonClick(IPropertyItem *pItem, SStringT strType)
-{
-	EventPropGridItemClick evt(this);
-	evt.pItem = pItem;
-	evt.strType = strType;
-	FireEvent(evt);
-}
+	//SMap<SStringT, IPropertyItem*>* SPropertyGrid::GetItemMap()
+	//{
+	//	return &m_mapItem;
+	//}
+	void SPropertyGrid::ClearAllGridItemValue()
+	{
+		SPOSITION pos = m_mapItem.GetStartPosition();
+		IPropertyItem* pItem;
 
+		while (pos)
+		{
+			SMap<SStringT, IPropertyItem*>::CPair *p = m_mapItem.GetNext(pos);
+			pItem = p->m_value;
+			pItem->SetStringOnly(_T(""));
+		}
+	}
+	IPropertyItem * SPropertyGrid::GetGridItem(SStringT strName2)
+	{
+		SMap<SStringT, IPropertyItem*>::CPair *p = m_mapItem.Lookup(strName2.MakeLower());
+		if (p)
+		{
+			return p->m_value;
+		}
 
+		return NULL;
+	}
+
+	void SPropertyGrid::OnItemButtonClick(IPropertyItem *pItem, SStringT strType)
+	{
+		EventPropGridItemClick evt(this);
+		evt.pItem = pItem;
+		evt.strType = strType;
+		FireEvent(evt);
+	}
 }

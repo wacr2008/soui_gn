@@ -1,7 +1,6 @@
 // imgdecoder-wic.cpp : Defines the exported functions for the DLL application.
 //
 
-//#include "stdafx.h"
 #include "imgdecoder-wic.h"
 
 #pragma  comment(lib,"windowscodecs.lib")

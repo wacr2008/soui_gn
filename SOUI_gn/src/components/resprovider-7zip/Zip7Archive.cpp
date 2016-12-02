@@ -82,7 +82,7 @@ static std::string WString2String(const std::wstring &wstr)
 		Close();
 	}
 
-	BlobBuffer &CZipFile::getBlob()
+	MemoryStream &CZipFile::getBlob()
 	{
 		return m_blob;
 	}

@@ -1,4 +1,4 @@
-#include "SPropertyItem-Size.h"
+ï»¿#include "SPropertyItem-Size.h"
 #include "../SPropertyEmbedWndHelper.hpp"
 #include "../SPropertyGrid.h"
 #include <helper/SplitString.h>
@@ -23,23 +23,13 @@ namespace SOUI
         m_szValue.cx=m_szValue.cy=0;
     }
 
-    void SPropertyItemSize::SetValue( void *pValue)
-    {
-        m_szValue = *(SIZE*)pValue;
-        OnValueChanged();
-    }
-
-    const void* SPropertyItemSize::GetValue() const
-    {
-        return &m_szValue;
-    }
 
     void SPropertyItemSize::SetString( const SStringT & strValue )
     {
         SIZE sz;
         if(_stscanf(strValue,_T("%d,%d"),&sz.cx,&sz.cy)==2)
         {
-			//Èç¹ûÖµÓĞ±ä»¯£¬¾Í·¢ËÍÍ¨Öª
+			//å¦‚æœå€¼æœ‰å˜åŒ–ï¼Œå°±å‘é€é€šçŸ¥
 			if (sz.cy != m_szValue.cy || sz.cy != m_szValue.cy)
 			{
 

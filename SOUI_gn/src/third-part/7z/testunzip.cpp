@@ -43,7 +43,7 @@ public:
 
 	void unzip() 
 	{
-		SevenZip::SevenZipPassword pwd(true, L"wuding");
+		SevenZip::SevenZipPassword pwd(true, L"123456");
 		UnProgressCallback call;
 		SevenZip::SevenZipExtractor decompress;
 		decompress.SetArchivePath(L"D:\\test.7z");
@@ -104,9 +104,9 @@ public:
 
 TEST_F(all_test_7z, TestUnzipFeature)
 {
-	//unzip(); 
+	unzip(); 
 }
-
+ 
 TEST_F(all_test_7z, TestUnzipMemoryFeature)
 {
 	unzipmeory();
