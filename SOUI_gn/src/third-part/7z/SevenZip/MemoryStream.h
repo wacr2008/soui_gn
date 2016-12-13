@@ -15,7 +15,7 @@
 
 #ifndef __MEMORY_BUFFER_H
 #define __MEMORY_BUFFER_H 
-
+ 
 #pragma warning(disable: 4786)
 
 
@@ -28,7 +28,7 @@ private:
 	unsigned long m_lBlobLen;          //实际数据总大小
 	unsigned long m_lBufferLen;          //缓冲区总大小 
 	unsigned long m_ReadLen;   //读取位置
-	unsigned char m_BlobBuffer[BLOB_BUFFER_BLOCK_SIZE];
+	unsigned char m_MemoryStream[BLOB_BUFFER_BLOCK_SIZE];
 
 	void Reset();
 public:

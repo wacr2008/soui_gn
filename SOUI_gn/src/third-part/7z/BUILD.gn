@@ -3,6 +3,123 @@ import("//testing/test.gni")
 import("7zunzip_source.gni") 
 import("7z_source.gni") 
 
+source_set("7zstaicunzip") {
+  configs += [ "//build/config:precompiled_headers" ]
+ 
+  configs -= [ "//build/config/win:default_crt" ] 
+  configs += [ "//build/config/win:static_crt" ] 
+
+   sources = [   
+              "SevenZip/SevenZipExtractorMemory.cpp",        
+              "SevenZip/SevenZipExtractorMemory.h",  
+              "SevenZip/FileStreamMemory.cpp",        
+              "SevenZip/FileStreamMemory.h",                
+              "SevenZip/ArchiveExtractCallbackMemory.cpp",        
+              "SevenZip/ArchiveExtractCallbackMemory.h",  
+              "SevenZip/OutStreamWrapperMemory.cpp",        
+              "SevenZip/OutStreamWrapperMemory.h",  
+              "SevenZip/MemoryStream.cpp",
+              "SevenZip/MemoryStream.h",
+              "SevenZip/ErpExcept.cpp",
+              "SevenZip/ErpExcept.h",
+              "SevenZip/FileStream.cpp",
+              "SevenZip/FileStream.h",
+              ] 
+
+
+  sources +=  source_7zunzip_file
+
+  include_dirs = [
+    ".", 
+  ] 
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4530",
+    ]
+  }
+  
+
+
+  defines = [
+    "_CRT_NON_CONFORMING_SWPRINTFS",
+    "_CRT_SECURE_NO_WARNINGS", 
+    "EXTRACT_ONLY", 
+    "NO_REGISTRY",
+    "_WIN32",
+    "_7ZIP_LARGE_PAGES",
+    "_7ZIP_ST_9",
+    ]
+
+  if (target_cpu == "x86" )
+  {
+      defines +=["_M_IX86"]
+  }
+  else if(target_cpu == "x64") 
+  {
+      defines +=["_M_X64","x64"] 
+  }
+
+} 
+
+source_set("7zstaic") {
+  configs += [ "//build/config:precompiled_headers" ]
+ 
+  configs -= [ "//build/config/win:default_crt" ] 
+  configs += [ "//build/config/win:static_crt" ] 
+
+  sources = [ 
+              "SevenZip/SevenZipExtractorMemory.cpp",        
+              "SevenZip/SevenZipExtractorMemory.h",  
+              "SevenZip/FileStreamMemory.cpp",        
+              "SevenZip/FileStreamMemory.h",  
+              "SevenZip/ArchiveExtractCallbackMemory.cpp",        
+              "SevenZip/ArchiveExtractCallbackMemory.h",   
+              "SevenZip/OutStreamWrapperMemory.cpp",        
+              "SevenZip/OutStreamWrapperMemory.h",       
+              "SevenZip/MemoryStream.cpp",
+              "SevenZip/MemoryStream.h",
+              "SevenZip/ErpExcept.cpp",
+              "SevenZip/ErpExcept.h",
+              "SevenZip/FileStream.cpp",
+              "SevenZip/FileStream.h",
+              ] 
+  sources +=  source_7z_file
+
+  include_dirs = [
+    ".", 
+  ]
+ 
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4530",
+    ]
+  }
+  
+
+  defines = [ 
+    "_CRT_NON_CONFORMING_SWPRINTFS",
+    "_CRT_SECURE_NO_WARNINGS", 
+    "EXTERNAL_CODECS", 
+    "NO_REGISTRY",
+    "_WIN32",
+    "_7ZIP_LARGE_PAGES",
+    "_7ZIP_ST_9",    
+    ]
+
+  if (target_cpu == "x86" )
+  {
+      defines +=["_M_IX86"]
+  }
+  else if(target_cpu == "x64") 
+  {
+      defines +=["_M_X64","x64"] 
+  }
+} 
+
+ 
 
 source_set("7zunzip") {
   configs += [ "//build/config:precompiled_headers" ]

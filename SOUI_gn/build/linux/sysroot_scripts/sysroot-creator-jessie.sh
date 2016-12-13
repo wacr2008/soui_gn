@@ -32,8 +32,12 @@ DEBIAN_PACKAGES="\
   krb5-multidev
   libasound2
   libasound2-dev
+  libatk-bridge2.0-0
+  libatk-bridge2.0-dev
   libatk1.0-0
   libatk1.0-dev
+  libatspi2.0-0
+  libatspi2.0-dev
   libattr1
   libavahi-client3
   libavahi-common3
@@ -59,6 +63,8 @@ DEBIAN_PACKAGES="\
   libdrm-dev
   libdrm-nouveau2
   libdrm-radeon1
+  libegl1-mesa
+  libegl1-mesa-dev
   libelf1
   libelf-dev
   libexpat1
@@ -94,6 +100,8 @@ DEBIAN_PACKAGES="\
   libgpg-error-dev
   libgssapi-krb5-2
   libgssrpc4
+  libgtk-3-0
+  libgtk-3-dev
   libgtk2.0-0
   libgtk2.0-dev
   libharfbuzz0b
@@ -148,6 +156,11 @@ DEBIAN_PACKAGES="\
   libtasn1-6
   libudev-dev
   libudev1
+  libwayland-client0
+  libwayland-cursor0
+  libwayland-dev
+  libwayland-egl1-mesa
+  libwayland-server0
   libx11-6
   libx11-dev
   libx11-xcb1
@@ -177,6 +190,8 @@ DEBIAN_PACKAGES="\
   libxi-dev
   libxinerama1
   libxinerama-dev
+  libxkbcommon0
+  libxkbcommon-dev
   libxrandr2
   libxrandr-dev
   libxrender1

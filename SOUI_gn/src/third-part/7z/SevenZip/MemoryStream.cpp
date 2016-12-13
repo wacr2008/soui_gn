@@ -62,7 +62,7 @@ MemoryStream::~MemoryStream()
 void MemoryStream::Reset()
 {
 	  m_lBlobLen   = 0;
-	  m_BlobPtr    = m_BlobBuffer;
+	  m_BlobPtr    = m_MemoryStream;
       m_lBufferLen = BLOB_BUFFER_BLOCK_SIZE;
 
       ResetRead();
@@ -115,9 +115,9 @@ unsigned long MemoryStream::GetMemoryStreamLength()
  
 void MemoryStream::AllocBuffer(unsigned long nBufSize)
 {
-	if (nBufSize <= this->GetMemoryStreamLength())
+	if (nBufSize > this->GetMemoryStreamLength())
 	{
-		IncreaseBufferSize(this->GetMemoryStreamLength() - nBufSize,false);
+		IncreaseBufferSize(nBufSize - this->GetMemoryStreamLength(), false);
 		m_lBlobLen = nBufSize;
 	}
 	else

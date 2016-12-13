@@ -62,7 +62,9 @@ def main(args):
   group.add_argument('--executable-dist-dir')
   group.add_argument('--isolate-file-path')
   group.add_argument('--output-directory')
+  group.add_argument('--runtime-deps-path')
   group.add_argument('--test-apk')
+  group.add_argument('--test-jar')
   group.add_argument('--test-apk-incremental-install-script')
   group.add_argument('--coverage-dir')
   args, test_runner_args = parser.parse_known_args(
@@ -102,9 +104,15 @@ def main(args):
   if args.output_directory:
     test_runner_path_args.append(
         ('--output-directory', RelativizePathToScript(args.output_directory)))
+  if args.runtime_deps_path:
+    test_runner_path_args.append(
+        ('--runtime-deps-path', RelativizePathToScript(args.runtime_deps_path)))
   if args.test_apk:
     test_runner_path_args.append(
         ('--test-apk', RelativizePathToScript(args.test_apk)))
+  if args.test_jar:
+    test_runner_path_args.append(
+        ('--test-jar', RelativizePathToScript(args.test_jar)))
   if args.test_apk_incremental_install_script:
     test_runner_path_args.append(
         ('--test-apk-incremental-install-script',
