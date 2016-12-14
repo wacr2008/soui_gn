@@ -139,6 +139,8 @@ template("yasm_assemble") {
         yasm_label,
       ]
     }
+  
+    deps =[]
     
     if (defined(invoker.deps)) {
       deps += invoker.deps

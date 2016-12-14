@@ -1,4 +1,4 @@
-ï»¿#include "souistd.h"
+#include "souistd.h"
 #include "control/STreeView.h"
 
 
@@ -56,22 +56,22 @@ namespace SOUI
             _SetItemWidth(hItem,0);
         }
         if(m_adapter->HasChildren(hItem))
-        {//æœ‰å­èŠ‚ç‚¹
+        {//ÓĞ×Ó½Úµã
             HTREEITEM hChild = m_adapter->GetFirstChildItem(hItem);
             int nBranchHeight = 0;
             while(hChild != ITvAdapter::ITEM_NULL)
             {
-                //è®¾ç½®åç§»
+                //ÉèÖÃÆ«ÒÆ
                 _SetItemOffset(hChild,nBranchHeight);
                 _InitBranch(hChild);
                 nBranchHeight += _GetItemVisibleHeight(hChild);
                 hChild = m_adapter->GetNextSiblingItem(hChild);
             }
             _SetBranchHeight(hItem,nBranchHeight);
-            //è®¾ç½®é»˜è®¤å®½åº¦
+            //ÉèÖÃÄ¬ÈÏ¿í¶È
             _SetBranchWidth(hItem,m_szDef.cx + m_nIndent);
         }else
-        {//æ— å­èŠ‚ç‚¹
+        {//ÎŞ×Ó½Úµã
             _SetBranchHeight(hItem,0);
             _SetBranchWidth(hItem,0);
         }
@@ -97,7 +97,7 @@ namespace SOUI
         int nParentBranchHeight = _GetBranchHeight(hParent);
 
         if(position-nPos < nParentBranchHeight/2)
-        {//ä»firstå¼€å§‹æŸ¥æ‰¾
+        {//´Ófirst¿ªÊ¼²éÕÒ
             HTREEITEM hItem = m_adapter->GetFirstChildItem(hParent);
             while(hItem)
             {
@@ -110,7 +110,7 @@ namespace SOUI
                 hItem = m_adapter->GetNextSiblingItem(hItem);
             }
         }else
-        {//ä»lastå¼€å§‹æŸ¥æ‰¾
+        {//´Ólast¿ªÊ¼²éÕÒ
             nPos += nParentBranchHeight;
 
             HTREEITEM hItem = m_adapter->GetLastChildItem(hParent);
@@ -127,7 +127,7 @@ namespace SOUI
 
         }
 
-        SASSERT(FALSE);//ä¸åº”è¯¥èµ°åˆ°è¿™é‡Œæ¥
+        SASSERT(FALSE);//²»Ó¦¸Ã×ßµ½ÕâÀïÀ´
         return ITvAdapter::ITEM_NULL;
     }
 
@@ -176,7 +176,7 @@ namespace SOUI
             nOffset += _GetItemVisibleHeight(hSib);
             hSib = m_adapter->GetNextSiblingItem(hSib);
         }
-        //æ³¨æ„æ›´æ–°å„çº§çˆ¶èŠ‚ç‚¹çš„åç§»é‡
+        //×¢Òâ¸üĞÂ¸÷¼¶¸¸½ÚµãµÄÆ«ÒÆÁ¿
         HTREEITEM hParent = m_adapter->GetParentItem(hItem);
         if(hParent != ITvAdapter::ITEM_NULL && hParent != ITvAdapter::ITEM_ROOT && IsItemExpanded(hParent))
         {
@@ -229,14 +229,14 @@ namespace SOUI
 
         int nIndent = hParent==ITvAdapter::ITEM_ROOT?0:m_nIndent;
         if(nCurBranchWidth != nOldWidth+nIndent) 
-        {//çˆ¶èŠ‚ç‚¹çš„å®½åº¦ä¸æ˜¯ç”±å½“å‰ç»“ç‚¹æ§åˆ¶çš„
+        {//¸¸½ÚµãµÄ¿í¶È²»ÊÇÓÉµ±Ç°½áµã¿ØÖÆµÄ
             if(nCurBranchWidth < nNewWidth+nIndent)
-            {//æ–°å®½åº¦æ‰©å±•äº†çˆ¶èŠ‚ç‚¹çš„æ˜¾ç¤ºå®½åº¦
+            {//ĞÂ¿í¶ÈÀ©Õ¹ÁË¸¸½ÚµãµÄÏÔÊ¾¿í¶È
                 _SetBranchWidth(hParent,nNewWidth + nIndent);
                 if(IsItemExpanded(hParent)) _UpdateBranchWidth(hParent,nCurBranchWidth,nNewWidth + nIndent);
             }
         }else
-        {//çˆ¶èŠ‚ç‚¹çš„å®½åº¦æ­£å¥½æ˜¯ç”±hItemçš„æ˜¾ç¤ºå®½åº¦
+        {//¸¸½ÚµãµÄ¿í¶ÈÕıºÃÊÇÓÉhItemµÄÏÔÊ¾¿í¶È
             int nNewBranchWidth;
             if(nNewWidth>nOldWidth)
             {
@@ -320,15 +320,15 @@ namespace SOUI
         }
 
         int nRet = 0;
-        //è·å¾—çˆ¶èŠ‚ç‚¹å¼€å§‹ä½ç½®
+        //»ñµÃ¸¸½Úµã¿ªÊ¼Î»ÖÃ
         HTREEITEM hParent = m_adapter->GetParentItem(hItem);
         if(hParent!=ITvAdapter::ITEM_NULL && hParent != ITvAdapter::ITEM_ROOT)
         {
             nRet = Item2Position(hParent);
-            //è¶Šè¿‡çˆ¶èŠ‚ç‚¹
+            //Ô½¹ı¸¸½Úµã
             nRet += GetItemHeight(hParent);
         }
-        //è¶Šè¿‡å‰é¢å…„å¼Ÿç»“ç‚¹
+        //Ô½¹ıÇ°ÃæĞÖµÜ½áµã
         nRet += _GetItemOffset(hItem);
 
         return nRet;
@@ -366,7 +366,7 @@ namespace SOUI
 
     void STreeViewItemLocator::OnBranchChanged(HTREEITEM hItem)
     {
-        //åˆå§‹åŒ–åˆ—è¡¨é¡¹é«˜åº¦ç­‰æ•°æ®
+        //³õÊ¼»¯ÁĞ±íÏî¸ß¶ÈµÈÊı¾İ
         int nVisibleHeightOld = _GetItemVisibleHeight(hItem);
         _InitBranch(hItem);
         int nVisibleHeightNew = _GetItemVisibleHeight(hItem);
@@ -542,14 +542,14 @@ namespace SOUI
 
 	void STreeView::EnsureVisible(HTREEITEM hItem)
 	{
-	    //ä¿è¯hItemè¢«æ­£ç¡®å±•å¼€
+	    //±£Ö¤hItem±»ÕıÈ·Õ¹¿ª
 	    HTREEITEM hParent = m_adapter->GetParentItem(hItem);
 	    while(hParent!=ITvAdapter::ITEM_ROOT)
 	    {
 	        m_adapter->ExpandItem(hParent,ITvAdapter::TVC_EXPAND);
 	        hParent = m_adapter->GetParentItem(hParent);
 	    }
-	    //æ»šåŠ¨è§†å›¾
+	    //¹ö¶¯ÊÓÍ¼
         int nPos = m_tvItemLocator->Item2Position(hItem);
         int nHeight = m_tvItemLocator->GetItemHeight(hItem);
         if(nPos + nHeight <= m_siVer.nPos)// && nPos < m_siVer.nPos + m_siVer.nPage) 
@@ -702,14 +702,14 @@ namespace SOUI
         szView.cy = m_tvItemLocator->GetTotalHeight();
         
         CRect rcClient;
-        SWindow::GetClientRect(&rcClient);//ä¸è®¡ç®—æ»šåŠ¨æ¡å¤§å°
+        SWindow::GetClientRect(&rcClient);//²»¼ÆËã¹ö¶¯Ìõ´óĞ¡
         CSize size = rcClient.Size();
-        //  å…³é—­æ»šåŠ¨æ¡
+        //  ¹Ø±Õ¹ö¶¯Ìõ
         m_wBarVisible = SSB_NULL;
 
         if (size.cy<szView.cy || (size.cy<szView.cy+m_nSbWid && size.cx<szView.cx))
         {
-            //  éœ€è¦çºµå‘æ»šåŠ¨æ¡
+            //  ĞèÒª×İÏò¹ö¶¯Ìõ
             m_wBarVisible |= SSB_VERT;
             m_siVer.nMin  = 0;
             m_siVer.nMax  = szView.cy-1;
@@ -717,9 +717,9 @@ namespace SOUI
 
             if (size.cx-m_nSbWid < szView.cx && !m_adapter->isViewWidthMatchParent())
             {
-                //  éœ€è¦æ¨ªå‘æ»šåŠ¨æ¡
+                //  ĞèÒªºáÏò¹ö¶¯Ìõ
                 m_wBarVisible |= SSB_HORZ;
-                m_siVer.nPage=size.cy-m_nSbWid > 0 ? size.cy-m_nSbWid : 0;//æ³¨æ„åŒæ—¶è°ƒæ•´çºµå‘æ»šåŠ¨æ¡pageä¿¡æ¯
+                m_siVer.nPage=size.cy-m_nSbWid > 0 ? size.cy-m_nSbWid : 0;//×¢ÒâÍ¬Ê±µ÷Õû×İÏò¹ö¶¯ÌõpageĞÅÏ¢
 
                 m_siHoz.nMin  = 0;
                 m_siHoz.nMax  = szView.cx-1;
@@ -727,7 +727,7 @@ namespace SOUI
             }
             else
             {
-                //  ä¸éœ€è¦æ¨ªå‘æ»šåŠ¨æ¡
+                //  ²»ĞèÒªºáÏò¹ö¶¯Ìõ
                 m_siHoz.nPage = size.cx;
                 m_siHoz.nMin  = 0;
                 m_siHoz.nMax  = m_siHoz.nPage-1;
@@ -736,7 +736,7 @@ namespace SOUI
         }
         else
         {
-            //  ä¸éœ€è¦çºµå‘æ»šåŠ¨æ¡
+            //  ²»ĞèÒª×İÏò¹ö¶¯Ìõ
             m_siVer.nPage = size.cy;
             m_siVer.nMin  = 0;
             m_siVer.nMax  = size.cy-1;
@@ -744,7 +744,7 @@ namespace SOUI
 
             if (size.cx < szView.cx && !m_adapter->isViewWidthMatchParent())
             {
-                //  éœ€è¦æ¨ªå‘æ»šåŠ¨æ¡
+                //  ĞèÒªºáÏò¹ö¶¯Ìõ
                 m_wBarVisible |= SSB_HORZ;
                 m_siHoz.nMin  = 0;
                 m_siHoz.nMax  = szView.cx-1;
@@ -752,7 +752,7 @@ namespace SOUI
             }
             else
             {
-                //  ä¸éœ€è¦æ¨ªå‘æ»šåŠ¨æ¡
+                //  ²»ĞèÒªºáÏò¹ö¶¯Ìõ
                 m_siHoz.nPage = size.cx;
                 m_siHoz.nMin  = 0;
                 m_siHoz.nMax  = m_siHoz.nPage-1;
@@ -760,7 +760,7 @@ namespace SOUI
             }
         }
 
-        //  æ ¹æ®éœ€è¦è°ƒæ•´åŸç‚¹ä½ç½®
+        //  ¸ù¾İĞèÒªµ÷ÕûÔ­µãÎ»ÖÃ
         if (HasScrollBar(FALSE) && m_siHoz.nPos+(int)m_siHoz.nPage>szView.cx)
         {
             m_siHoz.nPos = szView.cx-m_siHoz.nPage;
@@ -774,7 +774,7 @@ namespace SOUI
         SetScrollPos(TRUE, m_siVer.nPos, TRUE);
         SetScrollPos(FALSE, m_siHoz.nPos, TRUE);
 
-        //  é‡æ–°è®¡ç®—å®¢æˆ·åŒºåŠéå®¢æˆ·åŒº
+        //  ÖØĞÂ¼ÆËã¿Í»§Çø¼°·Ç¿Í»§Çø
         SSendMessage(WM_NCCALCSIZE);
 
         Invalidate();
@@ -814,7 +814,7 @@ namespace SOUI
             {
                 SList<SItemPanel *> *lstRecycle = m_itemRecycle.GetAt(ii.nType);
                 if(lstRecycle->IsEmpty())
-                {//åˆ›å»ºä¸€ä¸ªæ–°çš„åˆ—è¡¨é¡¹
+                {//´´½¨Ò»¸öĞÂµÄÁĞ±íÏî
                     ii.pItem = SItemPanel::Create(this,pugi::xml_node(),this);
                     ii.pItem->GetEventSet()->subscribeEvent(EventItemPanelClick::EventID,Subscriber(&STreeView::OnItemClick,this));
                     ii.pItem->GetEventSet()->subscribeEvent(EventItemPanelDbclick::EventID,Subscriber(&STreeView::OnItemDblClick,this));
@@ -870,7 +870,7 @@ namespace SOUI
                 ii.pItem->ModifyItemState(0, WndState_Check);
                 ii.pItem->GetFocusManager()->SetFocusedHwnd(0);
             }
-            ii.pItem->SetVisible(FALSE);//é˜²æ­¢æ‰§è¡ŒSItemPanel::OnTimeFrame()
+            ii.pItem->SetVisible(FALSE);//·ÀÖ¹Ö´ĞĞSItemPanel::OnTimeFrame()
             ii.pItem->GetEventSet()->setMutedState(false);
 
             m_itemRecycle[ii.nType]->AddTail(ii.pItem);    
@@ -883,7 +883,7 @@ namespace SOUI
         if(szOldView != szNewView)
         {//update scroll range
             UpdateScrollBar();
-            UpdateVisibleItems();//æ ¹æ®æ–°çš„æ»šåŠ¨æ¡çŠ¶æ€é‡æ–°è®°ç®—æ˜¾ç¤ºåˆ—è¡¨é¡¹
+            UpdateVisibleItems();//¸ù¾İĞÂµÄ¹ö¶¯Ìõ×´Ì¬ÖØĞÂ¼ÇËãÏÔÊ¾ÁĞ±íÏî
         }
 	}
 
@@ -971,7 +971,7 @@ namespace SOUI
 		}
 		else {
             if(uMsg==WM_LBUTTONDOWN || uMsg== WM_RBUTTONDOWN || uMsg==WM_MBUTTONDOWN)
-			{//äº¤ç»™panelå¤„ç†
+			{//½»¸øpanel´¦Àí
 				SItemPanel* pPanel = HitTest(pt);
 				if (!pPanel && m_hSelected)  //hit in none-item area,so make item to killfocus 
 				{
@@ -1007,7 +1007,7 @@ namespace SOUI
 		}
 
         if(uMsg==WM_LBUTTONUP || uMsg== WM_RBUTTONUP || uMsg==WM_MBUTTONUP)
-        {//äº¤ç»™panelå¤„ç†
+        {//½»¸øpanel´¦Àí
             __super::ProcessSwndMessage(uMsg,wParam,lParam,lRet);
         }
         SetMsgHandled(TRUE);
@@ -1067,12 +1067,13 @@ namespace SOUI
 		{
 			UpdateVisibleItems();
 
-			//åŠ é€Ÿæ»šåŠ¨æ—¶UIçš„åˆ·æ–°
+			//¼ÓËÙ¹ö¶¯Ê±UIµÄË¢ĞÂ
 			if (uCode==SB_THUMBTRACK)
 				ScrollUpdate();
 
-		}
-		return TRUE;
+            return TRUE;
+        }
+        return FALSE;
 	}
 
 	int STreeView::GetScrollLineSize( BOOL bVertical )
