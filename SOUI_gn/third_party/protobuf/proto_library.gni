@@ -83,7 +83,7 @@
 #    ]
 #  }
 
-import("//build/common.gni")
+import("//build_overrides/common.gni")
 
 template("proto_library") {
   assert(defined(invoker.sources), "Need sources for proto_library")

@@ -41,7 +41,7 @@
 #     include_dirs = [ "assembly_include" ]
 #   }
 
-import("//build/common.gni")
+import("//build_overrides/common.gni")
 
 if (is_mac || is_ios) {
   if (current_cpu == "x86") {
@@ -139,8 +139,7 @@ template("yasm_assemble") {
         yasm_label,
       ]
     }
-  
-    deps =[]
+   
     
     if (defined(invoker.deps)) {
       deps += invoker.deps

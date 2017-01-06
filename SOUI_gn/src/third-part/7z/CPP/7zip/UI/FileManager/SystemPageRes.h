@@ -1,4 +1,4 @@
-#define IDD_SYSTEM     2200
+﻿#define IDD_SYSTEM     2200
 #define IDD_SYSTEM_2  12200
 
 #define IDT_SYSTEM_ASSOCIATE  2201

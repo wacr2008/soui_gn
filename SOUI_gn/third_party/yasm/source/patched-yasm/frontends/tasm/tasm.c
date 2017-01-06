@@ -38,13 +38,17 @@
 
 #include "tasm-options.h"
 
-#ifdef CMAKE_BUILD
+#if defined(CMAKE_BUILD) && defined(BUILD_SHARED_LIBS)
 #include "yasm-plugin.h"
 #endif
 
 #include "license.c"
 
 #define DEFAULT_OBJFMT_MODULE   "bin"
+
+#if defined(CMAKE_BUILD) && !defined(BUILD_SHARED_LIBS)
+void yasm_init_plugin(void);
+#endif
 
 /*@null@*/ /*@only@*/ static char *obj_filename = NULL, *in_filename = NULL;
 /*@null@*/ /*@only@*/ static char *list_filename = NULL, *xref_filename = NULL;
@@ -224,6 +228,7 @@ static opt_option options[] =
 /* version message */
 /*@observer@*/ static const char *version_msg[] = {
     PACKAGE_STRING,
+    "Compiled on " __DATE__ ".",
     "Copyright (c) 2001-2010 Peter Johnson and other Yasm developers.",
     "Run yasm --license for licensing overview and summary."
 };
@@ -351,7 +356,7 @@ do_assemble(void)
     apply_preproc_saved_options();
 
     /* Get initial x86 BITS setting from object format */
-    if (strcmp(cur_arch_module->keyword, "x86") == 0) {
+    if (yasm__strcasecmp(cur_arch_module->keyword, "x86") == 0) {
         yasm_arch_set_var(cur_arch, "mode_bits",
                           cur_objfmt_module->default_x86_mode_bits);
     }
@@ -375,7 +380,7 @@ do_assemble(void)
     check_errors(errwarns, object, linemap);
 
     /* open the object file for output (if not already opened by dbg objfmt) */
-    if (!obj && strcmp(cur_objfmt_module->keyword, "dbg") != 0) {
+    if (!obj && yasm__strcasecmp(cur_objfmt_module->keyword, "dbg") != 0) {
         obj = open_file(obj_filename, "wb");
         if (!obj) {
             cleanup(object);
@@ -385,7 +390,8 @@ do_assemble(void)
 
     /* Write the object file */
     yasm_objfmt_output(object, obj?obj:stderr,
-                       strcmp(cur_dbgfmt_module->keyword, "null"), errwarns);
+                       yasm__strcasecmp(cur_dbgfmt_module->keyword, "null"),
+                       errwarns);
 
     /* Close object file */
     if (obj)
@@ -456,10 +462,14 @@ main(int argc, char *argv[])
 
 #ifdef CMAKE_BUILD
     /* Load standard modules */
+#ifdef BUILD_SHARED_LIBS
     if (!load_plugin("yasmstd")) {
         print_error(_("%s: could not load standard modules"), _("FATAL"));
         return EXIT_FAILURE;
     }
+#else
+    yasm_init_plugin();
+#endif
 #endif
 
     /* Initialize parameter storage */
@@ -639,7 +649,7 @@ cleanup(yasm_object *object)
 
     if (errfile != stderr && errfile != stdout)
         fclose(errfile);
-#ifdef CMAKE_BUILD
+#if defined(CMAKE_BUILD) && defined(BUILD_SHARED_LIBS)
     unload_plugins();
 #endif
 }
@@ -781,6 +791,8 @@ opt_warning_handler(char *cmd, /*@unused@*/ char *param, int extra)
         action(YASM_WARN_UNINIT_CONTENTS);
     else if (strcmp(cmd, "size-override") == 0)
         action(YASM_WARN_SIZE_OVERRIDE);
+    else if (strcmp(cmd, "segreg-in-64bit") == 0)
+        action(YASM_WARN_SEGREG_IN_64BIT);
     else
         return 1;
 

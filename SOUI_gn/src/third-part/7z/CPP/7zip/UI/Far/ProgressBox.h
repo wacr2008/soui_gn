@@ -1,4 +1,4 @@
-// ProgressBox.h
+﻿// ProgressBox.h
 
 #ifndef __PROGRESS_BOX_H
 #define __PROGRESS_BOX_H

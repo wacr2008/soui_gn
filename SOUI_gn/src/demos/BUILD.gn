@@ -1,10 +1,11 @@
 
-import("//build/common.gni")
+import("//build_overrides/common.gni")
 
 group("demos") {
   deps = [
     "360demo",
     "360Preview",
+    "BaoFeng",
     "demo",
     "mclistview_demo",
     "PCManager",

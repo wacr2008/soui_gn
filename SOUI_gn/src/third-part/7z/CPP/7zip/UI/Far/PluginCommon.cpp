@@ -1,4 +1,4 @@
-// SevenZip/Plugin.cpp
+﻿// SevenZip/Plugin.cpp
 
 
 

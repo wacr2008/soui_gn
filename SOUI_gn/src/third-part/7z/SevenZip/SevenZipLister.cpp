@@ -1,4 +1,4 @@
-#include "SevenZipLister.h"
+﻿#include "SevenZipLister.h"
 #include "GUIDs.h"
 #include "FileSys.h"
 #include "ArchiveOpenCallback.h"

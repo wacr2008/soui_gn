@@ -1,4 +1,4 @@
-// LzhHandler.cpp
+﻿// LzhHandler.cpp
 
 
 

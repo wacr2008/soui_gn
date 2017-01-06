@@ -1,4 +1,4 @@
-// HashCalc.cpp
+﻿// HashCalc.cpp
 
 
 

@@ -1,4 +1,4 @@
-// FarUtils.cpp
+﻿// FarUtils.cpp
 
 
 

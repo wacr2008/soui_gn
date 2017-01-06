@@ -1,4 +1,4 @@
-// OptionsDialog.cpp
+﻿// OptionsDialog.cpp
 
 
 

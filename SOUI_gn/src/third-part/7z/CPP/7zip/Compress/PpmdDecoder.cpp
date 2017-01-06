@@ -1,4 +1,4 @@
-// PpmdDecoder.cpp
+﻿// PpmdDecoder.cpp
 // 2009-03-11 : Igor Pavlov : Public domain
 
 

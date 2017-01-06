@@ -1,4 +1,4 @@
-// Lzma2Register.cpp
+﻿// Lzma2Register.cpp
 
 
 

@@ -1,4 +1,4 @@
-#include "ArchiveOpenCallback.h"
+﻿#include "ArchiveOpenCallback.h"
 #include "../CPP/Common/MyCom.h"
 
 namespace SevenZip
@@ -73,7 +73,7 @@ STDMETHODIMP ArchiveOpenCallback::CryptoGetTextPassword( BSTR* password)
 		// You can ask real password here from user
 		// Password = GetPassword(OutStream);
 		// PasswordIsDefined = true;
-		printf("Password is not defined");
+		//printf("Password is not defined");
 		return E_ABORT;
 	}
 

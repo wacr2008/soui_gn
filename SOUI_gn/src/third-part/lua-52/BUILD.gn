@@ -1,4 +1,4 @@
-import("//build/common.gni")
+import("//build_overrides/common.gni")
  
 
 static_library("lua-52") {

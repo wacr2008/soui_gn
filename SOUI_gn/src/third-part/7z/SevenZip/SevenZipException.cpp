@@ -1,4 +1,4 @@
-#include "SevenZipException.h"
+﻿#include "SevenZipException.h"
 
 
 namespace SevenZip

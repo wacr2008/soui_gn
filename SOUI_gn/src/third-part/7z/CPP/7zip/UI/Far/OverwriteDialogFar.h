@@ -1,4 +1,4 @@
-// OverwriteDialogFar.h
+﻿// OverwriteDialogFar.h
 
 #ifndef __OVERWRITE_DIALOG_FAR_H
 #define __OVERWRITE_DIALOG_FAR_H

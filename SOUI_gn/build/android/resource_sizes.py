@@ -180,11 +180,15 @@ class _FileGroup(object):
     self._zip_infos.append(zip_info)
     self._extracted.append(extracted)
 
+  def AllEntries(self):
+    return iter(self._zip_infos)
+
   def GetNumEntries(self):
     return len(self._zip_infos)
 
   def FindByPattern(self, pattern):
-    return next(i for i in self._zip_infos if re.match(pattern, i.filename))
+    return next((i for i in self._zip_infos if re.match(pattern, i.filename)),
+                None)
 
   def FindLargest(self):
     return max(self._zip_infos, key=lambda i: i.file_size)
@@ -226,6 +230,7 @@ def PrintApkAnalysis(apk_filename, chartjson=None):
   arsc = make_group('Compiled Android resources')
   metadata = make_group('Package metadata')
   unknown = make_group('Unknown files')
+  notices = make_group('licenses.notice file')
 
   apk = zipfile.ZipFile(apk_filename, 'r')
   try:
@@ -261,6 +266,8 @@ def PrintApkAnalysis(apk_filename, chartjson=None):
       arsc.AddZipInfo(member)
     elif filename.startswith('META-INF') or filename == 'AndroidManifest.xml':
       metadata.AddZipInfo(member)
+    elif filename.endswith('.notice'):
+      notices.AddZipInfo(member)
     else:
       unknown.AddZipInfo(member)
 
@@ -317,6 +324,8 @@ def PrintApkAnalysis(apk_filename, chartjson=None):
   # updated.
   english_pak = translations.FindByPattern(r'.*/en[-_][Uu][Ss]\.l?pak')
   if english_pak:
+    # TODO(agrieve): This should also analyze .arsc file to remove non-en
+    # configs. http://crbug.com/677966
     normalized_apk_size -= translations.ComputeZippedSize()
     # 1.17 found by looking at Chrome.apk and seeing how much smaller en-US.pak
     # is relative to the average locale .pak.
@@ -328,6 +337,9 @@ def PrintApkAnalysis(apk_filename, chartjson=None):
 
   ReportPerfResult(chartjson, apk_basename + '_Specifics',
                    'file count', len(apk_contents), 'zip entries')
+
+  for info in unknown.AllEntries():
+    print 'Unknown entry:', info.filename, info.compress_size
 
 
 def IsPakFileName(file_name):
@@ -365,6 +377,9 @@ def PrintPakAnalysis(apk_filename, min_pak_resource_size):
   print 'Total compressed size: %s' % _FormatBytes(total_compress_size)
   print 'Total uncompressed size: %s' % _FormatBytes(total_file_size)
   print
+
+  if not paks:
+    return
 
   # Output the table of details about all pak files.
   print '%25s%11s%21s%21s' % (

@@ -1,4 +1,4 @@
-#include "OutStreamWrapper.h"
+﻿#include "OutStreamWrapper.h"
 
 
 namespace SevenZip

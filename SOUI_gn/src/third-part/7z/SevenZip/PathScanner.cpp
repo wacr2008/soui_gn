@@ -1,4 +1,4 @@
-#include "PathScanner.h"
+﻿#include "PathScanner.h"
 #include "FileSys.h"
 
 

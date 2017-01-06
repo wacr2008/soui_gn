@@ -1,4 +1,4 @@
-// PluginRead.cpp
+﻿// PluginRead.cpp
 
 
 

@@ -1,4 +1,4 @@
-// This file is based on the following file from the LZMA SDK (http://www.7-zip.org/sdk.html):
+﻿// This file is based on the following file from the LZMA SDK (http://www.7-zip.org/sdk.html):
 //   ./CPP/Windows/PropVariant.cpp
 #include "PropVariant2.h"
 #include "../CPP/Common/Defs.h"

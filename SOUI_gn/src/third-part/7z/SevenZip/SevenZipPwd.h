@@ -1,4 +1,4 @@
-#ifndef _SEVEN_ZIP_PWD_H
+﻿#ifndef _SEVEN_ZIP_PWD_H
 #define _SEVEN_ZIP_PWD_H
 
 #include "SevenString.h"

@@ -1,4 +1,4 @@
-// FarPlugin.h
+﻿// FarPlugin.h
 
 // #include "plugin.hpp"
 

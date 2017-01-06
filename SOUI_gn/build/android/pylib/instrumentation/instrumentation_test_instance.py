@@ -18,6 +18,7 @@ from pylib.base import test_instance
 from pylib.constants import host_paths
 from pylib.instrumentation import test_result
 from pylib.instrumentation import instrumentation_parser
+from pylib.utils import dexdump
 from pylib.utils import proguard
 
 with host_paths.SysPath(host_paths.BUILD_COMMON_PATH):
@@ -29,8 +30,7 @@ _ACTIVITY_RESULT_OK = -1
 
 _COMMAND_LINE_PARAMETER = 'cmdlinearg-parameter'
 _DEFAULT_ANNOTATIONS = [
-    'Smoke', 'SmallTest', 'MediumTest', 'LargeTest',
-    'EnormousTest', 'IntegrationTest']
+    'SmallTest', 'MediumTest', 'LargeTest', 'EnormousTest', 'IntegrationTest']
 _EXCLUDE_UNLESS_REQUESTED_ANNOTATIONS = [
     'DisabledTest', 'FlakyTest']
 _VALID_ANNOTATIONS = set(['Manual', 'PerfTest'] + _DEFAULT_ANNOTATIONS +
@@ -61,7 +61,7 @@ class MissingSizeAnnotationError(test_exception.TestException):
         ', '.join('@' + a for a in _VALID_ANNOTATIONS))
 
 
-class ProguardPickleException(test_exception.TestException):
+class TestListPickleException(test_exception.TestException):
   pass
 
 
@@ -234,7 +234,15 @@ def FilterTests(tests, test_filter=None, annotations=None,
       GetTestName(unqualified_class_test, sep='.'),
       GetUniqueTestName(t, sep='.')
     ]
-    return unittest_util.FilterTestNames(names, test_filter)
+
+    pattern_groups = test_filter.split('-')
+    if len(pattern_groups) > 1:
+      negative_filter = pattern_groups[1]
+      if unittest_util.FilterTestNames(names, negative_filter):
+        return []
+
+    positive_filter = pattern_groups[0]
+    return unittest_util.FilterTestNames(names, positive_filter)
 
   def annotation_filter(all_annotations):
     if not annotations:
@@ -281,11 +289,11 @@ def FilterTests(tests, test_filter=None, annotations=None,
   return filtered_tests
 
 
-def GetAllTests(test_jar):
+def GetAllTestsFromJar(test_jar):
   pickle_path = '%s-proguard.pickle' % test_jar
   try:
     tests = _GetTestsFromPickle(pickle_path, test_jar)
-  except ProguardPickleException as e:
+  except TestListPickleException as e:
     logging.info('Could not get tests from pickle: %s', e)
     logging.info('Getting tests from JAR via proguard.')
     tests = _GetTestsFromProguard(test_jar)
@@ -293,11 +301,23 @@ def GetAllTests(test_jar):
   return tests
 
 
+def GetAllTestsFromApk(test_apk):
+  pickle_path = '%s-dexdump.pickle' % test_apk
+  try:
+    tests = _GetTestsFromPickle(pickle_path, test_apk)
+  except TestListPickleException as e:
+    logging.info('Could not get tests from pickle: %s', e)
+    logging.info('Getting tests from dex via dexdump.')
+    tests = _GetTestsFromDexdump(test_apk)
+    _SaveTestsToPickle(pickle_path, test_apk, tests)
+  return tests
+
+
 def _GetTestsFromPickle(pickle_path, jar_path):
   if not os.path.exists(pickle_path):
-    raise ProguardPickleException('%s does not exist.' % pickle_path)
+    raise TestListPickleException('%s does not exist.' % pickle_path)
   if os.path.getmtime(pickle_path) <= os.path.getmtime(jar_path):
-    raise ProguardPickleException(
+    raise TestListPickleException(
         '%s newer than %s.' % (jar_path, pickle_path))
 
   with open(pickle_path, 'r') as pickle_file:
@@ -305,9 +325,9 @@ def _GetTestsFromPickle(pickle_path, jar_path):
   jar_md5 = md5sum.CalculateHostMd5Sums(jar_path)[jar_path]
 
   if pickle_data['VERSION'] != _PICKLE_FORMAT_VERSION:
-    raise ProguardPickleException('PICKLE_FORMAT_VERSION has changed.')
+    raise TestListPickleException('PICKLE_FORMAT_VERSION has changed.')
   if pickle_data['JAR_MD5SUM'] != jar_md5:
-    raise ProguardPickleException('JAR file MD5 sum differs.')
+    raise TestListPickleException('JAR file MD5 sum differs.')
   return pickle_data['TEST_METHODS']
 
 
@@ -339,6 +359,30 @@ def _GetTestsFromProguard(jar_path):
 
   return [stripped_test_class(c) for c in p['classes']
           if is_test_class(c)]
+
+
+def _GetTestsFromDexdump(test_apk):
+  d = dexdump.Dump(test_apk)
+  tests = []
+
+  def get_test_methods(methods):
+    return [
+        {
+          'method': m,
+          # No annotation info is available from dexdump.
+          # Set MediumTest annotation for default.
+          'annotations': {'MediumTest': None},
+        } for m in methods if m.startswith('test')]
+
+  for package_name, package_info in d.iteritems():
+    for class_name, class_info in package_info['classes'].iteritems():
+      if class_name.endswith('Test'):
+        tests.append({
+            'class': '%s.%s' % (package_name, class_name),
+            'annotations': {},
+            'methods': get_test_methods(class_info['methods']),
+        })
+  return tests
 
 
 def _SaveTestsToPickle(pickle_path, jar_path, tests):
@@ -497,7 +541,11 @@ class InstrumentationTestInstance(test_instance.TestInstance):
 
     if not os.path.exists(self._test_apk.path):
       error_func('Unable to find test APK: %s' % self._test_apk.path)
-    if not self._test_jar or not os.path.exists(self._test_jar):
+    if not self._test_jar:
+      logging.warning('Test jar not specified. Test runner will not have '
+                      'Java annotation info available. May not handle test '
+                      'timeouts correctly.')
+    elif not os.path.exists(self._test_jar):
       error_func('Unable to find test JAR: %s' % self._test_jar)
 
     self._test_package = self._test_apk.GetPackageName()
@@ -692,7 +740,10 @@ class InstrumentationTestInstance(test_instance.TestInstance):
     return self._data_deps
 
   def GetTests(self):
-    tests = GetAllTests(self.test_jar)
+    if self.test_jar:
+      tests = GetAllTestsFromJar(self.test_jar)
+    else:
+      tests = GetAllTestsFromApk(self.test_apk.path)
     inflated_tests = self._ParametrizeTestsWithFlags(self._InflateTests(tests))
     filtered_tests = FilterTests(
         inflated_tests, self._test_filter, self._annotations,

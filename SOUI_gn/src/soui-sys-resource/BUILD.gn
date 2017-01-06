@@ -1,4 +1,4 @@
-import("//build/common.gni")
+import("//build_overrides/common.gni")
  
 
 shared_library("soui-sys-resource") {

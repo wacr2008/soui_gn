@@ -1,4 +1,4 @@
-#define IDD_ABOUT  2900
+﻿#define IDD_ABOUT  2900
 
 #define IDT_ABOUT_INFO  2901
 

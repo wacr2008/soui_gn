@@ -1,4 +1,4 @@
-// AboutDialog.h
+﻿// AboutDialog.h
  
 #ifndef __ABOUT_DIALOG_H
 #define __ABOUT_DIALOG_H

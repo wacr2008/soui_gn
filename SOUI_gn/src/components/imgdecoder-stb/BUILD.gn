@@ -1,4 +1,4 @@
-import("//build/common.gni")
+import("//build_overrides/common.gni")
  
 
 component("imgdecoder-stb") {

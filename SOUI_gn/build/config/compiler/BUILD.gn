@@ -322,12 +322,6 @@ config("compiler") {
 
   if (is_posix && use_lld && !is_nacl) {
     ldflags += [ "-fuse-ld=lld" ]
-
-    # LLD as of 2016/12/02 seems to behave poorly with multi-threading.
-    # Disable threads on LLD trunk bots to see if they hurt build time.
-    if (llvm_force_head_revision) {
-      ldflags += [ "-Wl,-no-threads" ]
-    }
   } else if (use_gold) {
     ldflags += [ "-fuse-ld=gold" ]
     if (is_android) {
@@ -448,13 +442,16 @@ config("compiler") {
   if (!is_debug && (allow_posix_link_time_opt || is_cfi) && !is_nacl) {
     if (use_thin_lto) {
       cflags += [ "-flto=thin" ]
-      ldflags += [
-        "-flto=thin",
+      ldflags += [ "-flto=thin" ]
 
-        # Limit the parallelism to the sweet spot on most of the machines.
-        # As of now, ThinLTO does not scale beyond 16 cores anyway.
-        "-Wl,-plugin-opt,jobs=16",
-      ]
+      # Limit the parallelism to avoid too agressive competition between
+      # linker jobs. This is still suboptimal to a potential dynamic
+      # resource allocation scheme, but should be good enough.
+      if (use_lld) {
+        ldflags += [ "-Wl,--thinlto-jobs=8" ]
+      } else {
+        ldflags += [ "-Wl,-plugin-opt,jobs=8" ]
+      }
     } else {
       # Note: ThinLTO does not currently have this feature implemented
       # For Full LTO, it provides a measurable runtime speedup of Chrome.
@@ -837,11 +834,24 @@ config("runtime_library") {
 config("default_warnings") {
   cflags = []
   cflags_cc = []
+  ldflags = []
 
   if (is_win) {
     if (treat_warnings_as_errors) {
       cflags += [ "/WX" ]
     }
+    if (fatal_linker_warnings) {
+      ldflags += [ "/WX" ]
+    }
+
+    if (visual_studio_version == "2015") {
+      cflags += [
+        # Assume UTF-8 by default to avoid code page dependencies.
+       "/utf-8",
+      ]
+    }
+
+    
 
     cflags += [
       # Warnings permanently disabled:
@@ -849,7 +859,7 @@ config("default_warnings") {
       # C4091: 'typedef ': ignored on left of 'X' when no variable is
       #                    declared.
       # This happens in a number of Windows headers. Dumb.
-      "/wd4091",
+      "/wd4091", 
 
       # C4127: conditional expression is constant
       # This warning can in theory catch dead code and other problems, but
@@ -969,6 +979,12 @@ config("default_warnings") {
       cflags += [ "-Wpartial-availability" ]
     }
 
+    if (is_ios) {
+      # When compiling Objective-C, warns if a selector named via @selector has
+      # not been defined in any visible interface.
+      cflags += [ "-Wundeclared-selector" ]
+    }
+
     # Suppress warnings about ABI changes on ARM (Clang doesn't give this
     # warning).
     if (current_cpu == "arm" && !is_clang) {
@@ -1074,11 +1090,6 @@ config("default_warnings") {
 config("chromium_code") {
   if (is_win) {
     cflags = [ "/W4" ]  # Warning level 4.
-
-    # Assume UTF-8 by default to avoid code page dependencies.
-    if (visual_studio_version == "2015") {
-      cflags += [ "/utf-8" ]
-    }
   } else {
     cflags = [ "-Wall" ]
     if (treat_warnings_as_errors) {
@@ -1270,9 +1281,14 @@ if (is_win) {
     ]
   }
   common_optimize_on_ldflags = []
-  if (!is_component_build) {
+
+  # /OPT:ICF is not desirable in Debug builds, since code-folding can result in
+  # misleading symbols in stack traces. It is also incompatible with
+  # incremental linking, which we enable for both Debug and component builds.
+  if (!is_debug && !is_component_build) {
     common_optimize_on_ldflags += [ "/OPT:ICF" ]  # Redundant COMDAT folding.
   }
+
   if (is_official_build) {
     common_optimize_on_ldflags += [ "/OPT:REF" ]  # Remove unreferenced data.
     if (!use_lld) {
@@ -1287,12 +1303,12 @@ if (is_win) {
       } else {
         common_optimize_on_ldflags += [ "/LTCG" ]  # Link-time code generation.
       }
-    }
-    if (full_wpo_on_official) {
-      if (use_incremental_wpo) {
-        arflags = [ "/LTCG:INCREMENTAL" ]
-      } else {
-        arflags = [ "/LTCG" ]
+      if (full_wpo_on_official) {
+        if (use_incremental_wpo) {
+          arflags = [ "/LTCG:INCREMENTAL" ]
+        } else {
+          arflags = [ "/LTCG" ]
+        }
       }
     }
   }
@@ -1554,7 +1570,6 @@ config("afdo") {
 # Full symbols.
 config("symbols") {
   if (is_win) {
-    import("//build/toolchain/goma.gni")
     cflags = [ "/Zi" ]  # Produce PDB file, no edit and continue.
 
     if (is_win_fastlink) {
@@ -1564,6 +1579,16 @@ config("symbols") {
       ldflags = [ "/DEBUG:FASTLINK" ]
     } else {
       ldflags = [ "/DEBUG" ]
+    }
+
+    if (is_clang) {
+      # /DEBUG:FASTLINK requires every object file to have standalone debug
+      # information.
+      if (is_win_fastlink) {
+        cflags += [ "-fstandalone-debug" ]
+      } else {
+        cflags += [ "-fno-standalone-debug" ]
+      }
     }
   } else {
     if (is_mac || is_ios) {

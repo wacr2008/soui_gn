@@ -1,4 +1,4 @@
-// FarUtils.h
+﻿// FarUtils.h
 
 #ifndef __FAR_UTILS_H
 #define __FAR_UTILS_H

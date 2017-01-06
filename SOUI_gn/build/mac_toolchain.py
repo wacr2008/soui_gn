@@ -28,8 +28,8 @@ MAC_TOOLCHAIN_VERSION = '5B1008'
 MAC_TOOLCHAIN_SUB_REVISION = 3
 MAC_TOOLCHAIN_VERSION = '%s-%s' % (MAC_TOOLCHAIN_VERSION,
                                    MAC_TOOLCHAIN_SUB_REVISION)
-IOS_TOOLCHAIN_VERSION = '8B62'
-IOS_TOOLCHAIN_SUB_REVISION = 1
+IOS_TOOLCHAIN_VERSION = '8A218a'
+IOS_TOOLCHAIN_SUB_REVISION = 2
 IOS_TOOLCHAIN_VERSION = '%s-%s' % (IOS_TOOLCHAIN_VERSION,
                                    IOS_TOOLCHAIN_SUB_REVISION)
 
@@ -157,7 +157,8 @@ def AcceptLicense():
 def _UseHermeticToolchain():
   current_dir = os.path.dirname(os.path.realpath(__file__))
   script_path = os.path.join(current_dir, 'mac/should_use_hermetic_xcode.py')
-  proc = subprocess.Popen([script_path], stdout=subprocess.PIPE)
+  target_os = 'ios' if IsIOSPlatform() else 'mac'
+  proc = subprocess.Popen([script_path, target_os], stdout=subprocess.PIPE)
   return '1' in proc.stdout.readline()
 
 

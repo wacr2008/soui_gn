@@ -1,4 +1,4 @@
-// BcjRegister.cpp
+﻿// BcjRegister.cpp
 
 
 

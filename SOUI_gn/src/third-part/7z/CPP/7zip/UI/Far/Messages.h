@@ -1,4 +1,4 @@
-// Far/Messages.h
+﻿// Far/Messages.h
 
 #ifndef __7ZIP_FAR_MESSAGES_H
 #define __7ZIP_FAR_MESSAGES_H

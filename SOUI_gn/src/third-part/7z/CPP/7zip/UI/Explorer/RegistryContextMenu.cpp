@@ -1,4 +1,4 @@
-// RegistryContextMenu.cpp
+﻿// RegistryContextMenu.cpp
 
 
 

@@ -42,6 +42,6 @@
 // Because the flag is accessed as a preprocessor macro with (), an error
 // will be thrown if the proper header defining the internal flag value has
 // not been included.
-#define BUILDFLAG(flag) (BUILDFLAG_CAT(BUILDFLAG_INTERNAL_, flag)())
-
+//wuding 20161205 #define BUILDFLAG(flag) (BUILDFLAG_CAT(BUILDFLAG_INTERNAL_, flag)())
+#define BUILDFLAG(flag) 0
 #endif  // BUILD_BUILDFLAG_H_

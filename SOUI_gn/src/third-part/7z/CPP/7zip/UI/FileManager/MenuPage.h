@@ -1,4 +1,4 @@
-// MenuPage.h
+﻿// MenuPage.h
  
 #ifndef __MENU_PAGE_H
 #define __MENU_PAGE_H

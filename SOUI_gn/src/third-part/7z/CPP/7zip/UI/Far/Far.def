@@ -1,4 +1,4 @@
-; 7-ZipFar.def : Declares the module parameters for the DLL.
+﻿; 7-ZipFar.def : Declares the module parameters for the DLL.
 
 LIBRARY      "7-ZipFar"
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "SevenString.h"
 #include "../CPP/Common/MyWindows.h"
 

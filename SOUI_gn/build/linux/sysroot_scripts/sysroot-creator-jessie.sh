@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-SCRIPT_DIR=$(cd $(dirname $0) && pwd)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 DISTRO=debian
 DIST=jessie
@@ -16,7 +16,7 @@ APT_REPO=http://http.us.debian.org/debian
 #   export KEYS="518E17E1 46925553 2B90D010"
 #   gpg --recv-keys $KEYS
 #   gpg --output ./debian-archive-jessie-stable.gpg --export $KEYS
-KEYRING_FILE=${SCRIPT_DIR}/debian-archive-jessie-stable.gpg
+KEYRING_FILE="${SCRIPT_DIR}/debian-archive-jessie-stable.gpg"
 
 HAS_ARCH_AMD64=1
 HAS_ARCH_I386=1
@@ -166,12 +166,17 @@ DEBIAN_PACKAGES="\
   libx11-xcb1
   libx11-xcb-dev
   libxau6
+  libaudit1
   libxau-dev
   libxcb1
   libxcb1-dev
+  libxcb-dri2-0
+  libxcb-dri3-0
   libxcb-glx0
+  libxcb-present0
   libxcb-render0
   libxcb-render0-dev
+  libxcb-sync1
   libxcb-shm0
   libxcb-shm0-dev
   libxcomposite1
@@ -196,6 +201,7 @@ DEBIAN_PACKAGES="\
   libxrandr-dev
   libxrender1
   libxrender-dev
+  libxshmfence1
   libxss1
   libxss-dev
   libxt6
@@ -253,4 +259,4 @@ DEBIAN_PACKAGES_ARM64="
   libthai0
 "
 
-. ${SCRIPT_DIR}/sysroot-creator.sh
+. "${SCRIPT_DIR}/sysroot-creator.sh"

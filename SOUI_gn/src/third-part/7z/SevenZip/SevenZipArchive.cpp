@@ -1,4 +1,4 @@
-#include "SevenZipArchive.h"
+﻿#include "SevenZipArchive.h"
 #include "UsefulFunctions.h"
 
 

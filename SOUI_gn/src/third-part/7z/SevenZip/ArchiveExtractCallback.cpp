@@ -1,4 +1,4 @@
-#include "ArchiveExtractCallback.h"
+ï»¿#include "ArchiveExtractCallback.h"
 #include "PropVariant2.h"
 #include "FileSys.h"
 #include "OutStreamWrapper.h"
@@ -147,7 +147,7 @@ namespace SevenZip
             }
             catch (_com_error& ex)
             {
-                wprintf_s(L"»ñÈ¡Êı¾İÊ§°Ü\n");
+                wprintf_s(L"è·å–æ•°æ®å¤±è´¥\n");
                 return ex.Error();
             }
 
@@ -209,7 +209,7 @@ namespace SevenZip
                     TString rename_path = FileSys::GetUniquePath(m_absPath);
                     if (!FileSys::RenameFile(m_absPath, rename_path))
                     {
-                        wprintf_s(L"ÖØÃüÃûÎÄ¼şÊ§°Ü:%s-%s\n", m_absPath.c_str(), rename_path.c_str());
+                        wprintf_s(L"é‡å‘½åæ–‡ä»¶å¤±è´¥:%s-%s\n", m_absPath.c_str(), rename_path.c_str());
                         return HRESULT_FROM_WIN32(GetLastError());
                     }
                 }
@@ -217,13 +217,13 @@ namespace SevenZip
                 {
                     if (!FileSys::RemovePath(m_absPath))
                     {
-                        wprintf_s(L"ÒÆ³ıÂ·¾¶Ê§°Ü:%s\n", m_absPath.c_str());
+                        wprintf_s(L"ç§»é™¤è·¯å¾„å¤±è´¥:%s\n", m_absPath.c_str());
                         return HRESULT_FROM_WIN32(GetLastError());
                     }
                 }
                 else
                 {
-                    wprintf_s(L"ÎÄ¼şÒÑ´æÔÚ:%s\n", m_absPath.c_str());
+                    wprintf_s(L"æ–‡ä»¶å·²å­˜åœ¨:%s\n", m_absPath.c_str());
                     return ERROR_FILE_EXISTS;
                 }
             }
@@ -231,14 +231,14 @@ namespace SevenZip
             TString absDir = FileSys::GetPath(m_absPath);
             if (!FileSys::CreateDirectoryTree(absDir))
             {
-                wprintf_s(L"´´½¨Ä¿Â¼Ê§°Ü:%s\n", absDir.c_str());
+                wprintf_s(L"åˆ›å»ºç›®å½•å¤±è´¥:%s\n", absDir.c_str());
                 return ERROR_CREATE_FAILED;
             }
 
             CMyComPtr< IStream > fileStream = FileSys::OpenFileToWrite(m_absPath);
             if (fileStream == NULL)
             {
-                wprintf_s(L"´´½¨ÎÄ¼şÊ§°Ü:%s\n", m_absPath.c_str());
+                wprintf_s(L"åˆ›å»ºæ–‡ä»¶å¤±è´¥:%s\n", m_absPath.c_str());
                 m_absPath.clear();
                 return HRESULT_FROM_WIN32(GetLastError());
             }
@@ -246,7 +246,7 @@ namespace SevenZip
             OutStreamWrapper* stream = new OutStreamWrapper(fileStream);
             if (!stream)
             {
-                wprintf_s(L"ÄÚ´æ²»×ã\n");
+                wprintf_s(L"å†…å­˜ä¸è¶³\n");
                 return E_OUTOFMEMORY;
             }
 

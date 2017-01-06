@@ -1,4 +1,4 @@
-import("//build/common.gni") 
+import("//build_overrides/common.gni") 
 
 
 action("gen_setupdll_resource") {
@@ -23,6 +23,9 @@ action("gen_setupdll_resource") {
 shared_library("setupdll") {
   configs += [ "//build/config:precompiled_headers" ]
 
+  configs -= [ "//build/config/win:console" ]
+  configs += [ "//build/config/win:windowed" ] 
+  
   sources = [ 
     "dllmain.cpp", 
     "api.h", 

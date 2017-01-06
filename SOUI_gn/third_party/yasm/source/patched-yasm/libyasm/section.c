@@ -241,6 +241,11 @@ yasm_object_create(const char *src_filename, const char *obj_filename,
     /* Initialize things to NULL in case of error */
     object->dbgfmt = NULL;
 
+    /* Initialize override structure */
+    object->overrides = yasm_xmalloc(sizeof(yasm_overrides));
+
+    object->overrides->value_finalize = NULL;
+
     /* Initialize the object format */
     object->objfmt = yasm_objfmt_create(objfmt_module, object);
     if (!object->objfmt) {
@@ -261,10 +266,14 @@ yasm_object_create(const char *src_filename, const char *obj_filename,
      * for the active object format.
      */
     matched = 0;
-    for (i=0; objfmt_module->dbgfmt_keywords[i]; i++)
+    for (i=0; objfmt_module->dbgfmt_keywords[i]; i++) {
         if (yasm__strcasecmp(objfmt_module->dbgfmt_keywords[i],
-                             dbgfmt_module->keyword) == 0)
+                             dbgfmt_module->keyword) == 0) {
             matched = 1;
+            break;
+        }
+    }
+
     if (!matched) {
         yasm_error_set(YASM_ERROR_GENERAL,
             N_("`%s' is not a valid debug format for object format `%s'"),
@@ -484,6 +493,8 @@ yasm_object_destroy(yasm_object *object)
     /* Delete architecture */
     if (object->arch)
         yasm_arch_destroy(object->arch);
+
+    yasm_xfree(object->overrides);
 
     yasm_xfree(object);
 }
@@ -1311,12 +1322,10 @@ yasm_object_optimize(yasm_object *object, yasm_errwarns *errwarns)
         unsigned long offset = 0;
 
         yasm_bytecode *bc = STAILQ_FIRST(&sect->bcs);
-        yasm_bytecode *prevbc;
 
         bc->bc_index = bc_index++;
 
         /* Skip our locally created empty bytecode first. */
-        prevbc = bc;
         bc = STAILQ_NEXT(bc, link);
 
         /* Iterate through the remainder, if any. */
@@ -1354,7 +1363,6 @@ yasm_object_optimize(yasm_object *object, yasm_errwarns *errwarns)
                 offset += bc->len*bc->mult_int;
             }
 
-            prevbc = bc;
             bc = STAILQ_NEXT(bc, link);
         }
     }

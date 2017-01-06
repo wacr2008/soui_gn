@@ -7,7 +7,7 @@ import("//build/config/compiler/compiler.gni")
 import("//build/config/sanitizers/sanitizers.gni")
 import("//build/config/win/visual_studio_version.gni")
 import("//build/toolchain/toolchain.gni")
-import("//build/common.gni")
+import("//build_overrides/common.gni")
 assert(is_win)
 
 declare_args() {
@@ -235,10 +235,16 @@ config("sdk_link") {
 
     if(enable_safeseh)
     {
-     ldflags += [
-      "/SAFESEH",  # Not compatible with x64 so use only for x86.
-      "/EHsc",
-     ]
+       ldflags += [
+        "/SAFESEH",  # Not compatible with x64 so use only for x86.
+       ]
+
+       if (visual_studio_version == "2015")
+       {
+         ldflags += [
+          "/EHsc",
+         ]
+       }
     }
     
 
@@ -258,6 +264,7 @@ config("common_linker_setup") {
     "/FIXED:NO",
     "/ignore:4199",
     "/ignore:4221",
+    "/ignore:4099",
     "/NXCOMPAT",
   ]
 
@@ -365,7 +372,7 @@ incremental_linking_off_switch = [ "/INCREMENTAL:NO" ]
 
 # Disable incremental linking for syzyasan, enable for debug builds and all
 # component builds - any builds where performance is not job one.
-if ((is_debug || is_component_build) && !is_syzyasan) {
+if ((is_debug) && !is_syzyasan) { # || is_component_build wuding20170104
   default_incremental_linking_switch = incremental_linking_on_switch
 } else {
   default_incremental_linking_switch = incremental_linking_off_switch

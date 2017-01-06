@@ -1,4 +1,4 @@
-
+﻿
 #include "SevenZipLibrary.h"
 #include "GUIDs.h"
 

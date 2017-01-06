@@ -131,7 +131,7 @@ namespace SOUI
 
 	void SDlgSkinSelect::LoadUIRes()
 	{
-		if (!m_xmlDocUiRes.load_file(m_strUIResFile))
+		if (!m_xmlDocUiRes.load_file(m_strUIResFile, pugi::parse_full))
 		{
 			CDebug::Debug(_T("加载uires文件失败"));
 			return;
@@ -144,6 +144,20 @@ namespace SOUI
 	void SDlgSkinSelect::LoadSkinFile()
 	{
 		pugi::xml_node xmlNode = m_xmlNodeUiRes.child(L"resource").child(L"UIDEF").first_child();
+
+		while(xmlNode)
+		{
+			if(xmlNode.type() == pugi::node_element)
+			{
+				break;
+			}else
+			{
+				xmlNode = xmlNode.next_sibling();
+			}
+		}
+		
+
+
 		SStringW strPath;
 		strPath = xmlNode.attribute(L"path").value();
 		//while (xmlNode)
@@ -164,7 +178,7 @@ namespace SOUI
 
 			m_strSkinFile = strInitFile;
 
-			pugi::xml_parse_result result = m_xmlDocSkin.load_file(strInitFile);
+			pugi::xml_parse_result result = m_xmlDocSkin.load_file(strInitFile, pugi::parse_full);
 			if (result)
 			{
 				//pugi::xml_writer_buff writer;
@@ -190,7 +204,7 @@ namespace SOUI
 					strLst[0];
 
 					m_strSkinFile = m_strProPath + _T("\\") + strLst[0] + _T("\\") + strLst[1] + _T(".xml");
-					result = m_xmlDocSkin.load_file(m_strSkinFile);
+					result = m_xmlDocSkin.load_file(m_strSkinFile, pugi::parse_full);
 					if (!result)
 					{
 						SMessageBox(NULL, _T("加载skin文件失败"), _T("加载skin文件失败"), MB_OK);
@@ -209,6 +223,12 @@ namespace SOUI
 
 		while (xmlNode)
 		{
+			if(xmlNode.type() != pugi::node_element)
+			{
+				xmlNode = xmlNode.next_sibling();
+				continue;
+			}
+
 			m_lbResType->AddString(xmlNode.name());
 
 			xmlNode = xmlNode.next_sibling();
@@ -244,6 +264,11 @@ namespace SOUI
 			xmlNode = m_xmlDocSysSkin.child(L"skin").first_child();
 			while (xmlNode)
 			{
+				if(xmlNode.type() != pugi::node_element)
+				{
+					xmlNode = xmlNode.next_sibling();
+					continue;
+				}
 	
 				SStringT *strData = new SStringT(xmlNode.name());
 
@@ -275,7 +300,11 @@ namespace SOUI
 			xmlNode = m_xmlNodeUiRes.child(L"resource").child(strText).first_child();
 			while(xmlNode)
 			{
-
+				if(xmlNode.type() != pugi::node_element)
+				{
+					xmlNode = xmlNode.next_sibling();
+					continue;
+				}
 				SStringT *strData = new SStringT(xmlNode.attribute(L"name").value());
 				m_lbRes->AddString(xmlNode.attribute(L"path").value(), -1, (LPARAM)strData);
 
@@ -349,6 +378,12 @@ namespace SOUI
 
 		while (xmlNode)
 		{
+			if(xmlNode.type() != pugi::node_element)
+			{
+				xmlNode = xmlNode.next_sibling();
+				continue;
+			}
+
 			if (strTemp.CompareNoCase(xmlNode.attribute(L"src").value()) == 0)
 			{
 				SStringT s2, s3;
@@ -408,6 +443,13 @@ namespace SOUI
 
 		while (xmlNode)
 		{
+			if(xmlNode.type() != pugi::node_element)
+			{
+				xmlNode = xmlNode.next_sibling();
+				continue;
+			}
+
+
 			if (xmlNode.attribute(L"name"))
 			{
 				if (strSkinType.CompareNoCase(xmlNode.name()) == 0)
@@ -489,6 +531,12 @@ namespace SOUI
 
 		while (xmlNode)
 		{
+			if(xmlNode.type() != pugi::node_element)
+			{
+				xmlNode = xmlNode.next_sibling();
+				continue;
+			}
+
 			if (strLst[0].CompareNoCase(xmlNode.name()) == 0 && 
 				strLst[1].CompareNoCase(xmlNode.attribute(L"name").value()) == 0)
 			{
@@ -621,6 +669,12 @@ namespace SOUI
 
 			while (xmlNode)
 			{
+				if(xmlNode.type() != pugi::node_element)
+				{
+					xmlNode = xmlNode.next_sibling();
+					continue;
+				}
+
 				if (strFile.CompareNoCase(xmlNode.attribute(L"path").value()) == 0)
 				{
 					break;
@@ -722,6 +776,11 @@ namespace SOUI
 		pugi::xml_node xmlNode = m_xmlNodeUiRes.child(L"resource").child(strResType).first_child();
 		while (xmlNode)
 		{
+			if(xmlNode.type() != pugi::node_element)
+			{
+				xmlNode = xmlNode.next_sibling();
+				continue;
+			}
 			if (strResText.CompareNoCase(xmlNode.attribute(L"path").value()) == 0)
 			{
 
@@ -858,6 +917,12 @@ namespace SOUI
 
 		while (xmlNode)
 		{
+			if(xmlNode.type() != pugi::node_element)
+			{
+				xmlNode = xmlNode.next_sibling();
+				continue;
+			}
+
 			if (strList[0].CompareNoCase(xmlNode.name()) == 0)
 			{
 				pugi::xml_attribute attr = xmlNode.attribute(_T("name"));
@@ -952,6 +1017,11 @@ namespace SOUI
 				pugi::xml_node xmlNode = m_xmlDocSysSkin.child(L"skin").first_child();
 				while (xmlNode)
 				{
+					if(xmlNode.type() != pugi::node_element)
+					{
+						xmlNode = xmlNode.next_sibling();
+						continue;
+					}
 					SStringT strPath = xmlNode.attribute(L"name").value();
 
 
@@ -971,6 +1041,11 @@ namespace SOUI
 				pugi::xml_node  xmlNode = m_xmlNodeUiRes.child(L"resource").child(GetLBCurSelText(m_lbResType)).first_child();
 				while(xmlNode)
 				{
+					if(xmlNode.type() != pugi::node_element)
+					{
+						xmlNode = xmlNode.next_sibling();
+						continue;
+					}
 					SStringT strPath = xmlNode.attribute(L"path").value();
 
 
@@ -996,6 +1071,11 @@ namespace SOUI
 		pugi::xml_node xmlNode = m_xmlDocSysSkin.child(L"skin").first_child();
 		while (xmlNode)
 		{
+			if(xmlNode.type() != pugi::node_element)
+			{
+				xmlNode = xmlNode.next_sibling();
+				continue;
+			}
 			if (m_strSkinName.CompareNoCase(xmlNode.attribute(L"name").value()) == 0)
 			{
 				SelectLBItem(m_lbResType, 0);
@@ -1053,6 +1133,11 @@ namespace SOUI
 
 			while (xmlNode)
 			{
+				if(xmlNode.type() != pugi::node_element)
+				{
+					xmlNode = xmlNode.next_sibling();
+					continue;
+				}
 				if (m_strSkinName.CompareNoCase(xmlNode.attribute(L"name").value()) == 0)
 				{
 					strSrc = xmlNode.attribute(L"src").value();
@@ -1091,6 +1176,11 @@ namespace SOUI
 			xmlNode = m_xmlNodeUiRes.child(L"resource").child(strList[0]).first_child();
 			while (xmlNode)
 			{
+				if(xmlNode.type() != pugi::node_element)
+				{
+					xmlNode = xmlNode.next_sibling();
+					continue;
+				}
 
 				if (strList[1].CompareNoCase(xmlNode.attribute(L"name").value()) == 0)
 				{

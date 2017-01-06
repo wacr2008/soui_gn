@@ -1,4 +1,4 @@
-// HelpUtils.cpp
+﻿// HelpUtils.cpp
 
 
 

@@ -1,4 +1,4 @@
-#include "InStreamWrapper.h"
+﻿#include "InStreamWrapper.h"
 
 
 namespace SevenZip

@@ -29,6 +29,8 @@ from pylib.base import base_test_result
 from pylib.constants import host_paths
 from pylib.local.device import local_device_environment
 from pylib.local.device import local_device_test_run
+from py_trace_event import trace_event
+from py_utils import contextlib_ext
 
 
 class HeartBeat(object):
@@ -79,6 +81,7 @@ class TestShard(object):
 
   def _TestSetUp(self, test):
     if (self._test_instance.collect_chartjson_data
+        or self._test_instance.collect_json_data
         or self._tests[test].get('archive_output_dir')):
       self._output_dir = tempfile.mkdtemp()
 
@@ -96,10 +99,18 @@ class TestShard(object):
 
     try:
       start_time = time.time()
-      exit_code, output = cmd_helper.GetCmdStatusAndOutputWithTimeout(
-          cmd, timeout, cwd=cwd, shell=True)
+
+      with contextlib_ext.Optional(
+          trace_event.trace(test),
+          self._test_instance.trace_output):
+        exit_code, output = cmd_helper.GetCmdStatusAndOutputWithTimeout(
+            cmd, timeout, cwd=cwd, shell=True)
       end_time = time.time()
-      json_output = self._test_instance.ReadChartjsonOutput(self._output_dir)
+      chart_json_output = self._test_instance.ReadChartjsonOutput(
+          self._output_dir)
+      json_output = ''
+      if self._test_instance.collect_json_data:
+        json_output = self._test_instance.ReadJsonOutput(self._output_dir)
       if exit_code == 0:
         result_type = base_test_result.ResultType.PASS
       else:
@@ -108,11 +119,12 @@ class TestShard(object):
       end_time = time.time()
       exit_code = -1
       output = e.output
+      chart_json_output = ''
       json_output = ''
       result_type = base_test_result.ResultType.TIMEOUT
-
     return self._ProcessTestResult(test, cmd, start_time, end_time, exit_code,
-                                   output, json_output, result_type)
+                                   output, chart_json_output, json_output,
+                                   result_type)
 
   def _CreateCmd(self, test):
     cmd = []
@@ -121,6 +133,8 @@ class TestShard(object):
     cmd.append(self._tests[test]['cmd'])
     if self._output_dir:
       cmd.append('--output-dir=%s' % self._output_dir)
+    if self._test_instance.collect_json_data:
+      cmd.append('--output-format=json')
     return ' '.join(self._ExtendCmd(cmd))
 
   def _ExtendCmd(self, cmd): # pylint: disable=no-self-use
@@ -137,7 +151,7 @@ class TestShard(object):
     raise NotImplementedError
 
   def _ProcessTestResult(self, test, cmd, start_time, end_time, exit_code,
-                         output, json_output, result_type):
+                         output, chart_json_output, json_output, result_type):
     if exit_code is None:
       exit_code = -1
 
@@ -153,7 +167,8 @@ class TestShard(object):
     persisted_result = {
         'name': test,
         'output': [output],
-        'chartjson': json_output,
+        'chartjson': chart_json_output,
+        'json': json_output,
         'archive_bytes': archive_bytes,
         'exit_code': exit_code,
         'actual_exit_code': actual_exit_code,
@@ -237,11 +252,16 @@ class DeviceTestShard(TestShard):
           self._TestTearDown()
           if result_type != base_test_result.ResultType.PASS:
             try:
-              device_recovery.RecoverDevice(self._device, self._env.blacklist)
+              # TODO(rnephew): Possible problem when restarting on N7 devices.
+              # Determine if this is true. crbug.com/667470
+              if 'Nexus 7' not in self._device.product_model:
+                device_recovery.RecoverDevice(self._device, self._env.blacklist)
+              else:
+                logging.critical('Not attempting device recovery.')
             except device_errors.CommandTimeoutError:
               logging.exception(
                   'Device failed to recover after failing %s.', test)
-          tries_left = tries_left - 1
+          tries_left -= 1
 
       results.AddResult(base_test_result.BaseTestResult(test, result_type))
     return results
@@ -310,6 +330,7 @@ class HostTestShard(TestShard):
           result_type = self._RunSingleTest(test)
         finally:
           self._TestTearDown()
+          tries_left -= 1
       results.AddResult(base_test_result.BaseTestResult(test, result_type))
     return results
 
@@ -323,7 +344,7 @@ class HostTestShard(TestShard):
 
 class LocalDevicePerfTestRun(local_device_test_run.LocalDeviceTestRun):
 
-  _DEFAULT_TIMEOUT = 3 * 60 * 60  # 3 hours.
+  _DEFAULT_TIMEOUT = 5 * 60 * 60  # 5 hours.
   _CONFIG_VERSION = 1
 
   def __init__(self, env, test_instance):
@@ -409,6 +430,9 @@ class LocalDevicePerfTestRun(local_device_test_run.LocalDeviceTestRun):
   #override
   def RunTests(self):
     # Affinitize the tests.
+    if self._test_instance.trace_output:
+      assert not trace_event.trace_is_enabled(), 'Tracing already running.'
+      trace_event.trace_enable(self._test_instance.trace_output + '.json')
     self._SplitTestsByAffinity()
     if not self._test_buckets and not self._no_device_tests:
       raise local_device_test_run.NoTestsError()
@@ -446,6 +470,12 @@ class LocalDevicePerfTestRun(local_device_test_run.LocalDeviceTestRun):
 
     host_test_results, device_test_results = reraiser_thread.RunAsync(
         [run_no_devices_tests, run_devices_tests])
+    if self._test_instance.trace_output:
+      assert trace_event.trace_is_enabled(), 'Tracing not running.'
+      trace_event.trace_disable()
+      local_device_test_run.LocalDeviceTestRun._JsonToTrace(
+          self._test_instance.trace_output + '.json',
+          self._test_instance.trace_output)
     return host_test_results + device_test_results
 
   # override

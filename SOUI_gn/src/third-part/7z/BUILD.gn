@@ -1,4 +1,4 @@
-import("//build/common.gni") 
+import("//build_overrides/common.gni") 
 import("//testing/test.gni") 
 import("7zunzip_source.gni") 
 import("7z_source.gni") 
@@ -8,6 +8,7 @@ source_set("7zstaicunzip") {
  
   configs -= [ "//build/config/win:default_crt" ] 
   configs += [ "//build/config/win:static_crt" ] 
+
 
    sources = [   
               "SevenZip/SevenZipExtractorMemory.cpp",        
@@ -69,6 +70,7 @@ source_set("7zstaic") {
   configs -= [ "//build/config/win:default_crt" ] 
   configs += [ "//build/config/win:static_crt" ] 
 
+
   sources = [ 
               "SevenZip/SevenZipExtractorMemory.cpp",        
               "SevenZip/SevenZipExtractorMemory.h",  
@@ -124,6 +126,7 @@ source_set("7zstaic") {
 source_set("7zunzip") {
   configs += [ "//build/config:precompiled_headers" ]
  
+
   sources = [   
               "SevenZip/SevenZipExtractorMemory.cpp",        
               "SevenZip/SevenZipExtractorMemory.h",  
@@ -178,6 +181,7 @@ source_set("7zunzip") {
 source_set("7z") {
   configs += [ "//build/config:precompiled_headers" ]
  
+
   sources = [ 
               "SevenZip/SevenZipExtractorMemory.cpp",        
               "SevenZip/SevenZipExtractorMemory.h",  
@@ -230,10 +234,7 @@ source_set("7z") {
 } 
 
  
-test("7z_unittests") {
-  configs -= [ "//build/config/win:windowed" ]
-  configs += [ "//build/config/win:console" ]
-  
+test("7z_unittests") { 
 
   sources = [
     "test.cpp",
@@ -252,10 +253,7 @@ test("7z_unittests") {
 
 
 
-test("7z_unzip_unittests") {
-  configs -= [ "//build/config/win:windowed" ]
-  configs += [ "//build/config/win:console" ]
-  
+test("7z_unzip_unittests") { 
 
   sources = [
     "testunzip.cpp",

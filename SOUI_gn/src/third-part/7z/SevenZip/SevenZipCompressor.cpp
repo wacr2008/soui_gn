@@ -1,4 +1,4 @@
-#include "SevenZipCompressor.h"
+ï»¿#include "SevenZipCompressor.h"
 #include "GUIDs.h"
 #include "FileSys.h"
 #include "ArchiveUpdateCallback.h"
@@ -83,7 +83,7 @@ CMyComPtr< IStream > SevenZipCompressor::OpenArchiveStream()
 
 HRESULT SevenZipCompressor::FindAndCompressFiles(const TString& directory, const TString& searchPattern, const TString& pathPrefix_, bool recursion, ProgressCallback* callback, SevenZipPassword *pSevenZipPassword)
 {
-    //ĞŞÕıÑ¹Ëõ°üÀïÃæÓĞ¿ÕµÄ¶¥¼¶ÎÄ¼ş¼ĞµÄµÄÇé¿ö
+    //ä¿®æ­£å‹ç¼©åŒ…é‡Œé¢æœ‰ç©ºçš„é¡¶çº§æ–‡ä»¶å¤¹çš„çš„æƒ…å†µ
     TString pathPrefix = pathPrefix_;
     if (*pathPrefix.rbegin() != L'/'&&*pathPrefix.rbegin() != L'\\')
         pathPrefix += L'\\';

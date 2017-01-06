@@ -1,4 +1,4 @@
-// DLLExports.cpp
+﻿// DLLExports.cpp
 //
 // Notes:
 // Win2000:

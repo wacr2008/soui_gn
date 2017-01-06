@@ -1,4 +1,4 @@
-// PluginDelete.cpp
+﻿// PluginDelete.cpp
 
 
 

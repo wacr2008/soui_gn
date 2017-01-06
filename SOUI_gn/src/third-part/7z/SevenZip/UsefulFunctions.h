@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "CompressionFormat.h"
 #include "../CPP/7zip/Archive/IArchive.h"
 #include "../C/7zTypes.h"

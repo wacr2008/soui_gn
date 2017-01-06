@@ -1,9 +1,6 @@
-# gn demo
-
-import("//build/common.gni")
+import("//build_overrides/common.gni")
 
 declare_args() {
-   
 }
 
 action("preBuild_360_resource") {

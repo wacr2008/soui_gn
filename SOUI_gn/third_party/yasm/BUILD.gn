@@ -49,6 +49,10 @@ if (current_toolchain == host_toolchain) {
   }
 
   executable("genmacro") {
+
+    configs -= [ "//build/config/win:windowed" ] 
+    configs += [ "//build/config/win:console" ]
+
     sources = [
       "source/patched-yasm/tools/genmacro/genmacro.c",
     ]
@@ -66,6 +70,9 @@ if (current_toolchain == host_toolchain) {
   }
 
   executable("genmodule") {
+    configs -= [ "//build/config/win:windowed" ] 
+    configs += [ "//build/config/win:console" ]
+
     sources = [
       "source/patched-yasm/libyasm/genmodule.c",
     ]
@@ -83,6 +90,9 @@ if (current_toolchain == host_toolchain) {
   }
 
   executable("genperf") {
+    configs -= [ "//build/config/win:windowed" ] 
+    configs += [ "//build/config/win:console" ]
+
     sources = [
       "source/patched-yasm/tools/genperf/genperf.c",
       "source/patched-yasm/tools/genperf/perfect.c",
@@ -119,6 +129,9 @@ if (current_toolchain == host_toolchain) {
   }
 
   executable("genstring") {
+    configs -= [ "//build/config/win:windowed" ] 
+    configs += [ "//build/config/win:console" ]
+
     sources = [
       "source/patched-yasm/genstring.c",
     ]
@@ -136,6 +149,9 @@ if (current_toolchain == host_toolchain) {
   }
 
   executable("genversion") {
+    configs -= [ "//build/config/win:windowed" ] 
+    configs += [ "//build/config/win:console" ]
+
     sources = [
       "source/patched-yasm/modules/preprocs/nasm/genversion.c",
     ]
@@ -167,6 +183,9 @@ if (current_toolchain == host_toolchain) {
   }
 
   executable("re2c") {
+    configs -= [ "//build/config/win:windowed" ] 
+    configs += [ "//build/config/win:console" ]
+
     sources = [
       "source/patched-yasm/tools/re2c/actions.c",
       "source/patched-yasm/tools/re2c/code.c",
@@ -206,6 +225,9 @@ if (current_toolchain == host_toolchain) {
   }
 
   executable("yasm") {
+    configs -= [ "//build/config/win:windowed" ] 
+    configs += [ "//build/config/win:console" ]
+
     sources = [
       "source/patched-yasm/frontends/yasm/yasm-options.c",
       "source/patched-yasm/frontends/yasm/yasm.c",
@@ -258,6 +280,7 @@ if (current_toolchain == host_toolchain) {
       "source/patched-yasm/modules/objfmts/elf/elf-x86-amd64.c",
       "source/patched-yasm/modules/objfmts/elf/elf-x86-x86.c",
       "source/patched-yasm/modules/objfmts/elf/elf.c",
+      "source/patched-yasm/modules/objfmts/elf/elf-x86-x32.c",
       "source/patched-yasm/modules/objfmts/macho/macho-objfmt.c",
       "source/patched-yasm/modules/objfmts/rdf/rdf-objfmt.c",
       "source/patched-yasm/modules/objfmts/xdf/xdf-objfmt.c",

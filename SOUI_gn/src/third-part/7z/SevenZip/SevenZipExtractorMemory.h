@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "SevenZipArchive.h"
 #include "CompressionFormat.h"
 #include "ProgressCallback.h"

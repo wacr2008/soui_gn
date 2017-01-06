@@ -1,4 +1,4 @@
-#define IDD_MENU     2300
+﻿#define IDD_MENU     2300
 #define IDD_MENU_2  12300
 
 #define IDX_SYSTEM_INTEGRATE_TO_MENU    2301

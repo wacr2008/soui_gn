@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="Client7z" - Package Owner=<4>
+﻿# Microsoft Developer Studio Project File - Name="Client7z" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 

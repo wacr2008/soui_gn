@@ -1,4 +1,4 @@
-// UpdateCallbackFar.h
+﻿// UpdateCallbackFar.h
 
 #ifndef __UPDATE_CALLBACK_FAR_H
 #define __UPDATE_CALLBACK_FAR_H

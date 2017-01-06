@@ -1,4 +1,4 @@
-// ProgressDialog.cpp
+﻿// ProgressDialog.cpp
 
 
 

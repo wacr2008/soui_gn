@@ -1,4 +1,4 @@
-// PpmdDecoder.h
+﻿// PpmdDecoder.h
 // 2009-03-11 : Igor Pavlov : Public domain
 
 #ifndef __COMPRESS_PPMD_DECODER_H

@@ -1,5 +1,5 @@
 
-import("//build/common.gni")
+import("//build_overrides/common.gni")
 
 group("components") {
   deps = [

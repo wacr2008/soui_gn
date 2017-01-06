@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../CPP/Common/MyCom.h"
 #include "FileInfo.h"
 #include "CompressionFormat.h"

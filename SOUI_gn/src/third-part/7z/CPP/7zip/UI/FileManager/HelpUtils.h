@@ -1,4 +1,4 @@
-// HelpUtils.h
+﻿// HelpUtils.h
 
 #ifndef __HELP_UTILS_H
 #define __HELP_UTILS_H

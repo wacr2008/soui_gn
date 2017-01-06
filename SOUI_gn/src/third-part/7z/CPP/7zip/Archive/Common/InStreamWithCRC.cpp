@@ -1,4 +1,4 @@
-// InStreamWithCRC.cpp
+﻿// InStreamWithCRC.cpp
 
 
 

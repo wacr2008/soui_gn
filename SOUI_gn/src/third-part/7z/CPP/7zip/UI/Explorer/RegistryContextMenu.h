@@ -1,4 +1,4 @@
-// RegistryContextMenu.h
+﻿// RegistryContextMenu.h
 
 #ifndef __REGISTRY_CONTEXT_MENU_H
 #define __REGISTRY_CONTEXT_MENU_H

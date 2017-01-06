@@ -37,7 +37,7 @@
 
 #include "yasm-options.h"
 
-#ifdef CMAKE_BUILD
+#if defined(CMAKE_BUILD) && defined(BUILD_SHARED_LIBS)
 #include "yasm-plugin.h"
 #endif
 
@@ -108,8 +108,12 @@ static int opt_ewmsg_handler(char *cmd, /*@null@*/ char *param, int extra);
 static int opt_makedep_handler(char *cmd, /*@null@*/ char *param, int extra);
 static int opt_prefix_handler(char *cmd, /*@null@*/ char *param, int extra);
 static int opt_suffix_handler(char *cmd, /*@null@*/ char *param, int extra);
-#ifdef CMAKE_BUILD
+#if defined(CMAKE_BUILD) && defined(BUILD_SHARED_LIBS)
 static int opt_plugin_handler(char *cmd, /*@null@*/ char *param, int extra);
+#endif
+
+#if defined(CMAKE_BUILD) && !defined(BUILD_SHARED_LIBS)
+void yasm_init_plugin(void);
 #endif
 
 static /*@only@*/ char *replace_extension(const char *orig, /*@null@*/
@@ -176,11 +180,13 @@ static opt_option options[] =
       N_("enables/disables warning"), NULL },
     { 'M', NULL, 0, opt_makedep_handler, 0,
       N_("generate Makefile dependencies on stdout"), NULL },
-    { 'E', NULL, 1, opt_error_file, 0,
+    { 'Z', NULL, 1, opt_error_file, 0,
       N_("redirect error messages to file"), N_("file") },
     { 's', NULL, 0, opt_error_stdout, 0,
       N_("redirect error messages to stdout"), NULL },
     { 'e', "preproc-only", 0, preproc_only_handler, 0,
+      N_("preprocess only (writes output to stdout by default)"), NULL },
+    { 'E', NULL, 0, preproc_only_handler, 0,
       N_("preprocess only (writes output to stdout by default)"), NULL },
     { 'i', NULL, 1, opt_include_option, 0,
       N_("add include path"), N_("path") },
@@ -204,7 +210,7 @@ static opt_option options[] =
       N_("append argument to name of all external symbols"), N_("suffix") },
     { 0, "postfix", 1, opt_suffix_handler, 0,
       N_("append argument to name of all external symbols"), N_("suffix") },
-#ifdef CMAKE_BUILD
+#if defined(CMAKE_BUILD) && defined(BUILD_SHARED_LIBS)
     { 'N', "plugin", 1, opt_plugin_handler, 0,
       N_("load plugin module"), N_("plugin") },
 #endif
@@ -213,7 +219,8 @@ static opt_option options[] =
 /* version message */
 /*@observer@*/ static const char *version_msg[] = {
     PACKAGE_STRING,
-    "Copyright (c) 2001-2011 Peter Johnson and other Yasm developers.",
+    "Compiled on " __DATE__ ".",
+    "Copyright (c) 2001-2014 Peter Johnson and other Yasm developers.",
     "Run yasm --license for licensing overview and summary."
 };
 
@@ -354,6 +361,7 @@ do_assemble(void)
     yasm_linemap *linemap;
     yasm_errwarns *errwarns = yasm_errwarns_create();
     int i, matched;
+    const char *machine;
 
     /* Initialize line map */
     linemap = yasm_linemap_create();
@@ -382,7 +390,7 @@ do_assemble(void)
          * machine to amd64.  When we get more arches with multiple machines,
          * we should do this in a more modular fashion.
          */
-        if (strcmp(cur_arch_module->keyword, "x86") == 0 &&
+        if (yasm__strcasecmp(cur_arch_module->keyword, "x86") == 0 &&
             cur_objfmt_module->default_x86_mode_bits == 64)
             machine_name = yasm__xstrdup("amd64");
         else
@@ -390,7 +398,16 @@ do_assemble(void)
                 yasm__xstrdup(cur_arch_module->default_machine_keyword);
     }
 
-    cur_arch = yasm_arch_create(cur_arch_module, machine_name,
+    /* If we're using amd64 and the default objfmt is elfx32, change the
+     * machine to "x32".
+     */
+    if (yasm__strcasecmp(machine_name, "amd64") == 0 &&
+	yasm__strcasecmp(cur_objfmt_module->keyword, "elfx32") == 0)
+      machine = "x32";
+    else
+      machine = machine_name;
+
+    cur_arch = yasm_arch_create(cur_arch_module, machine,
                                 cur_parser_module->keyword, &arch_error);
     if (!cur_arch) {
         switch (arch_error) {
@@ -437,9 +454,14 @@ do_assemble(void)
      */
     matched = 0;
     for (i=0; cur_parser_module->preproc_keywords[i]; i++)
+    {
         if (yasm__strcasecmp(cur_parser_module->preproc_keywords[i],
-                             cur_preproc_module->keyword) == 0)
+                             cur_preproc_module->keyword) == 0) {
             matched = 1;
+            break;
+        }
+    }
+
     if (!matched) {
         print_error(_("%s: `%s' is not a valid %s for %s `%s'"), _("FATAL"),
                     cur_preproc_module->keyword, _("preprocessor"),
@@ -462,7 +484,7 @@ do_assemble(void)
     apply_preproc_saved_options();
 
     /* Get initial x86 BITS setting from object format */
-    if (strcmp(cur_arch_module->keyword, "x86") == 0) {
+    if (yasm__strcasecmp(cur_arch_module->keyword, "x86") == 0) {
         yasm_arch_set_var(cur_arch, "mode_bits",
                           cur_objfmt_module->default_x86_mode_bits);
     }
@@ -514,7 +536,7 @@ do_assemble(void)
     check_errors(errwarns, object, linemap);
 
     /* open the object file for output (if not already opened by dbg objfmt) */
-    if (!obj && strcmp(cur_objfmt_module->keyword, "dbg") != 0) {
+    if (!obj && yasm__strcasecmp(cur_objfmt_module->keyword, "dbg") != 0) {
         obj = open_file(obj_filename, "wb");
         if (!obj) {
             cleanup(object);
@@ -524,7 +546,8 @@ do_assemble(void)
 
     /* Write the object file */
     yasm_objfmt_output(object, obj?obj:stderr,
-                       strcmp(cur_dbgfmt_module->keyword, "null"), errwarns);
+                       yasm__strcasecmp(cur_dbgfmt_module->keyword, "null"),
+                       errwarns);
 
     /* Close object file */
     if (obj)
@@ -595,10 +618,14 @@ main(int argc, char *argv[])
 
 #ifdef CMAKE_BUILD
     /* Load standard modules */
+#ifdef BUILD_SHARED_LIBS
     if (!load_plugin("yasmstd")) {
         print_error(_("%s: could not load standard modules"), _("FATAL"));
         return EXIT_FAILURE;
     }
+#else
+    yasm_init_plugin();
+#endif
 #endif
 
     /* Initialize parameter storage */
@@ -795,7 +822,7 @@ cleanup(yasm_object *object)
 
     if (errfile != stderr && errfile != stdout)
         fclose(errfile);
-#ifdef CMAKE_BUILD
+#if defined(CMAKE_BUILD) && defined(BUILD_SHARED_LIBS)
     unload_plugins();
 #endif
 }
@@ -1067,6 +1094,8 @@ opt_warning_handler(char *cmd, /*@unused@*/ char *param, int extra)
         action(YASM_WARN_UNINIT_CONTENTS);
     else if (strcmp(cmd, "size-override") == 0)
         action(YASM_WARN_SIZE_OVERRIDE);
+    else if (strcmp(cmd, "segreg-in-64bit") == 0)
+        action(YASM_WARN_SEGREG_IN_64BIT);
     else
         return 1;
 
@@ -1176,7 +1205,7 @@ opt_suffix_handler(/*@unused@*/ char *cmd, char *param, /*@unused@*/ int extra)
     return 0;
 }
 
-#ifdef CMAKE_BUILD
+#if defined(CMAKE_BUILD) && defined(BUILD_SHARED_LIBS)
 static int
 opt_plugin_handler(/*@unused@*/ char *cmd, char *param,
                    /*@unused@*/ int extra)
