@@ -1,0 +1,38 @@
+pid=6308 tid=3180 2017-01-13 09:55:01.625 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=176694797" wWinMain (demo.cpp):157 
+pid=6308 tid=3180 2017-01-13 09:55:01.625 ERROR demo.exe soui-lib "log output using unicode format,str=ÖÐÎÄ, tick=176694797" wWinMain (demo.cpp):158 
+pid=6308 tid=3180 2017-01-13 09:55:02.587 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.607 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.626 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.643 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.667 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.683 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.698 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.711 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.719 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute margin-x in class imglist, value = 1" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.719 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute margin-y in class imglist, value = 1" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:02.741 WARN  SOUI.dll soui-lib "Warning: no window type:template in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=6308 tid=3180 2017-01-13 09:55:02.746 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:02.768 WARN  SOUI.dll soui-lib "Warning: no window type:wkeWebkit in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=6308 tid=3180 2017-01-13 09:55:02.882 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:02.953 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:02.972 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:02.978 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:02.984 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:02.990 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:02.995 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:03.001 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:03.006 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:03.012 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:09.019 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:09.073 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:09.089 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:09.105 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:09.119 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:09.135 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:09.150 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6308 tid=3180 2017-01-13 09:55:16.559 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute appwin in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:16.559 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute frameSize in class hostwndattr, value = 40,40,10,60" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:16.559 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute resize in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:18.703 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute appwin in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:18.703 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute frameSize in class hostwndattr, value = 40,40,10,60" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6308 tid=3180 2017-01-13 09:55:18.703 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute resize in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 

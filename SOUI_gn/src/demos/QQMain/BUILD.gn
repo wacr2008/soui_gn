@@ -1,0 +1,66 @@
+import("//build_overrides/common.gni")
+ 
+
+executable("QQMain") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  configs -= [ "//build/config/win:console" ]
+  configs += [ "//build/config/win:windowed" ] 
+  
+  sources = [ 
+    "main.cpp",
+    "resource.h",
+
+
+    "ui/drag/DragWnd.cpp",
+    "ui/drag/DragWnd.h",
+
+    "ui/MainDlg.cpp",
+    "ui/MainDlg.h",
+    "ui/SToggleEx.cpp",
+    "ui/SToggleEx.h",
+    "ui/SHeaderCtrlEx.cpp", 
+    "ui/SHeaderCtrlEx.h",  
+    "ui/adapter/FirendListItemAdapter.cpp",
+    "ui/adapter/FirendListItemAdapter.h",
+    "ui/adapter/HotChannelListItemAdapter.cpp",
+    "ui/adapter/HotChannelListItemAdapter.h",
+    "ui/adapter/NewChannelListItemAdapter.cpp",
+    "ui/adapter/NewChannelListItemAdapter.h",
+
+    "ui/adapter/NodeMgr.cpp",
+    "ui/adapter/NodeMgr.h",
+    "ui/adapter/SimpleListDef.cpp",
+    "ui/adapter/SimpleListDef.h",
+      
+    "QQMain.rc",
+    
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+    "../../components",
+  ]
+
+  deps = [ 
+    "../../utilities",
+    "../../SOUI",
+    "../../third-part",
+    "../../components",
+  ]
+ 
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4201",
+      "/wd4239",
+    ]
+  }
+  
+  defines = ["_CRT_SECURE_NO_WARNINGS","_USE_UI_LIBRAY",] 
+
+} 

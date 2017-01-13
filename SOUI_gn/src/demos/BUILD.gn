@@ -8,6 +8,7 @@ group("demos") {
     "BaoFeng",
     "demo",
     "mclistview_demo",
+    "QQMain",
     "PCManager",
     "QQLogin",
     "SoTool",
