@@ -1,4 +1,4 @@
-ï»¿#include "SSkinAPNG.h"
+#include "SSkinAPNG.h"
 #include <helper/SplitString.h>
 #include <interface/imgdecoder-i.h>
 #include <interface/render-i.h>
@@ -23,7 +23,7 @@ namespace SOUI
                 GETRESPROVIDER->GetRawBuffer(strLst[0],strLst[1],pBuf,szBuf);
             }
         }else
-        {//è‡ªåŠ¨ä»ŽAPNGèµ„æºç±»åž‹é‡ŒæŸ¥æ‰¾èµ„æº
+        {//×Ô¶¯´ÓAPNG×ÊÔ´ÀàÐÍÀï²éÕÒ×ÊÔ´
             szBuf=GETRESPROVIDER->GetRawBufferSize(_T("apng"),strLst[0]);
             if(szBuf)
             {

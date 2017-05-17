@@ -35,7 +35,9 @@ executable("360Preview") {
     "../../utilities",
     "../../SOUI",
     "../../third-part",
-    "../../components",
+    "../../components", 
+    "../../soui-sys-resource",
+    "../../../:preBuild_360Preview_resource",
   ]
  
 

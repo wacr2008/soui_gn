@@ -56,8 +56,6 @@ executable("UiEditor") {
 
 
     "../../controls.extend/SAnimator.h",
-    "../../controls.extend/SAnimImg.cpp",
-    "../../controls.extend/SAnimImg.h",
     "../../controls.extend/SButtonEx.cpp",
     "../../controls.extend/SButtonEx.h",
     "../../controls.extend/SChromeTabCtrl.cpp",
@@ -146,6 +144,8 @@ executable("UiEditor") {
     "CNewGuid.h",
     "DesignerView.cpp",
     "DesignerView.h",
+    "SDesignerRoot.cpp",
+    "SDesignerRoot.h",
     "DlgFontSelect.cpp",
     "DlgFontSelect.h",
     "helpapi.cpp",
@@ -173,9 +173,9 @@ executable("UiEditor") {
     "SImageSwitcher.cpp",
     "SImageSwitcher.h",
     "SMoveWnd.cpp",
-    "SMoveWnd.h",
-    "SMyButton.cpp",
-    "SMyButton.h",
+    "SMoveWnd.h", 
+    "SImgCanvas.cpp",
+    "SImgCanvas.h",     
     "SouiRealWndHandler.cpp",
     "SouiRealWndHandler.h",
     "SPropertyGridEx.cpp",
@@ -199,6 +199,7 @@ executable("UiEditor") {
     "../../soui/include",
     "../../utilities/include",
     "../../components",
+    "../..",
     "../../controls.extend",
     "../../controls.extend/propgrid",
     "../../extend.skins",
@@ -211,6 +212,8 @@ executable("UiEditor") {
     "../../SOUI",
     "../../third-part",
     "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_UiEditor_resource",
   ]
 
 

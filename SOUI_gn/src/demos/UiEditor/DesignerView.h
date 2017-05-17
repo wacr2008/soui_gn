@@ -1,7 +1,11 @@
 #pragma once
 #include "ScintillaWnd.h"
 #include "Scintilla.h"
-#include "SPropertyItem-i.h"
+#include "layout/SouiLayout.h"
+#include "layout/SLinearLayout.h"
+#include "SDesignerRoot.h"
+#include "propgrid/SPropertyGrid.h"
+
 namespace SOUI
 {
 	class SMoveWnd;
@@ -36,7 +40,7 @@ namespace SOUI
 		 //创建Root窗口
 		 SMoveWnd* CreateWnd(SWindow *pContainer,LPCWSTR pszXml);
          void CreateAllChildWnd(SWindow *pRealWnd, SMoveWnd *pMoveWnd);
-         void UpdateAllLayout(SMoveWnd* pMoveWndRoot);
+        
 
 		 //重命名每一个控件的名字
 		 void RenameChildeWnd(pugi::xml_node xmlNode);
@@ -56,7 +60,7 @@ namespace SOUI
 
 		 void SetCurrentCtrl(pugi::xml_node xmlNode, SMoveWnd *pWnd); //设置当前选中的控件
 
-         SStringW GetPosFromLayout(SwndLayout *pLayout, INT nPosIndex);
+         SStringW GetPosFromLayout(SouiLayoutParam *pLayoutParam, INT nPosIndex);
 
 		 //通过控件的属性值找到该控件对应的xml节点
 		 pugi::xml_node FindNodeByAttr(pugi::xml_node NodeRoot, SStringT attrName, SStringT attrValue);
@@ -107,8 +111,15 @@ namespace SOUI
 		 
 		 void TrimXmlNodeTextBlank(pugi::xml_node xmlNode);
 
+		 void UseEditorUIDef(bool bYes);  //使用编辑器自身的UIDef还是使用所打开的工程的UIDef
+		 SStringT UnitToStr(int nUnit);
+
 	public:
-		    SWindow *m_pRealWndRoot;       //布局容器窗口;
+			CAutoRefPtr<IFont> m_defFont;
+	
+			SDesignerRoot *m_pRealWndRoot;       //布局容器窗口;
+
+
 		    SMoveWnd  *m_pMoveWndRoot; //布局窗口的根窗口
 
 			BOOL     m_bChange;    //文件是否被修改,如果被修改需要保存
@@ -162,7 +173,9 @@ namespace SOUI
 
 			int m_ndata; //这个值用来标识xmlnode的每一个节点，节点属性为data,xmlnode的这个属性值是唯一的;
 
+			CAutoRefPtr<IUiDefInfo> m_pUiDef;  //加载工程的UIdef
 
+			CAutoRefPtr<IUiDefInfo>  m_pOldUiDef;//编辑器自身的UiDef
 
 	};
 

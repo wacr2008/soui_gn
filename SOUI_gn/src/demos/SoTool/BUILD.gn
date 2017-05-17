@@ -62,6 +62,8 @@ executable("SoTool") {
     "../../SOUI",
     "../../third-part",
     "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_SoTool_resource",
   ]
  
   if (is_win) {

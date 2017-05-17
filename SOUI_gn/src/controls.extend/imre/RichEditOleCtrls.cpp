@@ -310,7 +310,7 @@ void RichEditReminderOle::CalculateNatureSize()
 {
     CAutoRefPtr<IRenderTarget> pRT;
     GETRENDERFACTORY->CreateRenderTarget(&pRT, 0, 0);
-    pRT->SelectObject(SFontPool::getSingleton().GetFont(m_strFont));
+    pRT->SelectObject(SFontPool::getSingleton().GetFont(m_strFont,100));
     pRT->MeasureText(m_strText, m_strText.GetLength(), &m_sizeNatural);
 
     m_sizeNatural.cx += m_nBorderWidth * 2;
@@ -336,7 +336,7 @@ void RichEditReminderOle::InitAttributes()
         pText->GetStyle().SetTextColor(0, m_crText);
         pText->GetStyle().m_crBorder = m_crBorder;
         pText->GetStyle().m_crBg     = m_crBk;
-        pText->GetStyle().m_rcMargin.SetRect(m_nBorderWidth,m_nBorderWidth,m_nBorderWidth,m_nBorderWidth);
+        pText->GetStyle().SetAttribute(L"margin",SStringW().Format(L"%d,%d,%d,%d",m_nBorderWidth,m_nBorderWidth,m_nBorderWidth,m_nBorderWidth));
     }
 }
 
@@ -432,8 +432,8 @@ void RichEditNewsOle::LayoutForMultiNews()
     }
 
     m_strXmlLayout = L"LAYOUT:MultiNewsOle";
-//    BOOL bRet = RichEditOleBase::InitOleWindow(m_pObjectHost);
-
+    BOOL bRet = RichEditOleBase::InitOleWindow(m_pObjectHost);
+	(void)bRet;
     pugi::xml_document  xmlDoc;
     LOADXML(xmlDoc, L"MultiNewsOle" ,RT_LAYOUT);
 

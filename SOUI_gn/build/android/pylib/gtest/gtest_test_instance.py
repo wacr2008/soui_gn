@@ -25,7 +25,16 @@ BROWSER_TEST_SUITES = [
   'content_browsertests',
 ]
 
-RUN_IN_SUB_THREAD_TEST_SUITES = ['net_unittests']
+RUN_IN_SUB_THREAD_TEST_SUITES = [
+  # Multiprocess tests should be run outside of the main thread.
+  'base_unittests',  # file_locking_unittest.cc uses a child process.
+  'ipc_perftests',
+  'ipc_tests',
+  'mojo_message_pipe_perftests',
+  'mojo_public_bindings_perftests',
+  'mojo_system_unittests',
+  'net_unittests'
+]
 
 
 # Used for filtering large data deps at a finer grain than what's allowed in
@@ -129,7 +138,7 @@ def ParseGTestOutput(output):
   def handle_possibly_unknown_test():
     if test_name is not None:
       results.append(base_test_result.BaseTestResult(
-          test_name,
+          TestNameWithoutDisabledPrefix(test_name),
           fallback_result_type or base_test_result.ResultType.UNKNOWN,
           duration, log=('\n'.join(log) if log else '')))
 
@@ -166,7 +175,7 @@ def ParseGTestOutput(output):
 
     if result_type and test_name:
       results.append(base_test_result.BaseTestResult(
-          test_name, result_type, duration,
+          TestNameWithoutDisabledPrefix(test_name), result_type, duration,
           log=('\n'.join(log) if log else '')))
       test_name = None
 
@@ -194,7 +203,7 @@ def ParseGTestXML(xml_content):
         log.append(html.unescape(failure.attrib['message']))
 
       results.append(base_test_result.BaseTestResult(
-          '%s.%s' % (suite_name, case_name),
+          '%s.%s' % (suite_name, TestNameWithoutDisabledPrefix(case_name)),
           result_type,
           int(float(testcase.attrib['time']) * 1000),
           log=('\n'.join(log) if log else '')))
@@ -253,11 +262,13 @@ class GtestTestInstance(test_instance.TestInstance):
     if len(args.suite_name) > 1:
       raise ValueError('Platform mode currently supports only 1 gtest suite')
     self._exe_dist_dir = None
+    self._external_shard_index = args.test_launcher_shard_index
     self._extract_test_list_from_filter = args.extract_test_list_from_filter
+    self._filter_tests_lock = threading.Lock()
     self._shard_timeout = args.shard_timeout
     self._store_tombstones = args.store_tombstones
+    self._total_external_shards = args.test_launcher_total_shards
     self._suite = args.suite_name[0]
-    self._filter_tests_lock = threading.Lock()
 
     # GYP:
     if args.executable_dist_dir:
@@ -323,10 +334,24 @@ class GtestTestInstance(test_instance.TestInstance):
       self._app_data_files = None
       self._app_data_file_dir = None
 
-    self._test_arguments = args.test_arguments
+    self._flags = None
+    self._initializeCommandLineFlags(args)
 
     # TODO(jbudorick): Remove this once it's deployed.
     self._enable_xml_result_parsing = args.enable_xml_result_parsing
+
+  def _initializeCommandLineFlags(self, args):
+    self._flags = []
+    if args.command_line_flags:
+      self._flags.extend(args.command_line_flags)
+    if args.device_flags_file:
+      with open(args.device_flags_file) as f:
+        stripped_lines = (l.strip() for l in f)
+        self._flags.extend(flag for flag in stripped_lines if flag)
+    if args.run_disabled:
+      self._flags.append('--gtest_also_run_disabled_tests')
+    if args.test_arguments:
+      self._flags.extend(args.test_arguments.split())
 
   @property
   def activity(self):
@@ -357,12 +382,20 @@ class GtestTestInstance(test_instance.TestInstance):
     return self._exe_dist_dir
 
   @property
+  def external_shard_index(self):
+    return self._external_shard_index
+
+  @property
+  def extract_test_list_from_filter(self):
+    return self._extract_test_list_from_filter
+
+  @property
   def extras(self):
     return self._extras
 
   @property
-  def gtest_also_run_disabled_tests(self):
-    return self._run_disabled
+  def flags(self):
+    return self._flags
 
   @property
   def gtest_filter(self):
@@ -397,12 +430,8 @@ class GtestTestInstance(test_instance.TestInstance):
     return self._test_apk_incremental_install_script
 
   @property
-  def test_arguments(self):
-    return self._test_arguments
-
-  @property
-  def extract_test_list_from_filter(self):
-    return self._extract_test_list_from_filter
+  def total_external_shards(self):
+    return self._total_external_shards
 
   #override
   def TestType(self):

@@ -7,7 +7,7 @@ import("//build/toolchain/goma.gni")
 declare_args() {
   # Precompiled header file support is by default available,
   # but for distributed build system uses (like goma) or when
-  # doing official builds.
-  #enable_precompiled_headers = !is_official_build && !use_goma wuding20170104
+  # doing official builds.//enable precompiled wuding20170401
+  #enable_precompiled_headers = !is_official_build && !use_goma
   enable_precompiled_headers =  !use_goma
 }

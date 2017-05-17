@@ -1,9 +1,11 @@
 #include "souistd.h"
 #include "control\SComboView.h"
+#include <algorithm>
 
 namespace SOUI
 {
     SComboView::SComboView(void)
+        :m_pListBox(NULL)
     {
     }
 
@@ -39,7 +41,8 @@ namespace SOUI
         {
             IListViewItemLocator * pItemLocator = m_pListBox->GetItemLocator();
             SASSERT(pItemLocator);
-            nDropHeight = min(nDropHeight,pItemLocator->GetTotalHeight()+m_pListBox->GetStyle().m_rcMargin.top + m_pListBox->GetStyle().m_rcMargin.bottom);
+			CRect rcMargin = m_pListBox->GetStyle().GetMargin();
+            nDropHeight = (std::min)(nDropHeight,(int)(pItemLocator->GetTotalHeight()+rcMargin.top + rcMargin.bottom));
         }
         return nDropHeight;    
     }
@@ -49,7 +52,7 @@ namespace SOUI
         __super::OnCreateDropDown(pDropDown);
         pDropDown->InsertChild(m_pListBox);
         pDropDown->UpdateChildrenPosition();
-        
+
         m_pListBox->SetVisible(TRUE);
         m_pListBox->SetFocus();
         m_pListBox->EnsureVisible(GetCurSel());
@@ -100,7 +103,7 @@ namespace SOUI
         return m_pListBox;
     }
 
-    SOUI::SStringT SComboView::GetLBText(int iItem)
+    SStringT SComboView::GetLBText(int iItem)
     {
         ILvAdapter *pAdapter = m_pListBox->GetAdapter();
         if(!pAdapter || iItem == -1) return SStringT();

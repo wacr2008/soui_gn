@@ -14,7 +14,7 @@ SImagePlayer::~SImagePlayer()
 
 
 void SImagePlayer::OnPaint( IRenderTarget *pRT )
-{	
+{
 	__super::OnPaint(pRT);
 	if(m_aniSkin)
 	{		
@@ -57,7 +57,7 @@ void SImagePlayer::OnNextFrame()
 
 HRESULT SImagePlayer::OnAttrSkin( const SStringW & strValue, BOOL bLoading )
 {
-	ISkinObj *pSkin = SSkinPoolMgr::getSingleton().GetSkin(strValue);
+    ISkinObj *pSkin = SSkinPoolMgr::getSingleton().GetSkin(strValue, GetScale());
 	if(!pSkin) return E_FAIL;
 	if(!pSkin->IsClass(SSkinAni::GetClassName())) return S_FALSE;
 	m_aniSkin=static_cast<SSkinAni*>(pSkin);
@@ -103,7 +103,7 @@ SIZE SImagePlayer::GetImageSize()
 
 void SImagePlayer::Pause()
 {
-    if (m_aniSkin->GetStates() > 1)
+    if (m_aniSkin && m_aniSkin->GetStates() > 1)
     {
         GetContainer()->UnregisterTimelineHandler(this);
     }
@@ -111,7 +111,7 @@ void SImagePlayer::Pause()
 
 void SImagePlayer::Resume()
 {
-    if (m_aniSkin->GetStates() > 1)
+    if (m_aniSkin && m_aniSkin->GetStates() > 1)
     {
         GetContainer()->RegisterTimelineHandler(this);
     }
@@ -120,26 +120,16 @@ void SImagePlayer::Resume()
 BOOL SImagePlayer::_PlayFile( LPCTSTR pszFileName, BOOL bGif )
 {
     SStringW key=S_CT2W(pszFileName);
-    SSkinPool *pBuiltinSkinPool = SSkinPoolMgr::getSingletonPtr()->GetBuiltinSkinPool();
-    ISkinObj *pSkin=pBuiltinSkinPool->GetSkin(key);
-    if(pSkin)
-    {
-        if(!pSkin->IsClass(SSkinAni::GetClassName())) return FALSE;
-        m_aniSkin=static_cast<SSkinAni*>(pSkin);
-    }else
-    {
-        SSkinAni *pGifSkin = (SSkinAni*)SApplication::getSingleton().CreateSkinByName(SSkinMutiFrameImg::GetClassName());
-        if(!pGifSkin) return FALSE;
-        if(0==pGifSkin->LoadFromFile(pszFileName))
-        {
-            pGifSkin->Release();
-            return FALSE;
-        }
+	SSkinAni *pGifSkin = (SSkinAni*)SApplication::getSingleton().CreateSkinByName(SSkinMutiFrameImg::GetClassName());
+	if(!pGifSkin) return FALSE;
+	if(0==pGifSkin->LoadFromFile(pszFileName))
+	{
+		pGifSkin->Release();
+		return FALSE;
+	}
 
-        pBuiltinSkinPool->AddKeyObject(key,pGifSkin);//将创建的skin交给skinpool管理
-        m_aniSkin = pGifSkin;
-    }
-    if(m_layout.IsFitContent())
+	m_aniSkin = pGifSkin;
+	if (GetLayoutParam()->IsWrapContent(Any))
     {
         GetParent()->UpdateChildrenPosition();
     }

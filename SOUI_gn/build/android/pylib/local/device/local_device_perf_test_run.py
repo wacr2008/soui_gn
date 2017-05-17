@@ -102,7 +102,7 @@ class TestShard(object):
 
       with contextlib_ext.Optional(
           trace_event.trace(test),
-          self._test_instance.trace_output):
+          self._env.trace_output):
         exit_code, output = cmd_helper.GetCmdStatusAndOutputWithTimeout(
             cmd, timeout, cwd=cwd, shell=True)
       end_time = time.time()
@@ -252,12 +252,7 @@ class DeviceTestShard(TestShard):
           self._TestTearDown()
           if result_type != base_test_result.ResultType.PASS:
             try:
-              # TODO(rnephew): Possible problem when restarting on N7 devices.
-              # Determine if this is true. crbug.com/667470
-              if 'Nexus 7' not in self._device.product_model:
-                device_recovery.RecoverDevice(self._device, self._env.blacklist)
-              else:
-                logging.critical('Not attempting device recovery.')
+              device_recovery.RecoverDevice(self._device, self._env.blacklist)
             except device_errors.CommandTimeoutError:
               logging.exception(
                   'Device failed to recover after failing %s.', test)
@@ -270,6 +265,7 @@ class DeviceTestShard(TestShard):
     logging.info('%s : exit_code=%d in %d secs on device %s',
                  test, exit_code, duration, str(self._device))
 
+  @trace_event.traced
   def _TestSetUp(self, test):
     if not self._device.IsOnline():
       msg = 'Device %s is unresponsive.' % str(self._device)
@@ -303,6 +299,7 @@ class DeviceTestShard(TestShard):
     persisted_result['host_test'] = False
     persisted_result['device'] = str(self._device)
 
+  @trace_event.traced
   def _TestTearDown(self):
     try:
       logging.info('Unmapping device ports for %s.', self._device)
@@ -429,14 +426,6 @@ class LocalDevicePerfTestRun(local_device_test_run.LocalDeviceTestRun):
 
   #override
   def RunTests(self):
-    # Affinitize the tests.
-    if self._test_instance.trace_output:
-      assert not trace_event.trace_is_enabled(), 'Tracing already running.'
-      trace_event.trace_enable(self._test_instance.trace_output + '.json')
-    self._SplitTestsByAffinity()
-    if not self._test_buckets and not self._no_device_tests:
-      raise local_device_test_run.NoTestsError()
-
     def run_no_devices_tests():
       if not self._no_device_tests:
         return []
@@ -468,14 +457,13 @@ class LocalDevicePerfTestRun(local_device_test_run.LocalDeviceTestRun):
           device_shard_helper)
       return [x for x in shards.pGet(self._timeout) if x is not None]
 
+    # Affinitize the tests.
+    self._SplitTestsByAffinity()
+    if not self._test_buckets and not self._no_device_tests:
+      raise local_device_test_run.NoTestsError()
     host_test_results, device_test_results = reraiser_thread.RunAsync(
         [run_no_devices_tests, run_devices_tests])
-    if self._test_instance.trace_output:
-      assert trace_event.trace_is_enabled(), 'Tracing not running.'
-      trace_event.trace_disable()
-      local_device_test_run.LocalDeviceTestRun._JsonToTrace(
-          self._test_instance.trace_output + '.json',
-          self._test_instance.trace_output)
+
     return host_test_results + device_test_results
 
   # override

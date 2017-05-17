@@ -16,7 +16,6 @@ from pylib.base import base_test_result
 from pylib.base import test_run
 from pylib.base import test_collection
 from pylib.local.device import local_device_environment
-from tracing_build import trace2html
 
 
 _SIGTERM_TEST_LOG = (
@@ -53,6 +52,17 @@ def SubstituteDeviceRoot(device_path, device_root):
     return posixpath.join(*(p if p else device_root for p in device_path))
   else:
     return device_path
+
+
+class TestsTerminated(Exception):
+  pass
+
+
+class InvalidShardingSettings(Exception):
+  def __init__(self, shard_index, total_shards):
+    super(InvalidShardingSettings, self).__init__(
+        'Invalid sharding settings. shard_index: %d total_shards: %d'
+            % (shard_index, total_shards))
 
 
 class LocalDeviceTestRun(test_run.TestRun):
@@ -95,9 +105,6 @@ class LocalDeviceTestRun(test_run.TestRun):
             tests.test_completed()
 
       logging.info('Finished running tests on this device.')
-
-    class TestsTerminated(Exception):
-      pass
 
     def stop_tests(_signum, _frame):
       logging.critical('Received SIGTERM. Stopping test execution.')
@@ -178,6 +185,17 @@ class LocalDeviceTestRun(test_run.TestRun):
 
     return [t for t in failed_tests if self._ShouldRetry(t)]
 
+  def _ApplyExternalSharding(self, tests, shard_index, total_shards):
+    logging.info('Using external sharding settings. This is shard %d/%d',
+                 shard_index, total_shards)
+
+    if total_shards < 0 or shard_index < 0 or total_shards <= shard_index:
+      raise InvalidShardingSettings(shard_index, total_shards)
+
+    return [
+        t for t in tests
+        if hash(self._GetUniqueTestName(t)) % total_shards == shard_index]
+
   def GetTool(self, device):
     if not str(device) in self._tools:
       self._tools[str(device)] = valgrind_tools.CreateTool(
@@ -197,19 +215,11 @@ class LocalDeviceTestRun(test_run.TestRun):
 
   def _GetTests(self):
     raise NotImplementedError
-
   def _RunTest(self, device, test):
     raise NotImplementedError
 
   def _ShouldShard(self):
     raise NotImplementedError
-
-  @staticmethod
-  def _JsonToTrace(json_path, html_path):
-    # First argument is call site.
-    cmd = [__file__, json_path, '--title', 'Android Test Runner Trace',
-           '--output', html_path]
-    trace2html.Main(cmd)
 
 
 class NoTestsError(Exception):

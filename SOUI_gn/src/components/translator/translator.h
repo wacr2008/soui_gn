@@ -50,17 +50,25 @@ namespace SOUI
         STranslatorMgr(void);
         ~STranslatorMgr(void);
 
-        /*virtual */
+		virtual void SetLanguage(const SStringW & strLang);
+		virtual SStringW GetLanguage() const;
+
         BOOL CreateTranslator(ITranslator ** ppTranslator);
-        /*virtual */
-        BOOL InstallTranslator(ITranslator *pTranslator);
-        /*virtual */
-        BOOL UninstallTranslator(REFGUID id);
-        /*virtual */
-        SStringW tr(const SStringW & strSrc,const SStringW & strCtx);
-    protected:
+
+		BOOL InstallTranslator(ITranslator *pTranslator);
+
+		BOOL UninstallTranslator(REFGUID id);
+
+		SStringW tr(const SStringW & strSrc,const SStringW & strCtx);
+
+
+	protected:
+
+		SStringW m_strLang;
+
         SList<ITranslator*> *m_lstLang;
-    };
+
+	};
 
     namespace TRANSLATOR
     {

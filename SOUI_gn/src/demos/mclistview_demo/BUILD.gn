@@ -35,6 +35,8 @@ executable("mclistview_demo") {
     "../../SOUI",
     "../../third-part",
     "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_mclistview_demo_resource",
   ]
  
   if (is_win) {

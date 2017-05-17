@@ -1,10 +1,10 @@
-ï»¿#pragma once
+#pragma once
 #include "core/shostwnd.h"
 #include "core/smsgloop.h"
 #include "core/SHostDialog.h"
 #include "control/SRichEdit.h"
-#include "SImageEx.h"
-#include "SPropertyGrid.h"
+#include "SImgCanvas.h"
+#include "propgrid/SPropertyGrid.h"
 
 namespace SOUI
 {
@@ -64,7 +64,9 @@ namespace SOUI
 			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_new", OnSkinNew)
 			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_DEL", OnSkinDel)
 
-			EVENT_ID_COMMAND(IDOK,OnOK)
+			EVENT_NAME_COMMAND(L"btnOK", OnOK)
+
+			//EVENT_ID_COMMAND(IDOK,OnOK)
 			//EVENT_ID_COMMAND(IDCANCEL,OnCancel)
 			EVENT_MAP_END()
 
@@ -92,23 +94,23 @@ namespace SOUI
          bool OnReNotify(EventArgs *pEvt);
 		 void GoToSkin();
 		 void ShowImage();
-		 void ShowSysImage();
 
+		 bool ChekSkin(SStringT strName, SStringT strScale);
 
 	public:
 		SStringT m_strinput;
-		SStringT m_strSkinName;  //çš®è‚¤å
+		SStringT m_strSkinName;  //Æ¤·ôÃû
 
 
-		SStringT m_strUIResFile;   //uires.idxå®Œæ•´æ–‡ä»¶å
+		SStringT m_strUIResFile;   //uires.idxÍêÕûÎÄ¼şÃû
 
-		SStringT m_strSkinFile;   //skinå®Œæ•´æ–‡ä»¶å
+		SStringT m_strSkinFile;   //skinÍêÕûÎÄ¼şÃû
 
 		pugi::xml_node m_xmlNodeUiRes;
-	    SListBox *m_lbResType;  //èµ„æºç±»å‹
-		SListBox *m_lbRes;  //èµ„æº
-		SListBox *m_lbSkin;  //çš®è‚¤
-		SPropertyGrid *m_pgGrid;  //çš®è‚¤å±æ€§
+	    SListBox *m_lbResType;  //×ÊÔ´ÀàĞÍ
+		SListBox *m_lbRes;  //×ÊÔ´
+		SListBox *m_lbSkin;  //Æ¤·ô
+		SPropertyGrid *m_pgGrid;  //Æ¤·ôÊôĞÔ
 
 		//SButton *m_btnZYLXNew;
 		//SButton *m_btnZYLXDel;
@@ -132,7 +134,8 @@ namespace SOUI
 
 		SMap<SStringT, SStringT> m_mapSysSkin; 
 
-		SImageWnd *m_imgView;
+		//SImageWnd *m_imgView;
+		SImgCanvas *m_imgView;
 		BOOL m_bGetSkin; //
 
 		pugi::xml_node m_xmlNodeCurSkin;

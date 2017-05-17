@@ -1,16 +1,17 @@
-ï»¿#include "DlgFontSelect.h"
+#include "DlgFontSelect.h"
 #include "CDebug.h"
 
 namespace SOUI
 {
 
-	SDlgFontSelect::SDlgFontSelect(SStringT strFont):SHostDialog(_T("LAYOUT:å­—ä½“é€‰æ‹©"))
+	SDlgFontSelect::SDlgFontSelect(SStringT strFont,SDesignerView *pDesignerView):SHostDialog(_T("LAYOUT:×ÖÌåÑ¡Ôñ"))
 	{
 		strFont.TrimBlank();
 		m_strFont = strFont;
+		m_pDesignerView = pDesignerView;
 	}
 
-	//TODO:æ¶ˆæ¯æ˜ å°„
+	//TODO:ÏûÏ¢Ó³Éä
 	void SDlgFontSelect::OnCancel()
 	{
 		SHostDialog::OnCancel();
@@ -63,12 +64,16 @@ namespace SOUI
 
 		if (!m_strFont.IsEmpty())
 		{
-			IFontPtr ft = SFontPool::getSingleton().GetFont(m_strFont);
+			m_pDesignerView->UseEditorUIDef(false);
+			IFontPtr ft = SFontPool::getSingleton().GetFont(m_strFont, 100);
+			m_pDesignerView->UseEditorUIDef(true);
 			InitInfo(ft);
 		}
 		else
 		{
-			IFontPtr ft = SFontPool::getSingleton().GetFont(_T(""));
+			m_pDesignerView->UseEditorUIDef(false);
+			IFontPtr ft = SFontPool::getSingleton().GetFont(_T(""),100);
+			m_pDesignerView->UseEditorUIDef(true);
 			InitInfo(ft);
 		}
 
@@ -172,10 +177,7 @@ namespace SOUI
 
 		m_LbFont->SetCurSel(n);
 
-		int nMinPos, nMaxPos;
-		m_LbFont->GetScrollRange(TRUE, &nMinPos, &nMaxPos);
-
-		m_LbFont->SetScrollPos(TRUE, nMaxPos /m_LbFont->GetCount() * n, TRUE );
+		m_LbFont->EnsureVisible(n);
 
 		m_chkBold->SetCheck(ft->IsBold());
 		m_chkItalic->SetCheck(ft->IsItalic());

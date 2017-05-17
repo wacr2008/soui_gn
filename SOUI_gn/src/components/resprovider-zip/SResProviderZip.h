@@ -6,7 +6,7 @@
 #include <string/strcpcvt.h>
 #include <souicoll.h>
 #define _COLL_NS SOUI
-#define SOUI_EXP
+//#define SOUI_EXP
 #include <helper/SResID.h>
 #include <interface/render-i.h>
 

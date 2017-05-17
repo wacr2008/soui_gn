@@ -36,3 +36,205 @@ pid=6308 tid=3180 2017-01-13 09:55:16.559 WARN  SOUI.dll soui-lib "warning!!! un
 pid=6308 tid=3180 2017-01-13 09:55:18.703 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute appwin in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
 pid=6308 tid=3180 2017-01-13 09:55:18.703 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute frameSize in class hostwndattr, value = 40,40,10,60" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
 pid=6308 tid=3180 2017-01-13 09:55:18.703 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute resize in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=2952 tid=3128 2017-01-20 10:55:48.882 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=255553693" wWinMain (demo.cpp):151 
+pid=2952 tid=3128 2017-01-20 10:55:48.882 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=255553693" wWinMain (demo.cpp):152 
+pid=5692 tid=5928 2017-01-20 10:56:02.472 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=255567280" wWinMain (demo.cpp):151 
+pid=5692 tid=5928 2017-01-20 10:56:02.472 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=255567280" wWinMain (demo.cpp):152 
+pid=6688 tid=3792 2017-01-20 10:56:20.766 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=255585564" wWinMain (demo.cpp):151 
+pid=6688 tid=3792 2017-01-20 10:56:20.766 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=255585564" wWinMain (demo.cpp):152 
+pid=6688 tid=3792 2017-01-20 10:56:21.260 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6688 tid=3792 2017-01-20 10:56:21.261 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6688 tid=3792 2017-01-20 10:56:21.262 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6688 tid=3792 2017-01-20 10:56:21.263 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6688 tid=3792 2017-01-20 10:56:21.265 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6688 tid=3792 2017-01-20 10:56:21.266 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6688 tid=3792 2017-01-20 10:56:21.267 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6688 tid=3792 2017-01-20 10:56:21.268 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1028 tid=7108 2017-01-20 10:56:47.850 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=255612661" wWinMain (demo.cpp):151 
+pid=1028 tid=7108 2017-01-20 10:56:47.850 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=255612661" wWinMain (demo.cpp):152 
+pid=5368 tid=2756 2017-01-20 11:04:14.497 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=256059307" wWinMain (demo.cpp):151 
+pid=5368 tid=2756 2017-01-20 11:04:14.524 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=256059307" wWinMain (demo.cpp):152 
+pid=5368 tid=2756 2017-01-20 11:04:15.314 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5368 tid=2756 2017-01-20 11:04:15.315 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5368 tid=2756 2017-01-20 11:04:15.318 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5368 tid=2756 2017-01-20 11:04:15.319 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5368 tid=2756 2017-01-20 11:04:15.322 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5368 tid=2756 2017-01-20 11:04:15.323 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5368 tid=2756 2017-01-20 11:04:15.325 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5368 tid=2756 2017-01-20 11:04:15.327 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5404 tid=2728 2017-01-20 11:21:18.141 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=257082939" wWinMain (demo.cpp):151 
+pid=5404 tid=2728 2017-01-20 11:21:18.141 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=257082939" wWinMain (demo.cpp):152 
+pid=5404 tid=2728 2017-01-20 11:21:18.914 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5404 tid=2728 2017-01-20 11:21:18.916 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5404 tid=2728 2017-01-20 11:21:18.918 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5404 tid=2728 2017-01-20 11:21:18.919 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5404 tid=2728 2017-01-20 11:21:18.922 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5404 tid=2728 2017-01-20 11:21:18.923 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5404 tid=2728 2017-01-20 11:21:18.925 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5404 tid=2728 2017-01-20 11:21:18.927 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=4668 tid=1788 2017-01-20 11:21:40.090 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=257104888" wWinMain (demo.cpp):151 
+pid=4668 tid=1788 2017-01-20 11:21:40.090 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=257104888" wWinMain (demo.cpp):152 
+pid=4668 tid=1788 2017-01-20 11:21:40.362 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=4668 tid=1788 2017-01-20 11:21:40.364 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=4668 tid=1788 2017-01-20 11:21:40.366 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=4668 tid=1788 2017-01-20 11:21:40.369 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=4668 tid=1788 2017-01-20 11:21:40.371 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=4668 tid=1788 2017-01-20 11:21:40.373 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=4668 tid=1788 2017-01-20 11:21:40.375 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=4668 tid=1788 2017-01-20 11:21:40.376 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6220 tid=6088 2017-01-20 11:21:47.833 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=257112642" wWinMain (demo.cpp):151 
+pid=6220 tid=6088 2017-01-20 11:21:47.833 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=257112642" wWinMain (demo.cpp):152 
+pid=6220 tid=6088 2017-01-20 11:21:48.146 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6220 tid=6088 2017-01-20 11:21:48.148 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6220 tid=6088 2017-01-20 11:21:48.150 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6220 tid=6088 2017-01-20 11:21:48.152 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6220 tid=6088 2017-01-20 11:21:48.155 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6220 tid=6088 2017-01-20 11:21:48.157 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6220 tid=6088 2017-01-20 11:21:48.158 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6220 tid=6088 2017-01-20 11:21:48.160 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5064 tid=3524 2017-01-20 11:49:42.887 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=258787687" wWinMain (demo.cpp):151 
+pid=5064 tid=3524 2017-01-20 11:49:42.887 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=258787687" wWinMain (demo.cpp):152 
+pid=5064 tid=3524 2017-01-20 11:49:43.292 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5064 tid=3524 2017-01-20 11:49:43.295 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5064 tid=3524 2017-01-20 11:49:43.299 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5064 tid=3524 2017-01-20 11:49:43.303 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5064 tid=3524 2017-01-20 11:49:43.306 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5064 tid=3524 2017-01-20 11:49:43.309 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5064 tid=3524 2017-01-20 11:49:43.312 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=5064 tid=3524 2017-01-20 11:49:43.315 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.287 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=258823083" wWinMain (demo.cpp):151 
+pid=1776 tid=6216 2017-01-20 11:50:18.287 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=258823083" wWinMain (demo.cpp):152 
+pid=1776 tid=6216 2017-01-20 11:50:18.699 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.702 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.705 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.708 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.712 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.715 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.717 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.720 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.761 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute margin-x in class imglist, value = 1" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.761 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute margin-y in class imglist, value = 1" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:18.840 WARN  SOUI.dll soui-lib "Warning: no window type:template in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:18.871 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:18.900 WARN  SOUI.dll soui-lib "Warning: no window type:wkeWebkit in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:19.512 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:19.723 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:19.754 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:19.767 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:19.780 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:19.793 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:19.806 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:19.820 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:19.833 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:19.848 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=1776 tid=6216 2017-01-20 11:50:42.264 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.264 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.264 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.264 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.271 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.271 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.271 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.271 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.271 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.279 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.279 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.279 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:42.279 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.415 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.415 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.415 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.415 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.435 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.435 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.435 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.435 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.436 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.455 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.455 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.455 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:46.455 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.608 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.608 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.608 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.608 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.630 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.630 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.630 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.630 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.630 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.650 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.650 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.650 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:56.650 WARN  SOUI.dll soui-lib "Warning: no window type:menuItem in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=1776 tid=6216 2017-01-20 11:50:57.778 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.780 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.784 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.787 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.791 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.794 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.797 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.800 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.803 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.805 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.809 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.813 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.817 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.821 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.824 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.829 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.833 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.837 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:50:57.837 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:51:02.423 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute appwin in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:51:02.423 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute frameSize in class hostwndattr, value = 40,40,10,60" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:51:02.423 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute resize in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:51:06.612 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute appwin in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:51:06.612 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute frameSize in class hostwndattr, value = 40,40,10,60" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=1776 tid=6216 2017-01-20 11:51:06.612 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute resize in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:49.750 ERROR demo.exe soui-lib "log output using ansi format,str=test, tick=258974560" wWinMain (demo.cpp):151 
+pid=6788 tid=4420 2017-01-20 11:52:49.750 ERROR demo.exe soui-lib "log output using unicode format,str=中文, tick=258974560" wWinMain (demo.cpp):152 
+pid=6788 tid=4420 2017-01-20 11:52:51.369 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.372 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.376 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.379 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.383 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.386 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.389 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.392 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.436 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute margin-x in class imglist, value = 1" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.436 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute margin-y in class imglist, value = 1" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:51.634 WARN  SOUI.dll soui-lib "Warning: no window type:template in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=6788 tid=4420 2017-01-20 11:52:51.679 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:51.720 WARN  SOUI.dll soui-lib "Warning: no window type:wkeWebkit in SOUI!!" SOUI::SWindowFactoryMgr::CreateWindowByName (swndfactorymgr.cpp):74 
+pid=6788 tid=4420 2017-01-20 11:52:52.297 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:52.601 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:52.640 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:52.657 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:52.672 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:52.689 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:52.708 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:52.727 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:52.747 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:52.766 WARN  SOUI.dll soui-lib "BaseClassNameFromClassName, Warning: no window type:combobase in SOUI!!" SOUI::SWindowFactoryMgr::BaseClassNameFromClassName (swndfactorymgr.cpp):87 
+pid=6788 tid=4420 2017-01-20 11:52:55.536 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.540 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.546 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.550 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.555 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.559 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.563 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.567 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.572 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.575 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.579 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.583 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.587 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.592 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.596 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.600 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.605 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.609 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:55.610 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute colorizeEnable in class imglist, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:58.637 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute appwin in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:58.637 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute frameSize in class hostwndattr, value = 40,40,10,60" SOUI::SObject::DefAttributeProc (sobject.cpp):48 
+pid=6788 tid=4420 2017-01-20 11:52:58.638 WARN  SOUI.dll soui-lib "warning!!! unhandled attribute resize in class hostwndattr, value = 0" SOUI::SObject::DefAttributeProc (sobject.cpp):48 

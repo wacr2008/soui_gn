@@ -17,7 +17,7 @@ class EventItemSelected : public SOUI::TplEventArgs<EventItemSelected>
 {
     SOUI_CLASS_NAME(EventItemSelected,L"on_item_selected")
 public:
-    EventItemSelected(SObject *pSender):TplEventArgs<EventItemSelected>(pSender){}
+    EventItemSelected(SOUI::SObject *pSender):TplEventArgs<EventItemSelected>(pSender){}
 	enum{ EventID = SOUI::EVT_EXTERNAL_BEGIN + 1 };
     int nCurrSelect;
 };

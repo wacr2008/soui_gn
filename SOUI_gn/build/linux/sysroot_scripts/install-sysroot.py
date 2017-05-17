@@ -6,16 +6,17 @@
 """Install Debian sysroots for building chromium.
 """
 
-# The sysroot is needed to ensure that binaries will run on Debian Wheezy,
-# the oldest supported linux distribution. For ARM64 linux, we have Debian
-# Jessie sysroot as Jessie is the first version with ARM64 support. This script
-# can be run manually but is more often run as part of gclient hooks. When run
-# from hooks this script is a no-op on non-linux platforms.
+# The sysroot is needed to ensure that binaries that get built will run on
+# the oldest stable version of Debian that we currently support.
+# This script can be run manually but is more often run as part of gclient
+# hooks. When run from hooks this script is a no-op on non-linux platforms.
 
-# The sysroot image could be constructed from scratch based on the current
-# state or Debian Wheezy/Jessie but for consistency we currently use a
-# pre-built root image. The image will normally need to be rebuilt every time
-# chrome's build dependencies are changed.
+# The sysroot image could be constructed from scratch based on the current state
+# of the Debian archive but for consistency we use a pre-built root image (we
+# don't want upstream changes to Debian to effect the chromium build until we
+# choose to pull them in). The images will normally need to be rebuilt every
+# time chrome's build dependencies are changed but should also be updated
+# periodically to include upstream security fixes from Debian.
 
 import hashlib
 import json
@@ -127,10 +128,9 @@ def InstallDefaultSysroots(host_arch):
   # available.
   InstallSysroot('Precise', 'amd64')
 
-  # Finally, if we can detect a non-standard target_arch such as ARM or
-  # MIPS, then install the sysroot too.
-  # Don't attampt to install arm64 since this is currently and android-only
-  # architecture.
+  # If we can detect a non-standard target_arch such as ARM or MIPS,
+  # then install the sysroot too.  Don't attempt to install arm64
+  # since this is currently and android-only architecture.
   target_arch = DetectTargetArch()
   if target_arch and target_arch not in (host_arch, 'i386'):
     InstallDefaultSysrootForArch(target_arch)
@@ -143,6 +143,9 @@ def main(args):
                                         ' Installs default sysroot images.')
   parser.add_option('--arch', type='choice', choices=VALID_ARCHS,
                     help='Sysroot architecture: %s' % ', '.join(VALID_ARCHS))
+  parser.add_option('--all', action='store_true',
+                    help='Install all sysroot images (useful when updating the'
+                         ' images)')
   options, _ = parser.parse_args(args)
   if options.running_as_hook and not sys.platform.startswith('linux'):
     return 0
@@ -153,27 +156,23 @@ def main(args):
     if host_arch in ['ppc','s390']:
       return 0
     InstallDefaultSysroots(host_arch)
-  else:
-    if not options.arch:
-      print 'You much specify either --arch or --running-as-hook'
-      return 1
+  elif options.arch:
     InstallDefaultSysrootForArch(options.arch)
+  elif options.all:
+    for arch in VALID_ARCHS:
+      InstallDefaultSysrootForArch(arch)
+  else:
+    print 'You much specify either --arch, --all or --running-as-hook'
+    return 1
 
   return 0
 
+
 def InstallDefaultSysrootForArch(target_arch):
-  if target_arch == 'amd64':
-    InstallSysroot('Wheezy', 'amd64')
-  elif target_arch == 'arm':
-    InstallSysroot('Wheezy', 'arm')
-  elif target_arch == 'arm64':
-    InstallSysroot('Jessie', 'arm64')
-  elif target_arch == 'i386':
-    InstallSysroot('Wheezy', 'i386')
-  elif target_arch == 'mips':
-    InstallSysroot('Wheezy', 'mips')
-  else:
+  if target_arch not in VALID_ARCHS:
     raise Error('Unknown architecture: %s' % target_arch)
+  InstallSysroot('Jessie', target_arch)
+
 
 def InstallSysroot(target_platform, target_arch):
   # The sysroot directory should match the one specified in build/common.gypi.
@@ -198,7 +197,7 @@ def InstallSysroot(target_platform, target_arch):
   if os.path.exists(stamp):
     with open(stamp) as s:
       if s.read() == url:
-        print 'Debian %s %s root image already up to date: %s' % \
+        print '%s %s sysroot image already up to date: %s' % \
             (target_platform, target_arch, sysroot)
         return
 

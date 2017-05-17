@@ -19,6 +19,9 @@ from pylib.gtest import gtest_test_instance
 from pylib.local import local_test_server_spawner
 from pylib.local.device import local_device_environment
 from pylib.local.device import local_device_test_run
+from pylib.utils import logdog_helper
+from py_trace_event import trace_event
+from py_utils import contextlib_ext
 import tombstones
 
 _MAX_INLINE_FLAGS_LENGTH = 50  # Arbitrarily chosen.
@@ -231,6 +234,8 @@ class _ExeDelegate(object):
     except (device_errors.CommandFailedError, KeyError):
       pass
 
+    # Executable tests return a nonzero exit code on test failure, which is
+    # fine from the test runner's perspective; thus check_return=False.
     output = device.RunShellCommand(
         cmd, cwd=cwd, env=env, check_return=False, large_output=True, **kwargs)
     return output
@@ -264,6 +269,7 @@ class LocalDeviceGtestRun(local_device_test_run.LocalDeviceTestRun):
   def SetUp(self):
     @local_device_environment.handle_shard_failures_with(
         on_failure=self._env.BlacklistDevice)
+    @trace_event.traced
     def individual_device_set_up(dev, host_device_tuples):
       def install_apk():
         # Install test APK.
@@ -355,7 +361,6 @@ class LocalDeviceGtestRun(local_device_test_run.LocalDeviceTestRun):
         logging.info('No tests found. Output:')
         for l in raw_test_list:
           logging.info('  %s', l)
-      tests = self._test_instance.FilterTests(tests)
       return tests
 
     # Query all devices in case one fails.
@@ -366,7 +371,12 @@ class LocalDeviceGtestRun(local_device_test_run.LocalDeviceTestRun):
     if all(not tl for tl in test_lists):
       raise device_errors.CommandFailedError(
           'Failed to list tests on any device')
-    return list(sorted(set().union(*[set(tl) for tl in test_lists if tl])))
+    tests = list(sorted(set().union(*[set(tl) for tl in test_lists if tl])))
+    tests = self._test_instance.FilterTests(tests)
+    tests = self._ApplyExternalSharding(
+        tests, self._test_instance.external_shard_index,
+        self._test_instance.total_external_shards)
+    return tests
 
   #override
   def _RunTest(self, device, test):
@@ -380,15 +390,20 @@ class LocalDeviceGtestRun(local_device_test_run.LocalDeviceTestRun):
         dir=self._delegate.ResultsDirectory(device),
         suffix='.xml') as device_tmp_results_file:
 
-      flags = self._test_instance.test_arguments or ''
+      flags = list(self._test_instance.flags)
       if self._test_instance.enable_xml_result_parsing:
-        flags += ' --gtest_output=xml:%s' % device_tmp_results_file.name
-      if self._test_instance.gtest_also_run_disabled_tests:
-        flags += ' --gtest_also_run_disabled_tests'
+        flags.append('--gtest_output=xml:%s' % device_tmp_results_file.name)
 
-      output = self._delegate.Run(
-          test, device, flags=flags,
-          timeout=timeout, retries=0)
+      logging.info('flags:')
+      for f in flags:
+        logging.info('  %s', f)
+
+      with contextlib_ext.Optional(
+          trace_event.trace(str(test)),
+          self._env.trace_output):
+        output = self._delegate.Run(
+            test, device, flags=' '.join(flags),
+            timeout=timeout, retries=0)
 
       if self._test_instance.enable_xml_result_parsing:
         gtest_xml = device.ReadFile(
@@ -427,16 +442,22 @@ class LocalDeviceGtestRun(local_device_test_run.LocalDeviceTestRun):
             stream_name = 'tombstones_%s_%s' % (
                 time.strftime('%Y%m%dT%H%M%S', time.localtime()),
                 device.serial)
-            tombstones_url = tombstones.LogdogTombstones(resolved_tombstones,
-                                                         stream_name)
-          result.SetTombstonesUrl(tombstones_url)
+            tombstones_url = logdog_helper.text(
+                stream_name, resolved_tombstones)
+          result.SetLink('tombstones', tombstones_url)
 
-    not_run_tests = set(test).difference(set(r.GetName() for r in results))
-    return results, list(not_run_tests)
+    tests_stripped_disabled_prefix = set()
+    for t in test:
+      tests_stripped_disabled_prefix.add(
+          gtest_test_instance.TestNameWithoutDisabledPrefix(t))
+    not_run_tests = tests_stripped_disabled_prefix.difference(
+        set(r.GetName() for r in results))
+    return results, list(not_run_tests) if results else None
 
   #override
   def TearDown(self):
     @local_device_environment.handle_shard_failures
+    @trace_event.traced
     def individual_device_tear_down(dev):
       for s in self._servers.get(str(dev), []):
         s.TearDown()

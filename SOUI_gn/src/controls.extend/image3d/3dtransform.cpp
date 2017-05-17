@@ -218,10 +218,10 @@ void C3DTransform::Render(const PARAM3DTRANSFORM & param3d)
 	//将目标图片清空
 	memset(pDstBits, 0, nDstPitch * nHeightDst);
 
-	int nMinX = max(0, min(min(min(quad.Ax,quad.Bx),quad.Cx),quad.Dx));
-	int nMinY = max(0, min(min(min(quad.Ay,quad.By),quad.Cy),quad.Dy));
-	int nMaxX = min(nWidthDst,  max(max(max(quad.Ax,quad.Bx),quad.Cx),quad.Dx));
-	int nMaxY = min(nHeightDst, max(max(max(quad.Ay,quad.By),quad.Cy),quad.Dy));
+	int nMinX = (std::max)(0, (std::min)((std::min)((std::min)(quad.Ax,quad.Bx),quad.Cx),quad.Dx));
+	int nMinY = (std::max)(0, (std::min)((std::min)((std::min)(quad.Ay,quad.By),quad.Cy),quad.Dy));
+	int nMaxX = (std::min)(nWidthDst,  (std::max)((std::max)((std::max)(quad.Ax,quad.Bx),quad.Cx),quad.Dx));
+	int nMaxY = (std::min)(nHeightDst, (std::max)((std::max)((std::max)(quad.Ay,quad.By),quad.Cy),quad.Dy));
 
 	
 	pDstBits += (nMinY*nDstPitch);

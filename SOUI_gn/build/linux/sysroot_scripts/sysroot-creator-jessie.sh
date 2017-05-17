@@ -75,6 +75,8 @@ DEBIAN_PACKAGES="\
   libfontconfig1-dev
   libfreetype6
   libfreetype6-dev
+  libgbm1
+  libgbm-dev
   libgcc-4.8-dev
   libgcc1
   libgconf-2-4
@@ -109,6 +111,8 @@ DEBIAN_PACKAGES="\
   libharfbuzz-gobject0
   libharfbuzz-icu0
   libatomic1
+  libjsoncpp0
+  libjsoncpp-dev
   libk5crypto3
   libkadm5clnt-mit9
   libkadm5srv-mit9

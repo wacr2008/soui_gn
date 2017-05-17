@@ -84,7 +84,25 @@ BOOL SDesignerView::OpenProject(SStringT strFileName)
 		Debug(_T("CreateResProvider失败"));
 		return FALSE;
 	}
-	SApplication::getSingletonPtr()->AddResProvider(pResProvider);
+	SApplication::getSingletonPtr()->AddResProvider(pResProvider,NULL);//param2 = null时不自动加载uidef
+
+	SStringT strXMLInit;
+	pugi::xml_node xmlNode = m_xmlDocUiRes.child(_T("resource")).child(_T("UIDEF")).child(_T("file"));
+
+	if (xmlNode)
+	{
+		strXMLInit = xmlNode.attribute(_T("name")).as_string();
+	}
+
+	if (strXMLInit.IsEmpty())
+	{
+		strXMLInit = _T("xml_init");
+	}
+
+	//将皮肤中的uidef保存起来.
+	m_pUiDef.Attach(SUiDef::getSingleton().CreateUiDefInfo(pResProvider,_T("uidef:") + strXMLInit));
+
+	m_pOldUiDef = SUiDef::getSingleton().GetUiDef();
 
 	return TRUE;
 }
@@ -117,6 +135,11 @@ BOOL SDesignerView::InsertLayoutToMap(SStringT strFileName)
 
 BOOL SDesignerView::LoadLayout(SStringT strFileName)
 {
+	m_CurSelCtrl = NULL;
+	//设置uidef为当前皮肤的uidef
+	UseEditorUIDef(false);
+
+	m_defFont = SFontPool::getSingleton().GetFont(FF_DEFAULTFONT,100);
 
 	pugi::xml_node xmlroot;
 	pugi::xml_node xmlnode;
@@ -172,15 +195,6 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 
 
 	m_pContainer->SSendMessage(WM_DESTROY);
-	/*
-	SWindow *pChild = m_pContainer->GetWindow(GSW_FIRSTCHILD);
-	while(pChild)
-	{
-		SWindow *pNext = pChild->GetWindow(GSW_NEXTSIBLING);
-		pChild->DestroyWindow();
-		pChild = pNext;
-	}
-	*/
 
 
 	SStringW s1, s2;
@@ -238,7 +252,7 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 		SStringW strAttrSize;
 		strAttrSize.Format(L" margin= \"%d\" width = \"%d\" height = \"%d\" ", MARGIN, nWidth + MARGIN * 2, nHeight + MARGIN * 2);
 
-		s2 = L"<window pos=\"20,20\" " +  s2 + strAttrSize + L"></window>";
+		s2 = L"<designerRoot pos=\"20,20\" " +  s2 + strAttrSize + L"></designerRoot>";
 
 
 		//删除size 改成width height
@@ -295,15 +309,18 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 		strAttrSize.Format(L" margin= \"%d\" width = \"%d\" height = \"%d\" ", MARGIN, nWidth + MARGIN * 2, nHeight + MARGIN * 2);
 
 
-    	s2 = L"<window pos=\"20,20\" " + strAttrSize + L" colorBkgnd=\"#d0d0d0\"></window>";
+    	s2 = L"<designerRoot pos=\"20,20\" " + strAttrSize + L" colorBkgnd=\"#d0d0d0\"/>";
 	}
 
 	//wchar_t *s = L"<window pos=\"20,20,@500,@500\" colorBkgnd=\"#d0d0d0\"></window>";
-	wchar_t *s3 = L"<movewnd pos=\"20,20,@500,@500\" ></movewnd>";
+	const wchar_t *s3 = L"<movewnd pos=\"20,20,@500,@500\" ></movewnd>";
 
 	////创建布局窗口的根窗口
 
-	m_pRealWndRoot = m_pContainer->CreateChildren(s2);
+	m_pRealWndRoot = (SDesignerRoot*)m_pContainer->CreateChildren(s2);
+
+	m_pRealWndRoot->SetRootFont(m_defFont);
+
  	m_pMoveWndRoot = (SMoveWnd *)m_pContainer->CreateChildren(s3);
  	m_pMoveWndRoot->m_pRealWnd = m_pRealWndRoot;
  	m_pMoveWndRoot->m_Desiner = this;	
@@ -326,11 +343,18 @@ BOOL SDesignerView::LoadLayout(SStringT strFileName)
 
 	m_treeXmlStruct->RemoveAllItems();
 	InitXMLStruct(m_CurrentLayoutNode, STVI_ROOT);
+
+
+	//恢复uidef为编辑器的uidef
+	UseEditorUIDef(true);
 	return TRUE;
 }
 
 void SDesignerView::CreateAllChildWnd(SWindow *pRealWnd, SMoveWnd *pMoveWnd)
 {
+
+	
+
 	//view系列加上适配器
 	if (pRealWnd->IsClass(SMCListView::GetClassNameW()))
 	{
@@ -355,49 +379,18 @@ void SDesignerView::CreateAllChildWnd(SWindow *pRealWnd, SMoveWnd *pMoveWnd)
 	SWindow *pSibReal = pRealWnd->GetWindow(GSW_FIRSTCHILD);
 	for (; pSibReal; pSibReal = pSibReal->GetWindow(GSW_NEXTSIBLING))
 	{
-		wchar_t *s1 = L"<movewnd pos=\"0,0,@100,@100\" ></movewnd>";
+		const wchar_t *s1 = L"<movewnd pos=\"0,0,@100,@100\" ></movewnd>";
 		//创建布局窗口的根窗口
 		SMoveWnd *pSibMove = (SMoveWnd *)pMoveWnd->CreateChildren(s1);
 		pSibMove->m_pRealWnd = pSibReal;
 		pSibMove->SetVisible(pSibReal->IsVisible());
 		m_mapMoveRealWnd[pSibReal] = pSibMove;
 		pSibMove->m_Desiner = this;
+
 		CreateAllChildWnd(pSibReal, pSibMove);
 	}
 }
 
-void SDesignerView::UpdateAllLayout(SMoveWnd* pMoveWndRoot)
-{
-	//int b = pMoveWndRoot->GetChildrenCount();
-	////得到第一个子窗口
-	SMoveWnd *pSibMove = (SMoveWnd*)pMoveWndRoot->GetWindow(GSW_FIRSTCHILD);
-	for (; pSibMove; pSibMove = (SMoveWnd*)pSibMove->GetWindow(GSW_NEXTSIBLING))
-	{
-
-		//更新两个窗口的布局
-		SwndLayout *pMoveWndLayout = pSibMove->GetLayout();
-		SwndLayout *pRealWndLayout = pSibMove->m_pRealWnd->GetLayout();
-
-		pMoveWndLayout->uPositionType = pRealWndLayout->uPositionType;
-		pMoveWndLayout->nCount = pRealWndLayout->nCount;
-
-		for (int i = 0; i < 4; i++)
-		{
-			pMoveWndLayout->pos[i].cMinus = pRealWndLayout->pos[i].cMinus;
-			pMoveWndLayout->pos[i].nPos = pRealWndLayout->pos[i].nPos;
-			pMoveWndLayout->pos[i].nRefID = pRealWndLayout->pos[i].nRefID;
-			pMoveWndLayout->pos[i].pit = pRealWndLayout->pos[i].pit;
-		}
-		pMoveWndLayout->fOffsetX = pRealWndLayout->fOffsetX;
-		pMoveWndLayout->fOffsetY = pRealWndLayout->fOffsetY;
-		pMoveWndLayout->SetWidth(pRealWndLayout->GetSpecifySize(PD_X));
-		pMoveWndLayout->SetHeight(pRealWndLayout->GetSpecifySize(PD_Y));
-
-		UpdateAllLayout(pSibMove);
-
-
-	}
-}
 
 
 SDesignerView::~SDesignerView()
@@ -415,6 +408,7 @@ BOOL SDesignerView::SaveAll()
 	SStringT FullFileName;
 	pugi::xml_document *doc;
 	pugi::xml_document DocSave;
+	bool bRet = true;
 
 
 	SPOSITION pos = m_mapLayoutFile1.GetStartPosition();
@@ -436,17 +430,35 @@ BOOL SDesignerView::SaveAll()
 			RemoveWndName(NodeSave, FALSE, strFileName);
 
 			FullFileName = m_strProPath + _T("\\") + strFileName;
-			DocSave.save_file(FullFileName);
+			if(!DocSave.save_file(FullFileName))
+			{
+				Debug(_T("保存文件失败：") + FullFileName);
+				bRet = false;
+			}
 		}else
 		{
-			Debug(_T("保存文件失败：") + FullFileName);
+			Debug(_T("保存失败：DocSave.load_buffer"));
+			bRet = false;
 		}
 		delete strxmlWnd;
 
 	}
 
-	m_xmlDocUiRes.save_file(m_strUIResFile);
-	Debug(_T("保存成功"));
+	if(!m_xmlDocUiRes.save_file(m_strUIResFile))
+	{
+		Debug(_T("保存文件失败：") + m_strUIResFile);
+		bRet = false;
+	}
+
+	if(bRet)
+	{
+	  Debug(_T("保存成功"));
+	}
+	else
+	{
+		Debug(_T("保存失败"));
+	}
+		
 
 
 	return TRUE;
@@ -479,14 +491,24 @@ bool SDesignerView::SaveLayoutFile()
 	    RemoveWndName(NodeSave, FALSE);
 		FullFileName = m_strProPath + _T("\\") + strFileName;
 		bRet=DocSave.save_file(FullFileName);
+		if (!bRet)
+		{
+			Debug(_T("保存文件失败：") + FullFileName);
+		}
 	}
 	else
 	{
-		Debug(_T("保存失败"));
+		Debug(_T("保存失败:DocSave.load_buffer失败"));
 	}
 	delete strxmlWnd;
 	if(bRet)
+	{
 		bRet = m_xmlDocUiRes.save_file(m_strUIResFile);
+		if (!bRet)
+		{
+			Debug(_T("保存失败:") + m_strUIResFile);
+		}
+	}
 	return bRet;
 }
 
@@ -833,11 +855,12 @@ SStringT SDesignerView::NodeToStr(pugi::xml_node xmlNode)
 
 void SDesignerView::SetCurrentCtrl(pugi::xml_node xmlNode, SMoveWnd *pWnd)
 {
-	//m_xmlDoc.remove_child(m_xmlDoc.first_child());
- //   m_xmlDoc.append_copy(xmlNode);
-	//m_xmlNode = m_xmlDoc.first_child();
 	m_xmlNode= xmlNode;
+	
 	m_CurSelCtrl = pWnd;
+
+	m_pContainer->Invalidate();
+
 	
 	m_treeXmlStruct->GetEventSet()->unsubscribeEvent(EVT_TC_SELCHANGED,Subscriber(&SDesignerView::OnTCSelChanged,this));
 	GoToXmlStructItem(m_CurSelCtrl->m_pRealWnd->GetUserData(), m_treeXmlStruct->GetRootItem());
@@ -849,19 +872,19 @@ void SDesignerView::UpdatePosToXmlNode(SWindow *pRealWnd, SMoveWnd* pMoveWnd)
 {
 	if (m_CurSelCtrl == m_pMoveWndRoot)
 	{
-		SwndLayout *pLayout = pRealWnd->GetLayout();
+		//SwndLayout *pLayout = pRealWnd->GetLayout();
+		SouiLayoutParam *pSouiLayoutParam = pRealWnd->GetLayoutParamT<SouiLayoutParam>();
+
 		CRect r;
 		pMoveWnd->GetWindowRect(r);
-		m_CurrentLayoutNode.attribute(_T("height")).set_value(pLayout->GetSpecifySize(PD_Y) - MARGIN*2);
-		m_CurrentLayoutNode.attribute(_T("width")).set_value(pLayout->GetSpecifySize(PD_X) - MARGIN*2);
+		m_CurrentLayoutNode.attribute(_T("height")).set_value((int)pSouiLayoutParam->GetSpecifiedSize(Vert).fSize - MARGIN*2);
+		m_CurrentLayoutNode.attribute(_T("width")).set_value((int)pSouiLayoutParam->GetSpecifiedSize(Horz).fSize - MARGIN*2);
 
 		return;
 	}
 
 
-	SwndLayout *pLayout = pRealWnd->GetLayout();
 
-	
 	SStringT s;
 	s.Format(_T("%d"), pRealWnd->GetUserData());
 	pugi::xml_node xmlNode = FindNodeByAttr(m_CurrentLayoutNode, L"data", s);
@@ -870,134 +893,200 @@ void SDesignerView::UpdatePosToXmlNode(SWindow *pRealWnd, SMoveWnd* pMoveWnd)
 		return;
 	}
 
-	pugi::xml_attribute attrPos, attrSize, attrOffset, attrPos2type;
+	pugi::xml_attribute attrPos, attrSize, attrOffset, attrPos2type, attrWidth, attrHeight;
 
 	SStringW strTemp;
 	attrPos = xmlNode.attribute(L"pos");
 	attrSize = xmlNode.attribute(L"size");
 	attrOffset = xmlNode.attribute(L"offset");
 	attrPos2type = xmlNode.attribute(L"pos2type");
+	attrWidth = xmlNode.attribute(L"width");
+	attrHeight = xmlNode.attribute(L"height");
 
-	if (attrSize)
+	if (pRealWnd->GetLayoutParam()->IsClass(SouiLayoutParam::GetClassName()))
 	{
-		strTemp.Format(_T("%d, %d"), pLayout->GetSpecifySize(PD_X), pLayout->GetSpecifySize(PD_Y));
-		attrSize.set_value(strTemp);
-	}
+		SouiLayoutParam *pSouiLayoutParam = pRealWnd->GetLayoutParamT<SouiLayoutParam>();
+		SouiLayoutParamStruct *pSouiLayoutParamStruct = (SouiLayoutParamStruct*)pSouiLayoutParam->GetRawData();
 
-	if (attrPos2type)
-	{
-		//删除Pos2Type,改成attrOffset
-		xmlNode.remove_attribute(L"pos2type");
-		if (!attrOffset)
+
+
+		if (attrSize)
 		{
-			xmlNode.append_attribute(L"offset");
-			attrOffset = xmlNode.attribute(L"offset");
+			strTemp.Format(_T("%d%s, %d%s"), 
+				(int)pSouiLayoutParam->GetSpecifiedSize(Horz).fSize, 
+				UnitToStr(pSouiLayoutParam->GetSpecifiedSize(Horz).unit), 
+				(int)pSouiLayoutParam->GetSpecifiedSize(Vert).fSize,
+				UnitToStr(pSouiLayoutParam->GetSpecifiedSize(Vert).unit));
+
+			attrSize.set_value(strTemp);
+		}
+
+		if (attrPos2type)
+		{
+			//删除Pos2Type,改成attrOffset
+			xmlNode.remove_attribute(L"pos2type");
+			if (!attrOffset)
+			{
+				xmlNode.append_attribute(L"offset");
+				attrOffset = xmlNode.attribute(L"offset");
+			}
+		}
+
+		if (attrOffset)
+		{
+			strTemp.Format(_T("%g, %g"), pSouiLayoutParamStruct->fOffsetX, pSouiLayoutParamStruct->fOffsetY);
+			attrOffset.set_value(strTemp);
+		}
+
+		if (attrPos)
+		{   
+			if (pSouiLayoutParamStruct->nCount == 2)
+			{
+				strTemp = GetPosFromLayout(pSouiLayoutParam, 0) + _T(",");
+				strTemp = strTemp + GetPosFromLayout(pSouiLayoutParam, 1);
+				attrPos.set_value(strTemp);
+			}else if (pSouiLayoutParamStruct->nCount == 4)
+			{
+				strTemp = GetPosFromLayout(pSouiLayoutParam, 0) + _T(",");
+				strTemp = strTemp + GetPosFromLayout(pSouiLayoutParam, 1) + _T(",");
+				strTemp = strTemp + GetPosFromLayout(pSouiLayoutParam, 2) + _T(",");
+				strTemp = strTemp + GetPosFromLayout(pSouiLayoutParam, 3);
+				attrPos.set_value(strTemp);
+			}
+		}
+
+	}
+	else
+	{
+		SLinearLayoutParam *pSLinearLayoutParam = pRealWnd->GetLayoutParamT<SLinearLayoutParam>();
+		if (attrSize)
+		{
+			strTemp.Format(_T("%d%s, %d%s"), 
+				(int)pSLinearLayoutParam->GetSpecifiedSize(Horz).fSize, 
+				UnitToStr(pSLinearLayoutParam->GetSpecifiedSize(Horz).unit), 
+				(int)pSLinearLayoutParam->GetSpecifiedSize(Vert).fSize,
+				UnitToStr(pSLinearLayoutParam->GetSpecifiedSize(Vert).unit));
+			attrSize.set_value(strTemp);
+		}
+
+		if (attrWidth)
+		{
+			strTemp.Format(_T("%d%s"), 
+				(int)pSLinearLayoutParam->GetSpecifiedSize(Horz).fSize,
+				UnitToStr(pSLinearLayoutParam->GetSpecifiedSize(Horz).unit));
+			attrWidth.set_value(strTemp);
+		}
+		if (attrHeight)
+		{
+			strTemp.Format(_T("%d"), 
+				(int)pSLinearLayoutParam->GetSpecifiedSize(Vert).fSize,
+				UnitToStr(pSLinearLayoutParam->GetSpecifiedSize(Vert).unit));
+			attrHeight.set_value(strTemp);
 		}
 	}
 
-	if (attrOffset)
-	{
-		strTemp.Format(_T("%g, %g"), pLayout->fOffsetX, pLayout->fOffsetY);
-		attrOffset.set_value(strTemp);
-	}
-
-	if (attrPos)
-	{   
-		if (pLayout->nCount == 2)
-		{
-			strTemp = GetPosFromLayout(pLayout, 0) + _T(",");
-			strTemp = strTemp + GetPosFromLayout(pLayout, 1);
-			attrPos.set_value(strTemp);
-		}else if (pLayout->nCount == 4)
-		{
-			strTemp = GetPosFromLayout(pLayout, 0) + _T(",");
-			strTemp = strTemp + GetPosFromLayout(pLayout, 1) + _T(",");
-			strTemp = strTemp + GetPosFromLayout(pLayout, 2) + _T(",");
-			strTemp = strTemp + GetPosFromLayout(pLayout, 3);
-			attrPos.set_value(strTemp);
-		}
-	}
-
+	
 	SetCurrentCtrl(xmlNode, pMoveWnd);
 
 }
 
-SStringW SDesignerView::GetPosFromLayout(SwndLayout *pLayout, INT nPosIndex)
+SStringW SDesignerView::GetPosFromLayout(SouiLayoutParam *pLayoutParam, INT nPosIndex)
 {
-	SStringW strPos;
+	SouiLayoutParamStruct *pSouiLayoutParamStruct = (SouiLayoutParamStruct*)pLayoutParam->GetRawData();
 
-	switch (pLayout->pos[nPosIndex].pit)
+	POS_INFO PI;
+
+	switch (nPosIndex)
 	{
-	case PIT_NULL: 
-		strPos = L"";        //无效定义
+	case 0:
+		PI = pSouiLayoutParamStruct->posLeft;
 		break;
-	case PIT_NORMAL:        //锚点坐标
-		strPos = L"";
+	case 1:
+		PI =  pSouiLayoutParamStruct->posTop;
 		break;
-	case PIT_CENTER:        //参考父窗口中心点,以"|"开始
-		strPos = L"|";
+	case 2:
+		PI =  pSouiLayoutParamStruct->posRight;
 		break;
-	case PIT_PERCENT:       //指定在父窗口坐标的中的百分比,以"%"开始
-		strPos = L"%";
-		break;
-	case PIT_PREV_NEAR:     //参考前一个兄弟窗口与自己近的边,以"["开始
-		strPos = L"[";
-		break;
-	case PIT_NEXT_NEAR:     //参考下一个兄弟窗口与自己近的边,以"]"开始
-		strPos = L"]";
-		break;
-	case PIT_PREV_FAR:     //参考前一个兄弟窗口与自己远的边,以"{"开始
-		strPos = L"{";
-		break;
-	case PIT_NEXT_FAR:      //参考下一个兄弟窗口与自己远的边,以"}"开始
-		strPos = L"}";
-		break;
-	case PIT_SIZE:          //指定窗口的宽或者高,以"@"开始
-		strPos = L"@";
-		break;
-	case PIT_SIB_LEFT:      //兄弟结点的left,用于X
-		if (0 == nPosIndex)
-		{
-			strPos = strPos.Format(L"sib.left@%d:", pLayout->pos[nPosIndex].nRefID);
-		}
-		else
-		{
-			strPos = strPos.Format(L"sib.top@%d:", pLayout->pos[nPosIndex].nRefID);
-		}
-
-		break;
-
-		//case PIT_SIB_TOP:      //兄弟结点的top，与left相同，用于Y
-		//	break;
-
-	case PIT_SIB_RIGHT:      //兄弟结点的right,用于X 
-		if (2 == nPosIndex)
-		{
-			strPos = strPos.Format(L"sib.right@%d:", pLayout->pos[nPosIndex].nRefID);
-		}
-		else
-		{
-			strPos = strPos.Format(L"sib.bottom@%d:", pLayout->pos[nPosIndex].nRefID);
-		}
-
-		break;
-
-		//case PIT_SIB_BOTTOM:      //兄弟结点的bottom,与right相同,用于Y 
-		//	break;
-
+	case 3:
 	default:
-		break;
+		PI =  pSouiLayoutParamStruct->posBottom;
 	}
 
-	if (pLayout->pos[nPosIndex].cMinus == -1)
-	{
-		strPos = strPos + L"-";
-	}
-	SStringW strTemp;
-	int n = (int)pLayout->pos[nPosIndex].nPos;
-	strTemp.Format(L"%d", n);
-	strPos = strPos + strTemp;
-	return strPos;
+
+		SStringW strPos;
+
+		switch (PI.pit)
+		{
+		case PIT_NULL: 
+			strPos = L"";        //无效定义
+			break;
+		case PIT_NORMAL:        //锚点坐标
+			strPos = L"";
+			break;
+		case PIT_CENTER:        //参考父窗口中心点,以"|"开始
+			strPos = L"|";
+			break;
+		case PIT_PERCENT:       //指定在父窗口坐标的中的百分比,以"%"开始
+			strPos = L"%";
+			break;
+		case PIT_PREV_NEAR:     //参考前一个兄弟窗口与自己近的边,以"["开始
+			strPos = L"[";
+			break;
+		case PIT_NEXT_NEAR:     //参考下一个兄弟窗口与自己近的边,以"]"开始
+			strPos = L"]";
+			break;
+		case PIT_PREV_FAR:     //参考前一个兄弟窗口与自己远的边,以"{"开始
+			strPos = L"{";
+			break;
+		case PIT_NEXT_FAR:      //参考下一个兄弟窗口与自己远的边,以"}"开始
+			strPos = L"}";
+			break;
+		case PIT_SIZE:          //指定窗口的宽或者高,以"@"开始
+			strPos = L"@";
+			break;
+		case PIT_SIB_LEFT:      //兄弟结点的left,用于X
+			if (0 == nPosIndex)
+			{
+				strPos = strPos.Format(L"sib.left@%d:", PI.nRefID);
+			}
+			else
+			{
+				strPos = strPos.Format(L"sib.top@%d:", PI.nRefID);
+			}
+
+			break;
+
+			//case PIT_SIB_TOP:      //兄弟结点的top，与left相同，用于Y
+			//	break;
+
+		case PIT_SIB_RIGHT:      //兄弟结点的right,用于X 
+			if (2 == nPosIndex)
+			{
+				strPos = strPos.Format(L"sib.right@%d:", PI.nRefID);
+			}
+			else
+			{
+				strPos = strPos.Format(L"sib.bottom@%d:", PI.nRefID);
+			}
+
+			break;
+
+			//case PIT_SIB_BOTTOM:      //兄弟结点的bottom,与right相同,用于Y 
+			//	break;
+
+		default:
+			break;
+		}
+
+		if (PI.cMinus == -1)
+		{
+			strPos = strPos + L"-";
+		}
+		SStringW strTemp;
+		int n = (int)PI.nPos.fSize;
+		strTemp.Format(L"%d%s", n, UnitToStr(PI.nPos.unit));
+		strPos = strPos + strTemp;
+		return strPos;
 }
 
 
@@ -1253,6 +1342,7 @@ void SDesignerView::UpdatePropGrid(pugi::xml_node xmlNode)
 							pItem->SetStringOnly(xmlNode.attribute(L"uidesiner_data").value());
 					}else
 					{
+						SStringT s = xmlAttr.value();
 						pItem->SetStringOnly(xmlAttr.value());
 					}
 
@@ -1385,8 +1475,8 @@ bool SDesignerView::OnPropGridValueChanged( EventArgs *pEvt )
 		xmlNode.text().set(s1);
 	}
 
-//	SWindow * pWnd = ((SMoveWnd*)m_CurSelCtrl)->m_pRealWnd->GetParent();
-
+	SWindow * pWnd = ((SMoveWnd*)m_CurSelCtrl)->m_pRealWnd->GetParent();
+	(void)pWnd;
 	pugi::xml_attribute attr = xmlNode.attribute(s);
 	if (attr)
 	{
@@ -1490,7 +1580,24 @@ void SDesignerView::RefreshRes()
 		Debug(_T("ResProvider初始化失败")); 
 		return ;
 	}
-	SApplication::getSingletonPtr()->AddResProvider(pResProvider1);
+	SApplication::getSingletonPtr()->AddResProvider(pResProvider1,NULL);
+
+	SStringT strXMLInit;
+	pugi::xml_node xmlNode = m_xmlDocUiRes.child(_T("resource")).child(_T("UIDEF")).child(_T("file"));
+
+	if (xmlNode)
+	{
+		strXMLInit = xmlNode.attribute(_T("name")).as_string();
+	}
+
+	if (strXMLInit.IsEmpty())
+	{
+		strXMLInit = _T("xml_init");
+	}
+
+	//将皮肤中的uidef保存起来.
+	m_pUiDef.Attach(SUiDef::getSingleton().CreateUiDefInfo(pResProvider1,_T("uidef:") + strXMLInit));
+
 }
 
 
@@ -1514,6 +1621,7 @@ bool SDesignerView::OnPropGridItemClick( EventArgs *pEvt )
 			{
 				RefreshRes();
 				pItem->SetString(DlgSkin.m_strSkinName);
+				m_pPropgrid->Invalidate();
 				//ReLoadLayout();
 			}
 
@@ -1527,10 +1635,11 @@ bool SDesignerView::OnPropGridItemClick( EventArgs *pEvt )
 	{
 	
 		//调用字体对话框
-			SDlgFontSelect DlgFont(pItem->GetString());
+			SDlgFontSelect DlgFont(pItem->GetString(), this);
 			if (DlgFont.DoModal(m_pMainHost->m_hWnd) == IDOK)
 			{
 				pItem->SetString(DlgFont.m_strFont);
+				m_pPropgrid->Invalidate();
 			}
 
 
@@ -1547,6 +1656,10 @@ bool SDesignerView::OnPropGridItemClick( EventArgs *pEvt )
 
 BOOL SDesignerView::ReLoadLayout()
 {
+	m_CurSelCtrl = NULL;
+
+	//设置uidef为当前皮肤的uidef
+	UseEditorUIDef(false);
 
 	pugi::xml_node xmlnode;
 		BOOL bIsInclude = FALSE;
@@ -1653,7 +1766,7 @@ BOOL SDesignerView::ReLoadLayout()
 		SStringW strAttrSize;
 		strAttrSize.Format(L" margin= \"%d\" width = \"%d\" height = \"%d\" ", MARGIN, nWidth + MARGIN * 2, nHeight + MARGIN * 2);
 
-		s2 = L"<window pos=\"20,20\" " +  s2 + strAttrSize + L"></window>";
+		s2 = L"<designerRoot pos=\"20,20\" " +  s2 + strAttrSize + L"></designerRoot>";
 
 	}else
 	{
@@ -1685,17 +1798,19 @@ BOOL SDesignerView::ReLoadLayout()
 		strAttrSize.Format(L" margin= \"%d\" width = \"%d\" height = \"%d\" ", MARGIN, nWidth + MARGIN * 2, nHeight + MARGIN * 2);
 
 
-		s2 = L"<window pos=\"20,20\" " + strAttrSize + L" colorBkgnd=\"#d0d0d0\"></window>";
+		s2 = L"<designerRoot pos=\"20,20\" " + strAttrSize + L" colorBkgnd=\"#d0d0d0\"/>";
 
 			//s2 = L"<window pos=\"20,20,-20,-20\" colorBkgnd=\"#d0d0d0\"></window>";
 	}
 
 	//wchar_t *s = L"<window pos=\"20,20,@500,@500\" colorBkgnd=\"#d0d0d0\"></window>";
-	wchar_t *s3 = L"<movewnd pos=\"20,20,@500,@500\" ></movewnd>";
+	const wchar_t *s3 = L"<movewnd pos=\"20,20,@500,@500\" ></movewnd>";
 
 	////创建布局窗口的根窗口
 
-	m_pRealWndRoot = m_pContainer->CreateChildren(s2);
+	m_pRealWndRoot = (SDesignerRoot*)m_pContainer->CreateChildren(s2);
+	m_pRealWndRoot->SetRootFont(m_defFont);
+
 	m_pMoveWndRoot = (SMoveWnd *)m_pContainer->CreateChildren(s3);
 	m_pMoveWndRoot->m_pRealWnd = m_pRealWndRoot;
 
@@ -1715,6 +1830,9 @@ BOOL SDesignerView::ReLoadLayout()
 
 	m_treeXmlStruct->RemoveAllItems();
 	InitXMLStruct(m_CurrentLayoutNode, STVI_ROOT);
+
+	//恢复uidef为编辑器的uidef
+	UseEditorUIDef(true);
 
 	return TRUE;
 }
@@ -1951,6 +2069,7 @@ void SDesignerView::NewWnd(CPoint pt, SMoveWnd *pM)
 	}
 
 
+	UseEditorUIDef(false);
 
 	SWindow* pRealWnd;
 	SMoveWnd* pMoveWnd;
@@ -1975,6 +2094,16 @@ void SDesignerView::NewWnd(CPoint pt, SMoveWnd *pM)
 			pMoveWnd = (SMoveWnd*)pM->GetParent();
 		}
 	}
+
+	//有margin的情况
+	SwndStyle &style = pRealWnd->GetStyle();
+	int nMarginLeft = 0;
+	int nMarginTop = 0;
+	CRect rcMargin = style.GetMargin();
+	nMarginLeft = rcMargin.left;
+	nMarginTop = rcMargin.top;
+	pt.x -= nMarginLeft;
+	pt.y -= nMarginTop;
 	
 	if (!bIsInclude)
 	{
@@ -2044,6 +2173,11 @@ void SDesignerView::NewWnd(CPoint pt, SMoveWnd *pM)
 		SetCurrentCtrl(xmlNodeRealWnd.append_copy(m_xmlNode), Wnd1);
 		//m_Desiner->m_xmlNode = xmlNodeRealWnd.append_copy(m_Desiner->m_xmlNode);
 	}
+
+    UseEditorUIDef(true);
+
+	pRealWnd->RequestRelayout();
+	pRealWnd->Invalidate();
 	m_nState = 0;
 	delete strxmlWnd;
 }
@@ -2129,7 +2263,8 @@ bool SDesignerView::OnTCSelChanged(EventArgs *pEvt)
 		return true;
 	}
 
-//	EventTCSelChanged *evt = (EventTCSelChanged*)pEvt;
+	EventTCSelChanged *evt = (EventTCSelChanged*)pEvt;
+	(void)evt;
 
 	HSTREEITEM item =  m_treeXmlStruct->GetSelectedItem();
 
@@ -2176,9 +2311,10 @@ void SDesignerView::DeleteCtrl()
 		m_xmlNode.parent().remove_child(m_xmlNode);
 
 		//Debug(m_CurrentLayoutNode);
+		GetMoveWndRoot()->Click(0, CPoint(0,0));
 		ReLoadLayout();
 		m_nState = 0;
-		GetMoveWndRoot()->Click(0, CPoint(0,0));
+
 	}
 }
 
@@ -2186,7 +2322,8 @@ void SDesignerView::Preview()
 {
 	//SMap<SWindow*, SMoveWnd*>::CPair *p = m_mapMoveRealWnd.GetNext();
 
-//	SMoveWnd *wnd;
+	SMoveWnd *wnd;
+	(void)wnd;
 
 	m_pMoveWndRoot->SetVisible(FALSE);
 
@@ -2337,4 +2474,34 @@ bool SDesignerView::OnPropGridItemActive( EventArgs *pEvt )
 	}
 
 	return true;
+}
+
+void SDesignerView::UseEditorUIDef(bool bYes) //使用编辑器自身的UIDef还是使用所打开的工程的UIDef
+{
+	if (bYes)
+	{
+		SUiDef::getSingleton().SetUiDef(m_pOldUiDef);
+	}
+	else
+	{
+		SUiDef::getSingleton().SetUiDef(m_pUiDef);
+	}
+}
+
+SStringT SDesignerView::UnitToStr(int nUnit)
+{
+	//	px=0,dp,dip,sp
+	switch (nUnit)
+	{
+	case 0:
+		return _T("");
+	case 1:
+		return _T("dp");
+	case 2:
+		return _T("dip");
+	case 3:
+		return _T("sp");
+	default:
+		return _T("");
+	}
 }

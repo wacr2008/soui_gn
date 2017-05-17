@@ -8,6 +8,7 @@
 #include "SlistCtrlex.h"
 #include "helper/mybuffer.h"
 #include "SListboxex.h"
+#include <algorithm>
 
 #pragma warning(disable:4018)
 #pragma warning(disable:4267)
@@ -87,7 +88,7 @@ namespace SOUI
 		CRect rcClient;
 		SWindow::GetClientRect(&rcClient);
 		CSize szView(rcClient.Width(),GetItemCount()*m_nItemHeight);
-		if(szView.cy>rcClient.Height()) szView.cx-=m_nSbWid;
+		if(szView.cy>rcClient.Height()) szView.cx-=GetSbWidth();
 		SetViewSize(szView);
 	}
 
@@ -114,7 +115,7 @@ namespace SOUI
 		CRect rcClient;
 		SWindow::GetClientRect(&rcClient);
 		CSize szView(rcClient.Width(),GetItemCount()*m_nItemHeight);
-		if(szView.cy>rcClient.Height()) szView.cx-=m_nSbWid;
+		if(szView.cy>rcClient.Height()) szView.cx-=GetSbWidth();
 		SetViewSize(szView);
 
 		return iItem;
@@ -228,7 +229,7 @@ namespace SOUI
 		CRect rcClient;
 		SWindow::GetClientRect(&rcClient);
 		CSize szView(rcClient.Width(),GetItemCount()*m_nItemHeight);
-		if(szView.cy>rcClient.Height()) szView.cx-=m_nSbWid;
+		if(szView.cy>rcClient.Height()) szView.cx-=GetSbWidth();
 		SetViewSize(szView);
 
 		return TRUE;
@@ -247,9 +248,10 @@ namespace SOUI
 		m_pHeader->GetClientRect(&rcHead);
 		CRect rcList = GetListRect();
 		rcList.right = rcList.left + rcHead.Width();
-		//int nTopItem = (int)GetTopIndex();
-//		int nPageItems    = (rcList.Height()+m_nItemHeight-1)/m_nItemHeight;
-
+		int nTopItem = (int)GetTopIndex();
+		int nPageItems    = (rcList.Height()+m_nItemHeight-1)/m_nItemHeight;
+		(void)nTopItem;
+		(void)nPageItems;
 		CRect rcClient;
 		GetClientRect(&rcClient);
 		CRect rcItem=GetItemRect(iItem);
@@ -322,7 +324,8 @@ namespace SOUI
 	{
 		if (iItem < 0 || iItem >= GetItemCount()) return;
 
-		//BOOL bTextColorChanged = FALSE;
+		BOOL bTextColorChanged = FALSE;
+		(void)bTextColorChanged;
 		int nBgImg = 0; 
 		COLORREF crItemBg = m_crItemBg;  
 
@@ -733,16 +736,16 @@ lblEnd:
 			{
 				CRect rcClient = GetListRect();
 				CPoint ptTmp = pt; //保证落在Client之内
-				ptTmp.x = max(ptTmp.x,rcClient.left);
-				ptTmp.y = max(ptTmp.y,rcClient.top);
-				ptTmp.x = min(ptTmp.x,rcClient.right);
-				ptTmp.y = min(ptTmp.y,rcClient.bottom);
+				ptTmp.x = (std::max)(ptTmp.x,rcClient.left);
+				ptTmp.y = (std::max)(ptTmp.y,rcClient.top);
+				ptTmp.x = (std::min)(ptTmp.x,rcClient.right);
+				ptTmp.y = (std::min)(ptTmp.y,rcClient.bottom);
 
 				CPoint pt1,pt2;//分配左上和右下的点
-				pt1.x = min(m_ptTmp.x,ptTmp.x);
-				pt1.y = min(m_ptTmp.y,ptTmp.y);
-				pt2.x = max(m_ptTmp.x,ptTmp.x);
-				pt2.y = max(m_ptTmp.y,ptTmp.y);
+				pt1.x = (std::min)(m_ptTmp.x,ptTmp.x);
+				pt1.y = (std::min)(m_ptTmp.y,ptTmp.y);
+				pt2.x = (std::max)(m_ptTmp.x,ptTmp.x);
+				pt2.y = (std::max)(m_ptTmp.y,ptTmp.y);
 
 				m_rcWnd.left = pt1.x;
 				m_rcWnd.top = pt1.y;
@@ -956,7 +959,7 @@ lblEnd:
 		//  关闭滚动条
 		m_wBarVisible = SSB_NULL;
 
-		if (size.cy<szView.cy || (size.cy<szView.cy+m_nSbWid && size.cx<szView.cx))
+		if (size.cy<szView.cy || (size.cy<szView.cy+GetSbWidth() && size.cx<szView.cx))
 		{
 			//  需要纵向滚动条
 			m_wBarVisible |= SSB_VERT;
@@ -964,14 +967,14 @@ lblEnd:
 			m_siVer.nMax  = szView.cy-1;
 			m_siVer.nPage = GetCountPerPage(FALSE)*m_nItemHeight;
 
-			if (size.cx-m_nSbWid < szView.cx)
+			if (size.cx-GetSbWidth() < szView.cx)
 			{
 				//  需要横向滚动条
 				m_wBarVisible |= SSB_HORZ;
 
 				m_siHoz.nMin  = 0;
 				m_siHoz.nMax  = szView.cx-1;
-				m_siHoz.nPage = size.cx-m_nSbWid > 0 ? size.cx-m_nSbWid : 0;
+				m_siHoz.nPage = size.cx-GetSbWidth() > 0 ? size.cx-GetSbWidth() : 0;
 			}
 			else
 			{
@@ -1039,7 +1042,7 @@ lblEnd:
 		div_t divHeight = div(rcClient.Height(), m_nItemHeight);
 
 		// round up to nearest item count
-		return max(bPartial && divHeight.rem > 0 ? divHeight.quot + 1 : divHeight.quot, 1);
+		return (std::max)(bPartial && divHeight.rem > 0 ? divHeight.quot + 1 : divHeight.quot, 1);
 	}
 
 	bool SListCtrlEx::OnHeaderClick(EventArgs *pEvt)

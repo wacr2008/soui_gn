@@ -2,25 +2,29 @@
 #include "skia2rop2.h"
 #include <core/skcolorpriv.h>
 #include <src/core/SkReadBuffer.h>
- 
+#include <include/core/SkPreConfig.h>
 
 // 扩展Skia, 实现Rop2操作
 static SkPMColor rdRop2Proc_Clear(SkPMColor src, SkPMColor dst)
 {
+	(src); (dst);
     return 0;
 }
 static SkPMColor rdRop2Proc_Copy(SkPMColor src, SkPMColor dst)
 {
-    return src;
+	(src); (dst);
+	return src;
 }
 static SkPMColor rdRop2Proc_CopyInvert(SkPMColor src, SkPMColor dst)
 {
+	(dst);
     SkPMColor res = ~src;
     res |= (SK_A32_MASK << SK_A32_SHIFT); // force it to be opaque
     return res;
 }
 static SkPMColor rdRop2Proc_Invert(SkPMColor src, SkPMColor dst)
 {
+	(src);
     SkPMColor res = ~dst;
     res |= (SK_A32_MASK << SK_A32_SHIFT); // force it to be opaque
     return res;
@@ -69,6 +73,7 @@ static SkPMColor rdRop2Proc_Equiv(SkPMColor src, SkPMColor dst)
 }
 static SkPMColor rdRop2Proc_Noop(SkPMColor src, SkPMColor dst)
 {
+	(src);
     return dst;
 }
 static SkPMColor rdRop2Proc_OrInvert(SkPMColor src, SkPMColor dst)
@@ -85,6 +90,7 @@ static SkPMColor rdRop2Proc_OrReverse(SkPMColor src, SkPMColor dst)
 }
 static SkPMColor rdRop2Proc_Set(SkPMColor src, SkPMColor dst)
 {
+	(src); (dst);
     SkPMColor res = 1;
     res |= (SK_A32_MASK << SK_A32_SHIFT); // force it to be opaque
     return res;
@@ -136,9 +142,9 @@ ProcXfermode::ProcXfermode( int rop ) : rop2(rop)
     }
 }
 
-void ProcXfermode::xfer32( SkPMColor dst[],
-                          const  SkPMColor src[], int count,
-                          const  SkAlpha aa[]) const 
+void ProcXfermode::xfer32( SkPMColor  dst[],
+                          const  SkPMColor  src[], int count,
+                          const  SkAlpha  aa[]) const 
 {
     SkASSERT(dst && src && count >= 0);
     SkXfermodeProc proc = fProc;

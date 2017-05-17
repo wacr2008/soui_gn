@@ -36,6 +36,8 @@ executable("PCManager") {
     "../../SOUI",
     "../../third-part",
     "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_PCManager_resource",
   ]
  
   if (is_win) {

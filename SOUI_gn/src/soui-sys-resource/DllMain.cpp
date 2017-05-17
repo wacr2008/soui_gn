@@ -1,6 +1,10 @@
 #include <windows.h>
 
-BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved )
+class __declspec(dllexport) soui_sys_res
 {
-    return TRUE;
-}
+public:
+	soui_sys_res()
+	{
+	}
+};
+ 

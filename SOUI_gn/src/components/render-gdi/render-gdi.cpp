@@ -7,6 +7,8 @@
 #include <math.h>
 #include <trace.h>
 #include <tchar.h>
+#include <algorithm>
+
 namespace SOUI
 {
 
@@ -19,10 +21,9 @@ namespace SOUI
         return TRUE;
     }
 
-    BOOL SRenderFactory_GDI::CreateFont( IFont ** ppFont , const LOGFONT &lf ,const IPropBag * pPropBag)
+    BOOL SRenderFactory_GDI::CreateFont( IFont ** ppFont , const LOGFONT &lf)
     {
         *ppFont = new SFont_GDI(this,&lf);
-		(*ppFont)->SetProps(pPropBag);
         return TRUE;
     }
 
@@ -79,36 +80,6 @@ namespace SOUI
         return m_hBmp?S_OK:E_OUTOFMEMORY;
     }
 
-    HRESULT SBitmap_GDI::InitEx(int nWid, int nHei, const LPVOID pBits)
-	{
-		if (m_sz.cx == nWid  && m_sz.cy == nHei && m_hBmp)
-		{
-			const int stride = m_sz.cx * 4;
-			::SetBitmapBits(m_hBmp, stride*m_sz.cy, pBits);
-		}
-		else
-		{
-			LPVOID pBmpBits = NULL;
-			m_hBmp = CreateGDIBitmap(nWid, nHei, &pBmpBits);
-			if (m_hBmp)
-			{
-				m_sz.cx = nWid, m_sz.cy = nHei;
-				const int stride = m_sz.cx * 4;
-				if (pBits)
-				{
-					memcpy(pBmpBits, pBits, stride*m_sz.cy);
-				}
-				else
-				{
-					memset(pBmpBits, 0, stride*m_sz.cy);
-				}
-			}
-		}
-
-		return m_hBmp ? S_OK : E_OUTOFMEMORY;
-	}
-
-
     HRESULT SBitmap_GDI::Init(IImgFrame *pFrame )
     {
         UINT nWid,nHei;
@@ -129,7 +100,7 @@ namespace SOUI
     HRESULT SBitmap_GDI::LoadFromFile( LPCTSTR pszFileName)
     {
         CAutoRefPtr<IImgX> imgDecoder;
-        GetRenderFactory_GDI()->GetImgDecoderFactory()->CreateImgX(&imgDecoder);
+        GetRenderFactory()->GetImgDecoderFactory()->CreateImgX(&imgDecoder);
         if(imgDecoder->LoadFromFile(S_CT2W(pszFileName))==0) return S_FALSE;
         return ImgFromDecoder(imgDecoder);
     }
@@ -137,7 +108,7 @@ namespace SOUI
     HRESULT SBitmap_GDI::LoadFromMemory(LPBYTE pBuf,size_t szLen)
     {
         CAutoRefPtr<IImgX> imgDecoder;
-        GetRenderFactory_GDI()->GetImgDecoderFactory()->CreateImgX(&imgDecoder);
+        GetRenderFactory()->GetImgDecoderFactory()->CreateImgX(&imgDecoder);
         if(imgDecoder->LoadFromMemory(pBuf,szLen)==0) return S_FALSE;
         return ImgFromDecoder(imgDecoder);
     }
@@ -338,8 +309,8 @@ namespace SOUI
 				}
 			}
             BLENDFUNCTION bf={AC_SRC_OVER,0,m_byAlpha,AC_SRC_ALPHA };
-			//BOOL bRet = ;
-			::AlphaBlend(m_hdc, m_pRc->left, m_pRc->top, m_nWid, m_nHei, m_hMemDC, m_pRc->left, m_pRc->top, m_nWid, m_nHei, bf);
+            BOOL bRet=::AlphaBlend(m_hdc,m_pRc->left,m_pRc->top,m_nWid,m_nHei,m_hMemDC,m_pRc->left,m_pRc->top,m_nWid,m_nHei,bf);
+			(void)bRet;
             ::DeleteDC(m_hMemDC);
             ::DeleteObject(m_hBmp);
             
@@ -374,11 +345,12 @@ namespace SOUI
     //////////////////////////////////////////////////////////////////////////
     
     SRenderTarget_GDI::SRenderTarget_GDI( IRenderFactory* pRenderFactory ,int nWid,int nHei)
-        :TGdiRenderObjImpl<IRenderTarget>(pRenderFactory)
-        ,m_hdc(NULL)
+        :m_hdc(NULL)
         ,m_curColor(0xFF000000)//Ä¬ÈÏºÚÉ«
         ,m_uGetDCFlag(0)
     {
+		m_pRenderFactory = pRenderFactory;
+
         m_ptOrg.x=m_ptOrg.y=0;
                 
         HDC hdc=::GetDC(NULL);
@@ -395,10 +367,10 @@ namespace SOUI
         LOGFONT lf={0};
         lf.lfHeight=20;
         _tcscpy(lf.lfFaceName,_T("ËÎÌå"));
-        pRenderFactory->CreateFont(&m_defFont,lf,NULL);
+        pRenderFactory->CreateFont(&m_defFont,lf);
         SelectObject(m_defFont);
 
-        GetRenderFactory_GDI()->CreateBitmap(&m_defBmp);
+        pRenderFactory->CreateBitmap(&m_defBmp);
         m_defBmp->Init(nWid,nHei);
         SelectObject(m_defBmp);
     }
@@ -410,27 +382,27 @@ namespace SOUI
 
     HRESULT SRenderTarget_GDI::CreateCompatibleRenderTarget( SIZE szTarget,IRenderTarget **ppRenderTarget )
     {
-        SRenderTarget_GDI *pRT = new SRenderTarget_GDI(GetRenderFactory_GDI(),szTarget.cx,szTarget.cy);
+        SRenderTarget_GDI *pRT = new SRenderTarget_GDI(m_pRenderFactory,szTarget.cx,szTarget.cy);
         *ppRenderTarget = pRT;
         return S_OK;
     }
 
     HRESULT SRenderTarget_GDI::CreatePen( int iStyle,COLORREF cr,int cWidth,IPen ** ppPen )
     {
-        *ppPen = new SPen_GDI(GetRenderFactory_GDI(),iStyle,cr,cWidth);
+        *ppPen = new SPen_GDI(m_pRenderFactory,iStyle,cr,cWidth);
         return S_OK;
     }
 
     HRESULT SRenderTarget_GDI::CreateSolidColorBrush( COLORREF cr,IBrush ** ppBrush )
     {
-        *ppBrush = SBrush_GDI::CreateSolidBrush(GetRenderFactory_GDI(),cr);
+        *ppBrush = SBrush_GDI::CreateSolidBrush(m_pRenderFactory,cr);
         return S_OK;
     }
 
     HRESULT SRenderTarget_GDI::CreateBitmapBrush( IBitmap *pBmp,IBrush ** ppBrush )
     {
         SBitmap_GDI *pBmpSkia = (SBitmap_GDI*)pBmp;
-        *ppBrush = SBrush_GDI::CreateBitmapBrush(GetRenderFactory_GDI(),pBmpSkia->GetBitmap());
+        *ppBrush = SBrush_GDI::CreateBitmapBrush(m_pRenderFactory,pBmpSkia->GetBitmap());
         return S_OK;
     }
 
@@ -500,7 +472,7 @@ namespace SOUI
 
     HRESULT SRenderTarget_GDI::GetClipRegion( IRegion **ppRegion )
     {
-        SRegion_GDI *pRgn=new SRegion_GDI(GetRenderFactory_GDI());
+        SRegion_GDI *pRgn=new SRegion_GDI(m_pRenderFactory);
         ::GetClipRgn(m_hdc,pRgn->GetRegion());
         POINT pt={-m_ptOrg.x,-m_ptOrg.y};
         pRgn->Offset(pt);
@@ -531,7 +503,12 @@ namespace SOUI
     {
         if(uFormat & DT_CALCRECT)
         {
-            ::DrawText(m_hdc,pszText,cchLen,pRc,uFormat);
+            int nRet = ::DrawText(m_hdc,pszText,cchLen,pRc,uFormat);
+			if(!nRet)
+			{
+				pRc->right = pRc->left;
+				pRc->bottom = pRc->top;
+			}
             return S_OK;
         }
         
@@ -936,6 +913,12 @@ namespace SOUI
     
     HRESULT SRenderTarget_GDI::GradientFillEx( LPCRECT pRect,const POINT* pts,COLORREF *colors,float *pos,int nCount,BYTE byAlpha/*=0xFF */ )
     {
+		(pRect);
+		(pts);
+		(colors);
+		(pos);
+		(nCount);
+		(byAlpha);
         return E_NOTIMPL;
     }
 

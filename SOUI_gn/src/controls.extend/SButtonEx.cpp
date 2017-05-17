@@ -31,25 +31,26 @@ namespace SOUI
         switch(m_drawMode)
         {
         case FREE_DRAW:
-            szRet.cx = max(szIcon.cx+m_ptIcon.x, szText.cx+m_ptText.x);
-            szRet.cy = max(szIcon.cy+m_ptIcon.y, szText.cy+m_ptText.y);
+            szRet.cx = (std::max)(szIcon.cx+m_ptIcon.x, szText.cx+m_ptText.x);
+            szRet.cy = (std::max)(szIcon.cy+m_ptIcon.y, szText.cy+m_ptText.y);
             break;
         case VERT_ICON_TEXT:
         case VERT_TEXT_ICON:
-            szRet.cx = max(szIcon.cx,szText.cx);
+            szRet.cx = (std::max)(szIcon.cx,szText.cx);
             szRet.cy = szIcon.cy + szText.cy + m_nSepSize;
             break;
         case HORZ_ICON_TEXT:
         case HORZ_TEXT_ICON:
-            szRet.cy = max(szIcon.cy,szText.cy);
+            szRet.cy = (std::max)(szIcon.cy,szText.cy);
             szRet.cx = szIcon.cx + szText.cx + m_nSepSize;
             break;
         default:
             SASSERT(FALSE);
             break;
         }
-        szRet.cx += m_style.m_rcInset.left + m_style.m_rcInset.right;
-        szRet.cy += m_style.m_rcInset.top + m_style.m_rcInset.bottom;
+		CRect rcPadding = GetStyle().GetPadding();
+        szRet.cx += rcPadding.left + rcPadding.right;
+        szRet.cy += rcPadding.top + rcPadding.bottom;
         return szRet;
     }
 
@@ -93,14 +94,16 @@ namespace SOUI
         {
             rcClient.OffsetRect(m_ptPushOffet);
         }
-        rcClient.DeflateRect(m_style.m_rcInset);
+		CRect rcPadding = GetStyle().GetPadding();
+
+        rcClient.DeflateRect(rcPadding);
         
         //draw icon and text
         CPoint ptIcon = rcClient.TopLeft(),ptText=ptIcon;
         CSize szIcon = GetIconSize();
         CSize szDesired = GetDesiredSize(pRT,&rcClient);
-        szDesired.cx -= m_style.m_rcInset.left + m_style.m_rcInset.right;
-        szDesired.cy -= m_style.m_rcInset.top + m_style.m_rcInset.bottom;
+        szDesired.cx -= rcPadding.left + rcPadding.right;
+        szDesired.cy -= rcPadding.top + rcPadding.bottom;
         
         CSize szText;
         pRT->MeasureText(GetWindowText(),GetWindowText().GetLength(),&szText);

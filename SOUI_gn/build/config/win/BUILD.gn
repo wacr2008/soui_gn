@@ -47,25 +47,15 @@ config("compiler") {
   # modes.
   cflags_c = [ "/TC" ]
   cflags_cc = [ "/TP" ]
-
   # Flags not supported in version 2013.
   if (visual_studio_version != "2013" && visual_studio_version != "2013e") {
     cflags += [
-      # Tell the compiler to crash on failures. This is undocumented
-      # and unsupported but very handy.
-      "/d2FastFail",
-    ]
-  }
+    # Tell the compiler to crash on failures. This is undocumented
+    # and unsupported but very handy.
+    "/d2FastFail",
 
-  if (visual_studio_version == "2015") {
-    cflags += [
-      # Work around crbug.com/526851, bug in VS 2015 RTM compiler.
-      "/Zc:sizedDealloc-",
-
-      # Disable thread-safe statics to avoid overhead and because
-      # they are disabled on other platforms. See crbug.com/587210
-      # and -fno-threadsafe-statics.
-      "/Zc:threadSafeInit-",
+    # Work around crbug.com/526851, bug in VS 2015 RTM compiler.
+    "/Zc:sizedDealloc-",
     ]
   }
 
@@ -232,14 +222,13 @@ config("sdk_link") {
       #"/SAFESEH",  # Not compatible with x64 so use only for x86.
       "/largeaddressaware",
     ]
-
     if(enable_safeseh)
     {
        ldflags += [
         "/SAFESEH",  # Not compatible with x64 so use only for x86.
        ]
 
-       if (visual_studio_version == "2015")
+       if (visual_studio_version != "2013" && visual_studio_version != "2013e")
        {
          ldflags += [
           "/EHsc",
@@ -261,14 +250,16 @@ config("sdk_link") {
 # their own.
 config("common_linker_setup") {
   ldflags = [
+    #"/fastfail",
     "/FIXED:NO",
     "/ignore:4199",
     "/ignore:4221",
-    "/ignore:4099",
+    "/ignore:4075",
+    "/ignore:4099", 
     "/NXCOMPAT",
   ]
 
-  if (visual_studio_version == "2015") {
+  if (visual_studio_version != "2013" && visual_studio_version != "2013e") {
     ldflags += [
       # Tell the linker to crash on failures.
       "/fastfail",
@@ -276,7 +267,6 @@ config("common_linker_setup") {
   }
 
   
-
   # ASLR makes debugging with windbg difficult because Chrome.exe and
   # Chrome.dll share the same base name. As result, windbg will name the
   # Chrome.dll module like chrome_<base address>, where <base address>
@@ -289,22 +279,21 @@ config("common_linker_setup") {
     ldflags += [ "/DYNAMICBASE" ]
   }
 
+  # Control Flow Guard (CFG)
+  # https://msdn.microsoft.com/en-us/library/windows/desktop/mt637065.aspx
+  # /DYNAMICBASE (ASLR) is turned off in debug builds, therefore CFG can’t be
+  # turned on either.
+  # TODO(thakis): Turn this on with lld once supported, https://crbug.com/693709
+  if (!is_debug && !use_lld) {
+    # Turn on CFG in msvc linker, regardless of compiler used.
+    ldflags += [ "/guard:cf" ]
+  }
+
   if (win_linker_timing) {
     ldflags += [
       "/time",
       "/verbose:incr",
     ]
-  }
-}
-
-# Control Flow Guard (CFG)
-# https://msdn.microsoft.com/en-us/library/windows/desktop/mt637065.aspx
-config("win_msvc_cfg") {
-  # /DYNAMICBASE (ASLR) is turned off in debug builds, therefore CFG can’t be
-  # turned on either.
-  if (!is_clang && !is_debug) {
-    cflags = [ "/guard:cf" ]
-    ldflags = [ "/guard:cf" ]
   }
 }
 
@@ -372,7 +361,7 @@ incremental_linking_off_switch = [ "/INCREMENTAL:NO" ]
 
 # Disable incremental linking for syzyasan, enable for debug builds and all
 # component builds - any builds where performance is not job one.
-if ((is_debug) && !is_syzyasan) { # || is_component_build wuding20170104
+if ((is_debug) && !is_syzyasan) { # || is_component_build wuding20170401
   default_incremental_linking_switch = incremental_linking_on_switch
 } else {
   default_incremental_linking_switch = incremental_linking_off_switch

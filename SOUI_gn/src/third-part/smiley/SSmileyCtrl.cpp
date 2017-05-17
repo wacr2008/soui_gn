@@ -249,7 +249,7 @@ HRESULT SSmileyCtrl::IPersistStreamInit_Load(LPSTREAM pStm, const ATL_PROPMAP_EN
     if(!SUCCEEDED(hr)) return hr;
     SetSource(pSource);
 
-	hr = IPersistStreamInitImpl<SSmileyCtrl>::IPersistStreamInit_Load(pStm, const_cast <ATL_PROPMAP_ENTRY*>(pMap));
+    hr = IPersistStreamInitImpl<SSmileyCtrl>::IPersistStreamInit_Load( pStm, pMap);
 
     if(!SUCCEEDED(hr)) return hr;
     FireViewChange();
@@ -261,7 +261,7 @@ HRESULT SSmileyCtrl::IPersistStreamInit_Save(LPSTREAM pStm, BOOL fClearDirty, co
     if(!m_pSmileySource) return E_FAIL;
     HRESULT hr = m_pSmileySource->Stream_Save(pStm);
     if(!SUCCEEDED(hr)) return hr;
-	return IPersistStreamInitImpl<SSmileyCtrl>::IPersistStreamInit_Save(pStm, fClearDirty, const_cast< ATL_PROPMAP_ENTRY*>(pMap));
+    return IPersistStreamInitImpl<SSmileyCtrl>::IPersistStreamInit_Save( pStm, fClearDirty, pMap);
 }
 
 HRESULT SSmileyCtrl::FireViewChange()
@@ -488,7 +488,7 @@ void SSmileyCtrl::UpdateSmileyFlag()
 {
     if(!m_pSmileyHost) return ;
     
-    if(m_dwDrawFlag!=0) return;
+    if(m_dwDrawFlag!=-1) return;
     
     CComPtr<IRichEditOle>  ole;
     LRESULT lMsgRet = 0;
@@ -521,7 +521,7 @@ void SSmileyCtrl::UpdateSmileyFlag()
 STDMETHODIMP SSmileyCtrl::Clear()
 {
     memset(&m_rcPos,0,sizeof(RECT));
-    m_dwDrawFlag = 0;
+    m_dwDrawFlag = (DWORD)-1;
     return S_OK;
 }
 

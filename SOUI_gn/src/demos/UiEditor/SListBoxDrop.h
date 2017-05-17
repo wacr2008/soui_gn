@@ -1,17 +1,16 @@
-ï»¿#pragma once
+#pragma once
 #include "DesignerView.h"
 #include "Adapter.h"
 namespace SOUI
 {
-
-class SPrintWindow : public SOUI::SWindow
+class SPrintWindow : public SWindow
 {
 	SOUI_CLASS_NAME(SPrintWindow, L"SPrintWindow")
 public:
-	void Attach(SOUI::SWindow *pHostCtrl)
+	void Attach(SWindow *pHostCtrl)
 	{
 		SASSERT(pHostCtrl);
-		SOUI::CRect rcHost = pHostCtrl->GetWindowRect();
+		CRect rcHost = pHostCtrl->GetWindowRect();
 		pHostCtrl->InsertChild(this);
 		Move(rcHost);
 		GETRENDERFACTORY->CreateRenderTarget(&m_memRt, rcHost.Width(), rcHost.Height());
@@ -72,7 +71,7 @@ public:
 	}
 	void MoveWindow(CPoint &pt)
 	{
-		//if (GetParent()->IsVisible()) //å·²ç»ä¿è¯æ˜¾ç¤ºæ‰æ‹–åŠ¨
+		//if (GetParent()->IsVisible()) //ÒÑ¾­±£Ö¤ÏÔÊ¾²ÅÍÏ¶¯
 		{
 			CRect parentRc=GetParent()->GetClientRect();			
 			if (parentRc.PtInRect(pt))
@@ -131,7 +130,7 @@ public:
 			{
 				SStringT strText;
 				GetText(iHoverItem, strText);
-				SMap<SStringT, pugi::xml_node>::CPair *p = m_controlDb->Lookup(strText);  //æŸ¥æ‰¾
+				SMap<SStringT, pugi::xml_node>::CPair *p = m_controlDb->Lookup(strText);  //²éÕÒ
 				if (p)
 				{
 					ctrlNode = p->m_value;
@@ -140,15 +139,18 @@ public:
 					{
 						SPrintWindow *pPrintWindow = new SPrintWindow();						
 						m_pDesignerView->m_pContainer->GetParent()->InsertChild(pChild);
+
+						m_pDesignerView->UseEditorUIDef(false);
+
 						pChild->InitFromXml(p->m_value.first_child());
-						//viewç³»åˆ—åŠ ä¸Šé€‚é…å™¨
+						//viewÏµÁÐ¼ÓÉÏÊÊÅäÆ÷
 						if (pChild->IsClass(SMCListView::GetClassNameW()))
 						{
 							CBaseMcAdapterFix *mcAdapter = new CBaseMcAdapterFix();
 							((SMCListView*)pChild)->SetAdapter(mcAdapter);
 							mcAdapter->Release();
 						}
-						//listview(flex)éœ€è¦é‡æ–°å¤„ç†ï¼Œæœ‰ç©ºå†æ¥
+						//listview(flex)ÐèÒªÖØÐÂ´¦Àí£¬ÓÐ¿ÕÔÙÀ´
 						if (pChild->IsClass(SListView::GetClassNameW()))
 						{
 							CBaseAdapterFix *listAdapter = new CBaseAdapterFix();
@@ -161,6 +163,9 @@ public:
 							((STileView*)pChild)->SetAdapter(listAdapter);
 							listAdapter->Release();
 						}
+
+						m_pDesignerView->UseEditorUIDef(true);
+
 						m_pDesignerView->m_pContainer->BringWindowToTop();
 						m_pDesignerView->m_pContainer->GetParent()->UpdateChildrenPosition();
 						pPrintWindow->Attach(pChild);
@@ -196,29 +201,11 @@ public:
 				m_pDesignerView->m_nState = 0;
 				return;
 			}
-			//if (pSChild == m_pDesignerView->m_pMoveWndRoot)
-			//	pt -= CPoint(20, 20);
-			SStringT s;
-			s.Format(_T("%d"), ((SMoveWnd*)pSChild)->m_pRealWnd->GetUserData());
-			pugi::xml_node xmlNodeRealWnd = m_pDesignerView->FindNodeByAttr(m_pDesignerView->m_CurrentLayoutNode, L"data", s);
-			// åˆ¤æ–­å½“å‰æŽ§ä»¶æ˜¯å¦æ˜¯å®¹å™¨ï¼Œå¦‚æžœä¸æ˜¯å°±å–å½“å‰æŽ§ä»¶çš„çˆ¶æŽ§ä»¶
-			if (!m_pDesignerView->bIsContainerCtrl(xmlNodeRealWnd.name()))
-			{
-				if(pSChild != m_pDesignerView->m_pMoveWndRoot)
-				{
-					pSChild = pSChild->GetParent();
-				}
-			}
-			//æœ‰marginçš„æƒ…å†µ
-			SwndStyle &style = ((SMoveWnd*)pSChild)->m_pRealWnd->GetStyle();
-			int nMarginLeft = 0;
-			int nMarginTop = 0;
-			nMarginLeft = style.m_rcMargin.left;
-			nMarginTop = style.m_rcMargin.top;
-			pt.x -= nMarginLeft;
-			pt.y -= nMarginTop;
 
 			m_pDesignerView->NewWnd(pt,(SMoveWnd*)pSChild);
+			((SMoveWnd*)pSChild)->m_pRealWnd->RequestRelayout();
+			((SMoveWnd*)pSChild)->m_pRealWnd->UpdateLayout();
+
 			m_pDesignerView->CreatePropGrid(m_pDesignerView->m_xmlNode.name());
 			m_pDesignerView->UpdatePropGrid(m_pDesignerView->m_xmlNode);
 		}
@@ -229,5 +216,4 @@ public:
 		MSG_WM_LBUTTONUP(OnLButtonUp)
 	SOUI_MSG_MAP_END()
 };
-
 }

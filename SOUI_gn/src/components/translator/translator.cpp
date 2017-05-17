@@ -182,6 +182,11 @@ namespace SOUI
     //  STranslator
     BOOL STranslatorMgr::InstallTranslator(ITranslator *pTranslator)
     {
+		if (m_strLang.IsEmpty())
+			m_strLang = pTranslator->name();
+		if (pTranslator->name() != m_strLang)
+			return FALSE;
+
         SPOSITION pos=m_lstLang->GetHeadPosition();
         while(pos)
         {
@@ -193,6 +198,7 @@ namespace SOUI
         }
         m_lstLang->AddHead(pTranslator);
         pTranslator->AddRef();
+
         return TRUE;
     }
 
@@ -207,6 +213,7 @@ namespace SOUI
             {
                 m_lstLang->RemoveAt(posBackup);
                 p->Release();
+
                 return TRUE;
             }
         }
@@ -247,6 +254,27 @@ namespace SOUI
         *ppTranslator = new STranslator;
         return TRUE;
     }
+
+
+	void STranslatorMgr::SetLanguage(const SStringW & strLang)
+	{
+		if (m_strLang != strLang)
+		{
+			SPOSITION pos = m_lstLang->GetHeadPosition();
+			while (pos)
+			{
+				ITranslator *pTrans = m_lstLang->GetNext(pos);
+				pTrans->Release();
+			}
+			m_lstLang->RemoveAll();
+		}
+		m_strLang = strLang;
+	}
+
+	SStringW STranslatorMgr::GetLanguage() const
+	{
+		return m_strLang;
+	}
 
     //////////////////////////////////////////////////////////////////////////
     //  

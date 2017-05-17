@@ -2,24 +2,6 @@ import("//build_overrides/common.gni")
  
 
 
-action("gen_QQLogin_resource") {
-  script  = "//build/gn_run_binary.py"
-  inputs  = [ "//uiresbuilder.exe" ]
-  outputs = [ "$target_gen_dir/gen_QQLogin_resource.out" ]
-
-  # The script takes as arguments the binary to run, and then the arguments
-  # to pass it.
-  args = [
-          rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w src/demos/QQLogin/",
-          "-i uires/uires.idx",
-          "-p uires",
-          "-r res/soui_res.rc2",
-          "-h res/R.h",
-          "idtable"
-         ] 
-}
-
 executable("QQLogin") {
   configs += [ "//build/config:precompiled_headers" ]
 
@@ -28,7 +10,7 @@ executable("QQLogin") {
   
   sources = [
     #include files   
-    "MainDlg.h",
+    "MainDlg.h", 
     "resource.h",
     "stdafx.h",
     "utils.h",
@@ -61,7 +43,7 @@ executable("QQLogin") {
     "../../controls.extend/slistboxex.h", 
     "../../controls.extend/GroupChatFrame.h",
 
-    "MainDlg.cpp",
+    "MainDlg.cpp", 
     "QQLogin.cpp",
     "utils.cpp",
     "../../controls.extend/ExtendCtrls.cpp",
@@ -102,15 +84,17 @@ executable("QQLogin") {
     "../../components",
     "../../controls.extend",
     "../../extend.skins",
+    "../..",
     
   ]
 
-  deps = [ 
-    ":gen_QQLogin_resource",
+  deps = [  
     "../../utilities",
     "../../SOUI",
     "../../third-part",
     "../../components", 
+    "../../soui-sys-resource",
+    "../../../:preBuild_QQLogin_resource",
   ]
  
   if (is_win) {

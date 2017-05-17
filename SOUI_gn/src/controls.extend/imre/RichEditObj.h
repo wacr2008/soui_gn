@@ -4,11 +4,12 @@
 
 #pragma once
 #include <TOM.h>
-#include "core/Sobject.h"
+#include "sobject/Sobject.hpp"
 #include "unknown/obj-ref-impl.hpp"
 #include "res.mgr/SFontPool.h"
 #include "interface/render-i.h"
 #include <atlcomcli.h>
+#include "layout/SouiLayoutParamStruct.h"
 #include "IRichEditObjHost.h"
 
 #define REOBJ_FIRST   ((RichEditObj*)-1)    /*子对象插入在开头*/
@@ -20,6 +21,10 @@
 
 class RichEditObj : public SOUI::SObject
 {
+#define LEFT          0
+#define TOP           1
+#define RIGHT         2
+#define BOTTOM        3
 public:
     enum AlignType
     {
@@ -139,18 +144,18 @@ public:
     RichEditBkImg();
     ~RichEditBkImg(){}
 
-	void    DrawObject(SOUI::IRenderTarget *);
-	void    CalcPosition(SOUI::POSITION_ITEM * pItemsPos, int nPosCount);
-	SOUI::CRect   GetRect();
+    void    DrawObject(SOUI::IRenderTarget *);
+    void CalcPosition(SOUI::POS_INFO * pItemsPos, int nPosCount);
+    SOUI::CRect   GetRect();
 
 protected:
-	HRESULT OnInternalAttrPos(SOUI::POSITION_ITEM* pPosItem, int& nPosCount, const SOUI::SStringW& strValue, BOOL bLoading);
-	HRESULT OnAttrPos(const SOUI::SStringW& strValue, BOOL bLoading);
+    HRESULT OnInternalAttrPos(SOUI::POS_INFO* pPosItem, int& nPosCount, const SOUI::SStringW& strValue, BOOL bLoading);
+    HRESULT OnAttrPos(const SOUI::SStringW& strValue, BOOL bLoading);
 
-	BOOL    ParsePosition34(SOUI::POSITION_ITEM* pPosItem, const SOUI::SStringW & strPos3, const SOUI::SStringW &strPos4);
-	BOOL    ParsePosition12(SOUI::POSITION_ITEM* pPosItem, const SOUI::SStringW & strPos1, const SOUI::SStringW &strPos2);
-	BOOL    StrPos2ItemPos(const SOUI::SStringW &strPos, SOUI::POSITION_ITEM & pos);
-	int     PositionItem2Value(const SOUI::POSITION_ITEM &pos, int nMin, int nMax, BOOL bX);
+    BOOL ParsePosition34(SOUI::POS_INFO* pPosItem, const SOUI::SStringW & strPos3, const SOUI::SStringW &strPos4 );
+    BOOL ParsePosition12(SOUI::POS_INFO* pPosItem, const SOUI::SStringW & strPos1, const SOUI::SStringW &strPos2 );
+    BOOL StrPos2ItemPos(const SOUI::SStringW &strPos, SOUI::POS_INFO& pos);
+    int PositionItem2Value(const SOUI::POS_INFO& pos ,int nMin, int nMax,BOOL bX);
 
     SOUI_ATTRS_BEGIN()
         ATTR_STRINGW(L"id", m_strId, TRUE)
@@ -159,10 +164,10 @@ protected:
     SOUI_ATTRS_END()
 
     int             m_nPosCount;        /**< 定义左/居中对齐时的坐标个数 */
-	SOUI::POSITION_ITEM   m_itemPos[4];       /**< 由pos属性定义的值, m_nPosCount >0 时有效*/
+    SOUI::POS_INFO        m_itemPos[4];       /**< 由pos属性定义的值, m_nPosCount >0 时有效*/
 
-	SOUI::SStringW        m_strId;
-	SOUI::SStringW        m_strSource;
+    SOUI::SStringW        m_strId;
+    SOUI::SStringW        m_strSource;
 };
 
 class RichEditBubble : public RichEditBkImg
@@ -187,13 +192,13 @@ protected:
     SOUI_ATTRS_END()
 
     int             m_nLeftPosCount;        /**< 定义左/居中对齐时的坐标个数 */
-	SOUI::POSITION_ITEM   m_itemLeftPos[4];       /**< 由pos属性定义的值, m_nLeftPosCount >0 时有效*/
+    SOUI::POS_INFO        m_itemLeftPos[4];       /**< 由pos属性定义的值, m_nLeftPosCount >0 时有效*/
 
     int             m_nRightPosCount;       /**< 定义右对齐时的坐标个数 */
-	SOUI::POSITION_ITEM   m_itemRightPos[4];      /**< 由pos属性定义的值, m_nRightPosCount >0 时有效*/
+    SOUI::POS_INFO        m_itemRightPos[4];      /**< 由pos属性定义的值, m_nRightPosCount >0 时有效*/
 
-	SOUI::SStringW        m_strLeftBubble;
-	SOUI::SStringW        m_strRightBubble;
+    SOUI::SStringW        m_strLeftBubble;
+    SOUI::SStringW        m_strRightBubble;
 };
 
 
@@ -217,10 +222,10 @@ protected:
     SOUI_ATTRS_END()
 
     int             m_nLeftPosCount;     /**< 定义左/居中对齐时的坐标个数 */
-	SOUI::POSITION_ITEM   m_itemLeftPos[4];    /**< 由pos属性定义的值, m_nPosCount >0 时有效*/
+    SOUI::POS_INFO        m_itemLeftPos[4];    /**< 由pos属性定义的值, m_nPosCount >0 时有效*/
 
     int             m_nRightPosCount;    /**< 定义右对齐时的坐标个数 */
-	SOUI::POSITION_ITEM   m_itemRightPos[4];   /**< 由pos属性定义的值, m_nLeftPosCount >0 时有效*/
+    SOUI::POS_INFO        m_itemRightPos[4];   /**< 由pos属性定义的值, m_nLeftPosCount >0 时有效*/
 };
 
 class RichEditPara : public RichEditObj
@@ -231,7 +236,7 @@ public:
     RichEditPara();
     ~RichEditPara(){}
 
-	SOUI::CRect   GetRect();
+    SOUI::CRect   GetRect();
     void    UpdatePosition();
     BOOL    InsertIntoHost(IRichEditObjHost * pHost);
     void    SetAlign(AlignType align);
@@ -279,6 +284,6 @@ protected:
         ATTR_INT(L"auto-layout", m_bAutoLayout, TRUE) /**< 是否自动布局,该设置会覆盖align属性*/
     SOUI_ATTRS_END()
 
-	SOUI::SStringW    m_strType;
+    SOUI::SStringW    m_strType;
     BOOL        m_bAutoLayout;
 };

@@ -36,6 +36,8 @@ executable("360demo") {
     "../../SOUI",
     "../../third-part",
     "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_360demo_resource",
   ]
 
 

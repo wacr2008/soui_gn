@@ -1,23 +1,6 @@
 import("//build_overrides/common.gni") 
 
 
-action("gen_Emoji_resource") {
-  script  = "//build/gn_run_binary.py"
-  inputs  = [ "//uiresbuilder.exe" ]
-  outputs = [ "$target_gen_dir/gen_Emoji_resource.out" ]
-
-  # The script takes as arguments the binary to run, and then the arguments
-  # to pass it.
-  args = [
-          rebase_path("//uiresbuilder.exe", root_build_dir),
-          "-w src/demos/Emoji/",
-          "-i uires/uires.idx",
-          "-p uires",
-          "-r res/soui_res.rc2",
-          "-h res/R.h",
-          "idtable"
-         ] 
-}
  
 
 executable("Emoji") {
@@ -61,12 +44,13 @@ executable("Emoji") {
     "../../components",
   ]
 
-  deps = [ 
-    ":gen_Emoji_resource",
+  deps = [  
     "../../utilities",
     "../../SOUI",
     "../../third-part",
     "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_Emoji_resource",
   ]
 
 

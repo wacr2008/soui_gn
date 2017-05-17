@@ -2,7 +2,7 @@ import("//build_overrides/common.gni")
  
 
 shared_library("soui-sys-resource") {
-  configs += [ "//build/config:precompiled_headers" ]
+  #configs += [ "//build/config:precompiled_headers" ]
     
   ldflags = ["/NOENTRY"]
 
@@ -13,6 +13,7 @@ shared_library("soui-sys-resource") {
 
   sources = [
     #include files	
+    "DllMain.cpp",
     "soui-sys-resource.rc",
     "resource.h",
   ]

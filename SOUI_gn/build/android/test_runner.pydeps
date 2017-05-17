@@ -50,6 +50,7 @@
 ../../third_party/catapult/devil/devil/android/sdk/gce_adb_wrapper.py
 ../../third_party/catapult/devil/devil/android/sdk/intent.py
 ../../third_party/catapult/devil/devil/android/sdk/keyevent.py
+../../third_party/catapult/devil/devil/android/sdk/shared_prefs.py
 ../../third_party/catapult/devil/devil/android/sdk/split_select.py
 ../../third_party/catapult/devil/devil/android/sdk/version_codes.py
 ../../third_party/catapult/devil/devil/android/tools/__init__.py
@@ -173,8 +174,10 @@ pylib/results/flakiness_dashboard/results_uploader.py
 pylib/results/json_results.py
 pylib/results/report_results.py
 pylib/utils/__init__.py
+pylib/utils/decorators.py
 pylib/utils/device_dependencies.py
 pylib/utils/dexdump.py
+pylib/utils/logdog_helper.py
 pylib/utils/proguard.py
 pylib/utils/repo_utils.py
 pylib/valgrind_tools.py

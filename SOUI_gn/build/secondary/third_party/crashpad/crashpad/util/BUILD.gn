@@ -35,13 +35,22 @@ if (is_mac) {
     args = [ "{{source}}" ]
     args += rebase_path(outputs, root_build_dir)
     if (!use_system_xcode) {
-      args += [ hermetic_xcode_path ]
+      args += [
+        "--developer-dir",
+        hermetic_xcode_path,
+      ]
     }
+    args += [
+      "--sdk",
+      mac_sdk_path,
+    ]
   }
 }
 
 static_library("util") {
   sources = [
+    "file/delimited_file_reader.cc",
+    "file/delimited_file_reader.h",
     "file/file_io.cc",
     "file/file_io.h",
     "file/file_io_posix.cc",
@@ -85,8 +94,12 @@ static_library("util") {
     "misc/tri_state.h",
     "misc/uuid.cc",
     "misc/uuid.h",
+    "misc/zlib.cc",
+    "misc/zlib.h",
     "net/http_body.cc",
     "net/http_body.h",
+    "net/http_body_gzip.cc",
+    "net/http_body_gzip.h",
     "net/http_headers.cc",
     "net/http_headers.h",
     "net/http_multipart_builder.cc",
@@ -109,6 +122,8 @@ static_library("util") {
     "posix/drop_privileges.h",
     "posix/process_info.h",
     "posix/process_info_mac.cc",
+    "posix/signals.cc",
+    "posix/signals.h",
     "posix/symbolic_constants_posix.cc",
     "posix/symbolic_constants_posix.h",
     "stdlib/aligned_allocator.cc",
@@ -172,6 +187,8 @@ static_library("util") {
     "win/scoped_local_alloc.h",
     "win/scoped_process_suspend.cc",
     "win/scoped_process_suspend.h",
+    "win/session_end_watcher.cc",
+    "win/session_end_watcher.h",
     "win/termination_codes.h",
     "win/time.cc",
     "win/time.h",
@@ -228,6 +245,7 @@ static_library("util") {
   deps = [
     "//base",
     "//third_party/crashpad/crashpad/compat",
+    "//third_party/crashpad/crashpad/third_party/zlib",
   ]
 
   if (is_win) {

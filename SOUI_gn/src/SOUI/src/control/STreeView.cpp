@@ -1,6 +1,6 @@
 #include "souistd.h"
 #include "control/STreeView.h"
-
+#include <algorithm>
 
 namespace SOUI 
 {
@@ -137,7 +137,7 @@ namespace SOUI
         if(m_adapter->GetFirstChildItem(hItem)!=ITvAdapter::ITEM_NULL)
         {
             int nIndent = m_adapter->GetParentItem(hItem) == ITvAdapter::ITEM_ROOT?0:m_nIndent;
-            nRet = max(nRet,_GetBranchWidth(hItem)+nIndent);
+            nRet = (std::max)(nRet,_GetBranchWidth(hItem)+nIndent);
         }
         return nRet;
     }
@@ -247,7 +247,7 @@ namespace SOUI
                 nNewBranchWidth = 0;
                 while(hSib!=ITvAdapter::ITEM_NULL)
                 {
-                    nNewBranchWidth = max(nNewBranchWidth,_GetItemVisibleWidth(hSib));
+                    nNewBranchWidth = (std::max)(nNewBranchWidth,_GetItemVisibleWidth(hSib));
                     hSib = m_adapter->GetNextSiblingItem(hSib);
                 }
                 nNewBranchWidth += nIndent;
@@ -472,7 +472,6 @@ namespace SOUI
 		
         CRect rcClient;
         GetClientRect(&rcClient);
-        //int width = rcClient.Width();
         pRT->PushClipRect(&rcClient, RGN_AND);
 
         CRect rcClip, rcInter;
@@ -707,7 +706,7 @@ namespace SOUI
         //  关闭滚动条
         m_wBarVisible = SSB_NULL;
 
-        if (size.cy<szView.cy || (size.cy<szView.cy+m_nSbWid && size.cx<szView.cx))
+        if (size.cy<szView.cy || (size.cy<szView.cy+GetSbWidth() && size.cx<szView.cx))
         {
             //  需要纵向滚动条
             m_wBarVisible |= SSB_VERT;
@@ -715,15 +714,15 @@ namespace SOUI
             m_siVer.nMax  = szView.cy-1;
             m_siVer.nPage = rcClient.Height();
 
-            if (size.cx-m_nSbWid < szView.cx && !m_adapter->isViewWidthMatchParent())
+            if (size.cx-GetSbWidth() < szView.cx && !m_adapter->isViewWidthMatchParent())
             {
                 //  需要横向滚动条
                 m_wBarVisible |= SSB_HORZ;
-                m_siVer.nPage=size.cy-m_nSbWid > 0 ? size.cy-m_nSbWid : 0;//注意同时调整纵向滚动条page信息
+                m_siVer.nPage=size.cy-GetSbWidth() > 0 ? size.cy-GetSbWidth() : 0;//注意同时调整纵向滚动条page信息
 
                 m_siHoz.nMin  = 0;
                 m_siHoz.nMax  = szView.cx-1;
-                m_siHoz.nPage = (size.cx-m_nSbWid) > 0 ? (size.cx-m_nSbWid) : 0;
+                m_siHoz.nPage = (size.cx-GetSbWidth()) > 0 ? (size.cx-GetSbWidth()) : 0;
             }
             else
             {
@@ -923,7 +922,7 @@ namespace SOUI
 
 	void STreeView::OnItemRequestRelayout( SItemPanel *pItem )
 	{
-		  pItem->UpdateChildrenPosition();
+		  //pItem->UpdateChildrenPosition();
 	}
 
 	void STreeView::onBranchChanged(HTREEITEM hBranch)
@@ -972,7 +971,7 @@ namespace SOUI
 		else {
             if(uMsg==WM_LBUTTONDOWN || uMsg== WM_RBUTTONDOWN || uMsg==WM_MBUTTONDOWN)
 			{//交给panel处理
-				SItemPanel* pPanel = HitTest(pt);
+				SItemPanel* pPanel = HitTest(CPoint(pt));
 				if (!pPanel && m_hSelected)  //hit in none-item area,so make item to killfocus 
 				{
 					SItemPanel *pSelItem = GetItemPanel(m_hSelected);
@@ -1021,6 +1020,8 @@ namespace SOUI
 
 	void STreeView::OnMouseLeave()
 	{
+		__super::OnMouseLeave();
+
 		if(m_pHoverItem)
 		{
 			m_pHoverItem->DoFrameEvent(WM_MOUSELEAVE,0,0);
@@ -1174,13 +1175,41 @@ namespace SOUI
     void STreeView::OnColorize(COLORREF cr)
     {
         __super::OnColorize(cr);
-        SPOSITION pos = m_visible_items.GetHeadPosition();
-        while(pos)
-        {
-            ItemInfo ii = m_visible_items.GetNext(pos);
-            ii.pItem->DoColorize(cr);
-        }
+		DispatchMessage2Items(UM_SETCOLORIZE,cr,0);
     }
 
+
+	void STreeView::OnScaleChanged(int nScale)
+	{
+		__super::OnScaleChanged(nScale);
+		DispatchMessage2Items(UM_SETSCALE,nScale,0);
+	}
+
+	HRESULT STreeView::OnLanguageChanged()
+	{
+		HRESULT hret =__super::OnLanguageChanged();
+		DispatchMessage2Items(UM_SETLANGUAGE,0,0);
+		return hret;
+	}
+
+	void STreeView::DispatchMessage2Items(UINT uMsg,WPARAM wParam,LPARAM lParam)
+	{
+		SPOSITION pos = m_visible_items.GetHeadPosition();
+		while (pos)
+		{
+			ItemInfo ii = m_visible_items.GetNext(pos);
+			ii.pItem->SDispatchMessage(uMsg, wParam, lParam);
+		}
+		for(UINT i=0;i<m_itemRecycle.GetCount();i++)
+		{
+			SList<SItemPanel*> *pLstTypeItems = m_itemRecycle[i];
+			SPOSITION pos = pLstTypeItems->GetHeadPosition();
+			while(pos)
+			{
+				SItemPanel *pItem = pLstTypeItems->GetNext(pos);
+				pItem->SDispatchMessage(uMsg, wParam, lParam);
+			}
+		}
+	}
 
 }

@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include "helper/SAdapterBase.h"
 
 #define DEFAULT_LINE 10
@@ -70,11 +70,14 @@ public:
 	{
 		for (xmlTemplate = xmlTemplate.first_child(); xmlTemplate; xmlTemplate = xmlTemplate.next_sibling())
 		{
-			//æ­¤æ³•æœ‰å¾…éªŒè¯
+			//TODO: ´Ë·¨ÓĞ´ıÑéÖ¤
+			/*
 			if (static_cast<SOUI::SWindowFactoryMgr*>(SOUI::SApplication::getSingletonPtr())->HasKey(xmlTemplate.name()))
 			{
 				return 0;
 			}
+			*/
+
 			m_TemplateNames.Add(xmlTemplate.name());
 		}
 		return m_TemplateNames.GetCount();
@@ -84,7 +87,7 @@ public:
 	{
 		if (IniTemplateNames(xmlTemplate) > 0)
 		{
-			//æ­¤å¤„åå­—æ˜¯è‡ªå®šä¹‰çš„ï¼Œviewçš„çµæ´»æ€§ä¹Ÿå°±ä½“ç°åœ¨è¿™äº›åœ°æ–¹ã€‚
+			//´Ë´¦Ãû×ÖÊÇ×Ô¶¨ÒåµÄ£¬viewµÄÁé»îĞÔÒ²¾ÍÌåÏÖÔÚÕâĞ©µØ·½¡£
 			m_nItemHeight[0]= xmlTemplate.attribute(KAttrName_Height[0]).as_int(50);
 			m_nItemHeight[1] = xmlTemplate.attribute(KAttrName_Height[1]).as_int(60);
 			m_nItemHeight[2] = xmlTemplate.attribute(KAttrName_Height[2]).as_int(70);
@@ -111,7 +114,7 @@ public:
 	{
 		DWORD dwState = pItem->GetState();
 		int viewType = getItemViewType(position, dwState);
-		return SOUI::CSize(0, m_nItemHeight[viewType]);//cxåœ¨listviewï¼Œmclistviewä¸­æ²¡æœ‰ä½¿ç”¨ï¼Œä¸éœ€è¦è®¡ç®—
+		return SOUI::CSize(0, m_nItemHeight[viewType]);//cxÔÚlistview£¬mclistviewÖĞÃ»ÓĞÊ¹ÓÃ£¬²»ĞèÒª¼ÆËã
 	}
 
 	virtual void getView(int position, SOUI::SWindow * pItem, pugi::xml_node xmlTemplate)

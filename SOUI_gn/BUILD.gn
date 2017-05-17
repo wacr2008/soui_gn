@@ -3,6 +3,62 @@ import("//build_overrides/common.gni")
 declare_args() {
 }
  
+ 
+action("preBuild_setupdll_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_setupdll_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w src/demos/setupdll/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+  
+
+action("preBuild_Emoji_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_Emoji_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w src/demos/Emoji/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
+action("preBuild_MultiLangs_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_MultiLangs_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w src/demos/MultiLangs/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
 action("preBuild_UiEditor_resource") {
   script  = "//build/gn_run_binary.py"
   inputs  = [ "//uiresbuilder.exe" ]
@@ -20,6 +76,26 @@ action("preBuild_UiEditor_resource") {
           "idtable"
          ] 
 }
+
+
+action("preBuild_BesLyric_resource") {
+  script  = "//build/gn_run_binary.py"
+  inputs  = [ "//uiresbuilder.exe" ]
+  outputs = [ "$target_gen_dir/preBuild_BesLyric_resource.out" ]
+
+  # The script takes as arguments the binary to run, and then the arguments
+  # to pass it.
+  args = [
+          rebase_path("//uiresbuilder.exe", root_build_dir),
+          "-w src/demos/BesLyric/",
+          "-i uires/uires.idx",
+          "-p uires",
+          "-r res/soui_res.rc2",
+          "-h res/R.h",
+          "idtable"
+         ] 
+}
+
 
 
 action("preBuild_BaoFeng_resource") {
@@ -59,10 +135,10 @@ action("preBuild_QQMain_resource") {
 }
 
 
-action("preBuild_360_resource") {
+action("preBuild_360demo_resource") {
   script  = "//build/gn_run_binary.py"
   inputs  = [ "//uiresbuilder.exe" ]
-  outputs = [ "$target_gen_dir/preBuild_360_resource.out" ]
+  outputs = [ "$target_gen_dir/preBuild_360demo_resource.out" ]
 
   # The script takes as arguments the binary to run, and then the arguments
   # to pass it.
@@ -207,7 +283,7 @@ action("preBuild_souispy_resource") {
  
 
 group("gen_demo_resource") {
-  deps = [":preBuild_360_resource",
+  deps = [":preBuild_360demo_resource",
           ":preBuild_360Preview_resource",
           ":preBuild_demo_resource",
           ":preBuild_mclistview_demo_resource",
@@ -217,7 +293,9 @@ group("gen_demo_resource") {
           ":preBuild_souispy_resource",
           ":preBuild_QQMain_resource",
           ":preBuild_UiEditor_resource",
-          ":preBuild_BaoFeng_resource",          
+          ":preBuild_BaoFeng_resource",     
+          ":preBuild_BesLyric_resource",  
+          ":preBuild_Emoji_resource",   
          ]  
 }
 

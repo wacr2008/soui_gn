@@ -12,17 +12,17 @@ class OleTimerHandler : public SOUI::ITimelineHandler
 {
 public:
 
-	BOOL RegisterHandler(SOUI::ITimelineHandler *pHandler)
+    BOOL RegisterHandler( SOUI::ITimelineHandler *pHandler )
     {
-		SOUI::SPOSITION pos = m_lstHandler.Find(pHandler);
+        SOUI::SPOSITION pos= m_lstHandler.Find(pHandler);
         if(pos) return FALSE;
         m_lstHandler.AddTail(pHandler);
         return TRUE;
     }
 
-	BOOL UnregisterHandler(SOUI::ITimelineHandler *pHandler)
+    BOOL UnregisterHandler( SOUI::ITimelineHandler *pHandler )
     {
-		SOUI::SPOSITION pos = m_lstHandler.Find(pHandler);
+        SOUI::SPOSITION pos= m_lstHandler.Find(pHandler);
         if(!pos) return FALSE;
         m_lstHandler.RemoveAt(pos);
         return TRUE;
@@ -37,16 +37,16 @@ public:
         //SList<ITimelineHandler*> lstCopy;
         //CopyList(m_lstHandler,lstCopy);
 
-		SOUI::SPOSITION pos = m_lstHandler.GetHeadPosition();
+        SOUI::SPOSITION pos=m_lstHandler.GetHeadPosition();
         while(pos)
         {
-			SOUI::ITimelineHandler * pHandler = m_lstHandler.GetNext(pos);
+            SOUI::ITimelineHandler * pHandler = m_lstHandler.GetNext(pos);
             pHandler->OnNextFrame();
         }
     }
 
 protected:
-	SOUI::SList<SOUI::ITimelineHandler*>    m_lstHandler;
+    SOUI::SList<SOUI::ITimelineHandler*>    m_lstHandler;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -61,13 +61,13 @@ public:
     //
     // ISwndContainer methods
     //
-	BOOL            OnFireEvent(SOUI::EventArgs &evt);
-	SOUI::CRect           GetContainerRect();
+    BOOL            OnFireEvent(SOUI::EventArgs &evt);
+    SOUI::CRect           GetContainerRect();
     HWND            GetHostHwnd();
-	const SOUI::SStringW& GetTranslatorContext();
-	SOUI::IRenderTarget*  OnGetRenderTarget(const SOUI::CRect & rc, DWORD gdcFlags);
-	void            OnReleaseRenderTarget(SOUI::IRenderTarget * pRT, const SOUI::CRect &rc, DWORD gdcFlags);
-	void            OnRedraw(const SOUI::CRect &rc);
+    const SOUI::SStringW& GetTranslatorContext();
+	SOUI::IRenderTarget*  OnGetRenderTarget(const SOUI::CRect & rc,DWORD gdcFlags);
+    void            OnReleaseRenderTarget(SOUI::IRenderTarget * pRT,const SOUI::CRect &rc,DWORD gdcFlags);
+    void            OnRedraw(const SOUI::CRect &rc);
     BOOL            IsTranslucent() const;
     BOOL            IsSendWheel2Hover() const;
     BOOL            OnCreateCaret(SWND swnd,HBITMAP hBmp,int nWidth,int nHeight) {return FALSE;}
@@ -75,28 +75,29 @@ public:
     BOOL            OnSetCaretPos(int x,int y) {return FALSE;}
     BOOL            UpdateWindow();
 	void            UpdateTooltip();
-	BOOL            RegisterTimelineHandler(SOUI::ITimelineHandler *pHandler);
-	BOOL            UnregisterTimelineHandler(SOUI::ITimelineHandler *pHandler);
-	SOUI::SMessageLoop *  GetMsgLoop();
-	SOUI::IScriptModule * GetScriptModule() { return NULL; }
+    BOOL            RegisterTimelineHandler(SOUI::ITimelineHandler *pHandler);
+    BOOL            UnregisterTimelineHandler(SOUI::ITimelineHandler *pHandler);
+    SOUI::SMessageLoop *  GetMsgLoop();
+    SOUI::IScriptModule * GetScriptModule() { return NULL; }
+    int             GetScale() const { return 0; }
 
     //
     // internal public methods
     //
     void        SetHostRichEdit(IRichEditObjHost *);
     LRESULT     HandleEvent(UINT msg, WPARAM wParam, LPARAM lParam);
-	void        SetOleWindowRect(SOUI::CRect rcWindow)    { m_rcOleWindow = rcWindow; }
+    void        SetOleWindowRect(SOUI::CRect rcWindow)    { m_rcOleWindow = rcWindow; }
     void        SetDelayDraw(BOOL bDelayDraw)       { m_bDelayDraw  = bDelayDraw; }
 
 protected:
-	void        RealDraw(SOUI::CRect rc);
+    void        RealDraw(SOUI::CRect rc);
 
 private:
-	SOUI::ISwndContainer*         m_pHostContainer;
+    SOUI::ISwndContainer*         m_pHostContainer;
     IRichEditObjHost *      m_pHostRichEdit;
     int                     m_nWindowID;   
 
-	SOUI::CRect                   m_rcOleWindow;      // ole在richedit里面的位置   
+    SOUI::CRect                   m_rcOleWindow;      // ole在richedit里面的位置   
     BOOL                    m_bDelayDraw;       // 对于GIF，需要设置延迟刷新
 
     static OleTimerHandler  m_timerHandler;     // 定时器
@@ -183,7 +184,7 @@ public:
     void            SetDirty(BOOL bDirty);
     LRESULT         ProcessMessage(UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     BOOL            InsertIntoHost(IRichEditObjHost * pHost);
-	BOOL            OnUpdateToolTip(SOUI::CPoint pt, SOUI::SwndToolTipInfo &tipInfo);
+    BOOL            OnUpdateToolTip(SOUI::CPoint pt, SOUI::SwndToolTipInfo &tipInfo);
     BOOL            NeedToProcessMessage() {return TRUE; }
 
     // internal  methods
@@ -208,6 +209,6 @@ protected:
     OleWindow                   m_oleWindow;
     SIZE                        m_sizeNatural;
     GUID                        m_guidOle;
-	SOUI::SStringW                    m_strXmlLayout;
+    SOUI::SStringW                    m_strXmlLayout;
     BOOL                        m_bCanSelect;
 };

@@ -37,6 +37,8 @@ executable("souispy") {
     "../../SOUI",
     "../../third-part",
     "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_souispy_resource",
   ]
  
   if (is_win) {

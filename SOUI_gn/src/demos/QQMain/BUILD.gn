@@ -50,6 +50,8 @@ executable("QQMain") {
     "../../SOUI",
     "../../third-part",
     "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_QQMain_resource",
   ]
  
 

@@ -8,6 +8,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DISTRO=ubuntu
 DIST=precise
 DIST_UPDATES=precise-updates
+REPO_EXTRA="universe"
 
 # This is where we get all the debian packages from.
 APT_REPO=http://archive.ubuntu.com/ubuntu
@@ -71,6 +72,8 @@ DEBIAN_PACKAGES="\
   libfontconfig1-dev
   libfreetype6
   libfreetype6-dev
+  libgbm1
+  libgbm-dev
   libgcc1
   libgconf-2-4
   libgconf2-4
@@ -172,6 +175,8 @@ DEBIAN_PACKAGES="\
   libxi-dev
   libxinerama1
   libxinerama-dev
+  libxkbcommon0
+  libxkbcommon-dev
   libxrandr2
   libxrandr-dev
   libxrender1

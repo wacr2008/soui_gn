@@ -2530,7 +2530,7 @@ INTERNAL U8 *SetOperands(INSTRUCTION *Instruction, U8 *Address, U32 Flags)
 {
 	INSTRUCTION_OPERAND *Operand;
 	U32 Index, OperandIndex;
-	//S64 Displacement = 0;
+//	S64 Displacement = 0;
 	U8 Register;
 	U32 OperandFlags, OperandType, AddressMode, Segment;
 	U8 Opcode;

@@ -39,6 +39,7 @@ android_java_prebuilt("android_gcm_java") {
 
 android_java_prebuilt("emma_device_java") {
   jar_path = "$android_sdk_root/tools/lib/emma_device.jar"
+  include_java_resources = true
 }
 
 android_aar_prebuilt("android_support_design_java") {
@@ -46,6 +47,14 @@ android_aar_prebuilt("android_support_design_java") {
     ":android_support_v7_appcompat_java",
   ]
   _lib_name = "design"
+  aar_path = "$lib_path/$_lib_name/$lib_version/$_lib_name-$lib_version.aar"
+}
+
+android_aar_prebuilt("android_support_transition_java") {
+  deps = [
+    ":android_support_v7_appcompat_java",
+  ]
+  _lib_name = "transition"
   aar_path = "$lib_path/$_lib_name/$lib_version/$_lib_name-$lib_version.aar"
 }
 
@@ -124,6 +133,14 @@ java_group("android_support_v7_appcompat_java") {
   ]
 }
 
+android_aar_prebuilt("android_support_v7_gridlayout_java") {
+  deps = [
+    ":android_support_v7_appcompat_java",
+  ]
+  _lib_name = "gridlayout-v7"
+  aar_path = "$lib_path/$_lib_name/$lib_version/$_lib_name-$lib_version.aar"
+}
+
 android_aar_prebuilt("android_support_v7_mediarouter_java") {
   deps = [
     ":android_support_v7_appcompat_java",
@@ -177,7 +194,7 @@ android_java_prebuilt("legacy_http_javalib") {
 
 # TODO(dgn): Use the POM files instead of hardcoding the dependencies.
 gms_path = "$default_extras_android_sdk_root/extras/google/m2repository/com/google/android/gms"
-gms_version = "10.0.1"
+gms_version = "10.2.0"
 
 android_aar_prebuilt("google_play_services_basement_java") {
   deps = [
