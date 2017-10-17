@@ -89,7 +89,6 @@
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif // !WIN32_LEAN_AND_MEAN
-
 #include <Windows.h>
 #include <intrin.h>
 #endif
@@ -1146,6 +1145,8 @@ bool ThreadHelper::wait()
     return true;
 }
 
+static const char * LOG4Z_MAIN_LOGGER_KEY = "main";
+static const LoggerId LOG4Z_INVALID_LOGGER_ID = -1;
 //////////////////////////////////////////////////////////////////////////
 //! LogerManager
 //////////////////////////////////////////////////////////////////////////
@@ -1448,7 +1449,7 @@ bool LogerManager::pushLog(LoggerId id, int level, const char * filter, const ch
         {
 #if defined (WIN32) || defined(_WIN64)
 
-            int ret = _snprintf_s(pLog->_content, LOG4Z_LOG_BUF_SIZE, _TRUNCATE, "pid=%u tid=%u %d-%02d-%02d %02d:%02d:%02d.%03d %s %s %s \"%s\" \r\n",
+            int ret = _snprintf_s(pLog->_content, LOG4Z_LOG_BUF_SIZE, _TRUNCATE, "pid=%u tid=%u %d-%02d-%02d %02d:%02d:%02d.%03d %s %s %s \"%s\"\r\n",
                 pid, tid,
                 tt.tm_year + 1900, tt.tm_mon + 1, tt.tm_mday, tt.tm_hour, tt.tm_min, tt.tm_sec, pLog->_precise,
                 LOG_STRING[pLog->_level], pModuleName, filter, log);
@@ -1484,7 +1485,7 @@ bool LogerManager::pushLog(LoggerId id, int level, const char * filter, const ch
             else pNameBegin ++;            
             
 #if defined (WIN32) || defined(_WIN64)
-            int ret = _snprintf_s(pLog->_content, LOG4Z_LOG_BUF_SIZE, _TRUNCATE, "pid=%u tid=%u %d-%02d-%02d %02d:%02d:%02d.%03d %s %s %s \"%s\" %s (%s):%d \r\n",
+            int ret = _snprintf_s(pLog->_content, LOG4Z_LOG_BUF_SIZE, _TRUNCATE, "pid=%u tid=%u %d-%02d-%02d %02d:%02d:%02d.%03d %s %s %s \"%s\" %s (%s):%d\r\n",
                 pid, tid,
                 tt.tm_year + 1900, tt.tm_mon + 1, tt.tm_mday, tt.tm_hour, tt.tm_min, tt.tm_sec, pLog->_precise,
                 LOG_STRING[pLog->_level], pModuleName, filter, log, func, pNameBegin, line);
@@ -1522,12 +1523,12 @@ bool LogerManager::pushLog(LoggerId id, int level, const char * filter, const ch
         showColorText(pLog->_content, pLog->_level);
     }
 
-    if (LOG4Z_ALL_DEBUGOUTPUT_DISPLAY && LOG4Z_ALL_SYNCHRONOUS_OUTPUT)
-    {
+	if (LOG4Z_ALL_DEBUGOUTPUT_DISPLAY && LOG4Z_ALL_SYNCHRONOUS_OUTPUT)
+	{
 #if defined (WIN32) || defined(_WIN64)
-        OutputDebugStringA(pLog->_content);
+		OutputDebugStringA(pLog->_content);
 #endif
-    }
+	}
 
     if (_loggers[pLog->_id]._outfile && LOG4Z_ALL_SYNCHRONOUS_OUTPUT)
     {
@@ -1806,7 +1807,7 @@ bool LogerManager::popLog(LogData *& log)
 void LogerManager::run()
 {
     _runing = true;
-    pushLog(0, LOG_LEVEL_ALARM, "logger", "-----------------  log4z thread started!   ----------------------------", NULL, 0 , NULL,NULL);
+    pushLog(0, LOG_LEVEL_ALARM, "logger", "-----------------  log4z thread started!   ----------------------------", __FILE__, __LINE__ , __FUNCTION__,_ReturnAddress());
     for (int i = 0; i <= _lastId; i++)
     {
         if (_loggers[i]._enable)
@@ -1818,7 +1819,7 @@ void LogerManager::run()
                 <<" path=" <<_loggers[i]._path
                 <<" level=" << _loggers[i]._level
                 <<" display=" << _loggers[i]._display;
-            pushLog(0, LOG_LEVEL_ALARM, "logger", ss.str().c_str(), NULL, 0 , NULL,NULL);
+            pushLog(0, LOG_LEVEL_ALARM, "logger", ss.str().c_str(), __FILE__, __LINE__ , __FUNCTION__,_ReturnAddress());
         }
     }
 

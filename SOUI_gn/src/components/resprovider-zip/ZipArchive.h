@@ -1,4 +1,4 @@
-#ifndef __ZIPARCHIVE_H__
+Ôªø#ifndef __ZIPARCHIVE_H__
 #define __ZIPARCHIVE_H__
 
 #pragma once
@@ -142,7 +142,7 @@ protected:
 		WORD	compression;		//	COMP_xxxx
 		WORD	modTime;
 		WORD	modDate;
-		DWORD	crc32;
+		DWORD	vcrc32;
 		DWORD	cSize;
 		DWORD	ucSize;
 		WORD	fnameLen;			//	Filename string follows header.
@@ -185,7 +185,7 @@ public:
 	BOOL GetFile(int iIndex, CZipFile& file);
 	DWORD GetFileSize(LPCTSTR pszFileName);
 	DWORD GetFileSize(int iIndex);
-	//file∂‘œÛ÷–“—æ≠∑÷≈‰∫√ƒ⁄¥Ê°£
+	//fileÂØπË±°‰∏≠Â∑≤ÁªèÂàÜÈÖçÂ•ΩÂÜÖÂ≠ò„ÄÇ
 	BOOL GetFile2(LPCTSTR pszFileName, CZipFile& file)
 	{
 		return GetFile2(GetFileIndex(pszFileName),file);

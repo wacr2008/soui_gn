@@ -11,7 +11,7 @@
     <text pos="28,125">Available space:</text>
     <text name="txt_choose_requiredspace" pos="100,105"></text>
     <text name="txt_choose_freespace" pos="100,125"></text>
-    
+
     <imgbtn name="btn_choose_install"  skin="img_custom_button" pos="-100,-33"  animate="1" >install</imgbtn>
     <imgbtn name="btn_choose_previous"  skin="img_custom_button" pos="-200,-33"  animate="1" >previous</imgbtn>
   </caption>

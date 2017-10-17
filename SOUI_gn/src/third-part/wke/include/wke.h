@@ -1,4 +1,4 @@
-/*
+﻿/*
  * 
  * BlzFans@hotmail.com
  * http://wke.sf.net

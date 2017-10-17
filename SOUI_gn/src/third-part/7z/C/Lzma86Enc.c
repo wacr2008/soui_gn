@@ -1,4 +1,4 @@
-/* Lzma86Enc.c -- LZMA + x86 (BCJ) Filter Encoder
+﻿/* Lzma86Enc.c -- LZMA + x86 (BCJ) Filter Encoder
 2016-05-16 : Igor Pavlov : Public domain */
 
 #include "Precomp.h"

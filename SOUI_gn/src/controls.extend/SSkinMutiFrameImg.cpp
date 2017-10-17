@@ -1,3 +1,4 @@
+ï»¿
 #include "SSkinMutiFrameImg.h"
 #include <helper/SplitString.h>
 #include <interface/imgdecoder-i.h>
@@ -10,6 +11,12 @@ using namespace Gdiplus;
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SSkinMutiFrameImg, L"imgMutiFrame")
+
+	SOUI_ATTRS_BEGIN(SSkinMutiFrameImg)
+		ATTR_CUSTOM(L"src", OnAttrSrc)   //XMLæ–‡ä»¶ä¸­æŒ‡å®šçš„å›¾ç‰‡èµ„æºå,(type:name)
+	SOUI_ATTRS_END()
+
 
     LRESULT SSkinMutiFrameImg::OnAttrSrc( const SStringW &strValue,BOOL bLoading )
     {
@@ -27,7 +34,7 @@ namespace SOUI
                 GETRESPROVIDER->GetRawBuffer(strLst[0],strLst[1],pBuf,szBuf);
             }
         }else
-        {//×Ô¶¯´ÓGIF×ÊÔ´ÀàÐÍÀï²éÕÒ×ÊÔ´
+        {//è‡ªåŠ¨ä»ŽGIFèµ„æºç±»åž‹é‡ŒæŸ¥æ‰¾èµ„æº
             szBuf=GETRESPROVIDER->GetRawBufferSize(_T("gif"),strLst[0]);
             if(szBuf)
             {

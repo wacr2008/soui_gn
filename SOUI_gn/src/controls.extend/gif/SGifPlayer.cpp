@@ -1,9 +1,24 @@
+﻿
 #include "SGifPlayer.h"
 #include "sskingif.h"
 #include "SSkinAPNG.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SSkinAni, L"skinani")
+
+	SOUI_CLASS_NAME(SGifPlayer, L"gifplayer")   //定义GIF控件在XM加的标签
+
+	SOUI_ATTRS_BEGIN(SGifPlayer)
+		ATTR_CUSTOM(L"skin", OnAttrSkin) //为控件提供一个skin属性，用来接收SSkinObj对象的name
+	SOUI_ATTRS_END()
+
+	SOUI_MSG_MAP_BEGIN(SGifPlayer)
+		MSG_WM_PAINT_EX(OnPaint)    //窗口绘制消息
+		MSG_WM_SHOWWINDOW(OnShowWindow)//窗口显示状态消息
+		MSG_WM_DESTROY(OnDestroy)
+	SOUI_MSG_MAP_END()
+
 
 SGifPlayer::SGifPlayer() :m_aniSkin(NULL), m_iCurFrame(0),m_nNextInterval(0)
 {

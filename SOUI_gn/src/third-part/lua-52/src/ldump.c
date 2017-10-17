@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: ldump.c,v 2.17.1.1 2013/04/12 18:48:47 roberto Exp $
 ** save precompiled Lua chunks
 ** See Copyright Notice in lua.h

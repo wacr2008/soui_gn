@@ -170,10 +170,7 @@ public:
         SkASSERT(width <= fWidth);
 
         // Make sure that we're only ever bracketing calls to blitAntiH.
-#ifdef SK_DEBUG
-		bool v = ((0 == y) || (!fCalledOnceWithNonzeroY && (fCalledOnceWithNonzeroY == true)));
-        SkASSERT(v);
-#endif
+        SkASSERT((0 == y) || (!fCalledOnceWithNonzeroY && (fCalledOnceWithNonzeroY = true)));
         
 #if !(PEDANTIC_BLIT_RECT)
         for (int i = 0; i < height; ++i) {
@@ -312,7 +309,7 @@ public:
     virtual void blitMask(const SkMask& mask, const SkIRect& clip) SK_OVERRIDE {
 
         // Assumptions:
-        SkASSERT(!fBlitMaskCalled && (fBlitMaskCalled == true));
+        SkASSERT(!fBlitMaskCalled && (fBlitMaskCalled = true));
         SkASSERT(SkMask::kA8_Format == mask.fFormat);
         SkASSERT(mask.fBounds.contains(clip));
 

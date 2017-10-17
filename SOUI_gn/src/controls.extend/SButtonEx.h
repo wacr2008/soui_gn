@@ -1,10 +1,10 @@
-#pragma once
+Ôªø#pragma once
 
 namespace SOUI
 {
     class SButtonEx : public SButton
     {
-    SOUI_CLASS_NAME(SButtonEx,L"buttonex")
+    SOUI_CLASS_NAME_DECL(SButtonEx,L"buttonex")
     
     enum{
     FREE_DRAW,
@@ -21,21 +21,8 @@ namespace SOUI
         HICON SetIcon(HICON hIcon,int nIconSize);
         void  SetIconVisible(bool bVisible);
     public:
-        SOUI_ATTRS_BEGIN()
-            ATTR_POINT(L"pushOffset",m_ptPushOffet,TRUE)//œ¬—π◊¥Ã¨’˚ÃÂ∆´“∆
-            ATTR_SKIN(L"icon",m_pIcon,TRUE) //Õº±ÍSKIN
-            ATTR_INT(L"iconIndex",m_iIcon,TRUE)//Õº±Í‘⁄Skin÷–µƒÀ˜“˝
-            ATTR_ENUM_BEGIN(L"drawMode",int,TRUE)
-                ATTR_ENUM_VALUE(L"freeDraw",FREE_DRAW)
-                ATTR_ENUM_VALUE(L"vertIconText",VERT_ICON_TEXT)
-                ATTR_ENUM_VALUE(L"vertTextIcon",VERT_TEXT_ICON)
-                ATTR_ENUM_VALUE(L"horzIconText",HORZ_ICON_TEXT)
-                ATTR_ENUM_VALUE(L"horzTextIcon",HORZ_TEXT_ICON)
-            ATTR_ENUM_END(m_drawMode)
-            ATTR_INT(L"sepSize",m_nSepSize,TRUE)    //FREE_DRAW ±Œﬁ–ß
-            ATTR_POINT(L"iconPos",m_ptIcon,TRUE)//Õº±Íœ‘ æŒª÷√,FREE_DRAW ±”––ß
-            ATTR_POINT(L"textPos",m_ptText,TRUE)//Œƒ±æœ‘ æŒª÷√,FREE_DRAW ±”––ß
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL()
+		SOUI_MSG_MAP_DECL()
         
     protected:
         virtual CSize GetDesiredSize(LPCRECT pRcContainer);
@@ -46,16 +33,14 @@ namespace SOUI
     protected:
         void OnPaint(IRenderTarget *pRT);
         
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_PAINT_EX(OnPaint)
-        SOUI_MSG_MAP_END()
+        
         
     protected:
         HICON       m_hIcon;
         int         m_nIconSize;
         
         ISkinObj * m_pIcon;
-        int        m_iIcon;//-1¥˙±Ìm_pIcon «“ª∏ˆ∂¿’ºµƒ∆§∑Ù
+        int        m_iIcon;//-1‰ª£Ë°®m_pIconÊòØ‰∏Ä‰∏™Áã¨Âç†ÁöÑÁöÆËÇ§
         CPoint     m_ptIcon;
         CPoint     m_ptText;
         CPoint     m_ptPushOffet;

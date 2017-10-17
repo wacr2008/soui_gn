@@ -1,4 +1,4 @@
-/* Sha256.h -- SHA-256 Hash
+﻿/* Sha256.h -- SHA-256 Hash
 2013-01-18 : Igor Pavlov : Public domain */
 
 #ifndef __CRYPTO_SHA256_H

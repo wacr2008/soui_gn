@@ -1,4 +1,4 @@
-// imgdecoder-gdip.cpp : Defines the exported functions for the DLL application.
+﻿// imgdecoder-gdip.cpp : Defines the exported functions for the DLL application.
 //
 
 #include <Windows.h>
@@ -17,8 +17,8 @@ namespace SOUI
     //////////////////////////////////////////////////////////////////////////
     //  SImgFrame_PNG
     SImgFrame_GDIP::SImgFrame_GDIP()
-        :m_pdata(NULL)
-        ,m_nWid(0)
+        :m_nWid(0)
+		, m_pdata(NULL)
         ,m_nHei(0)
         ,m_nFrameDelay(0)
     {
@@ -129,6 +129,12 @@ namespace SOUI
     {
         if(m_pImgArray) delete []m_pImgArray;
     }
+
+	IImgFrame * SImgX_GDIP::GetFrame(UINT iFrame)
+	{
+		if (iFrame >= GetFrameCount()) return NULL;
+		return m_pImgArray + iFrame;
+	}
 
     UINT SImgX_GDIP::GetFrameCount()
     {

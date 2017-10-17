@@ -1,4 +1,4 @@
-#include <stdio.h>
+Ôªø#include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
 
@@ -23,7 +23,7 @@ struct IPngReader_Mem : public IPngReader
     png_size_t   nLen;
     
     IPngReader_Mem(const char *_pbuf,png_size_t _nLen):pbuf(_pbuf),nLen(_nLen){}
-    png_size_t read(png_bytep data, png_size_t length)
+    png_size_t read(png_bytep data, png_size_t length) override
     {
         if(nLen < length) length = nLen;
         memcpy(data,pbuf,length);
@@ -38,7 +38,7 @@ struct IPngReader_File: public IPngReader
     FILE *f;
     IPngReader_File(FILE *_f):f(_f){}
     
-    png_size_t read(png_bytep data, png_size_t length)
+    png_size_t read(png_bytep data, png_size_t length) override
     {
         return fread(data,1,length,f);
     }
@@ -108,10 +108,10 @@ APNGDATA * loadPng(IPngReader *pSrc)
     apng->nWid  = png_ptr_read->width;
     apng->nHei = png_ptr_read->height;
     
-    //ÕºœÒ÷° ˝æ›
+    //ÂõæÂÉèÂ∏ßÊï∞ÊçÆ
     dataFrame = (png_bytep)malloc(bytesPerRow * apng->nHei);
     memset(dataFrame,0,bytesPerFrame);
-    //ªÒµ√…®√Ë––÷∏’Î
+    //Ëé∑ÂæóÊâ´ÊèèË°åÊåáÈíà
     rowPointers = (png_bytepp)malloc(sizeof(png_bytep)* apng->nHei);
     for(int i=0;i<apng->nHei;i++)
         rowPointers[i] = dataFrame + bytesPerRow * i;
@@ -125,9 +125,9 @@ APNGDATA * loadPng(IPngReader *pSrc)
         apng->nFrames =1;
 	}else
 	{//load apng
-        apng->nFrames  = png_get_num_frames(png_ptr_read, info_ptr_read);//ªÒ»°◊‹÷° ˝
+        apng->nFrames  = png_get_num_frames(png_ptr_read, info_ptr_read);//Ëé∑ÂèñÊÄªÂ∏ßÊï∞
 
-        png_bytep data = (png_bytep)malloc( bytesPerFrame * apng->nFrames);//Œ™√ø“ª÷°∑÷≈‰ƒ⁄¥Ê
+        png_bytep data = (png_bytep)malloc( bytesPerFrame * apng->nFrames);//‰∏∫ÊØè‰∏ÄÂ∏ßÂàÜÈÖçÂÜÖÂ≠ò
         png_bytep curFrame = (png_bytep)malloc(bytesPerFrame);
         memset(curFrame,0,bytesPerFrame);
                
@@ -136,10 +136,10 @@ APNGDATA * loadPng(IPngReader *pSrc)
         
         for(int iFrame = 0;iFrame<apng->nFrames;iFrame++)
         {
-            //∂¡÷°–≈œ¢Õ∑
+            //ËØªÂ∏ß‰ø°ÊÅØÂ§¥
             png_read_frame_head(png_ptr_read, info_ptr_read);
             
-            //º∆À„≥ˆ÷°—” ±–≈œ¢
+            //ËÆ°ÁÆóÂá∫Â∏ßÂª∂Êó∂‰ø°ÊÅØ
             if (png_get_valid(png_ptr_read, info_ptr_read, PNG_INFO_fcTL))
             {
                 png_uint_16 delay_num = info_ptr_read->next_frame_delay_num,
@@ -159,15 +159,15 @@ APNGDATA * loadPng(IPngReader *pSrc)
             {
                 apng->pDelay[iFrame] = 0;
             }
-            //∂¡»°PNG÷°µΩdataFrame÷–£¨≤ª∫¨∆´“∆ ˝æ›
+            //ËØªÂèñPNGÂ∏ßÂà∞dataFrame‰∏≠Ôºå‰∏çÂê´ÂÅèÁßªÊï∞ÊçÆ
             png_read_image(png_ptr_read, rowPointers);
-            {//Ω´µ±«∞÷° ˝æ›ªÊ÷∆µΩµ±«∞œ‘ æ÷°÷–:1)ªÒµ√ªÊ÷∆µƒ±≥æ∞£ª2)º∆À„≥ˆªÊ÷∆Œª÷√; 3) π”√÷∏∂®µƒªÊ÷∆∑Ω Ω”Î±≥æ∞ªÏ∫œ
+            {//Â∞ÜÂΩìÂâçÂ∏ßÊï∞ÊçÆÁªòÂà∂Âà∞ÂΩìÂâçÊòæÁ§∫Â∏ß‰∏≠:1)Ëé∑ÂæóÁªòÂà∂ÁöÑËÉåÊôØÔºõ2)ËÆ°ÁÆóÂá∫ÁªòÂà∂‰ΩçÁΩÆ; 3)‰ΩøÁî®ÊåáÂÆöÁöÑÁªòÂà∂ÊñπÂºè‰∏éËÉåÊôØÊ∑∑Âêà
 
 
-                //1)º∆À„≥ˆªÊ÷∆Œª÷√
+                //1)ËÆ°ÁÆóÂá∫ÁªòÂà∂‰ΩçÁΩÆ
                 png_bytep lineDst=curFrame+info_ptr_read->next_frame_y_offset*bytesPerRow + 4 * info_ptr_read->next_frame_x_offset;
                 png_bytep lineSour=dataFrame;
-                //2) π”√÷∏∂®µƒªÊ÷∆∑Ω Ω”Î±≥æ∞ªÏ∫œ
+                //2)‰ΩøÁî®ÊåáÂÆöÁöÑÁªòÂà∂ÊñπÂºè‰∏éËÉåÊôØÊ∑∑Âêà
                 switch(info_ptr_read->next_frame_blend_op)
                 {
                 case PNG_BLEND_OP_OVER:
@@ -179,10 +179,14 @@ APNGDATA * loadPng(IPngReader *pSrc)
                             for(unsigned int x=0;x<info_ptr_read->next_frame_width;x++)
                             {
                                 png_byte alpha = lineSour1[3];
-                                *lineDst1++ = ((*lineDst1)*(255-alpha)+(*lineSour1++)*alpha)>>8;
-                                *lineDst1++ = ((*lineDst1)*(255-alpha)+(*lineSour1++)*alpha)>>8;
-                                *lineDst1++ = ((*lineDst1)*(255-alpha)+(*lineSour1++)*alpha)>>8;
-                                *lineDst1++ = ((*lineDst1)*(255-alpha)+(*lineSour1++)*alpha)>>8;
+                                *lineDst1 = ((*lineDst1)*(255-alpha)+(*lineSour1++)*alpha)>>8;
+								lineDst1++;
+                                *lineDst1 = ((*lineDst1)*(255-alpha)+(*lineSour1++)*alpha)>>8;
+								lineDst1++;
+                                *lineDst1 = ((*lineDst1)*(255-alpha)+(*lineSour1++)*alpha)>>8;
+								lineDst1++;
+                                *lineDst1 = ((*lineDst1)*(255-alpha)+(*lineSour1++)*alpha)>>8;
+								lineDst1++;
                             }
                             lineDst += bytesPerRow;
                             lineSour+= bytesPerRow;
@@ -209,7 +213,7 @@ APNGDATA * loadPng(IPngReader *pSrc)
 
                 lineDst=curFrame+info_ptr_read->next_frame_y_offset*bytesPerRow + 4 * info_ptr_read->next_frame_x_offset;
 
-                //3)¥¶¿Ìµ±«∞÷°ªÊ÷∆«¯”Ú
+                //3)Â§ÑÁêÜÂΩìÂâçÂ∏ßÁªòÂà∂Âå∫Âüü
                 switch(info_ptr_read->next_frame_dispose_op)
                 {
                 case PNG_DISPOSE_OP_BACKGROUND://clear background

@@ -1,7 +1,6 @@
 ﻿#include "ui/adapter/NewChannelListItemAdapter.h"
 #include "ui/SToggleEx.h"
-
-#include "res/R.h" 
+#include "res/R.h"
  
 namespace SOUI
 {  
@@ -11,6 +10,11 @@ const wchar_t * KNewChannelAttrName_Height[] = {
 	L"friendItemHeight" 
 };
 
+
+bool CNewChannelListItemAdapter::IsColumnVisible(int iCol) const
+{
+	return true;
+}
 CNewChannelListItemAdapter::CNewChannelListItemAdapter(int data, live::IListItemCallback *pCB)
 { 
 	this->SetCallback(data, pCB);

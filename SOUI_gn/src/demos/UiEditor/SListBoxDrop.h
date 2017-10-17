@@ -1,11 +1,9 @@
-#pragma once
+Ôªø#pragma once
 #include "DesignerView.h"
 #include "Adapter.h"
-namespace SOUI
-{
 class SPrintWindow : public SWindow
 {
-	SOUI_CLASS_NAME(SPrintWindow, L"SPrintWindow")
+	SOUI_CLASS_NAME_DECL(SPrintWindow, L"SPrintWindow")
 public:
 	void Attach(SWindow *pHostCtrl)
 	{
@@ -40,7 +38,7 @@ protected:
 };
 class CDropWnd : public SWindow
 {
-	SOUI_CLASS_NAME(CDropWnd, L"dropwindow")
+	SOUI_CLASS_NAME_DECL(CDropWnd, L"dropwindow")
 private:
 	CAutoRefPtr<IRenderTarget> m_memRt;	
 	HWND m_hHostWnd;
@@ -71,7 +69,7 @@ public:
 	}
 	void MoveWindow(CPoint &pt)
 	{
-		//if (GetParent()->IsVisible()) //“—æ≠±£÷§œ‘ æ≤≈Õœ∂Ø
+		//if (GetParent()->IsVisible()) //Â∑≤Áªè‰øùËØÅÊòæÁ§∫ÊâçÊãñÂä®
 		{
 			CRect parentRc=GetParent()->GetClientRect();			
 			if (parentRc.PtInRect(pt))
@@ -92,13 +90,11 @@ public:
 			}
 		}
 	}
-	SOUI_MSG_MAP_BEGIN()
-		MSG_WM_PAINT_EX(OnPaint)
-	SOUI_MSG_MAP_END()
+	SOUI_MSG_MAP_DECL()
 };
 class SListBoxDrop :public SListBox
 {
-	SOUI_CLASS_NAME(SListBoxDrop, L"listboxdrop")
+	SOUI_CLASS_NAME_DECL(SListBoxDrop, L"listboxdrop")
 private:
 	SMap<SStringT, pugi::xml_node> * m_controlDb;
 	SDesignerView *m_pDesignerView;	
@@ -130,7 +126,7 @@ public:
 			{
 				SStringT strText;
 				GetText(iHoverItem, strText);
-				SMap<SStringT, pugi::xml_node>::CPair *p = m_controlDb->Lookup(strText);  //≤È’“
+				SMap<SStringT, pugi::xml_node>::CPair *p = m_controlDb->Lookup(strText);  //Êü•Êâæ
 				if (p)
 				{
 					ctrlNode = p->m_value;
@@ -143,14 +139,14 @@ public:
 						m_pDesignerView->UseEditorUIDef(false);
 
 						pChild->InitFromXml(p->m_value.first_child());
-						//viewœµ¡–º”…œ  ≈‰∆˜
+						//viewÁ≥ªÂàóÂä†‰∏äÈÄÇÈÖçÂô®
 						if (pChild->IsClass(SMCListView::GetClassNameW()))
 						{
 							CBaseMcAdapterFix *mcAdapter = new CBaseMcAdapterFix();
 							((SMCListView*)pChild)->SetAdapter(mcAdapter);
 							mcAdapter->Release();
 						}
-						//listview(flex)–Ë“™÷ÿ–¬¥¶¿Ì£¨”–ø’‘Ÿ¿¥
+						//listview(flex)ÈúÄË¶ÅÈáçÊñ∞Â§ÑÁêÜÔºåÊúâÁ©∫ÂÜçÊù•
 						if (pChild->IsClass(SListView::GetClassNameW()))
 						{
 							CBaseAdapterFix *listAdapter = new CBaseAdapterFix();
@@ -210,10 +206,5 @@ public:
 			m_pDesignerView->UpdatePropGrid(m_pDesignerView->m_xmlNode);
 		}
 	}
-	SOUI_MSG_MAP_BEGIN()
-		MSG_WM_LBUTTONDOWN(OnLButtonDown)
-		MSG_WM_MOUSEMOVE(OnMouseMove)
-		MSG_WM_LBUTTONUP(OnLButtonUp)
-	SOUI_MSG_MAP_END()
+	SOUI_MSG_MAP_DECL()
 };
-}

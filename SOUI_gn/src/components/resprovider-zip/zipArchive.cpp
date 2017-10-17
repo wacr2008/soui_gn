@@ -1,4 +1,4 @@
-#include "ZipArchive.h"
+ï»¿#include "ZipArchive.h"
 #include <assert.h>
 
 #ifndef __cplusplus
@@ -113,14 +113,14 @@ CZipFile::CZipFile(DWORD dwSize/*=0*/)
 	}
 
 #ifdef ZLIB_DECRYPTION
-	BOOL CZipFile::_DecryptFile(LPCSTR pstrPassword, LPBYTE& pData, DWORD& dwSize, DWORD crc32)
+	BOOL CZipFile::_DecryptFile(LPCSTR pstrPassword, LPBYTE& pData, DWORD& dwSize, DWORD vcrc32)
 	{
 		_ASSERTE(pData);
 		_ASSERTE(!::IsBadStringPtrA(pstrPassword, (UINT_PTR)-1));
 
 		if (!_InitKeys(pstrPassword))
 			return FALSE;
-		if (!_DecryptHeader(pData, dwSize, crc32))
+		if (!_DecryptHeader(pData, dwSize, vcrc32))
 			return FALSE;
 		if (!_DecryptData(pData, dwSize))
 			return FALSE;
@@ -130,7 +130,7 @@ CZipFile::CZipFile(DWORD dwSize/*=0*/)
 
 	BOOL CZipFile::_InitKeys(LPCSTR pstrPassword)
 	{
-		m_pCrcTable = get_crc_table();
+		m_pCrcTable = (const DWORD *)get_crc_table();
 		m_dwKey[0] = 305419896;
 		m_dwKey[1] = 591751049;
 		m_dwKey[2] = 878082192;
@@ -159,7 +159,7 @@ CZipFile::CZipFile(DWORD dwSize/*=0*/)
         return m_pCrcTable[((DWORD) (c) ^ (b)) & 0xFF] ^ ((c) >> 8);
     }
 
-	BOOL CZipFile::_DecryptHeader(LPBYTE pData, DWORD dwSize, DWORD crc32)
+	BOOL CZipFile::_DecryptHeader(LPBYTE pData, DWORD dwSize, DWORD vcrc32)
 	{
 		if (dwSize < 12)
 			return FALSE;
@@ -174,7 +174,7 @@ CZipFile::CZipFile(DWORD dwSize/*=0*/)
 		}
 
 		// Password check
-		return header[11] == (BYTE)(crc32 >> 24);
+		return header[11] == (BYTE)(vcrc32 >> 24);
 	}
 
     BYTE CZipFile::_DecryptByte() const
@@ -373,9 +373,10 @@ CZipFile::CZipFile(DWORD dwSize/*=0*/)
 
 		SeekFile(hdr.fnameLen + hdr.xtraLen, FILE_CURRENT);
 
-		//DWORD dwSize = hdr.cSize;
+		DWORD dwSize = hdr.cSize;
+		(void)dwSize;
 		if (hdr.flag & 1)
-		{//Õâ¸ö½Ó¿Ú²»Ö§³Ö¼ÓÃÜ
+		{//è¿™ä¸ªæ¥å£ä¸æ”¯æŒåŠ å¯†
 			return FALSE;
 		}
 
@@ -479,7 +480,7 @@ CZipFile::CZipFile(DWORD dwSize/*=0*/)
 				delete[] pData;
 				return FALSE;
 			}
-			if (!file._DecryptFile(m_szPassword, pData, dwSize, hdr.crc32))
+			if (!file._DecryptFile(m_szPassword, pData, dwSize, hdr.vcrc32))
 			{
                 delete[] pData;
 				return FALSE;
@@ -493,7 +494,7 @@ CZipFile::CZipFile(DWORD dwSize/*=0*/)
 		switch (hdr.compression)
 		{
 		case LOCAL_COMP_STORE:
-			//_ASSERTE(hdr.cSize == hdr.ucSize);//¼ÓÃÜµÄÊ±ÕâÁ½¸öÖµ²»Ò»¶¨ÏàµÈ
+			//_ASSERTE(hdr.cSize == hdr.ucSize);//åŠ å¯†çš„æ—¶è¿™ä¸¤ä¸ªå€¼ä¸ä¸€å®šç›¸ç­‰
 			break;
 		case LOCAL_COMP_DEFLAT: 
 			{

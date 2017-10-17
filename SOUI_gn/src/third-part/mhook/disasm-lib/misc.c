@@ -1,5 +1,6 @@
-// Copyright (C) 2002, Matt Conover (mconover@gmail.com)
+﻿// Copyright (C) 2002, Matt Conover (mconover@gmail.com)
 #include "misc.h"
+#include <stdlib.h>
 
 BOOL IsHexChar(BYTE ch)
 {
@@ -22,7 +23,8 @@ BYTE *HexToBinary(char *Input, DWORD InputLength, DWORD *OutputLength)
 {
 	DWORD i, j, ByteCount = 0;
 	char temp_byte[3];
-	BYTE *p, *ByteString = NULL;
+	BYTE *p = NULL;
+	BYTE *ByteString = NULL;
 
 	if (!InputLength || !OutputLength) return NULL;
 	else *OutputLength = 0;
@@ -68,7 +70,7 @@ BYTE *HexToBinary(char *Input, DWORD InputLength, DWORD *OutputLength)
 			goto abort;
 		}
 
-		ByteString = malloc(ByteCount+1);
+		ByteString = (BYTE *)malloc(ByteCount+1);
 		if (!ByteString)
 		{
 			//fprintf(stderr, "ERROR: failed to allocate %lu bytes\n", ByteCount);

@@ -1,9 +1,9 @@
-#include "souistd.h"
+ï»¿#include "souistd.h"
 #include "event/NotifyCenter.h"
 
 namespace SOUI{
 
-template<> SNotifyCenter * SSingleton<SNotifyCenter>::ms_Singleton = 0;
+//template<> SNotifyCenter * SSingleton<SNotifyCenter>::ms_Singleton = 0;
 
 //////////////////////////////////////////////////////////////////////////
 class SNotifyReceiver:public CSimpleWnd
@@ -18,21 +18,22 @@ public:
 		SASSERT(m_pCallback);
 	}
 
-	~SNotifyReceiver()
+	~SNotifyReceiver() override
 	{
 
 	}
 
 	LRESULT OnNotifyEvent(UINT uMsg,WPARAM wParam,LPARAM lParam);
 
-	BEGIN_MSG_MAP_EX(SNotifyReceiver)
-		MESSAGE_HANDLER_EX(UM_NOTIFYEVENT, OnNotifyEvent)
-	END_MSG_MAP()
+	BEGIN_MSG_MAP_EX_DECL()
 
 protected:
 	INotifyCallback * m_pCallback;
 };
 
+BEGIN_MSG_MAP_EX(SNotifyReceiver)
+	MESSAGE_HANDLER_EX(UM_NOTIFYEVENT, OnNotifyEvent)
+END_MSG_MAP()
 
 LRESULT SNotifyReceiver::OnNotifyEvent(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -65,7 +66,7 @@ void SNotifyCenter::FireEventSync( EventArgs *e )
 	OnFireEvent(e);
 }
 
-//°ÑÊÂ¼þÅ×µ½ÊÂ¼þ¶ÓÁÐ£¬²»¼ì²éÊÂ¼þÊÇ·ñ×¢²á£¬Ö´ÐÐÊÂ¼þÊ±ÔÙ¼ì²é¡£
+//æŠŠäº‹ä»¶æŠ›åˆ°äº‹ä»¶é˜Ÿåˆ—ï¼Œä¸æ£€æŸ¥äº‹ä»¶æ˜¯å¦æ³¨å†Œï¼Œæ‰§è¡Œäº‹ä»¶æ—¶å†æ£€æŸ¥ã€‚
 void SNotifyCenter::FireEventAsync( EventArgs *e )
 {
 	e->AddRef();
@@ -75,7 +76,7 @@ void SNotifyCenter::FireEventAsync( EventArgs *e )
 
 void SNotifyCenter::OnFireEvent( EventArgs *e )
 {
-	if(!GetEventObject(e->GetID())) return;//È·±£ÊÂ¼þÊÇÒÑ¾­×¢²á¹ýµÄÒÑ¾­ÊÂ¼þ¡£
+	if(!GetEventObject(e->GetID())) return;//ç¡®ä¿äº‹ä»¶æ˜¯å·²ç»æ³¨å†Œè¿‡çš„å·²ç»äº‹ä»¶ã€‚
 
 	FireEvent(*e);
 	if(!e->bubbleUp) return ;

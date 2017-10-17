@@ -11,7 +11,7 @@ group("components") {
     "render-gdi",
     "render-skia",
     "resprovider-zip",
-    "resprovider-7zip",
+    #"resprovider-7zip",
     "ScriptModule-LUA",
     "translator",
   ] 

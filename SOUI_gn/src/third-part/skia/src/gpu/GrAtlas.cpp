@@ -241,8 +241,7 @@ GrPlot* GrAtlas::addToAtlas(ClientPlotUsage* usage,
     GrPlotList::Iter plotIter;
     plotIter.init(fPlotList, GrPlotList::Iter::kHead_IterStart);
     GrPlot* plot;
-	plot = plotIter.get();
-	while (plot) {
+    while ((plot = plotIter.get())) {
         // make sure texture is set for quick lookup
         plot->fTexture = fTexture;
         if (plot->addSubImage(width, height, image, loc)) {
@@ -271,8 +270,7 @@ GrPlot* GrAtlas::getUnusedPlot() {
     GrPlotList::Iter plotIter;
     plotIter.init(fPlotList, GrPlotList::Iter::kTail_IterStart);
     GrPlot* plot;
-	plot = plotIter.get();
-	while (plot) {
+    while ((plot = plotIter.get())) {
         if (plot->drawToken().isIssued()) {
             return plot;
         }
@@ -287,8 +285,7 @@ void GrAtlas::uploadPlotsToTexture() {
         GrPlotList::Iter plotIter;
         plotIter.init(fPlotList, GrPlotList::Iter::kHead_IterStart);
         GrPlot* plot;
-		plot = plotIter.get();
-		while (plot) {
+        while ((plot = plotIter.get())) {
             plot->uploadToTexture();
             plotIter.next();
         }

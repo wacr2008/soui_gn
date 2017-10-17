@@ -1,3 +1,4 @@
+ï»¿
 #include "SIPAddressCtrl.h"
 #include <winsock.h>
 #define SEP_EDIT    2
@@ -6,7 +7,7 @@ namespace SOUI
 {
     class SEditIP: public SEdit
     {
-        SOUI_CLASS_NAME(SIPAddressCtrl,L"ipedit")
+        SOUI_CLASS_NAME_DECL(SEditIP,L"ipedit")
     public:
         SEditIP();
         ~SEditIP();
@@ -21,7 +22,7 @@ namespace SOUI
             }
         inline void ClearEdit(){SetField(0);}
     protected:
-        //ÖØÔØOnFinalReleaseÀ´±£Ö¤newºÍdeleteÔÚÍ¬Ò»¸öÄ£¿é¡£ÕâÑù¾Í²»ĞèÒªÏòÏµÍ³µÄ´°¿ÚÀà³§×¢²áSEditIPÀàÁË¡£
+        //é‡è½½OnFinalReleaseæ¥ä¿è¯newå’Œdeleteåœ¨åŒä¸€ä¸ªæ¨¡å—ã€‚è¿™æ ·å°±ä¸éœ€è¦å‘ç³»ç»Ÿçš„çª—å£ç±»å‚æ³¨å†ŒSEditIPç±»äº†ã€‚
         virtual void OnFinalRelease()
         {
             delete this;
@@ -29,14 +30,26 @@ namespace SOUI
         void OnChar(UINT nChar,UINT nRepCnt,UINT nFlags);
         void OnSetFocus(SWND wndOld);
         void OnKillFocus(SWND wndFocus);
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_CHAR(OnChar)
-            MSG_WM_SETFOCUS_EX(OnSetFocus)
-            MSG_WM_KILLFOCUS_EX(OnKillFocus)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
     private:
         HIMC m_hImcCopy;
     };
+
+	SOUI_CLASS_NAME(SEditIP,L"ipedit")
+
+	SOUI_MSG_MAP_BEGIN(SEditIP)
+		MSG_WM_CHAR(OnChar)
+		MSG_WM_SETFOCUS_EX(OnSetFocus)
+		MSG_WM_KILLFOCUS_EX(OnKillFocus)
+	SOUI_MSG_MAP_END()
+
+	SOUI_CLASS_NAME(SIPAddressCtrl, L"ipctrl")
+
+	SOUI_MSG_MAP_BEGIN(SIPAddressCtrl)
+		MSG_WM_CREATE(OnCreate)
+		MSG_WM_SIZE(OnSize)
+		MSG_WM_PAINT_EX(OnPaint)
+	SOUI_MSG_MAP_END()
 
 	SEditIP::SEditIP():m_hImcCopy(NULL)
 	{
@@ -87,8 +100,7 @@ namespace SOUI
         {
             SetField(255);
         }
-    }
-
+    } 
     //////////////////////////////////////////////////////////////////////////
     //
 	SIPAddressCtrl::SIPAddressCtrl(void)
@@ -126,7 +138,7 @@ namespace SOUI
         xmlDoc.load_buffer(szEditAttr,sizeof(szEditAttr));
         for(int i=0;i<4;i++)
         {
-            m_editFields[i] = new SEditIP;//Ö±½Ónew³öÀ´¡£
+            m_editFields[i] = new SEditIP;//ç›´æ¥newå‡ºæ¥ã€‚
             InsertChild(m_editFields[i]);
             m_editFields[i]->InitFromXml(xmlDoc.first_child());
         }

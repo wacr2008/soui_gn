@@ -1,4 +1,4 @@
-#include "souistd.h"
+ï»¿#include "souistd.h"
 #include "control/SListView.h"
 #include "helper/SListViewItemLocator.h"
 #include <algorithm>
@@ -13,8 +13,8 @@ namespace SOUI
         SListViewDataSetObserver(SListView *pView):m_pOwner(pView)
         {
         }
-        virtual void onChanged();
-        virtual void onInvalidated();
+        void onChanged() override;
+        void onInvalidated() override;
 
     protected:
         SListView * m_pOwner;
@@ -34,14 +34,36 @@ namespace SOUI
 
 
     //////////////////////////////////////////////////////////////////////////
+	SOUI_ATTRS_BEGIN(SListView)
+		ATTR_SKIN(L"dividerSkin", m_pSkinDivider, TRUE)
+		ATTR_LAYOUTSIZE(L"dividerSize", m_nDividerSize, FALSE)
+		ATTR_INT(L"wantTab", m_bWantTab, FALSE)
+	SOUI_ATTRS_END()
+
+	SOUI_MSG_MAP_BEGIN(SListView)
+		MSG_WM_PAINT_EX(OnPaint)
+		MSG_WM_SIZE(OnSize)
+		MSG_WM_DESTROY(OnDestroy)
+		MSG_WM_MOUSEWHEEL(OnMouseWheel)
+		MSG_WM_MOUSELEAVE(OnMouseLeave)
+		MSG_WM_KEYDOWN(OnKeyDown)
+		MSG_WM_KILLFOCUS_EX(OnKillFocus)
+		MSG_WM_SETFOCUS_EX(OnSetFocus)
+		MESSAGE_RANGE_HANDLER_EX(WM_MOUSEFIRST, WM_MOUSELAST, OnMouseEvent)
+		MESSAGE_RANGE_HANDLER_EX(WM_KEYFIRST, WM_KEYLAST, OnKeyEvent)
+		MESSAGE_RANGE_HANDLER_EX(WM_IME_STARTCOMPOSITION, WM_IME_KEYLAST, OnKeyEvent)
+	SOUI_MSG_MAP_END()
+
+	SOUI_CLASS_NAME(SListView, L"listview")
+
     SListView::SListView()
-        :m_iSelItem(-1)
-        ,m_iFirstVisible(-1)
-        ,m_pHoverItem(NULL)
-        ,m_itemCapture(NULL)
-        ,m_pSkinDivider(NULL)
-        ,m_bWantTab(FALSE)
+        :m_iFirstVisible(-1)
+		,m_itemCapture(NULL)
+		, m_iSelItem(-1)
+		, m_pHoverItem(NULL)
         ,m_bDataSetInvalidated(FALSE)
+		, m_pSkinDivider(NULL)
+		, m_bWantTab(FALSE)
     {
         m_bFocusable = TRUE;
         m_observer.Attach(new SListViewDataSetObserver(this));
@@ -116,12 +138,12 @@ namespace SOUI
         szView.cx = rcClient.Width();
         szView.cy = m_lvItemLocator?m_lvItemLocator->GetTotalHeight():0;
 
-        //  ¹Ø±Õ¹ö¶¯Ìõ
+        //  å…³é—­æ»šåŠ¨æ¡
         m_wBarVisible = SSB_NULL;
 
         if (size.cy<szView.cy )
         {
-            //  ĞèÒª×İÏò¹ö¶¯Ìõ
+            //  éœ€è¦çºµå‘æ»šåŠ¨æ¡
             m_wBarVisible |= SSB_VERT;
             m_siVer.nMin  = 0;
             m_siVer.nMax  = szView.cy-1;
@@ -130,7 +152,7 @@ namespace SOUI
         }
         else
         {
-            //  ²»ĞèÒª×İÏò¹ö¶¯Ìõ
+            //  ä¸éœ€è¦çºµå‘æ»šåŠ¨æ¡
             m_siVer.nPage = size.cy;
             m_siVer.nMin  = 0;
             m_siVer.nMax  = size.cy-1;
@@ -139,7 +161,7 @@ namespace SOUI
 
         SetScrollPos(TRUE, m_siVer.nPos, FALSE);
 
-        //  ÖØĞÂ¼ÆËã¿Í»§Çø¼°·Ç¿Í»§Çø
+        //  é‡æ–°è®¡ç®—å®¢æˆ·åŒºåŠéå®¢æˆ·åŒº
         SSendMessage(WM_NCCALCSIZE);
 
         InvalidateRect(NULL);
@@ -201,7 +223,7 @@ namespace SOUI
                 rcItem.top = rcItem.bottom;
                 rcItem.bottom += m_lvItemLocator->GetDividerSize();
                 if(m_pSkinDivider)
-                {//»æÖÆ·Ö¸ôÏß
+                {//ç»˜åˆ¶åˆ†éš”çº¿
                     m_pSkinDivider->Draw(pRT,rcItem,0);
                 }
             }
@@ -220,7 +242,7 @@ namespace SOUI
         {
             UpdateVisibleItems();
 
-            //¼ÓËÙ¹ö¶¯Ê±UIµÄË¢ĞÂ
+            //åŠ é€Ÿæ»šåŠ¨æ—¶UIçš„åˆ·æ–°
             if (uCode==SB_THUMBTRACK)
                 ScrollUpdate();
 
@@ -270,14 +292,14 @@ namespace SOUI
                     if(ii.nType == pItemInfos[iItem].nType)
                     {
                         ii = pItemInfos[iItem];
-                        pItemInfos[iItem].pItem = NULL;//±ê¼Ç¸ÃĞĞÒÑ¾­±»ÖØÓÃ
+                        pItemInfos[iItem].pItem = NULL;//æ ‡è®°è¯¥è¡Œå·²ç»è¢«é‡ç”¨
                     }
                 }
                 if(!ii.pItem)
                 {//create new visible item
                     SList<SItemPanel *> *lstRecycle = m_itemRecycle.GetAt(ii.nType);
                     if(lstRecycle->IsEmpty())
-                    {//´´½¨Ò»¸öĞÂµÄÁĞ±íÏî
+                    {//åˆ›å»ºä¸€ä¸ªæ–°çš„åˆ—è¡¨é¡¹
                         ii.pItem = SItemPanel::Create(this,pugi::xml_node(),this);
                         ii.pItem->GetEventSet()->subscribeEvent(EventItemPanelClick::EventID,Subscriber(&SListView::OnItemClick,this));
                     }else
@@ -295,7 +317,7 @@ namespace SOUI
                     ii.pItem->Move(rcItem);
                 }
 
-                //ÉèÖÃ×´Ì¬£¬Í¬Ê±ÔİÊ±½ûÖ¹Ó¦ÓÃÏìÓ¦statechangedÊÂ¼ş¡£
+                //è®¾ç½®çŠ¶æ€ï¼ŒåŒæ—¶æš‚æ—¶ç¦æ­¢åº”ç”¨å“åº”statechangedäº‹ä»¶ã€‚
                 ii.pItem->GetEventSet()->setMutedState(true);
                 ii.pItem->ModifyItemState(dwState,0);
                 ii.pItem->GetEventSet()->setMutedState(false);
@@ -347,7 +369,7 @@ namespace SOUI
         if(!m_lvItemLocator->IsFixHeight() && m_lvItemLocator->GetTotalHeight() != nOldTotalHeight)
         {//update scroll range
             UpdateScrollBar();
-            UpdateVisibleItems();//¸ù¾İĞÂµÄ¹ö¶¯Ìõ×´Ì¬ÖØĞÂ¼ÇÂ¼ÏÔÊ¾ÁĞ±íÏî
+            UpdateVisibleItems();//æ ¹æ®æ–°çš„æ»šåŠ¨æ¡çŠ¶æ€é‡æ–°è®°å½•æ˜¾ç¤ºåˆ—è¡¨é¡¹
         }
     }
 
@@ -373,6 +395,11 @@ namespace SOUI
 
     void SListView::OnDestroy()
     {
+		if(m_adapter)
+		{
+			m_adapter->unregisterDataSetObserver(m_observer);
+		}
+
         //destroy all itempanel
         SPOSITION pos = m_lstItems.GetHeadPosition();
         while(pos)
@@ -474,7 +501,7 @@ namespace SOUI
         else
         {
             if(uMsg==WM_LBUTTONDOWN || uMsg== WM_RBUTTONDOWN || uMsg==WM_MBUTTONDOWN)
-            {//½»¸øpanel´¦Àí
+            {//äº¤ç»™panelå¤„ç†
                 __super::ProcessSwndMessage(uMsg,wParam,lParam,lRet);
             }
 
@@ -501,7 +528,7 @@ namespace SOUI
         }
         
         if(uMsg==WM_LBUTTONUP || uMsg== WM_RBUTTONUP || uMsg==WM_MBUTTONUP)
-        {//½»¸øpanel´¦Àí
+        {//äº¤ç»™panelå¤„ç†
             __super::ProcessSwndMessage(uMsg,wParam,lParam,lRet);
         }
         SetMsgHandled(TRUE);
@@ -689,12 +716,12 @@ namespace SOUI
             m_xmlTemplate.append_copy(xmlTemplate);
 			SLayoutSize nItemHei = SLayoutSize::fromString(xmlTemplate.attribute(L"itemHeight").value());
             if(nItemHei.fSize>0.0f)
-            {//Ö¸¶¨ÁËitemHeightÊôĞÔÊ±´´½¨Ò»¸ö¹Ì¶¨ĞĞ¸ßµÄ¶¨Î»Æ÷
+            {//æŒ‡å®šäº†itemHeightå±æ€§æ—¶åˆ›å»ºä¸€ä¸ªå›ºå®šè¡Œé«˜çš„å®šä½å™¨
                 IListViewItemLocator * pItemLocator = new  SListViewItemLocatorFix(nItemHei,m_nDividerSize);
                 SetItemLocator(pItemLocator);
                 pItemLocator->Release();
             }else
-            {//´´½¨Ò»¸öĞĞ¸ß¿É±äµÄĞĞ¶¨Î»Æ÷£¬´ÓdefHeightÊôĞÔÖĞ»ñÈ¡Ä¬ÈÏĞĞ¸ß
+            {//åˆ›å»ºä¸€ä¸ªè¡Œé«˜å¯å˜çš„è¡Œå®šä½å™¨ï¼Œä»defHeightå±æ€§ä¸­è·å–é»˜è®¤è¡Œé«˜
 				IListViewItemLocator * pItemLocator = new  SListViewItemLocatorFlex(SLayoutSize::fromString(xmlTemplate.attribute(L"defHeight").as_string(L"30dp")),m_nDividerSize);
                 SetItemLocator(pItemLocator);
                 pItemLocator->Release();

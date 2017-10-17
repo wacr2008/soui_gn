@@ -1,7 +1,22 @@
+ï»¿
 #include "SIECtrl.h"
 #include "SDocHostUIHandler.h"
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SIECtrl, L"iectrl")
+
+	SOUI_MSG_MAP_BEGIN(SIECtrl)
+		MSG_WM_CREATE(OnCreate)
+		MSG_WM_DESTROY(OnDestroy)
+	SOUI_MSG_MAP_END()
+
+	SOUI_ATTRS_BEGIN(SIECtrl)
+		ATTR_STRINGW(L"url", m_strUrl, FALSE)
+		ATTR_INT(L"disableScrollbar", m_bDisableScrollbar, FALSE)
+		ATTR_INT(L"disable3DBorder", m_bDisable3DBorder, FALSE)
+		ATTR_INT(L"disableContextMenu", m_bDisableContextMenu, FALSE)
+		ATTR_INT(L"disableTextSelect", m_bDisableTextSelect, FALSE)
+	SOUI_ATTRS_END()
 
     SIECtrl::SIECtrl(void):m_dwCookie(0),m_eventDispatch(NULL),m_hIEWnd(NULL)
         ,m_bDisableScrollbar(FALSE)
@@ -140,11 +155,11 @@ namespace SOUI
         if(!IsVisible(TRUE)) return FALSE;       
 
         HWND hHost = GetContainer()->GetHostHwnd();
-        //¼ì²éËÞÖ÷´°¿Ú¿É¼û
+        //æ£€æŸ¥å®¿ä¸»çª—å£å¯è§
         if(!::IsWindowVisible(hHost)) return FALSE;
-        //¼ì²éËÞÖ÷´°¿Ú¼¤»î
+        //æ£€æŸ¥å®¿ä¸»çª—å£æ¿€æ´»
         if(::GetActiveWindow() != hHost) return FALSE;
-        //¼ì²éµ±Ç°½¹µã´°¿ÚÊÇIE´°¿Ú»òÕß×Ó´°¿Ú
+        //æ£€æŸ¥å½“å‰ç„¦ç‚¹çª—å£æ˜¯IEçª—å£æˆ–è€…å­çª—å£
         HWND hFocus =::GetFocus();
         while(hFocus)
         {

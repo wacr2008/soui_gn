@@ -1,3 +1,4 @@
+ï»¿
 #include "SSkinAPNG.h"
 #include <helper/SplitString.h>
 #include <interface/imgdecoder-i.h>
@@ -6,6 +7,12 @@
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SSkinAPNG, L"apng")
+
+	SOUI_ATTRS_BEGIN(SSkinAPNG)
+		ATTR_CUSTOM(L"src", OnAttrSrc)   //XMLæ–‡ä»¶ä¸­æŒ‡å®šçš„å›¾ç‰‡èµ„æºå,(type:name)
+	SOUI_ATTRS_END()
+
 
     LRESULT SSkinAPNG::OnAttrSrc( const SStringW &strValue,BOOL bLoading )
     {
@@ -23,7 +30,7 @@ namespace SOUI
                 GETRESPROVIDER->GetRawBuffer(strLst[0],strLst[1],pBuf,szBuf);
             }
         }else
-        {//×Ô¶¯´ÓAPNG×ÊÔ´ÀàÐÍÀï²éÕÒ×ÊÔ´
+        {//è‡ªåŠ¨ä»ŽAPNGèµ„æºç±»åž‹é‡ŒæŸ¥æ‰¾èµ„æº
             szBuf=GETRESPROVIDER->GetRawBufferSize(_T("apng"),strLst[0]);
             if(szBuf)
             {

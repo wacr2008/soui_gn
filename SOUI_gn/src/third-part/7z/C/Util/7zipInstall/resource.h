@@ -1,4 +1,4 @@
-#define IDD_INSTALL             100
+﻿#define IDD_INSTALL             100
 
 #define IDT_EXTRACT_EXTRACT_TO  110
 #define IDE_EXTRACT_PATH        111

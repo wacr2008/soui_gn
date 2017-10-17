@@ -107,8 +107,7 @@ static bool bridgeXor(SkTArray<SkOpContour*, true>& contourList, SkPathWriter* s
     int start, end;
     bool unsortable = false;
     bool closable = true;
-	current = FindUndone(contourList, &start, &end);
-	while (current) {
+    while ((current = FindUndone(contourList, &start, &end))) {
         do {
     #if DEBUG_ACTIVE_SPANS
             if (!unsortable && current->done()) {

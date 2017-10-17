@@ -1,4 +1,4 @@
-#include "ThreadObject.h"
+ï»¿#include "ThreadObject.h"
 #include <process.h>
 #include <assert.h>
 
@@ -19,10 +19,10 @@ CThreadObject::~CThreadObject()
 
 UINT CThreadObject::ThreadProc()
 {
-	SetEvent(m_evtStart);	//±ê¼ÇÏß³ÌÆô¶¯
-	ResetEvent(m_evtStop);  //Çå³ıÏß³Ì½áÊø±êÖ¾
-	UINT uRet = Run();		//Ö´ĞĞÏß³Ì
-	ResetEvent(m_evtStart); //Çå³ıÏß³ÌÆô¶¯±êÖ¾
+	SetEvent(m_evtStart);	//æ ‡è®°çº¿ç¨‹å¯åŠ¨
+	ResetEvent(m_evtStop);  //æ¸…é™¤çº¿ç¨‹ç»“æŸæ ‡å¿—
+	UINT uRet = Run();		//æ‰§è¡Œçº¿ç¨‹
+	ResetEvent(m_evtStart); //æ¸…é™¤çº¿ç¨‹å¯åŠ¨æ ‡å¿—
 	return uRet;
 }
 

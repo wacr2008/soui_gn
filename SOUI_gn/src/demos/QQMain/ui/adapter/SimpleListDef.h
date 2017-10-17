@@ -1,6 +1,7 @@
-#ifndef _SIMPLE_LIST_DEF_H_
+﻿#ifndef _SIMPLE_LIST_DEF_H_
 #define _SIMPLE_LIST_DEF_H_
 
+#include <vector>
 #include <math.h>
 #include <string>
 

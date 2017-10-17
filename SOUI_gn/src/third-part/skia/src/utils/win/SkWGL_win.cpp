@@ -198,18 +198,16 @@ HWND create_dummy_window() {
     style = WS_SYSMENU;
 
     AdjustWindowRectEx(&windowRect, style, false, exStyle);
-	dummy = CreateWindowEx(exStyle,
-		DUMMY_CLASS,
-		STR_LIT("DummyWindow"),
-		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | style,
-		0, 0,
-		windowRect.right - windowRect.left,
-		windowRect.bottom - windowRect.top,
-		NULL, NULL,
-		module,
-		NULL);
-
-		if (!(dummy)) {
+    if(!(dummy = CreateWindowEx(exStyle,
+                                DUMMY_CLASS,
+                                STR_LIT("DummyWindow"),
+                                WS_CLIPSIBLINGS | WS_CLIPCHILDREN | style,
+                                0, 0,
+                                windowRect.right-windowRect.left,
+                                windowRect.bottom-windowRect.top,
+                                NULL, NULL,
+                                module,
+                                NULL))) {
         UnregisterClass(DUMMY_CLASS, module);
         return NULL;
     }

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "core/SWnd.h"
 #include "SRichEdit.h"
@@ -11,7 +11,7 @@ namespace SOUI
 
     /**
     * @class      SComboEdit
-    * @brief      ÔÚCommboBoxÖĞÇ¶ÈëµÄEdit¿Ø¼ş
+    * @brief      åœ¨CommboBoxä¸­åµŒå…¥çš„Editæ§ä»¶
     * 
     * Describe    
     */
@@ -20,62 +20,58 @@ namespace SOUI
     public:
         /**
         * SComboEdit::SComboEdit
-        * @param    SComboBoxBase *pOwner  -- ÔİÎŞ       
-        * @brief    ¹¹Ôìº¯Êı
+        * @param    SComboBoxBase *pOwner  -- æš‚æ—        
+        * @brief    æ„é€ å‡½æ•°
         *
-        * Describe  ¹¹Ôìº¯Êı
+        * Describe  æ„é€ å‡½æ•°
         */
         SComboEdit(SWindow *pOwner);
 
         /**
         * SComboEdit::~SComboEdit
-        * @brief    Îö¹¹º¯Êı
+        * @brief    ææ„å‡½æ•°
         *
-        * Describe  Îö¹¹º¯Êı
+        * Describe  ææ„å‡½æ•°
         */
-        virtual ~SComboEdit(){}
+		~SComboEdit() override;
     protected:
         /**
         * SComboEdit::OnMouseHover
-        * @brief    ¼üÅÌÊó±êĞüÍ£ÊÂ¼ş
+        * @brief    é”®ç›˜é¼ æ ‡æ‚¬åœäº‹ä»¶
         * @param    WPARAM wParam 
-        * @param    CPoint ptPos -- Êó±êËùÔÚÎ»ÖÃ
+        * @param    CPoint ptPos -- é¼ æ ‡æ‰€åœ¨ä½ç½®
         * 
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */
         void OnMouseHover(WPARAM wParam, CPoint ptPos);
         /**
         * SComboEdit::OnMouseLeave
-        * @brief    ¼üÅÌÊó±êÀë¿ªÊÂ¼ş
+        * @brief    é”®ç›˜é¼ æ ‡ç¦»å¼€äº‹ä»¶
         * 
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */    
         void OnMouseLeave();
         /**
         * SComboEdit::OnKeyDown
-        * @brief    ¼üÅÌ°´ÏÂÊÂ¼ş
-        * @param    UINT nChar -- °´¼ü¶ÔÓ¦µÄÂëÖµ 
-        * @param    UINT nRepCnt -- ÖØ¸´´ÎÊı
-        * @param    UINT nFlags -- ±êÖ¾
+        * @brief    é”®ç›˜æŒ‰ä¸‹äº‹ä»¶
+        * @param    UINT nChar -- æŒ‰é”®å¯¹åº”çš„ç å€¼ 
+        * @param    UINT nRepCnt -- é‡å¤æ¬¡æ•°
+        * @param    UINT nFlags -- æ ‡å¿—
         * 
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */   
         void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
         /**
         * SComboEdit::FireEvent
-        * @brief    Í¨ÖªÏûÏ¢
-        * @param    EventArgs & evt -- ÊÂ¼ş¶ÔÏó 
+        * @brief    é€šçŸ¥æ¶ˆæ¯
+        * @param    EventArgs & evt -- äº‹ä»¶å¯¹è±¡ 
         * 
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */   
-        virtual BOOL FireEvent(EventArgs & evt);
+        BOOL FireEvent(EventArgs & evt) override;
 
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_MOUSEHOVER(OnMouseHover)
-            MSG_WM_MOUSELEAVE(OnMouseLeave)
-            MSG_WM_KEYDOWN(OnKeyDown)
-            SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL() 
     };
 
     class SOUI_EXP SDropDownWnd_ComboBox : public SDropDownWnd
@@ -83,321 +79,310 @@ namespace SOUI
     public:
         SDropDownWnd_ComboBox(ISDropDownOwner* pOwner):SDropDownWnd(pOwner){}
 
-        virtual BOOL PreTranslateMessage(MSG* pMsg);
+        BOOL PreTranslateMessage(MSG* pMsg) override;
     };
 
 
     /**
     * @class      SComboBoxBase
-    * @brief      ¿ÉÊäÈëCommboBox
+    * @brief      å¯è¾“å…¥CommboBox
     * 
-    * Describe    ¿ÉÊäÈëÏÂÀ­ÁĞ±í
+    * Describe    å¯è¾“å…¥ä¸‹æ‹‰åˆ—è¡¨
     */
     class SOUI_EXP SComboBase 
         : public SWindow
         , public ISDropDownOwner
     {
-        SOUI_CLASS_NAME(SComboBase,L"combobase")
+        SOUI_CLASS_NAME_DECL(SComboBase,L"combobase")
     public:
 
         /**
         * SComboBoxBase::SComboBoxBase
-        * @brief    ¹¹Ôìº¯Êı
+        * @brief    æ„é€ å‡½æ•°
         *
-        * Describe  ¹¹Ôìº¯Êı
+        * Describe  æ„é€ å‡½æ•°
         */
         SComboBase(void);
 
         /**
         * SComboBoxBase::~SComboBoxBase
-        * @brief    Îö¹¹º¯Êı
+        * @brief    ææ„å‡½æ•°
         *
-        * Describe  Îö¹¹º¯Êı
+        * Describe  ææ„å‡½æ•°
         */
-        virtual ~SComboBase(void);
+        ~SComboBase(void) override;
         /**
         * SComboBoxBase::GetCurSel
-        * @brief    »ñÈ¡Ñ¡ÖĞÖµË÷Òı
-        * @return   ·µ»Øint  
+        * @brief    è·å–é€‰ä¸­å€¼ç´¢å¼•
+        * @return   è¿”å›int  
         *
-        * Describe  »ñÈ¡µ±Ç°Ñ¡ÖĞË÷Òı
+        * Describe  è·å–å½“å‰é€‰ä¸­ç´¢å¼•
         */
         virtual int GetCurSel() const =0;
 
         /**
         * SComboBoxBase::GetCount
-        * @brief    »ñÈ¡ÏÂÀ­Ïî¸öÊı
-        * @return   ·µ»Øint
+        * @brief    è·å–ä¸‹æ‹‰é¡¹ä¸ªæ•°
+        * @return   è¿”å›int
         * 
-        * Describe  »ñÈ¡ÏÂÀ­Ïî¸öÊı
+        * Describe  è·å–ä¸‹æ‹‰é¡¹ä¸ªæ•°
         */ 
         virtual int  GetCount() const =0;
 
         /**
         * SComboBoxBase::SetCurSel
-        * @brief    ÉèÖÃµ±Ç°Ñ¡ÖĞ
-        * @param    int iSel -- Ñ¡ÖĞË÷Òı
+        * @brief    è®¾ç½®å½“å‰é€‰ä¸­
+        * @param    int iSel -- é€‰ä¸­ç´¢å¼•
         * 
-        * Describe  ÉèÖÃµ±Ç°Ñ¡ÖĞ
+        * Describe  è®¾ç½®å½“å‰é€‰ä¸­
         */ 
         virtual BOOL SetCurSel(int iSel)=0;
 
         /**
         * SComboBoxEx::GetTextRect
-        * @brief    »ñÈ¡ÎÄ±¾Î»ÖÃ
-        * @param    LPRECT pRect -- ÎÄ±¾Î»ÖÃ
+        * @brief    è·å–æ–‡æœ¬ä½ç½®
+        * @param    LPRECT pRect -- æ–‡æœ¬ä½ç½®
         *
-        * Describe  »ñÈ¡ÎÄ±¾Î»ÖÃ
+        * Describe  è·å–æ–‡æœ¬ä½ç½®
         */
-        virtual SStringT GetWindowText();
+        SStringT GetWindowText() override;
 
         virtual SStringT GetLBText(int iItem) =0;
         /**
         * FindString
-        * @brief    ²éÕÒ×Ö·û´®Î»ÖÃ
-        * @param    LPCTSTR pszFind --  ²éÕÒÄ¿±ê
-        * @param    int nAfter --  ¿ªÊ¼Î»ÖÃ
-        * @return   int -- Ä¿±êË÷Òı£¬Ê§°Ü·µ»Ø-1¡£
+        * @brief    æŸ¥æ‰¾å­—ç¬¦ä¸²ä½ç½®
+        * @param    LPCTSTR pszFind --  æŸ¥æ‰¾ç›®æ ‡
+        * @param    int nAfter --  å¼€å§‹ä½ç½®
+        * @return   int -- ç›®æ ‡ç´¢å¼•ï¼Œå¤±è´¥è¿”å›-1ã€‚
         * Describe  
         */    
         virtual int FindString(LPCTSTR pszFind,int nAfter=0);
 
         /**
         * SComboBoxBase::DropDown
-        * @brief    ÏÂÀ­ÊÂ¼ş
+        * @brief    ä¸‹æ‹‰äº‹ä»¶
         *
-        * Describe  ÏÂÀ­ÊÂ¼ş
+        * Describe  ä¸‹æ‹‰äº‹ä»¶
         */
         void DropDown();
 
         /**
         * SComboBoxBase::CloseUp
-        * @brief    ÏÂÀ­¹Ø±Õ
+        * @brief    ä¸‹æ‹‰å…³é—­
         *
-        * Describe  ÏÂÀ­¹Ø±Õ
+        * Describe  ä¸‹æ‹‰å…³é—­
         */
         void CloseUp();
 
     protected:
         /**
         * SComboBoxBase::GetDropDownOwner
-        * @brief    »ñÈ¡owner
+        * @brief    è·å–owner
         * @return   SWindow
         *
-        * Describe  »ñÈ¡owner
+        * Describe  è·å–owner
         */
-        virtual SWindow* GetDropDownOwner();
+        SWindow* GetDropDownOwner() override;
 
         /**
         * SComboBoxBase::OnCreateDropDown
-        * @brief    ÏÂÀ­ÊÂ¼ş
-        * @param     SDropDownWnd *pDropDown -- ÏÂÀ­´°¿ÚÖ¸Õë
+        * @brief    ä¸‹æ‹‰äº‹ä»¶
+        * @param     SDropDownWnd *pDropDown -- ä¸‹æ‹‰çª—å£æŒ‡é’ˆ
         *
-        * Describe  ÏÂÀ­ÊÂ¼ş
+        * Describe  ä¸‹æ‹‰äº‹ä»¶
         */
-        virtual void OnCreateDropDown(SDropDownWnd *pDropDown);
+        void OnCreateDropDown(SDropDownWnd *pDropDown) override;
 
         /**
         * SComboBoxBase::OnDestroyDropDown
-        * @brief    ÏÂÀ­ÊÂ¼ş
-        * @param     SDropDownWnd *pDropDown -- ÏÂÀ­´°¿ÚÖ¸Õë
-        * @param     UINT uCode -- ÏûÏ¢Âë
+        * @brief    ä¸‹æ‹‰äº‹ä»¶
+        * @param     SDropDownWnd *pDropDown -- ä¸‹æ‹‰çª—å£æŒ‡é’ˆ
+        * @param     UINT uCode -- æ¶ˆæ¯ç 
         *
-        * Describe  ÏÂÀ­¹Ø±Õ
+        * Describe  ä¸‹æ‹‰å…³é—­
         */
-        virtual void OnDestroyDropDown(SDropDownWnd *pDropDown);
+        void OnDestroyDropDown(SDropDownWnd *pDropDown) override;
 
         /**
         * SComboBoxBase::OnSelChanged
-        * @brief    ÏÂÀ­´°¿Ú¸Ä±äÊÂ¼ş
+        * @brief    ä¸‹æ‹‰çª—å£æ”¹å˜äº‹ä»¶
         *
-        * Describe  ÏÂÀ­¹Ø±Õ
+        * Describe  ä¸‹æ‹‰å…³é—­
         */
         virtual void OnSelChanged();
 
 
-        virtual BOOL FireEvent(EventArgs &evt);
+        BOOL FireEvent(EventArgs &evt) override;
     protected:
 
         /**
         * SComboBoxBase::CalcPopupRect
-        * @brief    ¼ÆËãµ¯³ö´°¿ÚÎ»ÖÃ
-        * @param    int nHeight -- ÏÂÀ­´°¿Ú¸ß¶È
-        * @param    CRect & rcPopup -- ±£´æµ¯³ö´°¿ÚRect
-        * @return   BOOL  TRUE -- ³É¹¦  FALSE -- Ê§°Ü
+        * @brief    è®¡ç®—å¼¹å‡ºçª—å£ä½ç½®
+        * @param    int nHeight -- ä¸‹æ‹‰çª—å£é«˜åº¦
+        * @param    CRect & rcPopup -- ä¿å­˜å¼¹å‡ºçª—å£Rect
+        * @return   BOOL  TRUE -- æˆåŠŸ  FALSE -- å¤±è´¥
         *
-        * Describe  ¼ÆËãµ¯³ö´°¿ÚÎ»ÖÃ,±£´æÔÚrcPopupÖĞ
+        * Describe  è®¡ç®—å¼¹å‡ºçª—å£ä½ç½®,ä¿å­˜åœ¨rcPopupä¸­
         */    
         BOOL CalcPopupRect(int nHeight,CRect & rcPopup);
 
         /**
         * SComboBoxBase::CreateListBox
-        * @brief    ´´½¨ÏÂÀ­ÁĞ±í
-        * @param    pugi::xml_node xmlNode  -- xml¶ÔÏó
-        * @return   BOOL  TRUE -- ³É¹¦  FALSE -- Ê§°Ü
+        * @brief    åˆ›å»ºä¸‹æ‹‰åˆ—è¡¨
+        * @param    pugi::xml_node xmlNode  -- xmlå¯¹è±¡
+        * @return   BOOL  TRUE -- æˆåŠŸ  FALSE -- å¤±è´¥
         *
-        * Describe  ´´½¨ÏÂÀ­ÁĞ±í
+        * Describe  åˆ›å»ºä¸‹æ‹‰åˆ—è¡¨
         */    
         virtual BOOL CreateListBox(pugi::xml_node xmlNode)=0;
 
         /**
         * SComboBoxBase::GetListBoxHeight
-        * @brief    »ñÈ¡ÏÂÀ­ÁĞ±í¸ß¶È
-        * @return   ·µ»Øint ¸ß¶È
+        * @brief    è·å–ä¸‹æ‹‰åˆ—è¡¨é«˜åº¦
+        * @return   è¿”å›int é«˜åº¦
         *
-        * Describe  »ñÈ¡ÏÂÀ­ÁĞ±í¸ß¶È
+        * Describe  è·å–ä¸‹æ‹‰åˆ—è¡¨é«˜åº¦
         */        
         virtual int  GetListBoxHeight()=0;
 
         /**
         * SComboBoxBase::GetDropBtnRect
-        * @brief    »ñÈ¡ÏÂÀ­ÁĞ±í°´Å¥Î»ÖÃ
-        * @param    LPRECT prc -- °´Å¥Rect
+        * @brief    è·å–ä¸‹æ‹‰åˆ—è¡¨æŒ‰é’®ä½ç½®
+        * @param    LPRECT prc -- æŒ‰é’®Rect
         *
-        * Describe  »ñÈ¡ÏÂÀ­ÁĞ±íÓÒ²à°´Å¥Î»ÖÃ
+        * Describe  è·å–ä¸‹æ‹‰åˆ—è¡¨å³ä¾§æŒ‰é’®ä½ç½®
         */        
         void GetDropBtnRect(LPRECT prc);
         /**
         * SComboBoxBase::LoadChildren
-        * @brief    ¼ÓÔØ×ÓÏî
-        * @param    pugi::xml_node xmlNode  -- xmlÎÄ¼ş
-        * @return   ·µ»ØBOOL  TRUE -- ³É¹¦ FALSE -- Ê§°Ü
+        * @brief    åŠ è½½å­é¡¹
+        * @param    pugi::xml_node xmlNode  -- xmlæ–‡ä»¶
+        * @return   è¿”å›BOOL  TRUE -- æˆåŠŸ FALSE -- å¤±è´¥
         *
-        * Describe  ¼ÓÔØ×ÓÏî
+        * Describe  åŠ è½½å­é¡¹
         */
-        virtual BOOL CreateChildren(pugi::xml_node xmlNode);    
+        BOOL CreateChildren(pugi::xml_node xmlNode) override;
         /**
         * SComboBoxBase::GetTextRect
-        * @brief    »ñÈ¡ÎÄ±¾Î»ÖÃ
-        * @param    LPRECT pRect -- ÎÄ±¾Î»ÖÃ
+        * @brief    è·å–æ–‡æœ¬ä½ç½®
+        * @param    LPRECT pRect -- æ–‡æœ¬ä½ç½®
         *
-        * Describe  »ñÈ¡ÎÄ±¾Î»ÖÃ
+        * Describe  è·å–æ–‡æœ¬ä½ç½®
         */
-        virtual void GetTextRect(LPRECT pRect);
+        void GetTextRect(LPRECT pRect) override;
 
         /**
         * SComboBoxBase::SetWindowText
-        * @brief    ÉèÖÃÏÔÊ¾ÎÄ±¾
-        * @param    LPCTSTR pszText -- ÎÄ±¾
+        * @brief    è®¾ç½®æ˜¾ç¤ºæ–‡æœ¬
+        * @param    LPCTSTR pszText -- æ–‡æœ¬
         *
         * Describe  
         */
-        virtual void SetWindowText(LPCTSTR pszText);
+        void SetWindowText(LPCTSTR pszText) override;
 
-        virtual void OnColorize(COLORREF cr);
+        void OnColorize(COLORREF cr) override;
         
+		HRESULT OnLanguageChanged() override;
+
+		void OnScaleChanged(int nScale) override;
+
         /**
         * SComboBoxBase::OnPaint
-        * @brief    »æÖÆÏûÏ¢
-        * @param    IRenderTarget * pRT -- ÔİÎŞ
+        * @brief    ç»˜åˆ¶æ¶ˆæ¯
+        * @param    IRenderTarget * pRT -- æš‚æ— 
         * 
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */
         void OnPaint(IRenderTarget * pRT);
 
         /**
         * SComboBoxBase::OnLButtonDown
-        * @brief    ×ó¼ü°´ÏÂÊÂ¼ş
-        * @param    UINT nFlags -- ±êÖ¾
-        * @param    CPoint point -- Êó±ê×ø±ê
+        * @brief    å·¦é”®æŒ‰ä¸‹äº‹ä»¶
+        * @param    UINT nFlags -- æ ‡å¿—
+        * @param    CPoint point -- é¼ æ ‡åæ ‡
         *
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */
         void OnLButtonDown(UINT nFlags,CPoint pt);
 
         /**
         * SComboBoxBase::OnMouseMove
-        * @brief    ¼üÅÌÊó±êÒÆ¶¯ÊÂ¼ş
-        * @param    UINT nFlags -- ±êÖ¾
-        * @param    CPoint point -- Êó±ê×ø±ê
+        * @brief    é”®ç›˜é¼ æ ‡ç§»åŠ¨äº‹ä»¶
+        * @param    UINT nFlags -- æ ‡å¿—
+        * @param    CPoint point -- é¼ æ ‡åæ ‡
         * 
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */
         void OnMouseMove(UINT nFlags,CPoint pt);
 
         /**
         * SComboBoxBase::OnMouseLeave
-        * @brief    ¼üÅÌÊó±êÒÆ¶¯ÊÂ¼ş
+        * @brief    é”®ç›˜é¼ æ ‡ç§»åŠ¨äº‹ä»¶
         * 
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */
         void OnMouseLeave();
 
         /**
         * SComboBoxBase::OnKeyDown
-        * @brief    ¼üÅÌ°´ÏÂÊÂ¼ş
-        * @param    UINT nChar -- °´¼ü¶ÔÓ¦µÄÂëÖµ 
-        * @param    UINT nRepCnt -- ÖØ¸´´ÎÊı
-        * @param    UINT nFlags -- ±êÖ¾
+        * @brief    é”®ç›˜æŒ‰ä¸‹äº‹ä»¶
+        * @param    UINT nChar -- æŒ‰é”®å¯¹åº”çš„ç å€¼ 
+        * @param    UINT nRepCnt -- é‡å¤æ¬¡æ•°
+        * @param    UINT nFlags -- æ ‡å¿—
         * 
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */
         void OnKeyDown( TCHAR nChar, UINT nRepCnt, UINT nFlags );
 
         /**
         * SComboBoxBase::OnChar
-        * @brief    ×Ö·ûÏûÏ¢
-        * @param    UINT nChar -- °´¼ü¶ÔÓ¦µÄÂëÖµ 
-        * @param    UINT nRepCnt -- ÖØ¸´´ÎÊı
-        * @param    UINT nFlags -- ±êÖ¾
+        * @brief    å­—ç¬¦æ¶ˆæ¯
+        * @param    UINT nChar -- æŒ‰é”®å¯¹åº”çš„ç å€¼ 
+        * @param    UINT nRepCnt -- é‡å¤æ¬¡æ•°
+        * @param    UINT nFlags -- æ ‡å¿—
         * 
-        * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+        * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
         */ 
         void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 
         /**
         * SComboBoxBase::OnDestroy
-        * @brief    ÏÂÀ­´°¿ÚÏú»Ù
+        * @brief    ä¸‹æ‹‰çª—å£é”€æ¯
         * 
-        * Describe  ´Ëº¯ÊıÊÇÓÃÓÚÏú»ÙÏÂÀ­´°¿Ú
+        * Describe  æ­¤å‡½æ•°æ˜¯ç”¨äºé”€æ¯ä¸‹æ‹‰çª—å£
         */  
         void OnDestroy();
         /**
         * SComboBoxBase::OnGetDlgCode
-        * @brief    »ñÈ¡ÏûÏ¢Âë
+        * @brief    è·å–æ¶ˆæ¯ç 
         * 
-        * Describe  »ñÈ¡ÏûÏ¢Âë
+        * Describe  è·å–æ¶ˆæ¯ç 
         */  
-        UINT OnGetDlgCode();
+        UINT OnGetDlgCode() override;
 
         /**
         * SComboBoxBase::IsTabStop
-        * @brief    ÊÇ·ñ½ûÖ¹TAB¼ü
+        * @brief    æ˜¯å¦ç¦æ­¢TABé”®
         * 
-        * Describe  ÊÇ·ñ½ûÖ¹TAB¼ü
+        * Describe  æ˜¯å¦ç¦æ­¢TABé”®
         */  
-        BOOL IsFocusable();
+        BOOL IsFocusable() override;
 
         void OnSetFocus(SWND wndOld);
-        
+		void UpdateChildrenPosition() override;
+
         void OnKillFocus(SWND wndFocus);
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_INT(L"dropDown", m_bDropdown, FALSE)
-            ATTR_INT(L"dropHeight", m_nDropHeight, FALSE)
-            ATTR_INT(L"curSel", m_iInitSel, FALSE)
-            ATTR_SKIN(L"btnSkin", m_pSkinBtn, FALSE)
-            ATTR_INT(L"animateTime", m_nAnimTime, FALSE)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL() 
 
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_PAINT_EX(OnPaint)
-            MSG_WM_LBUTTONDOWN(OnLButtonDown)        
-            MSG_WM_MOUSEMOVE(OnMouseMove)
-            MSG_WM_MOUSELEAVE(OnMouseLeave)
-            MSG_WM_KEYDOWN(OnKeyDown) 
-            MSG_WM_CHAR(OnChar)
-            MSG_WM_DESTROY(OnDestroy)
-            MSG_WM_SETFOCUS_EX(OnSetFocus)
-            MSG_WM_KILLFOCUS_EX(OnKillFocus)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL() 
 
     protected:
         /**
         * SComboBoxBase::GetEditText
-        * @brief    »ñÈ¡±à¼­¿òÄÚÈİ
+        * @brief    è·å–ç¼–è¾‘æ¡†å†…å®¹
         * 
-        * Describe  »ñÈ¡±à¼­¿òÄÚÈİ
+        * Describe  è·å–ç¼–è¾‘æ¡†å†…å®¹
         */  
         SStringT GetEditText() const
         {
@@ -410,17 +395,17 @@ namespace SOUI
                 return SStringT();
             }
         }
+        SRichEdit *m_pEdit;      /**< SRichEditæŒ‡é’ˆ */
+        DWORD     m_dwBtnState;  /**< æŒ‰é’®çŠ¶æ€      */
+        ISkinObj *m_pSkinBtn;    /**< æŒ‰é’®èµ„æº      */
 
-        SRichEdit *m_pEdit;      /**< SRichEditÖ¸Õë */
-        DWORD     m_dwBtnState;  /**< °´Å¥×´Ì¬      */
-        ISkinObj *m_pSkinBtn;    /**< °´Å¥×ÊÔ´      */
-
-        BOOL m_bDropdown;        /**< ÊÇ·ñ°´ÏÂ   */
-        int  m_nDropHeight;      /**< ÏÂÀ­¿ò¸ß¶È */
-        int  m_nAnimTime;        /**< ¶¯»­Ê±¼ä   */
-        int  m_iInitSel;         /**< Ä¬ÈÏÑ¡ÖĞË÷Òı */
-        SDropDownWnd *m_pDropDownWnd;  /**< DropDownÖ¸Õë */
-		pugi::xml_document	m_xmlDropdownStyle;/**< DropDownµÄstyle */
+        BOOL m_bDropdown;        /**< æ˜¯å¦æŒ‰ä¸‹   */
+        int  m_nDropHeight;      /**< ä¸‹æ‹‰æ¡†é«˜åº¦ */
+        int  m_nAnimTime;        /**< åŠ¨ç”»æ—¶é—´   */
+        int  m_iInitSel;         /**< é»˜è®¤é€‰ä¸­ç´¢å¼• */
+        SDropDownWnd *m_pDropDownWnd;  /**< DropDownæŒ‡é’ˆ */
+		pugi::xml_document	m_xmlDropdownStyle;/**< DropDownçš„style */
+		BOOL m_bAutoFitDropBtn; /**< è‡ªé€‚åº”ä¸‹æ‹‰æŒ‰é’®å¤§å°*/
     };
 
 }

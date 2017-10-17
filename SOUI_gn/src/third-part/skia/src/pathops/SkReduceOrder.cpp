@@ -250,10 +250,8 @@ int SkReduceOrder::reduce(const SkDCubic& cubic, Quadratics allowQuadratics) {
     if (result) {
         return result;
     }
-	result = check_quadratic(cubic, fCubic);
-
     if (allowQuadratics == SkReduceOrder::kAllow_Quadratics
-		&& result) {
+            && (result = check_quadratic(cubic, fCubic))) {
         return result;
     }
     fCubic = cubic;

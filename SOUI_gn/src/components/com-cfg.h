@@ -12,7 +12,7 @@
 #define COM_SCRIPT_LUA _T("scriptmodule-lua.dll")
 #define COM_TRANSLATOR _T("translator.dll")
 #define COM_ZIPRESPROVIDER _T("resprovider-zip.dll")
-#define COM_7ZIPRESPROVIDER _T("resprovider-7zip.dll")
+//#define COM_7ZIPRESPROVIDER _T("resprovider-7zip.dll")
 #define COM_LOG4Z   _T("log4z.dll") 
 
 #ifdef LIB_SOUI_COM
@@ -22,7 +22,8 @@
 #pragma comment(lib,"opengl32")
 
 #pragma comment(lib,"skia")
-#pragma comment(lib,"zlib")
+#pragma comment(lib,"zlib_static")
+#pragma comment(lib,"zlib_x86_simd_static")
 #pragma comment(lib,"png")
 
 #ifdef DLL_CORE
@@ -198,12 +199,12 @@ public:
     {
         return zipResLoader.CreateInstance(COM_ZIPRESPROVIDER,ppObj);
     }
-
+	/*
 	BOOL CreateResProvider_7ZIP(IObjRef **ppObj)
 	{
 		return zip7ResLoader.CreateInstance(COM_7ZIPRESPROVIDER, ppObj);
 	}
-
+	*/
 	
     BOOL CreateLog4z(IObjRef **ppObj)
     {

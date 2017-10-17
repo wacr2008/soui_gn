@@ -1,7 +1,13 @@
-#include "SwndFrame.h"
+ï»¿#include "SwndFrame.h"
 
 namespace SOUI
 {
+	BEGIN_MSG_MAP_EX(SwndFrame)
+		MSG_WM_PAINT(OnPaint)
+		MSG_WM_TIMER(OnTimer)
+		REFLECT_NOTIFICATIONS_EX()
+	END_MSG_MAP()
+
     SwndFrame::SwndFrame(void)
     {
     }
@@ -42,7 +48,7 @@ namespace SOUI
         HDC hdc = GetDC();
         LOGFONT lf={0};
         lf.lfWeight = FW_BOLD;
-        _tcscpy(lf.lfFaceName,_T("ËÎÌå"));
+        _tcscpy(lf.lfFaceName,_T("å®‹ä½“"));
         lf.lfHeight=-20;
         HFONT hFont = CreateFontIndirect(&lf);
         HGDIOBJ hOldFont=SelectObject(hdc,hFont);

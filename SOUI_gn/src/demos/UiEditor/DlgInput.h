@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "core/shostwnd.h"
 #include "core/smsgloop.h"
 #include "core/SHostDialog.h"
@@ -7,7 +7,7 @@ namespace SOUI
 {
 	class SDlgInput: public SHostDialog
 	{
-		SOUI_CLASS_NAME(SDlgInput,L"dlginput")
+		SOUI_CLASS_NAME_DECL(SDlgInput,L"dlginput")
 	public:
 		SDlgInput();
 
@@ -27,17 +27,9 @@ namespace SOUI
 		void OnOK();
 		void OnClose();
 
-		EVENT_MAP_BEGIN()
+		EVENT_MAP_DECL()
 
-			EVENT_NAME_COMMAND(L"btnOK", OnOK)
-			EVENT_NAME_COMMAND(L"btnCancel", OnClose)
-			EVENT_MAP_END()
-
-			BEGIN_MSG_MAP_EX(SDlgInput)
-			MSG_WM_INITDIALOG(OnInitDialog)
-			CHAIN_MSG_MAP(SHostDialog)
-			REFLECT_NOTIFICATIONS_EX()
-			END_MSG_MAP()
+		BEGIN_MSG_MAP_EX_DECL()
 
 	protected:
 

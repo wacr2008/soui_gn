@@ -1,8 +1,10 @@
-#include "sdemoskin.h"
+﻿#include "sdemoskin.h"
 #include "helper/SDIBHelper.h"
 
 namespace SOUI
 {	
+	SOUI_CLASS_NAME(SDemoSkin, L"demoskin")
+	
 	SDemoSkin::SDemoSkin():m_csSize(0, 0),m_bkColor(RGB(255, 255, 255)), m_bIsColor(false), m_ISetOrLoadSkinHandler(NULL)
 	{
 	}

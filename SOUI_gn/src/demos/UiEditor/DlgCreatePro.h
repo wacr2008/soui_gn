@@ -1,4 +1,4 @@
-/**
+Ôªø/**
 * Copyright (C) 2014-2050 
 * All rights reserved.
 * 
@@ -8,7 +8,7 @@
 * @author     SOUI group   
 * @date       2014/08/02
 * 
-* Describe    SOUIµƒDialogƒ£øÈ
+* Describe    SOUIÁöÑDialogÊ®°Âùó
 */
 
 #pragma once
@@ -21,7 +21,7 @@ namespace SOUI
 {
 	class SDlgCreatePro: public SHostDialog
 	{
-		SOUI_CLASS_NAME(SDlgCreatePro,L"dlgcreatepro")
+		SOUI_CLASS_NAME_DECL(SDlgCreatePro,L"dlgcreatepro")
 	public:
 		SDlgCreatePro(LPCTSTR pszXmlName):SHostDialog(pszXmlName)
 		{
@@ -42,17 +42,9 @@ namespace SOUI
 		//void OnCancel();
 		//virtual SMessageLoop * GetMsgLoop(){return m_MsgLoop;}
 
-		EVENT_MAP_BEGIN()
-			EVENT_ID_COMMAND(IDOK,OnOK)
-			//EVENT_ID_COMMAND(IDCANCEL,OnCancel)
-			EVENT_MAP_END()
+		EVENT_MAP_DECL()
 
-			BEGIN_MSG_MAP_EX(SCreateProDlg)
-			//MSG_WM_CLOSE(OnCancel)
-			//MSG_WM_KEYDOWN(OnKeyDown)
-			CHAIN_MSG_MAP(SHostDialog)
-			REFLECT_NOTIFICATIONS_EX()
-			END_MSG_MAP()
+		BEGIN_MSG_MAP_EX_DECL()
 
 	public:
 		SStringT m_strinput;

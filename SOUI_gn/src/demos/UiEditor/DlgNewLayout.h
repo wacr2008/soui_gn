@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "core/shostwnd.h"
 #include "core/smsgloop.h"
 #include "core/SHostDialog.h"
@@ -9,7 +9,7 @@ namespace SOUI
 {
 	class SDlgNewLayout: public SHostDialog
 	{
-		SOUI_CLASS_NAME(SDlgNewLayout,L"dlgnewlayout")
+		SOUI_CLASS_NAME_DECL(SDlgNewLayout,L"dlgnewlayout")
 	public:
 		SDlgNewLayout(LPCTSTR pszXmlName, SStringT strProPath);
 
@@ -34,27 +34,9 @@ namespace SOUI
 		//void OnCancel();
 		//virtual SMessageLoop * GetMsgLoop(){return m_MsgLoop;}
 
-		EVENT_MAP_BEGIN()
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_close", OnClose)
+		EVENT_MAP_DECL()
 
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_dlg", OnBtnDlgOpenFile)
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_OK", OnOK)
-			//EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZY_NEW", OnZYNew)
-			//EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZY_DEL", OnZYDel)
-			//EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_NEW", OnSkinNew)
-			//EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_DEL", OnSkinDel)
-
-			//EVENT_ID_COMMAND(IDOK,OnOK)
-			//EVENT_ID_COMMAND(IDCANCEL,OnCancel)
-			EVENT_MAP_END()
-
-		BEGIN_MSG_MAP_EX(SDlgSkinSelect)
-			MSG_WM_INITDIALOG(OnInitDialog)
-			//MSG_WM_CLOSE(OnCancel)
-			//MSG_WM_KEYDOWN(OnKeyDown)
-			CHAIN_MSG_MAP(SHostDialog)
-			REFLECT_NOTIFICATIONS_EX()
-			END_MSG_MAP()
+		BEGIN_MSG_MAP_EX_DECL()
 
 	protected:
 		SStringT m_strProPath;

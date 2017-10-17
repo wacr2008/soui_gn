@@ -1,4 +1,4 @@
-
+﻿
 /* png.h - header file for PNG reference library
  *
  * libpng version 1.5.19 - August 21, 2014

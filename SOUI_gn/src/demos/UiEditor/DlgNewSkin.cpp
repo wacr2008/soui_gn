@@ -1,8 +1,24 @@
-﻿#include "DlgNewSkin.h"
+﻿
+#include "DlgNewSkin.h"
 #include "CDebug.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SDlgNewSkin, L"dlgnewskin")
+
+	EVENT_MAP_BEGIN(SDlgNewSkin)
+
+		EVENT_NAME_COMMAND(L"btnOK", OnOK)
+		EVENT_NAME_COMMAND(L"btnCancel", OnCancel)
+	EVENT_MAP_END()
+
+	BEGIN_MSG_MAP_EX(SDlgNewSkin)
+		MSG_WM_INITDIALOG(OnInitDialog)
+		//MSG_WM_CLOSE(OnCancel)
+		//MSG_WM_KEYDOWN(OnKeyDown)
+		CHAIN_MSG_MAP(SHostDialog)
+		REFLECT_NOTIFICATIONS_EX()
+	END_MSG_MAP()
 
 	SDlgNewSkin::SDlgNewSkin(LPCTSTR pszXmlName):SHostDialog(pszXmlName)
 	{

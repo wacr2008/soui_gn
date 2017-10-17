@@ -1,0 +1,21 @@
+import("//build_overrides/common.gni")
+ 
+ 
+source_set("sqlite3") {
+  sources = [   
+    "sqlite3.h", 
+    "sqlite3.c",  
+  ]
+
+  allow_circular_includes_from = []
+  defines  = [  "_CRT_NON_CONFORMING_SWPRINTFS",
+                "_CRT_SECURE_NO_WARNINGS",
+                "__STDC_CONSTANT_MACROS",
+                "SQLITE_ENABLE_COLUMN_METADATA",
+             ]
+   
+  libs = []  
+   
+  cflags = ["/wd4005"]
+}  
+ 

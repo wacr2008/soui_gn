@@ -1001,7 +1001,7 @@ bool GrOvalRenderer::drawRRect(GrDrawTarget* target, GrContext* context, bool us
     SkStrokeRec::Style style = stroke.getStyle();
 
     // do (potentially) anisotropic mapping of stroke
-	SkVector scaledStroke = SkPoint::Make(0,0);
+    SkVector scaledStroke;
     SkScalar strokeWidth = stroke.getWidth();
 
     bool isStrokeOnly = SkStrokeRec::kStroke_Style == style ||

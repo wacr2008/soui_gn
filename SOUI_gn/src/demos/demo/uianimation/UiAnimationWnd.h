@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "UIAnimation.h"
 #include <atl.mini/SComHelper.h>
@@ -87,7 +87,7 @@ namespace SOUI
 
     class SUiAnimationWnd : public SWindow
     {
-        SOUI_CLASS_NAME(SUiAnimationWnd,L"uianimationwnd")
+        SOUI_CLASS_NAME_DECL(SUiAnimationWnd,L"uianimationwnd")
     public:
         SUiAnimationWnd(void);
         ~SUiAnimationWnd(void);
@@ -100,19 +100,9 @@ namespace SOUI
         void OnTimer(char cEvt);
         void OnShowWindow(BOOL bShow, UINT nStatus);
 
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_CREATE(OnCreate)
-            MSG_WM_DESTROY(OnDestroy)
-            MSG_WM_SIZE(OnSize)
-            MSG_WM_SHOWWINDOW(OnShowWindow)
-            MSG_WM_PAINT_EX(OnPaint)
-            MSG_WM_TIMER_EX(OnTimer)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_SKIN(L"icon",m_pSkinIcon,FALSE)
-            ATTR_IMAGE(L"aniMode",m_pAniMode,FALSE)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL()
     protected:
         
         ISkinObj        *               m_pSkinIcon;

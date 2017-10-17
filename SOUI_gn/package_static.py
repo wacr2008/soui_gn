@@ -17,7 +17,7 @@ APP_PACKAGE_LIB_FILE_LISTS = [
   'obj/src/components/render-skia/render-skia.lib',
   'obj/src/components/imgdecoder-stb/imgdecoder-stb.lib',
   'obj/src/third-part/lua-52/lua-52.lib',
-  'obj/src/components/resprovider-7zip/resprovider-7zip.lib',
+  #'obj/src/components/resprovider-7zip/resprovider-7zip.lib',
   'obj/src/components/resprovider-zip/resprovider-zip.lib',
   'obj/src/third-part/mhook/mhook.lib',
   'obj/src/components/log4z/log4z.lib',
@@ -31,11 +31,11 @@ APP_PACKAGE_LIB_FILE_LISTS = [
   'obj/src/components/imgdecoder-gdip/imgdecoder-gdip.lib',
   'obj/src/components/imgdecoder-wic/imgdecoder-wic.lib',
   'obj/src/components/render-gdi/render-gdi.lib',
-  'obj/src/third-part/zlib/zlib.lib',
+  'obj/src/third-part/zlib/zlib_static.lib',
+  'obj/src/third-part/zlib/zlib_x86_simd_static.lib',
 ]
 
 APP_PACKAGE_DLL_FILE_LISTS = [
-  'soui-sys-resource.dll', 
   'uiresbuilder.exe',
   'uiresImporter.exe',
   'souispy.exe',
@@ -48,7 +48,7 @@ APP_PACKAGE_PDB_FILE_LISTS = [
   'obj/src/components/imgdecoder-stb/imgdecoder-stb_cc.pdb',
   'obj/src/third-part/lua-52/lua-52_cc.pdb',
   'obj/src/components/resprovider-zip/resprovider-zip_cc.pdb',
-  'obj/src/components/resprovider-7zip/resprovider-7zip_cc.pdb', 
+  #'obj/src/components/resprovider-7zip/resprovider-7zip_cc.pdb', 
   'obj/src/third-part/mhook/mhook_cc.pdb',
   'obj/src/components/log4z/log4z_cc.pdb',
   'obj/src/third-part/smiley/smiley_cc.pdb',
@@ -61,7 +61,8 @@ APP_PACKAGE_PDB_FILE_LISTS = [
   'obj/src/components/imgdecoder-gdip/imgdecoder-gdip_cc.pdb',
   'obj/src/components/imgdecoder-wic/imgdecoder-wic_cc.pdb',
   'obj/src/components/render-gdi/render-gdi_cc.pdb',
-  'obj/src/third-part/zlib/zlib_cc.pdb',
+  'obj/src/third-part/zlib/zlib_static_c.pdb',
+  'obj/src/third-part/zlib/zlib_x86_simd_static_c.pdb',
 ]
  
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -86,7 +87,7 @@ class PackageDebug():
       os.makedirs(destDir)  
     
     for pkg_path  in self._package_db:
-      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Debug'+os.path.sep+ pkg_path
+      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Debug_static'+os.path.sep+ pkg_path
       logging.debug('package file  %s  ', srcPath)
       
       if os.path.isfile( srcPath ):
@@ -102,7 +103,7 @@ class PackageDebug():
       os.makedirs(destDir)  
     
     for pkg_path  in self._package_dll_db:
-      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Debug'+os.path.sep+ pkg_path
+      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Debug_static'+os.path.sep+ pkg_path
       logging.debug('package file  %s  ', srcPath)
       
       if os.path.isfile( srcPath ):
@@ -118,7 +119,7 @@ class PackageDebug():
        os.makedirs(destDir)  
     
     for pkg_path  in self._backup_db:
-      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Debug'+os.path.sep+ pkg_path
+      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Debug_static'+os.path.sep+ pkg_path
       logging.debug('backup file  %s  ', srcPath)
       
       if os.path.isfile( srcPath ):
@@ -141,7 +142,7 @@ class PackageRelease():
       os.makedirs(destDir)  
     
     for pkg_path  in self._package_db:
-      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Release'+os.path.sep+ pkg_path
+      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Release_static'+os.path.sep+ pkg_path
       logging.debug('package file  %s  ', srcPath)
       
       if os.path.isfile( srcPath ):
@@ -157,7 +158,7 @@ class PackageRelease():
       os.makedirs(destDir)  
     
     for pkg_path  in self._package_dll_db:
-      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Release'+os.path.sep+ pkg_path
+      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Release_static'+os.path.sep+ pkg_path
       logging.debug('package file  %s  ', srcPath)
       
       if os.path.isfile( srcPath ):
@@ -173,7 +174,7 @@ class PackageRelease():
        os.makedirs(destDir)  
     
     for pkg_path  in self._backup_db:
-      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Release'+os.path.sep+ pkg_path
+      srcPath =PROJECT_ROOT_DIR + os.path.sep +'out'+os.path.sep+'Release_static'+os.path.sep+ pkg_path
       logging.debug('backup file  %s  ', srcPath)
       
       if os.path.isfile( srcPath ):

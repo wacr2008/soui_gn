@@ -1,2 +1,2 @@
-//Ê¹ÓÃDLL·½Ê½±àÒëSOUI¼°UTILITES
+ï»¿//ä½¿ç”¨DLLæ–¹å¼ç¼–è¯‘SOUIåŠUTILITES
 #define DLL_CORE

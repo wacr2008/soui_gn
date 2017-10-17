@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "core/SSingleton.h"
 #include <unknown/obj-ref-i.h>
 #include <unknown/obj-ref-impl.hpp>
@@ -31,7 +31,7 @@ namespace SOUI
 	{
 	public:
 		SUiDef(void);
-		~SUiDef(void);
+		~SUiDef(void) override;
 
 		static IUiDefInfo * CreateUiDefInfo(IResProvider *pResProvider, LPCTSTR pszUiDef);
 

@@ -1,6 +1,21 @@
-#include "sclock.h"
+Ôªø#include "sclock.h"
 
 namespace SOUI{
+
+	SOUI_CLASS_NAME(SClock, L"clock")
+
+	SOUI_MSG_MAP_BEGIN(SClock)
+		MSG_WM_PAINT_EX(OnPaint)
+		MSG_WM_TIMER_EX(OnTimer)
+		MSG_WM_CREATE(OnCreate)
+	SOUI_MSG_MAP_END()
+		 
+	SOUI_ATTRS_BEGIN(SClock)
+		ATTR_IMAGEAUTOREF(L"pointer_hour", pointer_hour, TRUE)
+		ATTR_IMAGEAUTOREF(L"pointer_minute", pointer_minute, TRUE)
+		ATTR_IMAGEAUTOREF(L"pointer_second", pointer_second, TRUE)
+	SOUI_ATTRS_END()
+
 
 SClock::SClock()
 {
@@ -15,7 +30,7 @@ void SClock::OnPaint(SOUI::IRenderTarget * pRT)
 
 	CPoint center = rcClient.CenterPoint();
 
-	// º∆À„æÿ–Œ
+	// ËÆ°ÁÆóÁü©ÂΩ¢
 	// 35 * 16
 	CRect rcDraw(center, SOUI::CPoint(center.x + 200, center.y + 32));
 	rcDraw.OffsetRect(-35, -16);
@@ -51,7 +66,7 @@ void SClock::OnPaint(SOUI::IRenderTarget * pRT)
 
 SMatrix SClock::InitMatrix(double angle, CPoint &center)
 {
-    //œ»∆Ω“∆µΩcenter£¨‘Ÿ–˝◊™angle£¨‘Ÿ∆Ω“∆-center
+    //ÂÖàÂπ≥ÁßªÂà∞centerÔºåÂÜçÊóãËΩ¨angleÔºåÂÜçÂπ≥Áßª-center
     return SMatrix().translate((FLOAT)center.x,(FLOAT)center.y)
                     .rotate((FLOAT)angle-90)
                     .translate((FLOAT)-center.x,(FLOAT)-center.y);

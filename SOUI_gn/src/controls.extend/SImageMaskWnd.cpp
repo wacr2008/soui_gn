@@ -1,7 +1,21 @@
+ï»¿
 #include "SImageMaskWnd.h"
 
 namespace SOUI
 {
+
+	SOUI_MSG_MAP_BEGIN(SImageMaskWnd)
+		MSG_WM_PAINT_EX(OnPaint)
+	SOUI_MSG_MAP_END()
+
+	SOUI_ATTRS_BEGIN(SImageMaskWnd)
+		ATTR_CUSTOM(L"mask", OnAttrMask)//image.a
+		ATTR_CUSTOM(L"skin", OnAttrImage)
+	SOUI_ATTRS_END()
+
+		
+	SOUI_CLASS_NAME(SImageMaskWnd, L"imageMask")
+
     SImageMaskWnd::SImageMaskWnd(void)
     {
     }
@@ -73,7 +87,7 @@ namespace SOUI
         pSkin->Draw(pRTDst,&rc,0);
         pRTDst->SelectObject(pOldBmp);
         
-        //´ÓmaskµÄÖ¸¶¨channelÖĞ»ñµÃalphaÍ¨µÀ
+        //ä»maskçš„æŒ‡å®šchannelä¸­è·å¾—alphaé€šé“
         LPBYTE pBitCache = (LPBYTE)m_bmpCache->LockPixelBits();
         LPBYTE pBitMask = (LPBYTE)m_bmpMask->LockPixelBits();
         LPBYTE pDst = pBitCache;
@@ -83,12 +97,12 @@ namespace SOUI
         {
             BYTE byAlpha = *pSrc;
             pSrc += 4;
-            //Ô´°ëÍ¸Ã÷£¬mask²»Í¸Ã÷Ê±Ê¹ÓÃÔ´µÄ°ëÍ¸Ã÷ÊôĞÔ
+            //æºåŠé€æ˜ï¼Œmaskä¸é€æ˜æ—¶ä½¿ç”¨æºçš„åŠé€æ˜å±æ€§
             if(pDst[3] == 0xff || (pDst[3]!=0xFF &&byAlpha == 0))
-            {//Ô´²»Í¸Ã÷,»òÕßmaskÈ«Í¸Ã÷
-                *pDst++ = ((*pDst) * byAlpha)>>8;//×öpremultiply
-                *pDst++ = ((*pDst) * byAlpha)>>8;//×öpremultiply
-                *pDst++ = ((*pDst) * byAlpha)>>8;//×öpremultiply
+            {//æºä¸é€æ˜,æˆ–è€…maskå…¨é€æ˜
+                *pDst++ = ((*pDst) * byAlpha)>>8;//åšpremultiply
+                *pDst++ = ((*pDst) * byAlpha)>>8;//åšpremultiply
+                *pDst++ = ((*pDst) * byAlpha)>>8;//åšpremultiply
                 *pDst++ = byAlpha;
             }
         }

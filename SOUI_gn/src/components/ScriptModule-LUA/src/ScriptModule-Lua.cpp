@@ -1,16 +1,55 @@
-// luaScriptModule.cpp : ¶¨Òå DLL Ó¦ÓÃ³ÌĞòµÄµ¼³öº¯Êı¡£
-//
-
-#include <event/EventSubscriber.h>
-#include "ScriptModule-Lua.h"
-#include "../lua_tinker/lua_tinker.h"
+ï»¿#include "ScriptModule-Lua.h"
+#include "lua_tinker/lua_tinker.h"
+#include "core-def.h"
 #include <string/strcpcvt.h>
+#include <event/EventSubscriber.h>
+#include <interface/SScriptModule-i.h>
+
+extern "C"
+{
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+};
+
 
 extern BOOL SOUI_Export_Lua(lua_State *L);
 
 
 namespace SOUI
 {
+
+	class SScriptModule_Lua : public TObjRefImpl<IScriptModule>
+	{
+	public:
+		SScriptModule_Lua(void);
+
+		~SScriptModule_Lua() override;
+
+		void * GetScriptEngine() override;
+
+
+		void	executeScriptFile(LPCSTR pszScriptFile) override;
+		void	executeScriptBuffer(const char* buff, size_t sz) override;
+		void    executeString(LPCSTR str) override;
+
+		bool	executeScriptedEventHandler(LPCSTR handler_name, SOUI::EventArgs *pEvt) override;
+
+		LPCSTR getIdentifierString() const override;
+
+		bool subscribeEvent(SWindow* target, UINT uEvent, LPCSTR subscriber_name) override;
+		bool unsubscribeEvent(SWindow* target, UINT uEvent, LPCSTR subscriber_name) override;
+	protected:
+		lua_State * d_state;
+	};
+
+	class SIScriptFactory : public TObjRefImpl<IScriptFactory>
+	{
+	public:
+		HRESULT CreateScriptModule(IScriptModule ** ppScriptModule) override;
+	};
+
+
     wchar_t * cast_a2w(char * str)
     {
         return (wchar_t *)str;
@@ -47,21 +86,20 @@ namespace SOUI
     public:
         //! Slot function type.
         LuaFunctionSlot(lua_State *pLuaState,LPCSTR pszLuaFun) 
-            : m_pLuaState(pLuaState)
-            , m_luaFun(pszLuaFun)
+            : m_luaFun(pszLuaFun), m_pLuaState(pLuaState)
         {}
 
-        virtual bool operator()(EventArgs *pArg)
+        bool operator()(EventArgs *pArg)  override
         {
             return lua_tinker::call<bool>(m_pLuaState,m_luaFun,pArg);
         }
 
-        virtual ISlotFunctor* Clone() const 
+        ISlotFunctor* Clone() const  override
         {
             return new LuaFunctionSlot(m_pLuaState,m_luaFun);
         }
 
-        virtual bool Equal(const ISlotFunctor & sour)const 
+        bool Equal(const ISlotFunctor & sour)const  override
         {
             if(sour.GetSlotType()!=GetSlotType()) return false;
             const LuaFunctionSlot *psour=static_cast<const LuaFunctionSlot*>(&sour);
@@ -69,7 +107,7 @@ namespace SOUI
             return psour->m_luaFun==m_luaFun && psour->m_pLuaState==m_pLuaState;
         }
 
-        virtual UINT GetSlotType() const {return SLOT_USER+1;}
+        UINT GetSlotType() const  override  {return SLOT_USER+1;}
 
     private:
         SStringA m_luaFun;
@@ -86,11 +124,11 @@ namespace SOUI
             SOUI_Export_Lua(d_state);
             lua_register(d_state, "A2W", Utf8ToW);
             lua_tinker::def(d_state, "cast_a2w", cast_a2w);
-            luaL_dostring(d_state,"function L (str)\n return cast_a2w(A2W(str));\nend");//×¢²áÒ»¸öÈ«¾ÖµÄ"L"º¯Êı£¬ÓÃÀ´½«utf8±àÂëµÄ×Ö·û´®×ª»»ÎªWCHAR
+            luaL_dostring(d_state,"function L (str)\n return cast_a2w(A2W(str));\nend");//æ³¨å†Œä¸€ä¸ªå…¨å±€çš„"L"å‡½æ•°ï¼Œç”¨æ¥å°†utf8ç¼–ç çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºWCHAR
 
             lua_register(d_state, "A2T", Utf8ToT);
             lua_tinker::def(d_state, "cast_a2t", cast_a2t);
-            luaL_dostring(d_state,"function T (str)\n return cast_a2t(A2T(str));\nend");//×¢²áÒ»¸öÈ«¾ÖµÄ"T"º¯Êı£¬ÓÃÀ´½«utf8±àÂëµÄ×Ö·û´®×ª»»ÎªTCHAR
+            luaL_dostring(d_state,"function T (str)\n return cast_a2t(A2T(str));\nend");//æ³¨å†Œä¸€ä¸ªå…¨å±€çš„"T"å‡½æ•°ï¼Œç”¨æ¥å°†utf8ç¼–ç çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºTCHAR
         }
     }
 
@@ -103,8 +141,12 @@ namespace SOUI
         }
     }
 
+	void *SScriptModule_Lua::GetScriptEngine()
+	{
+		return d_state; 
+	}
 
-    LPCSTR SScriptModule_Lua::getIdentifierString() const
+	  LPCSTR SScriptModule_Lua::getIdentifierString() const
     {
         return "SOUI.Script.Lua5.1";
     }

@@ -3,7 +3,7 @@ import("//build_overrides/common.gni")
 
 group("demos") {
   deps = [
-    "360demo",
+    "360",
     "360Preview",
     "BaoFeng",
     "demo",
@@ -15,8 +15,13 @@ group("demos") {
     "QQLogin",
     "SoTool",
     "souispy",
+    "SMenuBarTest",
     "Emoji",
     "setupdll",
     "UiEditor",
+    "TIMDemo",
+    "SLogViewer",
+    #"SouiEditor",
+    "TXMgr",
   ] 
 }

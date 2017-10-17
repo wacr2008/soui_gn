@@ -3,6 +3,20 @@
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SDlgInput, L"dlginput")
+
+	EVENT_MAP_BEGIN(SDlgInput)
+
+		EVENT_NAME_COMMAND(L"btnOK", OnOK)
+		EVENT_NAME_COMMAND(L"btnCancel", OnClose)
+	EVENT_MAP_END()
+
+	BEGIN_MSG_MAP_EX(SDlgInput)
+		MSG_WM_INITDIALOG(OnInitDialog)
+		CHAIN_MSG_MAP(SHostDialog)
+		REFLECT_NOTIFICATIONS_EX()
+	END_MSG_MAP()
+
 
 	SDlgInput::SDlgInput():SHostDialog(_T("LAYOUT:UIDESIGNER_XML_INPUT"))
 	{

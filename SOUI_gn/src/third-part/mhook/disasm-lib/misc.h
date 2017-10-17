@@ -1,4 +1,4 @@
-// Copyright (C) 2002, Matt Conover (mconover@gmail.com)
+﻿// Copyright (C) 2002, Matt Conover (mconover@gmail.com)
 #ifndef MISC_H
 #define MISC_H
 #ifdef __cplusplus

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, Matt Conover (mconover@gmail.com)
+﻿// Copyright (C) 2004, Matt Conover (mconover@gmail.com)
 #ifndef X86_DISASM_H
 #define X86_DISASM_H
 #ifdef __cplusplus

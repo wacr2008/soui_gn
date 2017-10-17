@@ -86,7 +86,7 @@ public:
 
 		unsigned long as = fileStreams.GetFileSize(sfile.c_str());
 		(void)as;
-		BlobBuffer blob;
+		MemoryStream blob;
 		if(fileStreams.GetFile(sfile.c_str(),blob))
 			blob.SaveBlobToFile("d:\\aab.jpg");
 		

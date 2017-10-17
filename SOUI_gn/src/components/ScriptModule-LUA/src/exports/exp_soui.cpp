@@ -1,4 +1,4 @@
-
+﻿
 extern "C"
 {
 #include <lua.h>
@@ -6,10 +6,8 @@ extern "C"
 #include <lauxlib.h>
 };
 
-#include "../../lua_tinker/lua_tinker.h"
-
-using namespace SOUI;
-
+#include "lua_tinker/lua_tinker.h"
+ 
 #include "exp_Basic.h"
 #include "exp_string.h"
 #include "exp_strcpcvt.h"
@@ -23,6 +21,7 @@ using namespace SOUI;
 #include "exp_eventArgs.h"
 #include "exp_Window.h"
 #include "exp_ctrls.h"
+#include "helper/color.h"
 
 BOOL SOUI_Export_Lua(lua_State *L)
 {

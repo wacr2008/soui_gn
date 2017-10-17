@@ -63,9 +63,8 @@ public:
     int sign() const {
         return SkSign32(fStart - fEnd);
     }
-	
-#undef  small
-	bool small() const;
+
+    bool small() const;
 
     int start() const {
         return fStart;

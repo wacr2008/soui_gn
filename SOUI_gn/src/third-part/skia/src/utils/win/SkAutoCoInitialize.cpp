@@ -7,9 +7,7 @@
  */
 
 
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
+//#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <ole2.h>
 #include "SkAutoCoInitialize.h"

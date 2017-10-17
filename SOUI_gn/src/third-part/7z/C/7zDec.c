@@ -1,4 +1,4 @@
-/* 7zDec.c -- Decoding from 7z folder
+﻿/* 7zDec.c -- Decoding from 7z folder
 2015-11-18 : Igor Pavlov : Public domain */
 
 #include "Precomp.h"

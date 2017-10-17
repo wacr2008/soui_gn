@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <atl.mini/SComHelper.h>
 #include <ExDisp.h>

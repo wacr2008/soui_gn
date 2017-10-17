@@ -1,9 +1,27 @@
+﻿
 #include "SFadeFrame.h"
 
 #define TIMER_SHOW  1
 #define TIMER_HIDE  2
 
 namespace SOUI{
+	SOUI_CLASS_NAME(SFadeFrame, L"fadeframe")
+
+	SOUI_ATTRS_BEGIN(SFadeFrame)
+		ATTR_UINT(L"AniTime", m_nAniTime, FALSE)
+		ATTR_UINT(L"DelayTime", m_nDelayTime, FALSE)
+		ATTR_STRINGW(L"targetName", m_strTargetName, FALSE)
+		ATTR_UINT(L"showAlpha", m_byAlphaShow, FALSE)
+		ATTR_INT(L"initShow", m_bInitShow, FALSE)
+	SOUI_ATTRS_END()
+		
+	SOUI_MSG_MAP_BEGIN(SFadeFrame)
+		MSG_WM_MOUSEHOVER(OnMouseHover)
+		MSG_WM_MOUSELEAVE(OnMouseLeave)
+		MSG_WM_TIMER_EX(OnTimer)
+		MSG_WM_CREATE(OnCreate)
+	SOUI_MSG_MAP_END()
+
     SFadeFrame::SFadeFrame(void):m_nAniTime(200),m_nDelayTime(200),m_byAlphaShow(0xFF),m_byAlphaCurrent(0xFF),m_bInitShow(TRUE)
     {
         m_style.m_bTrackMouseEvent = true;

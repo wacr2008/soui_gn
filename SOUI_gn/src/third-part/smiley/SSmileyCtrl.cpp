@@ -1,4 +1,4 @@
-// SSmileyCtrl.cpp : Implementation of SSmileyCtrl
+ï»¿// SSmileyCtrl.cpp : Implementation of SSmileyCtrl
 #include <Windows.h>
 #include "../../controls.extend/smiley/SSmileyCtrl.h"
 
@@ -70,7 +70,7 @@ public:
 
 public:
     SSmileyCtrl();
-    ~SSmileyCtrl();
+    ~SSmileyCtrl() override;
 
     static CLSID GetObjectCLSID(){
         return CLSID_SSmileyCtrl;
@@ -79,21 +79,21 @@ public:
 
 
 public://ISoSmileyCtrl
-    STDMETHOD(Insert2Richedit)(IRichEditOle * ole);
-    STDMETHOD(SetSource)(ISmileySource * pSource);    
-    STDMETHOD(GetSource)(ISmileySource ** ppSource);    
+    STDMETHOD(Insert2Richedit)(IRichEditOle * ole) override;
+    STDMETHOD(SetSource)(ISmileySource * pSource) override;
+    STDMETHOD(GetSource)(ISmileySource ** ppSource) override;
 
 public://IOleObject
-    STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
-    STDMETHOD(GetMiscStatus)(DWORD dwAspect, DWORD *pdwStatus);
+    STDMETHOD(SetClientSite)(IOleClientSite *pClientSite) override;
+    STDMETHOD(GetMiscStatus)(DWORD dwAspect, DWORD *pdwStatus) override;
 
 public://IPersistStreamInitImpl
     HRESULT IPersistStreamInit_Load(LPSTREAM pStm, const ATL_PROPMAP_ENTRY* pMap);
     HRESULT IPersistStreamInit_Save(LPSTREAM pStm, BOOL fClearDirty, const ATL_PROPMAP_ENTRY* pMap);
     HRESULT FireViewChange();
-    HRESULT	OnDraw(ATL_DRAWINFO& di);
+    HRESULT	OnDraw(ATL_DRAWINFO& di) override;
 public://IPersistStorage
-    STDMETHOD(Load)(IStorage* pStorage);//ÖØÔØIPersistStorage::Load£¬³õÊ¼»¯Íê³ÉºóĞ´Èë¼¸¸ö±êÖ¾Î»
+    STDMETHOD(Load)(IStorage* pStorage);//é‡è½½IPersistStorage::Loadï¼Œåˆå§‹åŒ–å®Œæˆåå†™å…¥å‡ ä¸ªæ ‡å¿—ä½
 
 public://ITimerHander
     STDMETHOD(OnTimer)(HDC hdc);
@@ -124,7 +124,7 @@ SSmileyCtrl::SSmileyCtrl():m_iFrameIndex(0),m_dwDrawFlag(0)
 SSmileyCtrl::~SSmileyCtrl()
 {
     if(m_pSmileyHost) 
-    {//±£Ö¤¶¨Ê±Æ÷²»ÔÙÒıÓÃ×Ô¼º
+    {//ä¿è¯å®šæ—¶å™¨ä¸å†å¼•ç”¨è‡ªå·±
         m_pSmileyHost->KillTimer(this);
     }
 }
@@ -206,7 +206,7 @@ STDMETHODIMP SSmileyCtrl::SetSource(ISmileySource * pSource)
     m_pSmileySource = pSource;
     if(m_pSmileySource)
     {
-        //¸üĞÂ±íÇé´óĞ¡
+        //æ›´æ–°è¡¨æƒ…å¤§å°
         SIZE sz;
         m_pSmileySource->GetSize(&sz);
 
@@ -291,7 +291,7 @@ HRESULT SSmileyCtrl::OnDraw(ATL_DRAWINFO& di)
     RECT rc={di.prcBounds->left,di.prcBounds->top,di.prcBounds->right,di.prcBounds->bottom};
     m_pSmileySource->Draw(di.hdcDraw,&rc,m_iFrameIndex);
     if(!di.bZoomed)
-    {//ÔÚcopyÊ±»áÓĞbZoomed±êÖ¾£¬°Ñ¾ØĞÎ·Å´ó¡£ÕâÀïÏÈÇå³ıµô
+    {//åœ¨copyæ—¶ä¼šæœ‰bZoomedæ ‡å¿—ï¼ŒæŠŠçŸ©å½¢æ”¾å¤§ã€‚è¿™é‡Œå…ˆæ¸…é™¤æ‰
         m_rcPos = rc;//cache pos, position will be updated in response to EN_UPDATE message come from it's host
     }
     
@@ -342,7 +342,7 @@ void SSmileyCtrl::UpdateSmiley(HDC hdc)
 
 HRESULT SSmileyCtrl::Load( IStorage* pStorage )
 {
-    //ÏòRichEditFlags×Ö¶ÎÖĞĞ´Èë3¸öREOBJECT±êÖ¾¡£·ÖÎöÁËRichedit20µÄwinceÔ´´úÂëºó·¢ÏÖ¶ÔÏó³õÊ¼»¯Íê³É²åÈëricheditÇ°»á´Ó"RichEditFlags"Á÷ÖĞ¶Á3¸ö±êÖ¾Î»
+    //å‘RichEditFlagså­—æ®µä¸­å†™å…¥3ä¸ªREOBJECTæ ‡å¿—ã€‚åˆ†æäº†Richedit20çš„winceæºä»£ç åå‘ç°å¯¹è±¡åˆå§‹åŒ–å®Œæˆæ’å…¥richeditå‰ä¼šä»"RichEditFlags"æµä¸­è¯»3ä¸ªæ ‡å¿—ä½
     CComPtr<IStream> spStream;
     static LPCOLESTR vszRichEditFlags = OLESTR("RichEditFlags");
     HRESULT hr = pStorage->CreateStream(vszRichEditFlags,
@@ -376,7 +376,7 @@ STDMETHODIMP SSmileyCtrl::SetClientSite(IOleClientSite *pClientSite)
         HRESULT hr=pClientSite->QueryInterface(IID_IRichEditOleCallback,(void**)&pCallback);
         if(FAILED(hr)) return E_FAIL;
 
-        //´ÓcallbackÖĞ»ñÈ¡host
+        //ä»callbackä¸­è·å–host
         hr = pCallback->QueryInterface(__uuidof(ISmileyHost),(LPVOID*)&m_pSmileyHost);
         if(FAILED(hr)) return E_FAIL;
     }
@@ -450,7 +450,7 @@ int FindLastOleInrange(IRichEditOle *pOle, int iBegin,int iEnd,int cpMin,int cpM
 }
 
 
-//»ñµÃ±íÇéµÄ»æÖÆ×´Ì¬
+//è·å¾—è¡¨æƒ…çš„ç»˜åˆ¶çŠ¶æ€
 DWORD SSmileyCtrl::GetSmileyFlag(IRichEditOle *ole,int iFirst,int iLast)
 {
     ATLASSERT(m_pSmileyHost);
@@ -465,7 +465,7 @@ DWORD SSmileyCtrl::GetSmileyFlag(IRichEditOle *ole,int iFirst,int iLast)
 
         if (reobj.clsid==CLSID_SSmileyCtrl && reobj.dwUser==m_dwID)
         {
-            //Ñ¡ÖĞµ¥¸ö¶ÔÏóÊ±»æÖÆ±ß¿ò£¬Ñ¡ÖĞ¶à¸ö¶ÔÏóÊ±·´É«
+            //é€‰ä¸­å•ä¸ªå¯¹è±¡æ—¶ç»˜åˆ¶è¾¹æ¡†ï¼Œé€‰ä¸­å¤šä¸ªå¯¹è±¡æ—¶åè‰²
             CHARRANGE chr={0};
             m_pSmileyHost->SendMessage(EM_EXGETSEL, 0, (LPARAM)&chr,NULL);
 
@@ -495,7 +495,7 @@ void SSmileyCtrl::UpdateSmileyFlag()
     m_pSmileyHost->SendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)&ole,&lMsgRet);
     if (!lMsgRet) return;
         
-    //»ñµÃ¿É¼û×Ö·û·¶Î§
+    //è·å¾—å¯è§å­—ç¬¦èŒƒå›´
     m_pSmileyHost->SendMessage(EM_GETFIRSTVISIBLELINE,0,0,&lMsgRet);
 
     int iFirstLine = (int)lMsgRet;
@@ -508,7 +508,7 @@ void SSmileyCtrl::UpdateSmileyFlag()
     m_pSmileyHost->SendMessage(EM_CHARFROMPOS,0,(LPARAM)&pt,&lMsgRet);
     LONG cpLast  = (LONG)lMsgRet;
 
-    //²ÉÓÃÁ½·Ö·¨²éÕÒÔÚ¿É¼û·¶Î§ÖĞµÄOLE¶ÔÏó
+    //é‡‡ç”¨ä¸¤åˆ†æ³•æŸ¥æ‰¾åœ¨å¯è§èŒƒå›´ä¸­çš„OLEå¯¹è±¡
     int nCount=ole->GetObjectCount();
 
     int iFirstVisibleOle = FindFirstOleInrange(ole,0,nCount,cpFirst,cpLast);

@@ -1,4 +1,4 @@
-
+﻿
 #ifndef  WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #endif
@@ -134,6 +134,14 @@ namespace SOUI
         *ppImgDecoder = new SImgX_STB(TRUE);
         return TRUE;
     }
+
+	HRESULT SImgDecoderFactory_STB::SaveImage(IBitmap *pImg, LPCWSTR pszFileName, const LPVOID pFormat)
+	{ 
+		(void)(pImg);
+		(void)(pszFileName);
+		(void)(pFormat);
+		return E_NOTIMPL;
+	}
     
     LPCWSTR SImgDecoderFactory_STB::GetDescription() const
     {

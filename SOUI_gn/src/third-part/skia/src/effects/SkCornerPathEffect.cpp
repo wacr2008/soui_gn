@@ -43,8 +43,7 @@ bool SkCornerPathEffect::filterPath(SkPath* dst, const SkPath& src,
 
     bool        closed;
     SkPoint     moveTo, lastCorner;
-	SkVector    firstStep;
-	SkVector step = SkPoint::Make(0,0);
+    SkVector    firstStep, step;
     bool        prevIsValid = true;
 
     // to avoid warnings

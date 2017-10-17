@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 #include <helper/color.h>
 #include <unknown/obj-ref-impl.hpp>
@@ -31,6 +31,12 @@ namespace SOUI
         virtual BOOL CreateFont(IFont ** ppFont , const LOGFONT &lf);
         virtual BOOL CreateBitmap(IBitmap ** ppBitmap);
         virtual BOOL CreateRegion(IRegion **ppRgn);
+
+		virtual BOOL CreatePath(IPath ** ppPath);
+
+		virtual BOOL CreatePathEffect(REFGUID guidEffect, IPathEffect ** ppPathEffect);
+
+		virtual BOOL CreatePathMeasure(IPathMeasure ** ppPathMeasure);
 
     protected:
         CAutoRefPtr<IImgDecoderFactory> m_imgDecoderFactory;
@@ -65,7 +71,7 @@ namespace SOUI
     // SPen_GDI
     class SPen_GDI : public TGdiRenderObjImpl<IPen>
     {
-		SOUI_CLASS_NAME(SPen_GDI,L"pen")
+		SOUI_CLASS_NAME_DECL(SPen_GDI,L"pen")
 	public:
         SPen_GDI(IRenderFactory * pRenderFac,int iStyle=PS_SOLID,COLORREF cr=0,int cWidth=1)
             :TGdiRenderObjImpl<IPen>(pRenderFac)
@@ -74,10 +80,9 @@ namespace SOUI
         {
             m_hPen = ::CreatePen(m_style,m_nWidth,m_cr&0x00ffffff);
         }
-        ~SPen_GDI()
-        {
-            DeleteObject(m_hPen);
-        }
+		~SPen_GDI() override;
+		
+		OBJTYPE ObjectType() const override; 
 
         int GetWidth(){return m_nWidth;}
 
@@ -103,7 +108,7 @@ namespace SOUI
     // SFont_GDI
     class SFont_GDI: public TGdiRenderObjImpl<IFont>
     {
-		SOUI_CLASS_NAME(SFont_GDI,L"font")
+		SOUI_CLASS_NAME_DECL(SFont_GDI,L"font")
     public:
         SFont_GDI(IRenderFactory * pRenderFac,const LOGFONT * plf)
             :TGdiRenderObjImpl<IFont>(pRenderFac),m_hFont(NULL)
@@ -115,6 +120,8 @@ namespace SOUI
         {
             DeleteObject(m_hFont);
         }
+
+		OBJTYPE ObjectType() const override ; 
 
         virtual const LOGFONT * LogFont() const {return &m_lf;}
 
@@ -136,8 +143,9 @@ namespace SOUI
 
     class SBrush_GDI : public TGdiRenderObjImpl<IBrush>
     {
-		SOUI_CLASS_NAME(SBrush_GDI,L"brush")
+		SOUI_CLASS_NAME_DECL(SBrush_GDI,L"brush")
     public:
+		OBJTYPE ObjectType() const override;
         static SBrush_GDI * CreateSolidBrush(IRenderFactory * pRenderFac,COLORREF cr){
             return new SBrush_GDI(pRenderFac,cr);
         }
@@ -179,28 +187,36 @@ namespace SOUI
     // SBitmap_GDI
     class SBitmap_GDI : public TGdiRenderObjImpl<IBitmap>
     {
-		SOUI_CLASS_NAME(SBitmap_GDI,L"bitmap")
+		SOUI_CLASS_NAME_DECL(SBitmap_GDI,L"bitmap")
     public:
         SBitmap_GDI(IRenderFactory *pRenderFac)
             :TGdiRenderObjImpl<IBitmap>(pRenderFac),m_hBmp(0)
         {
             m_sz.cx=m_sz.cy=0;
         }
-        virtual ~SBitmap_GDI()
-        {
-            if(m_hBmp) DeleteObject(m_hBmp);
-        }
-        virtual HRESULT Init(int nWid,int nHei,const LPVOID pBits=NULL);
-        virtual HRESULT Init(IImgFrame *pFrame);
-		virtual HRESULT LoadFromFile(LPCTSTR pszFileName);
-        virtual HRESULT LoadFromMemory(LPBYTE pBuf,size_t szLen);
+		~SBitmap_GDI() override;
+
+		OBJTYPE ObjectType() const override;
+
+		HRESULT Clone(IBitmap **ppClone) const ;
+		HRESULT Scale(IBitmap **ppOutput, int nScale, FilterLevel filterLevel) ;
+
+		HRESULT Scale(IBitmap **pOutput, int nWid, int nHei, FilterLevel filterLevel) override;
+
+		HRESULT Save(LPCWSTR pszFileName, const LPVOID pFormat) override;
+
+
+        HRESULT Init(int nWid,int nHei,const LPVOID pBits=NULL) override;
+        HRESULT Init(IImgFrame *pFrame) override;
+		HRESULT LoadFromFile(LPCTSTR pszFileName) override;
+        HRESULT LoadFromMemory(LPBYTE pBuf,size_t szLen) override;
 
         virtual UINT Width() const;
         virtual UINT Height() const;
         virtual SIZE Size() const;
         virtual LPVOID  LockPixelBits();
-        virtual void    UnlockPixelBits(LPVOID);
-        virtual const LPVOID GetPixelBits() const;
+        virtual void    UnlockPixelBits(LPVOID pBuf);
+        virtual LPVOID GetPixelBits() const;
         
         HBITMAP  GetBitmap(){return m_hBmp;}
 
@@ -209,23 +225,26 @@ namespace SOUI
 
         HRESULT ImgFromDecoder(IImgX *imgDecoder);
         SIZE        m_sz;
-        HBITMAP     m_hBmp;     //±Í◊ºµƒ32ŒªŒªÕº£¨∫Õm_bitmapπ≤œÌƒ⁄¥Ê
+        HBITMAP     m_hBmp;     //Ê†áÂáÜÁöÑ32‰Ωç‰ΩçÂõæÔºåÂíåm_bitmapÂÖ±‰∫´ÂÜÖÂ≠ò
     };
 
     //////////////////////////////////////////////////////////////////////////
     //	SRegion_GDI
     class SRegion_GDI: public TGdiRenderObjImpl<IRegion>
     {
-		SOUI_CLASS_NAME(SRegion_GDI,L"region")
+		SOUI_CLASS_NAME_DECL(SRegion_GDI,L"region")
 		friend class SRenderTarget_GDI;
     public:
         SRegion_GDI(IRenderFactory *pRenderFac);
-        ~SRegion_GDI(){
-            DeleteObject(m_hRgn);
-        }
+		~SRegion_GDI() override;
+
+		OBJTYPE ObjectType() const override;
 
         virtual void CombineRect(LPCRECT lprect,int nCombineMode);
-        virtual void CombineRgn(const IRegion * pRgnSrc,int nCombineMode );
+		virtual void CombineRoundRect(LPCRECT lprect, POINT ptRadius, int nCombineMode);
+		virtual void CombineEllipse(LPCRECT lprect , int nCombineMode);
+
+		virtual void CombineRgn(const IRegion * pRgnSrc,int nCombineMode );
         virtual void SetRgn(const HRGN rgn);
 
         virtual BOOL PtInRegion(POINT pt);
@@ -238,7 +257,9 @@ namespace SOUI
     protected:
         HRGN GetRegion() const;
         void _CombineRgn(HRGN hRgn,int nCombineMode);
-        
+
+
+
         HRGN    m_hRgn;
     };
 
@@ -251,7 +272,7 @@ namespace SOUI
         SRenderTarget_GDI(IRenderFactory* pRenderFactory,int nWid,int nHei);
         ~SRenderTarget_GDI();
 
-        //÷ª÷ß≥÷¥¥Ω®ŒªÕº±Ì√Ê
+        //Âè™ÊîØÊåÅÂàõÂª∫‰ΩçÂõæË°®Èù¢
         virtual HRESULT CreateCompatibleRenderTarget(SIZE szTarget,IRenderTarget **ppRenderTarget);
 
         virtual HRESULT CreatePen(int iStyle,COLORREF cr,int cWidth,IPen ** ppPen);
@@ -339,7 +360,7 @@ namespace SOUI
         virtual HRESULT QueryInterface(REFGUID iid,IObjRef ** ppObj){
 			(iid);
 			(ppObj);
-			return E_NOTIMPL;
+			return E_NOINTERFACE;
 		}
 
         virtual HRESULT SetTransform(const IxForm * pXForm,IxForm *pOldXFrom=NULL);
@@ -350,6 +371,14 @@ namespace SOUI
 
 		virtual COLORREF SetPixel( int x, int y, COLORREF cr );
 
+		virtual HRESULT GradientFill2(LPCRECT pRect,GradientType type,COLORREF crStart,COLORREF crCenter,COLORREF crEnd,float fLinearAngle,float fCenterX,float fCenterY,int nRadius,BYTE byAlpha=0xff);
+
+		virtual HRESULT CreateRegion( IRegion ** ppRegion );
+
+		virtual HRESULT ClipPath(const IPath * path, UINT mode, bool doAntiAlias = false);
+
+		virtual HRESULT DrawPath(const IPath * path, IPathEffect * pathEffect = NULL);
+
     protected:
         HDC               m_hdc;
         SColor            m_curColor;
@@ -359,7 +388,7 @@ namespace SOUI
         CAutoRefPtr<SFont_GDI> m_curFont;
         POINT               m_ptOrg;
         
-        //◊¢“‚±£¥Ê4∏ˆƒ¨»œµƒGDI∂‘œÛ
+        //Ê≥®ÊÑè‰øùÂ≠ò4‰∏™ÈªòËÆ§ÁöÑGDIÂØπË±°
         CAutoRefPtr<IBitmap> m_defBmp;
         CAutoRefPtr<IPen> m_defPen;
         CAutoRefPtr<IBrush> m_defBrush;

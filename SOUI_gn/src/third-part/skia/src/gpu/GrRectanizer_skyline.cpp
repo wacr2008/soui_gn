@@ -17,7 +17,7 @@ bool GrRectanizerSkyline::addRect(int width, int height, SkIPoint16* loc) {
 
     // find position for new rectangle
     int bestWidth = this->width() + 1;
-    int bestX=0;
+    int bestX;
     int bestY = this->height() + 1;
     int bestIndex = -1;
     for (int i = 0; i < fSkyline.count(); ++i) {

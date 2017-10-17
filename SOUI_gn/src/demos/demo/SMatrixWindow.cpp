@@ -1,7 +1,21 @@
-#include "SMatrixWindow.h"
+ï»¿#include "SMatrixWindow.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SMatrixWindow, L"matrixWindow")
+
+	SOUI_MSG_MAP_BEGIN(SMatrixWindow)
+		MSG_WM_PAINT_EX(OnPaint)
+		MSG_WM_ERASEBKGND_EX(OnEraseBkgnd)
+	SOUI_MSG_MAP_END()
+
+	SOUI_ATTRS_BEGIN(SMatrixWindow)
+		ATTR_CUSTOM(L"rotate", OnAttrRotate)
+		ATTR_CUSTOM(L"scale", OnAttrScale)
+		ATTR_CUSTOM(L"skew", OnAttrSkew)
+		ATTR_CUSTOM(L"translate", OnAttrTranslate)
+	SOUI_ATTRS_END()
+
 SMatrixWindow::SMatrixWindow(void)
 :m_fRotate(.0f)
 ,m_fScaleX(1.0F),m_fScaleY(1.0f)
@@ -56,7 +70,7 @@ void SMatrixWindow::OnPaint(IRenderTarget *pRT)
     CRect rc = GetClientRect();
     if(!m_pBgSkin)
     {
-        pRT->DrawText(_T("Ã»ÓÐÖ¸¶¨skin¶ÔÏó"),-1,rc,DT_SINGLELINE|DT_VCENTER|DT_VCENTER);
+        pRT->DrawText(_T("æ²¡æœ‰æŒ‡å®šskinå¯¹è±¡"),-1,rc,DT_SINGLELINE|DT_VCENTER|DT_VCENTER);
     }else
     {
         SMatrix m,m2;

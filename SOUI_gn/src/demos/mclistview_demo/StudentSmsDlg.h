@@ -1,7 +1,9 @@
-#pragma once
+﻿#pragma once
 
-#include "res/R.h"
 #include "SSearchDropdownList.h"
+#include "res/R.h"
+using namespace SOUI;
+
 struct IStudentCheckChanged
 {
     virtual void OnStudentCheckChanged(int nSelCurrent, int nSelExpired) PURE;
@@ -18,32 +20,23 @@ public:
 protected:
     void OnBtnSmsRecord();
     
-    void OnSearchFillList(SOUI::EventArgs *e);
-    void OnSearchValue(SOUI::EventArgs *e);
-    void OnSmsInputNotify(SOUI::EventArgs *e);
-    EVENT_MAP_BEGIN()
-        EVENT_ID_HANDLER(SOUI::R.id.edit_sms_input,SOUI::EventRENotify::EventID,OnSmsInputNotify)
-        EVENT_ID_COMMAND(SOUI::R.id.btn_sms_record,OnBtnSmsRecord);
-        EVENT_ID_HANDLER(SOUI::R.id.edit_search,SOUI::EventFillSearchDropdownList::EventID,OnSearchFillList)
-        EVENT_ID_HANDLER(SOUI::R.id.edit_search,SOUI::EventDropdownListSelected::EventID,OnSearchValue)
-    EVENT_MAP_END()
+    void OnSearchFillList(EventArgs *e);
+    void OnSearchValue(EventArgs *e);
+    void OnSmsInputNotify(EventArgs *e);
+    EVENT_MAP_DECL()
 protected:
     BOOL OnInitDialog(HWND wndFocus, LPARAM lInitParam);
-    void OnLButtonDown(UINT nFlags, SOUI::CPoint point);
+    void OnLButtonDown(UINT nFlags, CPoint point);
 
-    BEGIN_MSG_MAP_EX(CStudentSmsDlg)
-        MSG_WM_LBUTTONDOWN(OnLButtonDown)
-        MSG_WM_INITDIALOG(OnInitDialog)
-        CHAIN_MSG_MAP(SOUI::SHostDialog)
-    END_MSG_MAP()
+    BEGIN_MSG_MAP_EX_DECL()
 
 protected:
     virtual void OnStudentCheckChanged(int nSelCurrent, int nSelExpired);
 
 protected:
 	
-    SOUI::SWindow     * m_wndSmsRecord;
-	SOUI::SMCListView * m_tvStudent;
-	SOUI::SListView   * m_lvSmsRecord;
+    SWindow     * m_wndSmsRecord;
+	SMCListView * m_tvStudent;
+	SListView   * m_lvSmsRecord;
 };
 

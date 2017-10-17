@@ -1,4 +1,4 @@
-#include "IconvWorker.h"
+﻿#include "IconvWorker.h"
 
 #include "FileMap.h"
 

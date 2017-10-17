@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 namespace SOUI
 {
@@ -6,7 +6,7 @@ namespace SOUI
     
     class EventChatEditKeyReturn : public TplEventArgs<EventChatEditKeyReturn>
     {
-        SOUI_CLASS_NAME(EventChatEditKeyReturn,L"on_chatedit_key_return")
+        SOUI_CLASS_NAME_DECL(EventChatEditKeyReturn,L"on_chatedit_key_return")
     public:
         EventChatEditKeyReturn(SObject *pSender):TplEventArgs<EventChatEditKeyReturn>(pSender),bCancel(false){}
         enum {EventID=EVT_CHATEDIT_KEYRETURN};
@@ -15,7 +15,7 @@ namespace SOUI
     
     class SChatEdit : public SRichEdit
     {
-    SOUI_CLASS_NAME(SChatEdit,L"chatedit")
+    SOUI_CLASS_NAME_DECL(SChatEdit,L"chatedit")
     public:
         SChatEdit(void);
         ~SChatEdit(void);
@@ -27,7 +27,7 @@ namespace SOUI
         // Returns:   BOOL -- success:TRUE
         // Qualifier: 
         // Parameter: const SStringW & strMsg
-        // remark: strMsg :“ª∏ˆXML∏Ò Ωµƒ’˝Œƒ£¨÷ß≥÷±Í«©£∫<color value="#ff0000">abc<link color="#0000ff">home</link><underline>efg<italic>abc<bold>abc<strike>afc<font value="ÀŒÃÂ">abc<smiley id="1" path="c:\a.gif"/></font></strike></bold></italic></underline></color>
+        // remark: strMsg :‰∏Ä‰∏™XMLÊ†ºÂºèÁöÑÊ≠£ÊñáÔºåÊîØÊåÅÊ†áÁ≠æÔºö<color value="#ff0000">abc<link color="#0000ff">home</link><underline>efg<italic>abc<bold>abc<strike>afc<font value="ÂÆã‰Ωì">abc<smiley id="1" path="c:\a.gif"/></font></strike></bold></italic></underline></color>
         //************************************
         BOOL AppendFormatText(const SStringW & strMsg,BOOL bNewLine=TRUE,BOOL bCanUndo=TRUE);
 
@@ -41,10 +41,7 @@ namespace SOUI
         int     OnCreate(LPVOID);
         void    OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
         
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_CREATE(OnCreate)
-            MSG_WM_KEYDOWN(OnKeyDown)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
         
     protected:
         int _InsertFormatText(int iCaret,CHARFORMATW cf,pugi::xml_node xmlText,BOOL bCanUndo);

@@ -1,8 +1,12 @@
-#include "CalcMd5Handler.h"
+ï»¿#include "CalcMd5Handler.h"
 
 using namespace SOUI;
-
 const void *map_fileW( LPCWSTR name, LPDWORD filesize );
+
+EVENT_MAP_BEGIN(CCalcMd5Handler)
+	EVENT_CHECK_SENDER_ROOT(m_pPageRoot)
+	EVENT_NAME_HANDLER(L"edit_input", SOUI::EventKeyEnter::EventID, OnDirEnterFinish)
+EVENT_MAP_BREAK()
 
 CCalcMd5Handler::CCalcMd5Handler(void)
 {
@@ -71,7 +75,7 @@ void CCalcMd5Handler::CalcFileMd5( const SStringT &strFileName )
 
     }else
     {
-        strMd5 = _T("ÎÄ¼þ´ò¿ªÊ§°Ü!");
+        strMd5 = _T("æ–‡ä»¶æ‰“å¼€å¤±è´¥!");
     }
 
     strMd5 += _T("\t");

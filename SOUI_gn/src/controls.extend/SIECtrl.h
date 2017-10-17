@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <control/SActiveX.h>
 #include <ExDisp.h>
@@ -89,7 +89,7 @@ namespace SOUI
         
     class SIECtrl :	public SActiveX, public IMessageFilter
     {
-        SOUI_CLASS_NAME(SIECtrl, L"iectrl")
+        SOUI_CLASS_NAME_DECL(SIECtrl, L"iectrl")
     public:
         SIECtrl(void);
         ~SIECtrl(void);
@@ -106,21 +106,13 @@ namespace SOUI
         int OnCreate(LPVOID);
         void OnDestroy();
 
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_CREATE(OnCreate)
-            MSG_WM_DESTROY(OnDestroy)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
+
+		SOUI_ATTRS_DECL()
     protected:
         HRESULT RegisterEventHandler(BOOL inAdvise );
 
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_STRINGW(L"url",m_strUrl,FALSE)
-			ATTR_INT(L"disableScrollbar",m_bDisableScrollbar,FALSE)
-			ATTR_INT(L"disable3DBorder",m_bDisable3DBorder,FALSE)
-            ATTR_INT(L"disableContextMenu",m_bDisableContextMenu,FALSE)
-			ATTR_INT(L"disableTextSelect",m_bDisableTextSelect,FALSE)
-        SOUI_ATTRS_END()
 
         SStringW m_strUrl;
 

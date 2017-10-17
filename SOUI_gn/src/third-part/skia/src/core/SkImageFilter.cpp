@@ -345,7 +345,7 @@ bool SkImageFilter::onFilterBounds(const SkIRect& src, const SkMatrix& ctm,
         return false;
     }
 
-	SkIRect bounds = SkIRect::MakeEmpty();
+    SkIRect bounds;
     for (int i = 0; i < fInputCount; ++i) {
         SkImageFilter* filter = this->getInput(i);
         SkIRect rect = src;

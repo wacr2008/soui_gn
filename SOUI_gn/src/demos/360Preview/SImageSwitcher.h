@@ -1,7 +1,7 @@
-#pragma once
+Ôªø#pragma once
 
 /**
-by ∂‡µ„√‚∑—WIFI
+by Â§öÁÇπÂÖçË¥πWIFI
  */
 #include <core/Swnd.h>
 
@@ -9,7 +9,7 @@ namespace SOUI
 {
 	class SImageSwitcher : public SWindow
 	{
-		SOUI_CLASS_NAME(SImageSwitcher,L"imageSwitcher")
+		SOUI_CLASS_NAME_DECL(SImageSwitcher,L"imageSwitcher")
 	public:
 		SImageSwitcher();
 		virtual ~SImageSwitcher();
@@ -37,18 +37,11 @@ namespace SOUI
 		void OnMouseMove(UINT nFlags,CPoint pt);
 		void OnTimer(char nIDEvent);
 	protected:
-		SOUI_MSG_MAP_BEGIN()	
-			MSG_WM_PAINT_EX(OnPaint)    //¥∞ø⁄ªÊ÷∆œ˚œ¢
-			MSG_WM_LBUTTONDOWN(OnLButtonDown)
-			MSG_WM_LBUTTONUP(OnLButtonUp)
-			MSG_WM_MOUSEMOVE(OnMouseMove)
-			MSG_WM_TIMER_EX(OnTimer)
-		SOUI_MSG_MAP_END()
+		SOUI_MSG_MAP_DECL()	 
+
+		SOUI_ATTRS_DECL()
 
         HRESULT OnAttrImages(const SStringW strValue,BOOL bLoading);
         
-		SOUI_ATTRS_BEGIN()
-			ATTR_CUSTOM(L"images",OnAttrImages)
-		SOUI_ATTRS_END()
 	};
 }

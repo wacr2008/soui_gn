@@ -1,4 +1,4 @@
-/* LzmaUtil.c -- Test application for LZMA compression
+﻿/* LzmaUtil.c -- Test application for LZMA compression
 2015-11-08 : Igor Pavlov : Public domain */
 
 #include "../../Precomp.h"

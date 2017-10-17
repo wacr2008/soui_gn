@@ -1,4 +1,4 @@
-#include "SSearchDropdownList.h"
+﻿#include "SSearchDropdownList.h"
 
 namespace SOUI
 {
@@ -6,6 +6,18 @@ namespace SOUI
     const wchar_t * KName_ListView   = L"lv_dropdown";
     const wchar_t * KName_SearchEdit = L"edit_input";
     
+
+	SOUI_CLASS_NAME(EventFillSearchDropdownList, L"on_fill_search_dropdown_list")
+	
+	SOUI_CLASS_NAME(EventDropdownListSelected, L"on_dropdown_list_selected")
+
+	SOUI_CLASS_NAME(SSearchDropdownList, L"searchDropdownList")
+
+	SOUI_ATTRS_BEGIN(SSearchDropdownList)
+		ATTR_INT(L"dropAlign", m_nDropAlign, FALSE)
+		ATTR_INT(L"maxDropHeight", m_nMaxDropHeight, FALSE)
+	SOUI_ATTRS_END()
+
     SSearchDropdownList::SSearchDropdownList(void):m_nDropAlign(DROPALIGN_RIGHT),m_nMaxDropHeight(150),m_pDropDownWnd(NULL)
     {
         GetEventSet()->addEvent(EVENTID(EventFillSearchDropdownList));

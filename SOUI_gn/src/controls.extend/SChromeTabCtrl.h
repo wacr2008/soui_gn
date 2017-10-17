@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <core/Swnd.h>
 #include "SAnimator.h"
@@ -12,7 +12,7 @@ namespace SOUI
 #define EVT_CHROMETAB_SELCHANGED    (EVT_CHROMETAB_BEGIN + 2)
     class EventChromeTabNew : public TplEventArgs<EventChromeTabNew>
     {
-        SOUI_CLASS_NAME(EventChromeTabNew,L"on_chrometab_new")
+        SOUI_CLASS_NAME_DECL(EventChromeTabNew,L"on_chrometab_new")
     public:
         EventChromeTabNew(SWindow *pSender):TplEventArgs<EventChromeTabNew>(pSender)
         {
@@ -26,7 +26,7 @@ namespace SOUI
 
     class EventChromeTabClose : public TplEventArgs<EventChromeTabClose>
     {
-        SOUI_CLASS_NAME(EventChromeTabClose,L"on_chrometab_close")
+        SOUI_CLASS_NAME_DECL(EventChromeTabClose,L"on_chrometab_close")
     public:
         EventChromeTabClose(SWindow *pSender):TplEventArgs<EventChromeTabClose>(pSender)
         {
@@ -41,7 +41,7 @@ namespace SOUI
 
     class EventChromeTabSelChanged : public TplEventArgs<EventChromeTabSelChanged>
     {
-        SOUI_CLASS_NAME(EventChromeTabSelChanged,L"on_chrometab_sel_changed")
+        SOUI_CLASS_NAME_DECL(EventChromeTabSelChanged,L"on_chrometab_sel_changed")
     public:
         EventChromeTabSelChanged(SWindow *pSender):TplEventArgs<EventChromeTabSelChanged>(pSender)
         {
@@ -55,7 +55,7 @@ namespace SOUI
 
     class SChromeTabCtrl : public SWindow, public ITimelineHandler
     {
-        SOUI_CLASS_NAME(SChromeTabCtrl,L"chromeTabCtrl")
+        SOUI_CLASS_NAME_DECL(SChromeTabCtrl,L"chromeTabCtrl")
         friend class SChromeTab;
     public:
         enum TABDIR{
@@ -92,19 +92,9 @@ namespace SOUI
         int OnCreate(LPVOID);
         void OnDestroy();
 
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_CREATE(OnCreate)
-            MSG_WM_DESTROY(OnDestroy)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_INT(L"tabDesiredSize",m_nDesiredSize,FALSE)
-            ATTR_INT(L"enableDrag",m_bEnableDrag,FALSE)
-            ATTR_ENUM_BEGIN(L"tabAlign",TABDIR,FALSE)
-                ATTR_ENUM_VALUE(L"vertical",TDIR_VERT)
-                ATTR_ENUM_VALUE(L"horizontal",TDIR_HORZ)
-            ATTR_ENUM_END(m_tabAlign)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL()
 
         int     m_nDesiredSize;
         TABDIR  m_tabAlign;

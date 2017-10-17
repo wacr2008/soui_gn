@@ -1,2 +1,2 @@
-//Ê¹ÓÃDLL·½Ê½±àÒëSOUI×é¼þ
+ï»¿//ä½¿ç”¨DLLæ–¹å¼ç¼–è¯‘SOUIç»„ä»¶
 #define DLL_SOUI_COM

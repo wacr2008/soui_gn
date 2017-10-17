@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <interface/SResProvider-i.h>
 #include <unknown/obj-ref-impl.hpp>
@@ -6,7 +6,6 @@
 #include <string/strcpcvt.h>
 #include <souicoll.h>
 #define _COLL_NS SOUI
-//#define SOUI_EXP
 #include <helper/SResID.h>
 #include <interface/render-i.h>
 

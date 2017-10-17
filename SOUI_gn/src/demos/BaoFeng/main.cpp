@@ -3,15 +3,9 @@
 #include <com-loader.hpp>
 
 
-#ifdef _DEBUG
-#define COM_IMGDECODER  _T("imgdecoder-wicd.dll")
-#define COM_RENDER_GDI  _T("render-gdid.dll")
-#define SYS_NAMED_RESOURCE _T("soui-sys-resourced.dll")
-#else
 #define COM_IMGDECODER  _T("imgdecoder-wic.dll")
 #define COM_RENDER_GDI  _T("render-gdi.dll")
 #define SYS_NAMED_RESOURCE _T("soui-sys-resource.dll")
-#endif
 
 using namespace SOUI;
 

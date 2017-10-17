@@ -2009,8 +2009,7 @@ void SkOpSegment::checkDuplicates() {
     do {
         index = endIndex;
         endIndex = nextExactSpan(index, 1);
-		endFound = endIndex < 0;
-		if (endFound) {
+        if ((endFound = endIndex < 0)) {
             endIndex = count();
         }
         int dupCount = endIndex - index;
@@ -3451,8 +3450,7 @@ SkOpSpan* SkOpSegment::markAndChaseDoneBinary(int index, int endIndex) {
     markDoneBinary(min);
     SkOpSpan* last = NULL;
     SkOpSegment* other = this;
-	other = other->nextChase(&index, &step, &min, &last);
-	while ((other)) {
+    while ((other = other->nextChase(&index, &step, &min, &last))) {
         if (other->done()) {
             SkASSERT(!last);
             break;
@@ -3468,8 +3466,7 @@ SkOpSpan* SkOpSegment::markAndChaseDoneUnary(int index, int endIndex) {
     markDoneUnary(min);
     SkOpSpan* last = NULL;
     SkOpSegment* other = this;
-	other = other->nextChase(&index, &step, &min, &last);
-	while ((other)) {
+    while ((other = other->nextChase(&index, &step, &min, &last))) {
         if (other->done()) {
             SkASSERT(!last);
             break;
@@ -3487,8 +3484,7 @@ SkOpSpan* SkOpSegment::markAndChaseWinding(const SkOpAngle* angle, int winding) 
     markWinding(min, winding);
     SkOpSpan* last = NULL;
     SkOpSegment* other = this;
-	other = other->nextChase(&index, &step, &min, &last);
-	while ((other)) {
+    while ((other = other->nextChase(&index, &step, &min, &last))) {
         if (other->fTs[min].fWindSum != SK_MinS32) {
 //            SkASSERT(other->fTs[min].fWindSum == winding);
             SkASSERT(!last);
@@ -3505,8 +3501,7 @@ SkOpSpan* SkOpSegment::markAndChaseWinding(int index, int endIndex, int winding)
     markWinding(min, winding);
     SkOpSpan* last = NULL;
     SkOpSegment* other = this;
-	other = other->nextChase(&index, &step, &min, &last);
-	while (other) {
+    while ((other = other->nextChase(&index, &step, &min, &last))) {
         if (other->fTs[min].fWindSum != SK_MinS32) {
             SkASSERT(other->fTs[min].fWindSum == winding || other->fTs[min].fLoop);
             SkASSERT(!last);
@@ -3523,8 +3518,7 @@ SkOpSpan* SkOpSegment::markAndChaseWinding(int index, int endIndex, int winding,
     markWinding(min, winding, oppWinding);
     SkOpSpan* last = NULL;
     SkOpSegment* other = this;
-	other = other->nextChase(&index, &step, &min, &last);
-	while (other) {
+    while ((other = other->nextChase(&index, &step, &min, &last))) {
         if (other->fTs[min].fWindSum != SK_MinS32) {
 #ifdef SK_DEBUG
             if (!other->fTs[min].fLoop) {

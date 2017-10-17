@@ -9,9 +9,7 @@
 #include "gl/GrGLInterface.h"
 #include "gl/GrGLAssembleInterface.h"
 #include "gl/GrGLUtil.h"
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
+//#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 class AutoLibraryUnload {

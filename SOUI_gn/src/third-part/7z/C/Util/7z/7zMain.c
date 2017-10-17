@@ -1,4 +1,4 @@
-/* 7zMain.c - Test application for 7z Decoder
+﻿/* 7zMain.c - Test application for 7z Decoder
 2016-05-16 : Igor Pavlov : Public domain */
 
 #include "Precomp.h"

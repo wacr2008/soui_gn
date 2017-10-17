@@ -1,4 +1,4 @@
-// Copyright (C) 2004, Matt Conover (mconover@gmail.com)
+﻿// Copyright (C) 2004, Matt Conover (mconover@gmail.com)
 #undef NDEBUG
 #include <assert.h>
 #include "disasm.h"
@@ -1639,6 +1639,8 @@ HasSpecialExtension:
 	// Instructions that implicitly reference the CS/DS can't have segment override prefixes
 	switch (Instruction->Type)
 	{
+		default:
+			break;
 		case ITYPE_PUSHF: case ITYPE_POPF:
 		case ITYPE_ENTER: case ITYPE_LEAVE:
 			SANITY_CHECK_SEGMENT_OVERRIDE();
@@ -1915,7 +1917,7 @@ HasSpecialExtension:
 				Instruction->AnomalyOccurred = TRUE;
 				break;
 			default:
-				if (!SuppressErrors) printf("[0x%08I64X] ANOMALY: unexpected segment 0x%02X\n", VIRTUAL_ADDRESS, X86Instruction->Selector);
+				if (!SuppressErrors) printf("[0x%08I64X] ANOMALY: unexpected segment 0x%02X\n", VIRTUAL_ADDRESS, (unsigned int)X86Instruction->Selector);
 				Instruction->AnomalyOccurred = TRUE;
 				break;
 		}
@@ -3737,7 +3739,7 @@ INTERNAL U8 *SetOperands(INSTRUCTION *Instruction, U8 *Address, U32 Flags)
 				}
 				else if (X86Instruction->OperandSize == 2)
 				{
-					if (!SuppressErrors) printf("[0x%08I64X] ERROR: AMODE_PR illegal in 16-bit mode (\"%s\")\n", VIRTUAL_ADDRESS, rex_modrm.rm, X86Instruction->Opcode.Mnemonic);
+					if (!SuppressErrors) printf("[0x%08I64X] ERROR: invalid mmx register %d AMODE_PR illegal in 16-bit mode (\"%s\")\n", VIRTUAL_ADDRESS, rex_modrm.rm, X86Instruction->Opcode.Mnemonic);
 					goto abort;
 				}
 				if (!Decode) continue;
@@ -3764,7 +3766,7 @@ INTERNAL U8 *SetOperands(INSTRUCTION *Instruction, U8 *Address, U32 Flags)
 				}
 				else if (X86Instruction->OperandSize == 2)
 				{
-					if (!SuppressErrors) printf("[0x%08I64X] ERROR: AMODE_VR illegal in 16-bit mode (\"%s\")\n", VIRTUAL_ADDRESS, rex_modrm.rm, X86Instruction->Opcode.Mnemonic);
+					if (!SuppressErrors) printf("[0x%08I64X] ERROR: invalid mmx register %d AMODE_VR illegal in 16-bit mode (\"%s\")\n", VIRTUAL_ADDRESS, rex_modrm.rm, X86Instruction->Opcode.Mnemonic);
 					goto abort;
 				}
 				if (!Decode) continue;

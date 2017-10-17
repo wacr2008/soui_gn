@@ -1,4 +1,4 @@
-/* Ppmd8.h -- PPMdI codec
+﻿/* Ppmd8.h -- PPMdI codec
 2011-01-27 : Igor Pavlov : Public domain
 This code is based on:
   PPMd var.I (2002): Dmitry Shkarin : Public domain

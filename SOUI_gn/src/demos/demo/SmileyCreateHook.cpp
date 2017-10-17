@@ -1,4 +1,4 @@
-#include "SmileyCreateHook.h"
+﻿#include "SmileyCreateHook.h"
 #include "mhook.h"
 #include "../../controls.extend/smiley/SSmileyCtrl.h"
 

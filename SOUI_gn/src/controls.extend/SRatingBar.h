@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 namespace SOUI
 {
     class SRatingBar : public SWindow
     {
-    SOUI_CLASS_NAME(SRatingBar,L"ratingbar")
+    SOUI_CLASS_NAME_DECL(SRatingBar,L"ratingbar")
     public:
         SRatingBar(void);
         ~SRatingBar(void);
@@ -17,15 +17,9 @@ namespace SOUI
         
         void OnPaint(IRenderTarget *pRT);
         
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_PAINT_EX(OnPaint)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
         
-        SOUI_ATTRS_BEGIN()
-            ATTR_SKIN(L"starSkin",m_pStar,TRUE)
-            ATTR_INT(L"starNum",m_nStars,TRUE)
-            ATTR_FLOAT(L"value",m_fValue,TRUE)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL() 
         
     protected:
         ISkinObj * m_pStar;

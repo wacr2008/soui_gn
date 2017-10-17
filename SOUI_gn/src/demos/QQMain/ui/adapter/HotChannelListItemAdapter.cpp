@@ -1,7 +1,6 @@
 ﻿#include "ui/adapter/HotChannelListItemAdapter.h"
 #include "ui/SToggleEx.h"
-
-#include "res/R.h" 
+#include "res/R.h"
  
 namespace SOUI
 {  
@@ -10,6 +9,11 @@ const wchar_t * KHotChannelAttrName_Height[] = {
 	L"defHeight",
 	L"friendItemHeight" 
 };
+
+bool CHotChannelListItemAdapter::IsColumnVisible(int) const
+{
+	return true;
+}
 
 CHotChannelListItemAdapter::CHotChannelListItemAdapter(int data, live::IListItemCallback *pCB)
 { 

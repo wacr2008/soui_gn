@@ -1,12 +1,14 @@
-#include <control/SMessageBox.h>
+﻿#pragma once
 
-BOOL ExpLua_MessageBox(lua_State *L)
+#ifndef _EXP_MSG_BOX_H_
+#define _EXP_MSG_BOX_H_
+#include <windows.h>
+
+extern "C"
 {
-	try{
-		lua_tinker::def(L,"SMessageBox",SMessageBox);
-		return TRUE;
-	}catch(...)
-	{
-		return FALSE;
-	}
+#include "lua.h"
+#include "lstate.h"
 }
+BOOL ExpLua_MessageBox(lua_State *L);
+
+#endif

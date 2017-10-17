@@ -1,4 +1,4 @@
-// Copyright (C) 2004, Matt Conover (mconover@gmail.com)
+﻿// Copyright (C) 2004, Matt Conover (mconover@gmail.com)
 //
 // The opcode tables in this file are based off the Intel Instruction Set Reference
 // and an assortment of disassemblers, primarily libdisasm (by mammon)

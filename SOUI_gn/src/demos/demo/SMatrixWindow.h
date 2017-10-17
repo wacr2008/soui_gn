@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 #include <helper/SMatrix.h>
 namespace SOUI
 {
 class SMatrixWindow : public SWindow
 {
-SOUI_CLASS_NAME(SMatrixWindow,L"matrixWindow")
+SOUI_CLASS_NAME_DECL(SMatrixWindow,L"matrixWindow")
 public:
     SMatrixWindow(void);
     ~SMatrixWindow(void);
@@ -13,22 +13,14 @@ protected:
     void OnPaint(IRenderTarget *pRT);
     BOOL OnEraseBkgnd(IRenderTarget *pRT){return TRUE;}
 
-    SOUI_MSG_MAP_BEGIN()
-        MSG_WM_PAINT_EX(OnPaint)
-        MSG_WM_ERASEBKGND_EX(OnEraseBkgnd)
-    SOUI_MSG_MAP_END()
+    SOUI_MSG_MAP_DECL()
 protected:
     HRESULT OnAttrRotate(const SStringW & strValue,BOOL bLoading);
     HRESULT OnAttrScale(const SStringW & strValue,BOOL bLoading);
     HRESULT OnAttrSkew(const SStringW & strValue,BOOL bLoading);
     HRESULT OnAttrTranslate(const SStringW & strValue,BOOL bLoading);
     
-    SOUI_ATTRS_BEGIN()
-        ATTR_CUSTOM(L"rotate",OnAttrRotate)
-        ATTR_CUSTOM(L"scale",OnAttrScale)
-        ATTR_CUSTOM(L"skew",OnAttrSkew)
-        ATTR_CUSTOM(L"translate",OnAttrTranslate)
-    SOUI_ATTRS_END()
+    SOUI_ATTRS_DECL()
     
     float m_fRotate;
     float m_fScaleX,m_fScaleY;

@@ -1,4 +1,4 @@
-/* LzmaLibExports.c -- LZMA library DLL Entry point
+﻿/* LzmaLibExports.c -- LZMA library DLL Entry point
 2015-11-08 : Igor Pavlov : Public domain */
 
 #include "../../Precomp.h"

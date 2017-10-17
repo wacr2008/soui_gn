@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 created:	2012/12/27
 created:	27:12:2012   14:55
 filename: 	DuiSkinGif.h
@@ -6,7 +6,7 @@ file base:	DuiSkinGif
 file ext:	h
 author:		huangjianxiong
 
-purpose:	×Ô¶¨ÒåÆ¤·ô¶ÔÏó
+purpose:	è‡ªå®šä¹‰çš®è‚¤å¯¹è±¡
 *********************************************************************/
 #pragma once
 #include <interface/SSkinobj-i.h>
@@ -24,46 +24,44 @@ namespace SOUI
 
     /**
     * @class     SSkinGif
-    * @brief     GIFÍ¼Æ¬¼ÓÔØ¼°ÏÔÊ¾¶ÔÏó
+    * @brief     GIFå›¾ç‰‡åŠ è½½åŠæ˜¾ç¤ºå¯¹è±¡
     * 
     * Describe
     */
     class SSkinGif : public SSkinAni
     {
-        SOUI_CLASS_NAME(SSkinGif, L"gif")
+        SOUI_CLASS_NAME_DECL(SSkinGif, L"gif")
     public:
         SSkinGif()
         {
 
         }
         
-        //³õÊ¼»¯GDI+»·¾³£¬ÓÉÓÚÕâÀïĞèÒªÊ¹ÓÃGDI+À´½âÂëGIFÎÄ¼ş¸ñÊ½
+        //åˆå§‹åŒ–GDI+ç¯å¢ƒï¼Œç”±äºè¿™é‡Œéœ€è¦ä½¿ç”¨GDI+æ¥è§£ç GIFæ–‡ä»¶æ ¼å¼
         static BOOL Gdiplus_Startup();
-        //ÍË³öGDI+»·¾³
+        //é€€å‡ºGDI+ç¯å¢ƒ
         static void Gdiplus_Shutdown();
 
         /**
          * LoadFromFile
-         * @brief    ´ÓÎÄ¼ş¼ÓÔØGIF
-         * @param    LPCTSTR pszFileName --  ÎÄ¼şÃû
-         * @return   int -- GIFÖ¡Êı£¬0-Ê§°Ü
+         * @brief    ä»æ–‡ä»¶åŠ è½½GIF
+         * @param    LPCTSTR pszFileName --  æ–‡ä»¶å
+         * @return   int -- GIFå¸§æ•°ï¼Œ0-å¤±è´¥
          * Describe  
          */    
         int LoadFromFile(LPCTSTR pszFileName);
 
         /**
          * LoadFromMemory
-         * @brief    ´ÓÄÚ´æ¼ÓÔØGIF
-         * @param    LPVOID pBits --  ÄÚ´æµØÖ·
-         * @param    size_t szData --  ÄÚ´æÊı¾İ³¤¶È
-         * @return   int -- GIFÖ¡Êı£¬0-Ê§°Ü
+         * @brief    ä»å†…å­˜åŠ è½½GIF
+         * @param    LPVOID pBits --  å†…å­˜åœ°å€
+         * @param    size_t szData --  å†…å­˜æ•°æ®é•¿åº¦
+         * @return   int -- GIFå¸§æ•°ï¼Œ0-å¤±è´¥
          * Describe  
          */    
         int LoadFromMemory(LPVOID pBits,size_t szData);
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_CUSTOM(L"src",OnAttrSrc)   //XMLÎÄ¼şÖĞÖ¸¶¨µÄÍ¼Æ¬×ÊÔ´Ãû,(type:name)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL()
     protected:
         LRESULT OnAttrSrc(const SStringW &strValue,BOOL bLoading);
         int LoadFromGdipImage(Gdiplus::Bitmap * pImg);

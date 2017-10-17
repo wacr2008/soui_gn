@@ -46,7 +46,7 @@ static int contourRangeCheckY(const SkTArray<SkOpContour*, true>& contourList, S
     SkScalar bestY = SK_ScalarMin;
     SkOpSegment* bestSeg = NULL;
     int bestTIndex = 0;
-    bool bestOpp=false;
+    bool bestOpp;
     bool hitSomething = false;
     for (int cTest = 0; cTest < contourCount; ++cTest) {
         SkOpContour* contour = contourList[cTest];

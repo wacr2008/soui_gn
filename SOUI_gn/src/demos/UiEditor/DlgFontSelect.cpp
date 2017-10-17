@@ -1,17 +1,36 @@
+Ôªø
 #include "DlgFontSelect.h"
 #include "CDebug.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SDlgFontSelect, L"dlgfontselect")
 
-	SDlgFontSelect::SDlgFontSelect(SStringT strFont,SDesignerView *pDesignerView):SHostDialog(_T("LAYOUT:◊÷ÃÂ—°‘Ò"))
+	EVENT_MAP_BEGIN(SDlgFontSelect)
+		EVENT_NAME_COMMAND(L"btnOK", OnOK)
+		EVENT_NAME_COMMAND(L"btnCancel", OnCancel)
+		EVENT_NAME_COMMAND(L"chkBold", OnCKClick)
+		EVENT_NAME_COMMAND(L"chkItalic", OnCKClick)
+		EVENT_NAME_COMMAND(L"chkUnderline", OnCKClick)
+		EVENT_NAME_COMMAND(L"chkStrike", OnCKClick)
+	EVENT_MAP_END()
+
+	BEGIN_MSG_MAP_EX(SDlgFontSelect)
+		MSG_WM_INITDIALOG(OnInitDialog)
+		//MSG_WM_CLOSE(OnCancel)
+		//MSG_WM_KEYDOWN(OnKeyDown)
+		CHAIN_MSG_MAP(SHostDialog)
+		REFLECT_NOTIFICATIONS_EX()
+	END_MSG_MAP()
+
+	SDlgFontSelect::SDlgFontSelect(SStringT strFont,SDesignerView *pDesignerView):SHostDialog(_T("LAYOUT:Â≠ó‰ΩìÈÄâÊã©"))
 	{
 		strFont.TrimBlank();
 		m_strFont = strFont;
 		m_pDesignerView = pDesignerView;
 	}
 
-	//TODO:œ˚œ¢”≥…‰
+	//TODO:Ê∂àÊÅØÊò†Â∞Ñ
 	void SDlgFontSelect::OnCancel()
 	{
 		SHostDialog::OnCancel();

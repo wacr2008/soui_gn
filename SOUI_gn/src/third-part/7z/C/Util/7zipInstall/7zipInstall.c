@@ -1,4 +1,4 @@
-/* 7zipInstall.c - 7-Zip Installer
+﻿/* 7zipInstall.c - 7-Zip Installer
 2016-06-08 : Igor Pavlov : Public domain */
 
 #include "Precomp.h"

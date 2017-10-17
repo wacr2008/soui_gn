@@ -1,4 +1,4 @@
-#ifndef SoSmileyCtrl_h__
+﻿#ifndef SoSmileyCtrl_h__
 #define SoSmileyCtrl_h__
 
 // SoSmileyCtrl.h : Declaration of the CSoSmileyCtrl
@@ -19,7 +19,7 @@ interface  __declspec( uuid("E9FFF8D9-7585-42ce-B6CE-33336283994E") )ISmileySour
     virtual HRESULT STDMETHODCALLTYPE Stream_Save( LPSTREAM pStm) PURE;
     virtual HRESULT STDMETHODCALLTYPE LoadFromID(UINT uID) PURE;
     virtual HRESULT STDMETHODCALLTYPE LoadFromFile(LPCWSTR pszFilePath) PURE;
-    virtual HRESULT STDMETHODCALLTYPE GetID( int *pID) PURE;
+    virtual HRESULT STDMETHODCALLTYPE GetID( UINT *pID) PURE;
     virtual HRESULT STDMETHODCALLTYPE GetFile( BSTR * bstrFile) PURE;
     virtual HRESULT STDMETHODCALLTYPE GetFrameCount( int *pFrameCount) PURE;
     virtual HRESULT STDMETHODCALLTYPE GetFrameDelay( int iFrame,  int *pFrameDelay) PURE;

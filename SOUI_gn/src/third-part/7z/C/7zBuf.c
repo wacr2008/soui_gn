@@ -1,4 +1,4 @@
-/* 7zBuf.c -- Byte Buffer
+﻿/* 7zBuf.c -- Byte Buffer
 2013-01-21 : Igor Pavlov : Public domain */
 
 #include "Precomp.h"

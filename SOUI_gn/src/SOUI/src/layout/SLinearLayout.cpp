@@ -1,10 +1,30 @@
-#include "souistd.h"
+ï»¿#include "souistd.h"
 #include "layout\SLinearLayout.h"
 #include "helper\SplitString.h"
 #include <algorithm>
 
 namespace SOUI
 {
+	SOUI_ATTRS_BEGIN(SLinearLayoutParam)
+		ATTR_CUSTOM(L"width", OnAttrWidth)
+		ATTR_CUSTOM(L"height", OnAttrHeight)
+		ATTR_CUSTOM(L"size", OnAttrSize)
+		ATTR_FLOAT(L"weight", weight, FALSE)
+		ATTR_ENUM_BEGIN(L"layout_gravity", Gravity, FALSE)
+		ATTR_ENUM_VALUE(L"left", G_Left)
+		ATTR_ENUM_VALUE(L"top", G_Top)
+		ATTR_ENUM_VALUE(L"center", G_Center)
+		ATTR_ENUM_VALUE(L"right", G_Right)
+		ATTR_ENUM_VALUE(L"bottom", G_Bottom)
+		ATTR_ENUM_END(gravity)
+		ATTR_CUSTOM(L"extend", OnAttrExtend)
+		ATTR_LAYOUTSIZE(L"extend_left", extend_left, FALSE)
+		ATTR_LAYOUTSIZE(L"extend_top", extend_top, FALSE)
+		ATTR_LAYOUTSIZE(L"extend_right", extend_right, FALSE)
+		ATTR_LAYOUTSIZE(L"extend_bottom", extend_bottom, FALSE)
+	SOUI_ATTRS_BREAK()
+
+	SOUI_CLASS_NAME(SLinearLayoutParam, L"LinearLayoutParam")
 
     SLinearLayoutParam::SLinearLayoutParam()
 	{
@@ -71,7 +91,7 @@ namespace SOUI
         case Any: 
         case Both:
         default:
-            SASSERT_FMTA(FALSE,"GetSpecifiedSize can only be applyed for Horz or Vert");
+            SASSERT_FMTA(FALSE,"GetSpecifiedSize can only be applied for Horz or Vert");
             return SLayoutSize();
         }
     }
@@ -154,6 +174,8 @@ namespace SOUI
             width.setMatchParent();
 			height.setMatchParent();
             break;
+		case Any:
+			break;
         }
 	}
 
@@ -171,6 +193,8 @@ namespace SOUI
             width.setWrapContent();
 			height.setWrapContent();
             break;
+		case Any:
+			break;
         }
 	}
 
@@ -187,6 +211,8 @@ namespace SOUI
         case Both:
             width = height = layoutSize;
             break;
+		case Any:
+			break;
         }
 
 	}
@@ -198,6 +224,22 @@ namespace SOUI
 
 
 	//////////////////////////////////////////////////////////////////////////
+	SOUI_ATTRS_BEGIN(SLinearLayout)
+		ATTR_ENUM_BEGIN(L"orientation", ORIENTATION, FALSE)
+		ATTR_ENUM_VALUE(L"horizontal", Horz)
+		ATTR_ENUM_VALUE(L"vertical", Vert)
+		ATTR_ENUM_END(m_orientation)
+		ATTR_ENUM_BEGIN(L"gravity", Gravity, FALSE)
+		ATTR_ENUM_VALUE(L"left", G_Left)
+		ATTR_ENUM_VALUE(L"top", G_Top)
+		ATTR_ENUM_VALUE(L"center", G_Center)
+		ATTR_ENUM_VALUE(L"right", G_Right)
+		ATTR_ENUM_VALUE(L"bottom", G_Bottom)
+		ATTR_ENUM_END(m_gravity)
+	SOUI_ATTRS_BREAK()
+
+	SOUI_CLASS_NAME_EX(SLinearLayout, L"linearLayout", Layout)
+
     SLinearLayout::SLinearLayout(void):m_gravity(G_Undefined)
     {
     }
@@ -393,9 +435,9 @@ namespace SOUI
 			{
                 int nWid = szChild.cx, nHei = szChild.cy;
                 if(nWid == SIZE_WRAP_CONTENT)
-                    nWid = nWidth * pParentLayoutParam->IsWrapContent(Horz)?-1:1; //°Ñ¸¸´°¿ÚµÄWrapContentÊôÐÔÍ¨¹ý-1±êÖ¾´«µÝ¸øGetDesiredSize
+                    nWid = nWidth * (pParentLayoutParam->IsWrapContent(Horz)?-1:1); //æŠŠçˆ¶çª—å£çš„WrapContentå±žæ€§é€šè¿‡-1æ ‡å¿—ä¼ é€’ç»™GetDesiredSize
                 if(nHei == SIZE_WRAP_CONTENT)
-                    nHei = nHeight * pParentLayoutParam->IsWrapContent(Vert)?-1:1;//°Ñ¸¸´°¿ÚµÄWrapContentÊôÐÔÍ¨¹ý-1±êÖ¾´«µÝ¸øGetDesiredSize
+                    nHei = nHeight * (pParentLayoutParam->IsWrapContent(Vert)?-1:1);//æŠŠçˆ¶çª—å£çš„WrapContentå±žæ€§é€šè¿‡-1æ ‡å¿—ä¼ é€’ç»™GetDesiredSize
 
 				CSize szCalc = pChild->GetDesiredSize(nWid,nHei);
 				if(szChild.cx == SIZE_WRAP_CONTENT) 
@@ -440,15 +482,10 @@ namespace SOUI
 
 	ILayoutParam * SLinearLayout::CreateLayoutParam() const
 	{
-		SLinearLayoutParam *pRet = NULL;
-		CreateLayoutParam((IObjRef**)&pRet);
-		return pRet;
+		return new SLinearLayoutParam();
 	}
 
-	HRESULT SLinearLayout::CreateLayoutParam(IObjRef ** ppObj)
-	{
-		*ppObj = new SLinearLayoutParam();
-		return S_OK;
-	}
+	SOUI_CLASS_NAME(SVBox, L"vbox")
 
+	SOUI_CLASS_NAME(SHBox, L"hbox")
 }

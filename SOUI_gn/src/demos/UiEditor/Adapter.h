@@ -1,21 +1,22 @@
-#pragma once
+ï»¿#pragma once
 #include "helper/SAdapterBase.h"
 
 #define DEFAULT_LINE 10
-class CBaseMcAdapterFix : public SOUI::SMcAdapterBase
+class CBaseMcAdapterFix : public SMcAdapterBase
 {
-	SOUI::SArray<SOUI::SStringT> m_colNames;
+	SArray<SStringT> m_colNames;
 public:
 	CBaseMcAdapterFix()
 	{		
 	}
 
+	bool IsColumnVisible(int) const override;
 	virtual int getCount()
 	{
 		return DEFAULT_LINE;
 	}
 
-	virtual void getView(int position, SOUI::SWindow * pItem, pugi::xml_node xmlTemplate)
+	virtual void getView(int position, SWindow * pItem, pugi::xml_node xmlTemplate)
 	{
 		if (pItem->GetChildrenCount() == 0)
 		{
@@ -23,7 +24,7 @@ public:
 		}		
 	}
 
-	SOUI::SStringW GetColumnName(int iCol) const {
+	SStringW GetColumnName(int iCol) const {
 		return m_colNames[iCol];
 	}
 
@@ -42,10 +43,10 @@ public:
 };
 
 
-class CBaseAdapterFix : public SOUI::SAdapterBase
+class CBaseAdapterFix : public SAdapterBase
 {	
 	const wchar_t*  KAttrName_Height[3];
-	SOUI::SArray<SOUI::SStringT> m_TemplateNames;
+	SArray<SStringT> m_TemplateNames;
 	int m_nItemHeight[3];
 public:
 
@@ -70,9 +71,9 @@ public:
 	{
 		for (xmlTemplate = xmlTemplate.first_child(); xmlTemplate; xmlTemplate = xmlTemplate.next_sibling())
 		{
-			//TODO: ´Ë·¨ÓĞ´ıÑéÖ¤
+			//TODO: æ­¤æ³•æœ‰å¾…éªŒè¯
 			/*
-			if (static_cast<SOUI::SWindowFactoryMgr*>(SOUI::SApplication::getSingletonPtr())->HasKey(xmlTemplate.name()))
+			if (static_cast<SWindowFactoryMgr*>(SApplication::getSingletonPtr())->HasKey(xmlTemplate.name()))
 			{
 				return 0;
 			}
@@ -87,7 +88,7 @@ public:
 	{
 		if (IniTemplateNames(xmlTemplate) > 0)
 		{
-			//´Ë´¦Ãû×ÖÊÇ×Ô¶¨ÒåµÄ£¬viewµÄÁé»îĞÔÒ²¾ÍÌåÏÖÔÚÕâĞ©µØ·½¡£
+			//æ­¤å¤„åå­—æ˜¯è‡ªå®šä¹‰çš„ï¼Œviewçš„çµæ´»æ€§ä¹Ÿå°±ä½“ç°åœ¨è¿™äº›åœ°æ–¹ã€‚
 			m_nItemHeight[0]= xmlTemplate.attribute(KAttrName_Height[0]).as_int(50);
 			m_nItemHeight[1] = xmlTemplate.attribute(KAttrName_Height[1]).as_int(60);
 			m_nItemHeight[2] = xmlTemplate.attribute(KAttrName_Height[2]).as_int(70);
@@ -102,7 +103,7 @@ public:
 		{
 			if (position % 2 == 0)
 				return 0;//1,3,5,... odd lines
-			else if (dwState & SOUI::WndState_Hover)
+			else if (dwState & WndState_Hover)
 				return 2;//even lines with check state
 			else
 				return 1;//even lines 
@@ -110,14 +111,14 @@ public:
 		return __super::getItemViewType(position, dwState);
 	}
 
-	virtual SIZE getViewDesiredSize(int position, SOUI::SWindow *pItem, LPCRECT prcContainer)
+	virtual SIZE getViewDesiredSize(int position, SWindow *pItem, LPCRECT prcContainer)
 	{
 		DWORD dwState = pItem->GetState();
 		int viewType = getItemViewType(position, dwState);
-		return SOUI::CSize(0, m_nItemHeight[viewType]);//cxÔÚlistview£¬mclistviewÖĞÃ»ÓĞÊ¹ÓÃ£¬²»ĞèÒª¼ÆËã
+		return CSize(0, m_nItemHeight[viewType]);//cxåœ¨listviewï¼Œmclistviewä¸­æ²¡æœ‰ä½¿ç”¨ï¼Œä¸éœ€è¦è®¡ç®—
 	}
 
-	virtual void getView(int position, SOUI::SWindow * pItem, pugi::xml_node xmlTemplate)
+	virtual void getView(int position, SWindow * pItem, pugi::xml_node xmlTemplate)
 	{
 		if (pItem->GetChildrenCount() == 0)
 		{

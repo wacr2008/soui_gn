@@ -1,7 +1,6 @@
 ﻿#include "ui/adapter/FirendListItemAdapter.h"
 #include "ui/SToggleEx.h"
-
-#include "res/R.h" 
+#include "res/R.h"
  
 namespace SOUI
 {  
@@ -10,6 +9,11 @@ const wchar_t * KAttrName_Height[] = {
 	L"defHeight",
 	L"friendItemHeight" 
 };
+
+bool CFriendListAdapter::IsColumnVisible(int) const
+{
+	return true;
+}
 
 CFriendListAdapter::CFriendListAdapter(int data, live::IListItemCallback *pCB)
 { 

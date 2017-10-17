@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <wke.h>
 
 namespace SOUI
@@ -32,7 +32,7 @@ namespace SOUI
     const char TM_TICKER = 1;
     class SWkeWebkit : public SWindow, protected wkeBufHandler , protected IIdleHandler
     {
-        SOUI_CLASS_NAME(SWkeWebkit, L"wkeWebkit")
+        SOUI_CLASS_NAME_DECL(SWkeWebkit, L"wkeWebkit")
     public:
         SWkeWebkit(void);
         ~SWkeWebkit(void);
@@ -59,25 +59,10 @@ namespace SOUI
         virtual BOOL OnSetCursor(const CPoint &pt);
         virtual UINT OnGetDlgCode(){return SC_WANTALLKEYS;}
         BOOL OnAttrUrl(SStringW strValue, BOOL bLoading);
-        SOUI_ATTRS_BEGIN()
-            ATTR_CUSTOM(L"url",OnAttrUrl)
-        SOUI_ATTRS_END()
 
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_PAINT_EX(OnPaint)
-            MSG_WM_CREATE(OnCreate)
-            MSG_WM_DESTROY(OnDestroy)
-            MSG_WM_SIZE(OnSize)
-            MSG_WM_TIMER_EX(OnTimer)
-            MSG_WM_SETFOCUS_EX(OnSetFocus)
-            MSG_WM_KILLFOCUS_EX(OnKillFocus)
-            MESSAGE_RANGE_HANDLER_EX(WM_MOUSEFIRST,0x209,OnMouseEvent)
-            MESSAGE_HANDLER_EX(WM_MOUSEWHEEL,OnMouseWheel)
-            MESSAGE_HANDLER_EX(WM_KEYDOWN,OnKeyDown)
-            MESSAGE_HANDLER_EX(WM_KEYUP,OnKeyUp)
-            MESSAGE_HANDLER_EX(WM_CHAR,OnChar)
-            MESSAGE_HANDLER_EX(WM_IME_STARTCOMPOSITION,OnImeStartComposition)
-        SOUI_MSG_MAP_END()
+		SOUI_ATTRS_DECL()
+
+        SOUI_MSG_MAP_DECL()
 
     protected:
         wkeWebView m_pWebView;

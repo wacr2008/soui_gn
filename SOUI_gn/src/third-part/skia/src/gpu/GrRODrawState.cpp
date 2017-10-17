@@ -126,7 +126,7 @@ bool GrRODrawState::hasSolidCoverage() const {
         return true;
     }
 
-    GrColor coverage=0xFFFFFFFF;
+    GrColor coverage;
     uint32_t validComponentFlags;
     // Initialize to an unknown starting coverage if per-vertex coverage is specified.
     if (this->hasCoverageVertexAttribute()) {

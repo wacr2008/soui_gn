@@ -94,16 +94,14 @@ void SkOpContour::addCoincidentPoints() {
         double startT = coincidence.fTs[0][0];
         double endT = coincidence.fTs[0][1];
         bool startSwapped, oStartSwapped, cancelers;
-		cancelers = startSwapped = (startT>endT);
-		if ((cancelers)) {
+        if ((cancelers = startSwapped = startT > endT)) {
             SkTSwap(startT, endT);
         }
         bump_out_close_span(&startT, &endT);
         SkASSERT(!approximately_negative(endT - startT));
         double oStartT = coincidence.fTs[1][0];
         double oEndT = coincidence.fTs[1][1];
-		oStartSwapped = oStartT > oEndT;
-		if ((oStartSwapped)) {
+        if ((oStartSwapped = oStartT > oEndT)) {
             SkTSwap(oStartT, oEndT);
             cancelers ^= true;
         }
@@ -568,8 +566,7 @@ bool SkOpContour::calcCommonCoincidentWinding(const SkCoincidence& coincidence) 
     const SkPoint* startPt = &coincidence.fPts[0][0];
     const SkPoint* endPt = &coincidence.fPts[0][1];
     bool cancelers;
-	cancelers = startT > endT;
-	if ((cancelers)) {
+    if ((cancelers = startT > endT)) {
         SkTSwap<double>(startT, endT);
         SkTSwap<const SkPoint*>(startPt, endPt);
     }
@@ -619,8 +616,7 @@ void SkOpContour::resolveNearCoincidence() {
         double startT = coincidence.fTs[0][0];
         double endT = coincidence.fTs[0][1];
         bool cancelers;
-		cancelers = startT > endT;
-		if ((cancelers)) {
+        if ((cancelers = startT > endT)) {
             SkTSwap<double>(startT, endT);
         }
         if (startT == endT) { // if span is very large, the smaller may have collapsed to nothing

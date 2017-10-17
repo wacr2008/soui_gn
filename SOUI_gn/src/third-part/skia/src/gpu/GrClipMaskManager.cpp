@@ -128,7 +128,7 @@ bool GrClipMaskManager::installClipEffects(const ElementList& elements,
 
     while (iter.get()) {
         SkRegion::Op op = iter.get()->getOp();
-        bool invert=false;
+        bool invert;
         bool skip = false;
         switch (op) {
             case SkRegion::kReplace_Op:
@@ -218,10 +218,10 @@ bool GrClipMaskManager::setupClipping(const GrClipData* clipDataIn,
     fCurrClipMaskType = kNone_ClipMaskType;
 
     ElementList elements(16);
-    int32_t genID=0;
-	InitialState initialState = kAllOut_InitialState;
-    SkIRect clipSpaceIBounds = SkIRect::MakeEmpty();
-    bool requiresAA=false;
+    int32_t genID;
+    InitialState initialState;
+    SkIRect clipSpaceIBounds;
+    bool requiresAA;
 
     GrDrawState* drawState = fGpu->drawState();
 

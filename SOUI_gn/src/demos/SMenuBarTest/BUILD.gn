@@ -1,0 +1,46 @@
+import("//build_overrides/common.gni")
+ 
+
+executable("SMenuBarTest") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  configs -= [ "//build/config/win:console" ]
+  configs += [ "//build/config/win:windowed" ] 
+  
+  sources = [ 
+            "SMenuBarTest.cpp",
+            "MainDlg.cpp",
+            "MainDlg.h",
+            "resource.h",
+            "SMenuBarTest.rc",    
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+    "../../components",
+  ]
+
+  deps = [ 
+    "../../utilities",
+    "../../SOUI",
+    "../../third-part",
+    "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_SMenuBarTest_resource",
+  ]
+ 
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4201",
+      "/wd4239",
+    ]
+  }
+  
+  defines = ["_CRT_SECURE_NO_WARNINGS","_USE_UI_LIBRAY",] 
+
+} 

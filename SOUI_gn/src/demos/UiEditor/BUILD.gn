@@ -19,14 +19,14 @@ action("gen_UiEditor_resource") {
          ] 
 }
 
-copy("UiEditor_binary_copy") {
-    sources = [ "SciLexer.dll" ]
+#copy("UiEditor_binary_copy") {
+#    sources = [ "SciLexer.dll" ]
 
     # Use source expansion to generate output files with the
     # corresponding file names in the gen dir. This will just copy each
     # file.
-    outputs = [ "$target_out_dir/{{source_file_part}}" ]
-}
+#    outputs = [ "$target_out_dir/{{source_file_part}}" ]
+#}
 
 executable("UiEditor") {
   configs += [ "//build/config:precompiled_headers" ]
@@ -35,161 +35,116 @@ executable("UiEditor") {
   configs += [ "//build/config/win:windowed" ] 
   
   sources = [     
-    "trayicon/SShellNotifyIcon.cpp",
-    "trayicon/SShellNotifyIcon.h",
+            "../../controls.extend/image3d/3dlib.cpp",
+            "../../controls.extend/image3d/3dmatrix.cpp",
+            "../../controls.extend/image3d/3dtransform.cpp",
+            "../../controls.extend/ExtendSkins.cpp",
+            "../../controls.extend/SButtonEx.cpp",
+            "../../controls.extend/SChromeTabCtrl.cpp",
+            "../../controls.extend/SFreeMoveWindow.cpp",
+            "../../controls.extend/gif/SGifPlayer.cpp",
+            "../../controls.extend/SImageEx.cpp",
+            "../../controls.extend/SImageMaskWnd.cpp",
+            "../../controls.extend/gif/SSkinAPNG.cpp",
+            "../../controls.extend/gif/SSkinGif.cpp",
+            "../../controls.extend/SSkinMutiFrameImg.cpp",
+            "../../controls.extend/STabCtrl2.cpp",
+            "../../controls.extend/SText.cpp",
+            "../../controls.extend/STurn3DView.cpp",
+            "../../controls.extend/SScrollText.cpp",
+            "../../controls.extend/SVscrollbar.cpp",
+            "../../controls.extend/ExtendCtrls.cpp",
+            "../../controls.extend/SSkinNewScrollBar.cpp",
+            "../../controls.extend/SRealWndHandler_Scintilla.cpp",
+            "../../controls.extend/ScintillaWnd.cpp",
+           
+
+            "SRotateWindow.cpp",
+            "DesignerView.cpp",
+            "SDesignerRoot.cpp",
+            "DlgAbout.cpp",
+            "DlgCreatePro.cpp",
+            "DlgInput.cpp",
+            "DlgNewLayout.cpp",
+            "DlgNewSkin.cpp",
+            "DlgSkinSelect.cpp",
+            "DlgStyleManage.cpp",
+            "MainDlg.cpp",
+            "SImageSwitcher.cpp",
+            "SMoveWnd.cpp",
+            "SSwitch.cpp",
+            "SToolbox.cpp",
+            "UIEditor.cpp",
+            "propgrid/SPropertyGrid.cpp",
+            "propgrid/propitem/SPropertyItem-Color.cpp",
+            "propgrid/propitem/SPropertyItem-Option.cpp",
+            "propgrid/propitem/SPropertyItem-Size.cpp",
+            "propgrid/propitem/SPropertyItem-Text.cpp",
+            "propgrid/SPropertyItemBase.cpp",
+            "trayicon/SShellNotifyIcon.cpp",
+            "colorpicker/ColourPopup.cpp",
+            "colorpicker/SColorPicker.cpp",
+            "DlgFontSelect.cpp",
+            "helpapi.cpp",
+            "SImgCanvas.cpp",
 
 
-    
-    "../../controls.extend/ExtendCtrls.cpp",
-    "../../controls.extend/ExtendCtrls.h",
-    "../../controls.extend/GroupChatFrame.cpp",
-    "../../controls.extend/GroupChatFrame.h",
-    "../../controls.extend/SScrollText.cpp",
-    "../../controls.extend/SScrollText.h",
-
-    "../../controls.extend/colorpicker/ColourPopup.cpp",
-    "../../controls.extend/colorpicker/ColourPopup.h",
-    "../../controls.extend/colorpicker/SColorPicker.cpp",
-    "../../controls.extend/colorpicker/SColorPicker.h",
-    "../../controls.extend/colorpicker/Tooltipctrl.h",
-
-
-
-    "../../controls.extend/SAnimator.h",
-    "../../controls.extend/SButtonEx.cpp",
-    "../../controls.extend/SButtonEx.h",
-    "../../controls.extend/SChromeTabCtrl.cpp",
-    "../../controls.extend/SChromeTabCtrl.h",
-    "../../controls.extend/SFreeMoveWindow.cpp",
-    "../../controls.extend/SFreeMoveWindow.h",
-    "../../controls.extend/SImageEx.cpp",
-    "../../controls.extend/SImageEx.h",
-    "../../controls.extend/SImageMaskWnd.cpp",
-    "../../controls.extend/SImageMaskWnd.h",
-    "../../controls.extend/SImagePlayer.cpp",
-    "../../controls.extend/SImagePlayer.h",
-    "../../controls.extend/SListboxex.cpp",
-    "../../controls.extend/SListboxex.h",
-    "../../controls.extend/SplitBar.cpp",
-    "../../controls.extend/SplitBar.h",
-    "../../controls.extend/STabCtrl2.cpp",
-    "../../controls.extend/STabCtrl2.h",
-    "../../controls.extend/SText.cpp",
-    "../../controls.extend/SText.h",
-    "../../controls.extend/STurn3DView.cpp",
-    "../../controls.extend/STurn3DView.h",
-    "../../controls.extend/utils.cpp",
-    "../../controls.extend/utils.h",
-
-    "../../controls.extend/image3d/3dlib.cpp",
-    "../../controls.extend/image3d/3dmatrix.cpp",
-    "../../controls.extend/image3d/3dtransform.cpp",
-        
-    "../../controls.extend/imre/ImgProvider.cpp",
-    "../../controls.extend/imre/RichEditObj.cpp",
-    "../../controls.extend/imre/RichEditObjFactory.cpp",
-    "../../controls.extend/imre/RichEditOleBase.cpp",
-    "../../controls.extend/imre/RichEditOleCallback.cpp",
-    "../../controls.extend/imre/RichEditOleCtrls.cpp",
-    "../../controls.extend/imre/SImRichedit.cpp",  
-
-
-
-    "../../controls.extend/propgrid/propitem/SPropertyItem-Color.cpp",
-    "../../controls.extend/propgrid/propitem/SPropertyItem-Color.h",
-    "../../controls.extend/propgrid/propitem/SPropertyItem-Option.cpp",
-    "../../controls.extend/propgrid/propitem/SPropertyItem-Option.h",
-    "../../controls.extend/propgrid/propitem/SPropertyItem-Size.cpp",
-    "../../controls.extend/propgrid/propitem/SPropertyItem-Size.h",
-    "../../controls.extend/propgrid/propitem/SPropertyItem-Text.cpp",
-    "../../controls.extend/propgrid/propitem/SPropertyItem-Text.h",
-
-    "../../controls.extend/propgrid/SPropertyEmbedWndHelper.hpp",
-    "../../controls.extend/propgrid/SPropertyGrid.cpp",
-    "../../controls.extend/propgrid/SPropertyGrid.h",
-    "../../controls.extend/propgrid/SPropertyItemBase.cpp",
-    "../../controls.extend/propgrid/SPropertyItemBase.h",
-    "../../controls.extend/propgrid/SPropertyItem-i.h",
-
- 
-    "../../controls.extend/imre/ImgProvider.h",
-    "../../controls.extend/imre/IRichEditObjHost.h",
-    "../../controls.extend/imre/RichEditObj.h",
-    "../../controls.extend/imre/RichEditObjFactory.h",
-    "../../controls.extend/imre/RichEditOleBase.h",
-    "../../controls.extend/imre/RichEditOleCallback.h",
-    "../../controls.extend/imre/RichEditOleCtrls.h",
-    "../../controls.extend/imre/SImRichEdit.h",
-    "../../controls.extend/imre/TOM2.h",
-
-
-    "../../controls.extend/gif/SGifPlayer.cpp",
-    "../../controls.extend/gif/SGifPlayer.h", 
-    "../../controls.extend/gif/SSkinGif.cpp",
-    "../../controls.extend/gif/SSkinGif.h", 
-    "../../controls.extend/gif/SSkinAPNG.cpp",
-    "../../controls.extend/gif/SSkinAPNG.h", 
-
-
-
-    "../../extend.skins/ExtendSkins.cpp",
-    "../../extend.skins/ExtendSkins.h",  
-    "../../extend.skins/SSkinMutiFrameImg.cpp",
-    "../../extend.skins/SSkinMutiFrameImg.h", 
-    "../../extend.skins/SAniImgFrame.h", 
-
-
-    
-    "CDebug.h",
-    "CNewGuid.h",
-    "DesignerView.cpp",
-    "DesignerView.h",
-    "SDesignerRoot.cpp",
-    "SDesignerRoot.h",
-    "DlgFontSelect.cpp",
-    "DlgFontSelect.h",
-    "helpapi.cpp",
-    "helpapi.h",
-    "DlgAbout.cpp",
-    "DlgAbout.h",
-    "DlgCreatePro.cpp",
-    "DlgCreatePro.h",
-    "DlgInput.cpp",
-    "DlgInput.h",
-    "DlgNewLayout.cpp",
-    "DlgNewLayout.h",
-    "DlgNewSkin.cpp",
-    "DlgNewSkin.h",
-    "DlgSkinSelect.cpp",
-    "DlgSkinSelect.h",
-    "DlgStyleManage.cpp",
-    "DlgStyleManage.h",
-    "MainDlg.cpp",
-    "MainDlg.h",
-    "SciLexer.h",
-    "Scintilla.h",
-    "ScintillaWnd.cpp",
-    "ScintillaWnd.h",
-    "SImageSwitcher.cpp",
-    "SImageSwitcher.h",
-    "SMoveWnd.cpp",
-    "SMoveWnd.h", 
-    "SImgCanvas.cpp",
-    "SImgCanvas.h",     
-    "SouiRealWndHandler.cpp",
-    "SouiRealWndHandler.h",
-    "SPropertyGridEx.cpp",
-    "SPropertyGridEx.h",
-    "SSwitch.cpp",
-    "SSwitch.h",
-    "SToolbox.cpp",
-    "SToolbox.h",
-
-    "UIEditor.cpp",
-
-    "resource.h", 
-
-    "UiEditor.rc",
+            "SListBoxDrop.h",
+            "Adapter.h",
+            "CDebug.h",
+            "CNewGuid.h",
+            "DesignerView.h",
+            "SDesignerRoot.h",
+            "DlgAbout.h",
+            "DlgCreatePro.h",
+            "DlgInput.h",
+            "DlgNewLayout.h",
+            "DlgNewSkin.h",
+            "DlgSkinSelect.h",
+            "DlgStyleManage.h",
+            "MainDlg.h",
+            "resource.h",
+            "SImageSwitcher.h",
+            "SMoveWnd.h",
+            "SSwitch.h",
+            "SToolbox.h",
+            "propgrid/SPropertyEmbedWndHelper.hpp",
+            "propgrid/SPropertyGrid.h",
+            "propgrid/propitem/SPropertyItem-Color.h",
+            "propgrid/SPropertyItem-i.h",
+            "propgrid/propitem/SPropertyItem-Option.h",
+            "propgrid/propitem/SPropertyItem-Size.h",
+            "propgrid/propitem/SPropertyItem-Text.h",
+            "propgrid/SPropertyItemBase.h",
+            "trayicon/SShellNotifyIcon.h",
+            "colorpicker/ColourPopup.h",
+            "colorpicker/SColorPicker.h",
+            "colorpicker/Tooltipctrl.h",
+            "DlgFontSelect.h",
+            "helpapi.h",
+            "SImgCanvas.h",
+            "../../controls.extend/ExtendSkins.h",
+            "../../controls.extend/image3d/PerspectiveTransform.h",
+            "../../controls.extend/gif/SAniImgFrame.h",
+            "../../controls.extend/SButtonEx.h",
+            "../../controls.extend/SChromeTabCtrl.h",
+            "../../controls.extend/SFreeMoveWindow.h",
+            "../../controls.extend/gif/SGifPlayer.h",
+            "../../controls.extend/SImageEx.h",
+            "../../controls.extend/SImageMaskWnd.h",
+            "../../controls.extend/gif/SSkinAPNG.h",
+            "../../controls.extend/gif/SSkinGif.h",
+            "../../controls.extend/SSkinMutiFrameImg.h",
+            "../../controls.extend/STabCtrl2.h",
+            "../../controls.extend/SText.h",
+            "../../controls.extend/STurn3DView.h",
+            "../../controls.extend/SScrollText.h",
+            "../../controls.extend/image3d/3dlib.h",
+            "../../controls.extend/image3d/3dmatrix.h",
+            "../../controls.extend/image3d/3dTransform.h",
+            "../../controls.extend/SRealWndHandler_Scintilla.h",
+            "../../controls.extend/ScintillaWnd.h",
+            "UiEditor.rc",
     
   ]
 
@@ -199,14 +154,13 @@ executable("UiEditor") {
     "../../soui/include",
     "../../utilities/include",
     "../../components",
-    "../..",
     "../../controls.extend",
     "../../controls.extend/propgrid",
     "../../extend.skins",
+    "../../third-part/Scintilla/include",
   ]
 
-  deps = [ 
-    ":UiEditor_binary_copy",
+  deps = [  
     ":gen_UiEditor_resource",
     "../../utilities",
     "../../SOUI",
@@ -222,6 +176,7 @@ executable("UiEditor") {
       #"/W3",  # Warning level 3.
       "/wd4201",
       "/wd4239",
+      "/wd4407",
     ]
   }
  

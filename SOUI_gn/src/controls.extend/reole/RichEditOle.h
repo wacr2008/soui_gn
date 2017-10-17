@@ -1,4 +1,4 @@
-#if !defined(AFX_OLERICHEDITCTRL_H__3DFF15EE_7336_4297_9620_7F00B611DAA1__INCLUDED_)
+ï»¿#if !defined(AFX_OLERICHEDITCTRL_H__3DFF15EE_7336_4297_9620_7F00B611DAA1__INCLUDED_)
 #define AFX_OLERICHEDITCTRL_H__3DFF15EE_7336_4297_9620_7F00B611DAA1__INCLUDED_
 
 #if _MSC_VER > 1000
@@ -13,13 +13,13 @@
 
 using namespace SOUI;
 
-#define ID_INVALID  -1
+#define ID_INVALID  (UINT)-1
 class ImageID
 {
 public:
-    ImageID():m_uID(ID_INVALID){}
+    ImageID():m_uID((UINT)ID_INVALID){}
     
-    int      m_uID;
+    UINT      m_uID;
     SStringW m_strFilename;
     
     ImageID & operator = (const ImageID & src)
@@ -49,7 +49,7 @@ namespace SOUI
     public:
         static ULONG Hash( INARGTYPE imgid )
         {
-           // ULONG_PTR uRet=0;
+            ULONG_PTR uRet=0;
             if(imgid.m_uID!=ID_INVALID) return imgid.m_uID;
             return SStringElementTraits<SStringW>::Hash(imgid.m_strFilename)+10000;
         }
@@ -114,7 +114,7 @@ public:
     static void GdiplusShutdown(void);
     
 protected:
-    //»ñ¶ÔID¶ÔÓ¦µÄÍ¼Æ¬Â·¾¶
+    //èŽ·å¯¹IDå¯¹åº”çš„å›¾ç‰‡è·¯å¾„
     virtual SStringW ImageID2Path(UINT nID);
     
 public:
@@ -154,7 +154,7 @@ public:
         /* [in] */ LPCWSTR pszFilePath);
         
     virtual HRESULT STDMETHODCALLTYPE GetID( 
-        /* [out] */ int *pID);
+        /* [out] */ UINT *pID);
 
     virtual HRESULT STDMETHODCALLTYPE GetFile( 
         /* [out] */ BSTR *bstrFile);

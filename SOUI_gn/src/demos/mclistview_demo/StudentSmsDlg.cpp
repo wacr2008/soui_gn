@@ -1,17 +1,28 @@
-#include "StudentSmsDlg.h"
+ï»¿#include "StudentSmsDlg.h"
 #include <helper/SAdapterBase.h>
 #include <helper/STime.h>
 
-using namespace SOUI;
+EVENT_MAP_BEGIN(CStudentSmsDlg)
+	EVENT_ID_HANDLER(R.id.edit_sms_input, EventRENotify::EventID, OnSmsInputNotify)
+	EVENT_ID_COMMAND(R.id.btn_sms_record, OnBtnSmsRecord);
+	EVENT_ID_HANDLER(R.id.edit_search, EventFillSearchDropdownList::EventID, OnSearchFillList)
+	EVENT_ID_HANDLER(R.id.edit_search, EventDropdownListSelected::EventID, OnSearchValue)
+EVENT_MAP_END()
 
-class SStudentSearchAdapter : public SOUI::SAdapterBase
+BEGIN_MSG_MAP_EX(CStudentSmsDlg)
+	MSG_WM_LBUTTONDOWN(OnLButtonDown)
+	MSG_WM_INITDIALOG(OnInitDialog)
+	CHAIN_MSG_MAP(SOUI::SHostDialog)
+END_MSG_MAP()
+
+class SStudentSearchAdapter : public SAdapterBase
 {
 friend class CStudentAdapter;
 
 public:
     struct StudentInfo2
     {
-        SOUI::SStringT strText;
+        SStringT strText;
         int      bExpired;
         int      nPos;
     };
@@ -23,7 +34,7 @@ protected:
         return m_searchResult.GetCount();
     }
 
-    virtual void getView(int position, SOUI::SWindow * pItem, pugi::xml_node xmlTemplate)
+    virtual void getView(int position, SWindow * pItem, pugi::xml_node xmlTemplate)
     {
         if(pItem->GetChildrenCount() == 0)
         {
@@ -33,7 +44,7 @@ protected:
     }
 
 protected:
-    SOUI::SArray<StudentInfo2> m_searchResult;
+    SArray<StudentInfo2> m_searchResult;
 };
 
 class CStudentAdapter : public SMcAdapterBase
@@ -45,7 +56,7 @@ protected:
     };
     struct StudentInfo{
         SStringT strNick;
-        UINT     imid;//yy ºÅ
+        UINT     imid;//yy å·
         SOUI::CTime tm1;
         SOUI::CTime tm2;
         int         nLoyalDegree;
@@ -116,6 +127,11 @@ public:
             m_stuExpired.Add(data2[i]);
         }
     }
+
+	bool IsColumnVisible(int) const
+	{
+		return true;
+	}
     
     int Search(const SStringT & strKey,SStudentSearchAdapter *pSearchAdapter)
     {
@@ -177,7 +193,7 @@ protected:
 
     virtual int getItemViewType(int position)
     {
-		if (position == 0 || position == 1 + (m_bCurrentExpand ? (int)m_stuCurrent.GetCount() : 0))
+        if(position == 0 || position == 1+ (int)(m_bCurrentExpand?m_stuCurrent.GetCount():0))
             return VT_GROUP;
         else
             return VT_DATA;
@@ -318,8 +334,8 @@ protected:
                 nSelExp += m_stuExpired[i].bChecked;
             }
         }
-		m_bAllCurrentChecked = nSelCur == (int)m_stuCurrent.GetCount();
-		m_bAllExpiredChecked = nSelExp == (int)m_stuExpired.GetCount();
+        m_bAllCurrentChecked = nSelCur == (int)m_stuCurrent.GetCount();
+        m_bAllExpiredChecked = nSelExp == (int)m_stuExpired.GetCount();
         
         notifyDataSetChanged();
         
@@ -362,7 +378,7 @@ protected:
             {
                 nSelExp += m_stuExpired[i].bChecked;
             }
-			BOOL bAllCurrentChecked = nSelCur == (int)m_stuCurrent.GetCount();
+            BOOL bAllCurrentChecked = nSelCur == (int)m_stuCurrent.GetCount();
             BOOL bAllExpiredChecked = nSelExp == (int)m_stuExpired.GetCount();
             if(bAllCurrentChecked!=m_bAllCurrentChecked || bAllExpiredChecked != m_bAllExpiredChecked)
             {
@@ -397,27 +413,27 @@ public:
             {
             SOUI::CTime(2015,9,1,0,0,0),
             _T("sb no.1"),
-            _T("A¹ÉÃ÷Ìì±©µø£¬ÓĞÇ®Ã»Ç®Ê¹¾¢Âò¡£"),
+            _T("Aè‚¡æ˜å¤©æš´è·Œï¼Œæœ‰é’±æ²¡é’±ä½¿åŠ²ä¹°ã€‚"),
             },
             {
             SOUI::CTime(2015,9,1,0,0,0),
             _T("sb no.2"),
-            _T("A¹ÉÃ÷Ìì±©µø£¬ÓĞÇ®Ã»Ç®Ê¹¾¢Âò¡£"),
+            _T("Aè‚¡æ˜å¤©æš´è·Œï¼Œæœ‰é’±æ²¡é’±ä½¿åŠ²ä¹°ã€‚"),
             },
             {
             SOUI::CTime(2015,9,1,0,0,0),
             _T("sb no.3"),
-            _T("A¹ÉÃ÷Ìì±©µø£¬ÓĞÇ®Ã»Ç®Ê¹¾¢Âò¡£"),
+            _T("Aè‚¡æ˜å¤©æš´è·Œï¼Œæœ‰é’±æ²¡é’±ä½¿åŠ²ä¹°ã€‚"),
             },
             {
             SOUI::CTime(2015,9,1,0,0,0),
             _T("sb no.4"),
-            _T("A¹ÉÃ÷Ìì±©µø£¬ÓĞÇ®Ã»Ç®Ê¹¾¢Âò¡£"),
+            _T("Aè‚¡æ˜å¤©æš´è·Œï¼Œæœ‰é’±æ²¡é’±ä½¿åŠ²ä¹°ã€‚"),
             },
             {
             SOUI::CTime(2015,9,1,0,0,0),
             _T("sb no.5"),
-            _T("A¹ÉÃ÷Ìì±©µø£¬ÓĞÇ®Ã»Ç®Ê¹¾¢Âò¡£"),
+            _T("Aè‚¡æ˜å¤©æš´è·Œï¼Œæœ‰é’±æ²¡é’±ä½¿åŠ²ä¹°ã€‚"),
             },
         };
         

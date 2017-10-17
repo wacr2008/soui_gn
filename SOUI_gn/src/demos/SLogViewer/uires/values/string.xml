@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+  <string>
+    <title value="SLogViewer[%s]"/>
+    <title_no_name value="SLogViewer"/>
+    <ver value="1.0"/>
+    <open_file value="&amp;Open file"/>
+    <clear value="Clear"/>
+    <lang_chinese value="chinese"/>
+    <lang_english value="english"/>
+    <cue_input_filter value="input filter string"/>
+    <col_line value="line index"/>
+    <col_time value="time"/>
+    <col_level value="level"/>
+    <col_pid value="pid"/>
+    <col_tid value="tid"/>
+    <col_tag value="tag"/>
+    <col_module value="module"/>
+    <col_source_file value="source file"/>
+    <col_source_line value="source line"/>
+    <col_function value="function"/>
+    <col_content value="content"/>
+    <filter value="filter"/>
+    <tag_filter value="tag filter"/>
+    <pid_filter value="pid filter"/>
+    <tid_filter value="tid filter"/>
+    <level value="level"/>
+    <copy value="copy"/>
+    <select_all value="select all"/>
+    <clear_all value="clear all"/>
+    <exclude_tag value="exclude tag:"/>
+    <only_tag value="only tag:"/>
+    <find_text value="find text"/>
+    <search value="search:"/>
+    <match_case value="match case"/>
+    <match_whole_word value="match whole word"/>
+    <next value="next"/>
+    <prev value="previous"/>
+    <close value="close"/>
+  </string>

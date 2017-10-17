@@ -1,7 +1,0 @@
-{
-	"runtime_dirs": ["C:\\vs2013_files\\sys64", "C:\\vs2013_files\\sys32"],
-	"path": "C:\\vs2013_files",
-	"version": "2013",
-	"wdk": "C:\\vs2013_files\\wdk",
-	"win_sdk": "C:\\vs2013_files\\win_sdk"
-}

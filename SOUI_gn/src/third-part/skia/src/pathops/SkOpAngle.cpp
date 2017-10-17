@@ -503,8 +503,7 @@ bool SkOpAngle::endsIntersect(const SkOpAngle& rh) const {
         }
         double maxWidth = SkTMax(maxX - minX, maxY - minY);
         delta /= maxWidth;
-		useIntersect ^= true;
-		if (delta > 1e-4 && (useIntersect)) {  // FIXME: move this magic number
+        if (delta > 1e-4 && (useIntersect ^= true)) {  // FIXME: move this magic number
             sRayLonger = rayLonger;
             sCept = cept;
             sCeptT = smallTs[index];
@@ -576,8 +575,7 @@ const SkOpAngle* SkOpAngle::findFirst() const {
     } while (angle != firstBest);
     // if the angles are equally ordered, fall back on the initial tangent
     bool foundBelow = false;
-	angle = angle->fNext;
-	while (angle) {
+    while ((angle = angle->fNext)) {
         SkDVector scratch[2];
         const SkDVector* sweep;
         if (!angle->fUnorderedSweep) {

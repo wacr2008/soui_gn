@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #include "interface/slayout-i.h"
 #include "SouiLayoutParamStruct.h"
 
@@ -6,32 +6,32 @@ namespace SOUI{
 
 
 
-	class SouiLayoutParam: public SObjectImpl<TObjRefImpl<ILayoutParam>>
+	class SOUI_EXP SouiLayoutParam: public SObjectImpl<TObjRefImpl<ILayoutParam>>
 						 , protected SouiLayoutParamStruct
 	{
-		SOUI_CLASS_NAME(SouiLayoutParam,L"SouiLayoutParam")
+		SOUI_CLASS_NAME_DECL(SouiLayoutParam,L"SouiLayoutParam")
 
 		friend class SouiLayout;
 	public:
 		SouiLayoutParam();
 
-		virtual bool IsMatchParent(ORIENTATION orientation) const;
+		bool IsMatchParent(ORIENTATION orientation) const override;
 
-		virtual bool IsSpecifiedSize(ORIENTATION orientation) const;
+		bool IsSpecifiedSize(ORIENTATION orientation) const override;
 
-		virtual bool IsWrapContent(ORIENTATION orientation) const;
+		bool IsWrapContent(ORIENTATION orientation) const override;
 
-		virtual SLayoutSize  GetSpecifiedSize(ORIENTATION orientation) const;
+		SLayoutSize  GetSpecifiedSize(ORIENTATION orientation) const override;
 
-		virtual void Clear();
+		void Clear() override;
 
-		virtual void SetMatchParent(ORIENTATION orientation);
+		void SetMatchParent(ORIENTATION orientation) override;
 
-		virtual void SetWrapContent(ORIENTATION orientation);
+		void SetWrapContent(ORIENTATION orientation) override;
 
-		virtual void SetSpecifiedSize(ORIENTATION orientation, const SLayoutSize& layoutSize);
+		void SetSpecifiedSize(ORIENTATION orientation, const SLayoutSize& layoutSize) override;
 
-		virtual void * GetRawData();
+		void * GetRawData() override;
 	public:
 		bool IsOffsetRequired(ORIENTATION orientation) const;
         int  GetExtraSize(ORIENTATION orientation,int nScale) const;
@@ -46,48 +46,36 @@ namespace SOUI{
 
 		HRESULT OnAttrOffset(const SStringW & strValue,BOOL bLoading);
 
-		SOUI_ATTRS_BEGIN()
-            ATTR_CUSTOM(L"width",OnAttrWidth)
-            ATTR_CUSTOM(L"height",OnAttrHeight)
-			ATTR_CUSTOM(L"pos",OnAttrPos)
-			ATTR_CUSTOM(L"size",OnAttrSize)
-			ATTR_CUSTOM(L"offset",OnAttrOffset)
-        SOUI_ATTRS_BREAK()
+		SOUI_ATTRS_DECL() 
 
     protected:
-        //Ω´◊÷∑˚¥Æ√Ë ˆµƒ◊¯±Í◊™ªª≥…POSITION_ITEM
+        //Â∞ÜÂ≠óÁ¨¶‰∏≤ÊèèËø∞ÁöÑÂùêÊ†áËΩ¨Êç¢ÊàêPOSITION_ITEM
         BOOL StrPos2ItemPos(const SStringW &strPos,POS_INFO & posItem);
 
-        //Ω‚Œˆ‘⁄pos÷–∂®“Âµƒ«∞¡Ω∏ˆŒª÷√
+        //Ëß£ÊûêÂú®pos‰∏≠ÂÆö‰πâÁöÑÂâç‰∏§‰∏™‰ΩçÁΩÆ
         BOOL ParsePosition12(const SStringW & pos1, const SStringW &pos2);
 
-        //Ω‚Œˆ‘⁄pos÷–∂®“Âµƒ∫Û¡Ω∏ˆŒª÷√
+        //Ëß£ÊûêÂú®pos‰∏≠ÂÆö‰πâÁöÑÂêé‰∏§‰∏™‰ΩçÁΩÆ
         BOOL ParsePosition34(const SStringW & pos3, const SStringW &pos4);
 
 
 	};
 
-	class SouiLayout: public SObjectImpl<TObjRefImpl<ILayout>>
+	class SOUI_EXP SouiLayout: public SObjectImpl<TObjRefImpl<ILayout>>
 	{
-		SOUI_CLASS_NAME_EX(SouiLayout,L"SouiLayout",Layout)
+		SOUI_CLASS_NAME_DECL_EX(SouiLayout,L"SouiLayout",Layout)
 
 	public:
 		SouiLayout(void);
-		~SouiLayout(void);
+		~SouiLayout(void) override;
 
-		static HRESULT CreateLayout(IObjRef ** ppObj);
+        bool IsParamAcceptable(ILayoutParam *pLayoutParam) const override;
 
-		static HRESULT CreateLayoutParam(IObjRef ** ppObj);
+        void LayoutChildren(SWindow * pParent) override;
 
-		virtual LayoutType GetLayoutType() const {return Layout_Soui;}
+        ILayoutParam * CreateLayoutParam() const override;
 
-        virtual bool IsParamAcceptable(ILayoutParam *pLayoutParam) const;
-
-        virtual void LayoutChildren(SWindow * pParent);
-
-        virtual ILayoutParam * CreateLayoutParam() const;
-
-        virtual CSize MeasureChildren(SWindow * pParent,int nWidth,int nHeight) const;
+        CSize MeasureChildren(SWindow * pParent,int nWidth,int nHeight) const override;
     protected:
         struct WndPos{
             SWindow *pWnd;

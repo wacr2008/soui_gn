@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 using namespace SOUI;
 
@@ -8,7 +8,7 @@ namespace SOUI{
 
 class SClock : public SWindow
 {
-	SOUI_CLASS_NAME(SClock, L"clock")
+	SOUI_CLASS_NAME_DECL(SClock, L"clock")
 
 public:
 	SClock();
@@ -26,18 +26,10 @@ protected:
 	void OnPaint(SOUI::IRenderTarget * pRT);
 	void OnTimer(char cTimerID);
 
-	SOUI_MSG_MAP_BEGIN()
-		MSG_WM_PAINT_EX(OnPaint)
-		MSG_WM_TIMER_EX(OnTimer)
-		MSG_WM_CREATE(OnCreate)
-	SOUI_MSG_MAP_END()
+	SOUI_MSG_MAP_DECL()
 
 protected:
-	SOUI_ATTRS_BEGIN()
-		ATTR_IMAGEAUTOREF(L"pointer_hour",   pointer_hour, TRUE)
-		ATTR_IMAGEAUTOREF(L"pointer_minute", pointer_minute, TRUE)
-		ATTR_IMAGEAUTOREF(L"pointer_second", pointer_second, TRUE)
-	SOUI_ATTRS_END()
+	SOUI_ATTRS_DECL()
 
 	CAutoRefPtr<IBitmap> pointer_hour;
 	CAutoRefPtr<IBitmap> pointer_minute;

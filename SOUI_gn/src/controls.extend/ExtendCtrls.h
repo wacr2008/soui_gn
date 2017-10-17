@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "core/SWnd.h"
 
 namespace SOUI
@@ -6,12 +6,10 @@ namespace SOUI
 class SWindowEx : public SWindow
 {
 public:
-    SOUI_CLASS_NAME(SWindowEx, L"windowex")
+    SOUI_CLASS_NAME_DECL(SWindowEx, L"windowex")
 
 protected:
-    SOUI_MSG_MAP_BEGIN()
-        MSG_WM_LBUTTONDBLCLK(OnLButtonDown) //½«Ë«»÷ÏûÏ¢´¦ÀíÎªµ¥»÷
-    SOUI_MSG_MAP_END()
+    SOUI_MSG_MAP_DECL()
 };
 
 };

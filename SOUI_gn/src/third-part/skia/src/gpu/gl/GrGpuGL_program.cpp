@@ -112,7 +112,7 @@ GrGLProgram* GrGpuGL::ProgramCache::getProgram(const GrGLProgramDesc& desc,
         entry = hashedEntry;
     }
 
-    int entryIdx=0;
+    int entryIdx;
     if (NULL == entry) {
         entryIdx = this->search(desc);
         if (entryIdx >= 0) {

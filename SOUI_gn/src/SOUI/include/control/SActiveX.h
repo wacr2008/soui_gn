@@ -1,9 +1,7 @@
-#pragma once
+Ôªø#pragma once
 #include "core/SWnd.h"
 #include "activex/flash10t.tlh"
-#include "activex/wmp.tlh"
 #include <mshtmhst.h>
-//#import "C:\\windows\\system32\\WMP.dll" no_function_mapping // π”√’‚––¥˙¬Î¿¥…˙≥…wmp.tlh and wmp.tli
 
 namespace SOUI
 {
@@ -12,9 +10,9 @@ namespace SOUI
     {
         friend class SAxContainerImpl;
     public:
-        SOUI_CLASS_NAME(SActiveX, L"activex")
+        SOUI_CLASS_NAME_DECL(SActiveX, L"activex")
         explicit SActiveX();
-        virtual ~SActiveX();
+        ~SActiveX() override;
 
         IUnknown * GetIUnknown();
     protected:
@@ -27,25 +25,15 @@ namespace SOUI
         LRESULT OnKeyEvent(UINT uMsg,WPARAM wp,LPARAM lp);
         void OnShowWindow(BOOL bShow, UINT nStatus);
 
-        virtual UINT OnGetDlgCode(){return SC_WANTALLKEYS;}
+		UINT OnGetDlgCode() override;
 
-        virtual BOOL IsFocusable(){return TRUE;}
+		BOOL IsFocusable() override;
 
         HRESULT OnAttrClsid(const SStringW & strValue,BOOL bLoading);
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_PAINT_EX(OnPaint)
-            MESSAGE_RANGE_HANDLER_EX(WM_MOUSEFIRST,WM_MOUSELAST,OnMouseEvent)
-            MESSAGE_RANGE_HANDLER_EX(WM_KEYFIRST,WM_KEYLAST,OnKeyEvent)
-            MSG_WM_CREATE(OnCreate)
-            MSG_WM_SIZE(OnSize)
-            MSG_WM_SHOWWINDOW(OnShowWindow)
-        SOUI_MSG_MAP_END()
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_CUSTOM(L"clsID",OnAttrClsid)
-            ATTR_DWORD(L"clscText",m_clsCtx,FALSE)
-            ATTR_UINT(L"delay",m_bDelayInit,FALSE)
-        SOUI_ATTRS_END()
+        SOUI_MSG_MAP_DECL() 
+
+        SOUI_ATTRS_DECL() 
 
         virtual void OnInitActiveXFinished(){}
 
@@ -62,8 +50,9 @@ namespace SOUI
     class SOUI_EXP SFlashCtrl : public SActiveX
     {
     public:
-        SOUI_CLASS_NAME(SFlashCtrl, L"flash")
+        SOUI_CLASS_NAME_DECL(SFlashCtrl, L"flash")
         SFlashCtrl();
+		~SFlashCtrl() override;
 
         ShockwaveFlashObjects::IShockwaveFlash* GetFlashInterface()  const
         {
@@ -72,13 +61,11 @@ namespace SOUI
 
         BOOL Play(LPCWSTR pszUrl);
     protected:
-        virtual void OnAxActivate(IUnknown *pUnknwn);
+        void OnAxActivate(IUnknown *pUnknwn) override;
 
         HRESULT OnAttrUrl(const SStringW & strValue,BOOL bLoading);
         
-        SOUI_ATTRS_BEGIN()
-            ATTR_CUSTOM(L"url",OnAttrUrl)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL() 
 
         SStringW m_strUrl;
 
@@ -86,35 +73,6 @@ namespace SOUI
     };
 
 
-    class SOUI_EXP SMediaPlayer :public SActiveX
-    {
-    public:
-        SOUI_CLASS_NAME(SMediaPlayer, L"mediaplayer")
-        SMediaPlayer();
-
-        WMPLib::IWMPPlayer4* GetMediaPlayerInterface()  const
-        {
-            return wmp_;
-        }
-        bool Play(LPCWSTR pszUrl);
-
-    protected:
-        virtual void OnInitActiveXFinished(){
-            if(!m_strUrl.IsEmpty() && wmp_)
-            {
-                Play(m_strUrl);
-            }
-        }
-
-        virtual void OnAxActivate(IUnknown *pUnknwn);
-
-        SOUI_ATTRS_BEGIN()
-            ATTR_STRINGW(L"url",m_strUrl,FALSE)
-        SOUI_ATTRS_END()
-
-        SStringW m_strUrl;
-        SComQIPtr<WMPLib::IWMPPlayer4> wmp_;
-    };
-
+    
 }
 

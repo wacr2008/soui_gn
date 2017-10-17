@@ -936,9 +936,15 @@ static_library("skia") {
       "/wd4702",
       "/wd4706",
       "/wd4310",
+      "/wd4701",
     ]
   }  
 
+
   defines = ["SK_IGNORE_ETC1_SUPPORT","SK_CPU_SSE_LEVEL=31"] 
 
+  if(is_clang) {
+    defines +=["SK_BUILD_WITH_CLANG_CL"]
+  }
+  
 } 

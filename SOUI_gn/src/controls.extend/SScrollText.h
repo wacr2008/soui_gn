@@ -1,10 +1,10 @@
-#pragma once
+Ôªø#pragma once
 
 namespace SOUI
 {
     class SScrollText : public SStatic , public ITimelineHandler
     {
-        SOUI_CLASS_NAME(SScrollText,L"scrolltext")
+        SOUI_CLASS_NAME_DECL(SScrollText,L"scrolltext")
     public:
         SScrollText(void);
         ~SScrollText(void);
@@ -20,23 +20,15 @@ namespace SOUI
 
         void UpdateScrollInfo(CSize size);
         
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_PAINT_EX(OnPaint)
-            MSG_WM_SIZE(OnSize)
-            MSG_WM_DESTROY(OnDestroy)
-            MSG_WM_SHOWWINDOW(OnShowWindow)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
         
-        SOUI_ATTRS_BEGIN()
-            ATTR_INT(L"speed",m_nSpeed,FALSE)
-			ATTR_INT(L"rolltype",m_nRollType,FALSE)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL()
         
         int m_nSpeed;
         int m_nOffset;
         int m_nScrollWidth;
         int m_nNextInterval;
-		int m_nRollType;//0 ◊ŒªœŒΩ” 1 ∑«œŒΩ”
+		int m_nRollType;//0È¶ñ‰ΩçË°îÊé• 1 ÈùûË°îÊé•
     };
 
 }

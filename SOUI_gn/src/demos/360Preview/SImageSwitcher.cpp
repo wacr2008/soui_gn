@@ -1,10 +1,24 @@
-#include "SImageSwitcher.h"
+﻿#include "SImageSwitcher.h"
 #include <helper/SplitString.h>
 
 #define TIMER_MOVE		1
 
 namespace SOUI
 {
+	SOUI_MSG_MAP_BEGIN(SImageSwitcher)
+		MSG_WM_PAINT_EX(OnPaint)    //窗口绘制消息
+		MSG_WM_LBUTTONDOWN(OnLButtonDown)
+		MSG_WM_LBUTTONUP(OnLButtonUp)
+		MSG_WM_MOUSEMOVE(OnMouseMove)
+		MSG_WM_TIMER_EX(OnTimer)
+	SOUI_MSG_MAP_END()
+
+	SOUI_ATTRS_BEGIN(SImageSwitcher)
+		ATTR_CUSTOM(L"images", OnAttrImages)
+	SOUI_ATTRS_END()
+
+	SOUI_CLASS_NAME(SImageSwitcher, L"imageSwitcher")
+
 	SImageSwitcher::SImageSwitcher()
 		:m_bWantMove(FALSE)
 		,m_iDownX(0)

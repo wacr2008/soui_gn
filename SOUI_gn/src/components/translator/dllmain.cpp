@@ -1,4 +1,4 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
+﻿// dllmain.cpp : Defines the entry point for the DLL application.
 #include <windows.h>
 
 BOOL APIENTRY DllMain( HMODULE hModule,

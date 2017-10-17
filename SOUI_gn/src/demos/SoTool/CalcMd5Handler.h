@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "droptarget.h"
 #include "MD5.h"
@@ -20,10 +20,7 @@ protected:
 	void CalcFileMd5(const SOUI::SStringT &strFileName);
     void OnDirEnterFinish(SOUI::EventArgs *pEvt);
 
-    EVENT_MAP_BEGIN()
-        EVENT_CHECK_SENDER_ROOT(m_pPageRoot)
-        EVENT_NAME_HANDLER(L"edit_input",SOUI::EventKeyEnter::EventID,OnDirEnterFinish)
-    EVENT_MAP_BREAK()
+	EVENT_MAP_DECL_EX()
 
     SOUI::SWindow *m_pPageRoot;
     DWORD    m_dwPrevProg;

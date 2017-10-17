@@ -1,4 +1,4 @@
-#pragma once
+О╩©#pragma once
 #include "DesignerView.h"
 
 namespace SOUI
@@ -6,7 +6,7 @@ namespace SOUI
 
 	class SMoveWnd : public SWindow
 	{
-		SOUI_CLASS_NAME(SMoveWnd,L"movewnd")
+		SOUI_CLASS_NAME_DECL(SMoveWnd,L"movewnd")
 	public:
 		SMoveWnd(void);
 		~SMoveWnd(void);
@@ -21,25 +21,18 @@ namespace SOUI
 		void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 		void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 
-		SOUI_MSG_MAP_BEGIN()
-			MSG_WM_LBUTTONDOWN(OnLButtonDown)
-			MSG_WM_LBUTTONUP(OnLButtonUp)
-			MSG_WM_MOUSEMOVE(OnMouseMove)
-		    MSG_WM_PAINT_EX(OnPaint)   
-			MSG_WM_KEYDOWN(OnKeyDown)
-			MSG_WM_KEYUP(OnKeyUp)
-			SOUI_MSG_MAP_END()
+		SOUI_MSG_MAP_DECL()
 
 	public:
-		void AdjustRect(); //╣ВуШ8╦Ж╣Ц╣дн╩жц;
-		BOOL IsSelect();   //йг╥Я╠╩я║жп
+		void AdjustRect(); //Х╟┐Ф∙╢8Д╦╙Г┌╧Г └Д╫█Г╫╝;
+		BOOL IsSelect();   //Ф≤╞Е░╕Х╒╚И─┴Д╦╜
 		void NewWnd(CPoint pt);
 		void Click(UINT nFlags,CPoint pt);
 
-        void MoveWndSize(int x, int PosN);   //ю╜╤╞ср╠ъ©Р╩Роб╠ъ©Р
-		void MoveWndSizeLT(int x, int PosN); //ю╜╤╞вС╠ъ©Р╩Рио╠ъ©Р
+        void MoveWndSize(int x, int PosN);   //Ф▀┴Е┼╗Е▐ЁХ╬╧Ф║├Ф┬√Д╦▀Х╬╧Ф║├
+		void MoveWndSizeLT(int x, int PosN); //Ф▀┴Е┼╗Е╥╕Х╬╧Ф║├Ф┬√Д╦┼Х╬╧Ф║├
 
-		void MoveWndSize_Linear(int x , ORIENTATION orientation); //оъпт╡╪╬ж ю╜╤╞ср╠ъ©Р╩Роб╠ъ©Р
+		void MoveWndSize_Linear(int x , ORIENTATION orientation); //Г╨©Ф─╖Е╦┐Е╠─ Ф▀┴Е┼╗Е▐ЁХ╬╧Ф║├Ф┬√Д╦▀Х╬╧Ф║├
 
 		void MoveWndHorz(int x);
 		void MoveWndVert(int x);
@@ -64,21 +57,21 @@ namespace SOUI
 		HCURSOR m_hAll;
 		HCURSOR m_hNormal;
 
-		//рф╤╞т╙кь
-		int      m_downIndex; //мо╤╞я║тЯт╙кь -1©у 0тз©у╢╕ 1вСио╫г 2ио 3срио╫г 4ср 5сроб╫г 6об 7вСоб╫г 8вС 9жп╪Д
-		POINT    m_downPt;   //╟╢обоЮ╤тн╩жц
-		CRect     m_rcPos1,m_rcPos2,m_rcPos3,m_rcPos4,m_rcPos5,m_rcPos6,m_rcPos7,m_rcPos8; //╟к╦Ж╫г╣Ц,╢свСио╫гкЁй╠уКпЩв╙
+		//Г╖╩Е┼╗Е┘┐Г╢═
+		int      m_downIndex; //Ф▀√Е┼╗И─┴Ф▀╘Е┘┐Г╢═ -1Г╘╨ 0Е°╗Г╘╨Е╓└ 1Е╥╕Д╦┼Х╖▓ 2Д╦┼ 3Е▐ЁД╦┼Х╖▓ 4Е▐Ё 5Е▐ЁД╦▀Х╖▓ 6Д╦▀ 7Е╥╕Д╦▀Х╖▓ 8Е╥╕ 9Д╦╜И≈╢
+		POINT    m_downPt;   //Ф▄┴Д╦▀Г⌡╦Е╞╧Д╫█Г╫╝
+		CRect     m_rcPos1,m_rcPos2,m_rcPos3,m_rcPos4,m_rcPos5,m_rcPos6,m_rcPos7,m_rcPos8; //Е┘╚Д╦╙Х╖▓Г┌╧,Д╩▌Е╥╕Д╦┼Х╖▓И║╨Ф≈╤И▓┬Ф≈▀Х╫╛
 
-		CRect m_rcCenter; //мо╤╞н╩жц
+		CRect m_rcCenter; //Ф▀√Е┼╗Д╫█Г╫╝
 
-		//мо╤╞╢╟©з
-		int m_downWindow;  // 0:н╢╟╢об,4:╟╢тзср╠ъ©Р,5.╟╢тзсроб╫г, 6:╟╢тзоб╠ъ©Р
+		//Ф▀√Е┼╗Г╙≈Е▐ё
+		int m_downWindow;  // 0:Ф°╙Ф▄┴Д╦▀,4:Ф▄┴Е°╗Е▐ЁХ╬╧Ф║├,5.Ф▄┴Е°╗Е▐ЁД╦▀Х╖▓, 6:Ф▄┴Е°╗Д╦▀Х╬╧Ф║├
 
-		INT StateMove; //©ь╪Ч╢Сп║н╩жцйг╥Я╠╩╦д╠Д;
+		INT StateMove; //Ф▌╖Д╩╤Е╓╖Е╟▐Д╫█Г╫╝Ф≤╞Е░╕Х╒╚Ф■╧Е▐≤;
 
 	public:
 		SDesignerView *m_Desiner;
-		SWindow *m_pRealWnd;  //сКуБ╦Ж╢╟©зоЮ╧ь╣дй╣╪й╢╟©з
+		SWindow *m_pRealWnd;  //Д╦▌Х©≥Д╦╙Г╙≈Е▐ёГ⌡╦Е┘ЁГ └Е╝·И≥┘Г╙≈Е▐ё
 		BOOL m_bCtrlShift;
 
 

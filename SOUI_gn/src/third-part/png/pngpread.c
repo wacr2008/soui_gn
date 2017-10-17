@@ -1,4 +1,4 @@
-
+﻿
 /* pngpread.c - read a png file in push mode
  *
  * Last changed in libpng 1.5.19 [August 21, 2014]

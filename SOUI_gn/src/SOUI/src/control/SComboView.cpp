@@ -1,9 +1,10 @@
-#include "souistd.h"
+ï»¿#include "souistd.h"
 #include "control\SComboView.h"
 #include <algorithm>
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SComboView, L"comboview")
     SComboView::SComboView(void)
         :m_pListBox(NULL)
     {
@@ -21,11 +22,15 @@ namespace SOUI
     BOOL SComboView::CreateListBox(pugi::xml_node xmlNode)
     {
         SASSERT(xmlNode);
-        //´´½¨ÁÐ±í¿Ø¼þ
-        m_pListBox=(SListView*)SApplication::getSingleton().CreateWindowByName(SListView::GetClassName());
-        m_pListBox->SetContainer(GetContainer());
+        //åˆ›å»ºåˆ—è¡¨æŽ§ä»¶
+		pugi::xml_node listStyle = xmlNode.child(L"listStyle");
+		SStringW strListClass = listStyle.attribute(L"wndclass").as_string(SListView::GetClassName());
+		m_pListBox=sobj_cast<SListView>(SApplication::getSingleton().CreateWindowByName(strListClass));
+		SASSERT(m_pListBox);
 
-        m_pListBox->InitFromXml(xmlNode.child(L"liststyle"));
+		m_pListBox->SetContainer(GetContainer());
+
+		m_pListBox->InitFromXml(listStyle);
         m_pListBox->SetAttribute(L"pos", L"0,0,-0,-0", TRUE);
         m_pListBox->SetAttribute(L"hotTrack",L"1",TRUE);
         m_pListBox->SetOwner(this);    //chain notify message to combobox

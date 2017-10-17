@@ -1,5 +1,5 @@
-/*
-    SOUI¥∞ø⁄≤ºæ÷Ω”ø⁄
+Ôªø/*
+    SOUIÁ™óÂè£Â∏ÉÂ±ÄÊé•Âè£
 */
 #pragma once
 
@@ -21,13 +21,7 @@ namespace SOUI{
 		SIZE_SPEC = 0,
 	};
 
-	enum LayoutType
-	{
-		Layout_Soui=0,	//SOUI ≤ºæ÷
-		Layout_Linear,  //œﬂ–‘≤ºæ÷
-	};
-
-    struct ILayoutParam :IObjRef, IObject
+    struct SOUI_EXP ILayoutParam :IObjRef, IObject
     {
 		virtual void Clear() = 0;
         virtual bool IsMatchParent(ORIENTATION orientation) const = 0;
@@ -40,11 +34,10 @@ namespace SOUI{
 		virtual void * GetRawData() = 0;
     };
 
-    struct ILayout : IObject , IObjRef{
+    struct SOUI_EXP ILayout : IObject , IObjRef{
 		virtual bool IsParamAcceptable(ILayoutParam *pLayoutParam) const = 0;
         virtual void LayoutChildren(SWindow * pParent) = 0;
         virtual ILayoutParam * CreateLayoutParam() const = 0;
 		virtual CSize MeasureChildren(SWindow * pParent,int nWidth,int nHeight) const =0;
-		virtual LayoutType GetLayoutType() const = 0;
     };
 }

@@ -98,75 +98,10 @@ public:
 
 protected:
 	//按钮事件处理映射表
-	EVENT_MAP_BEGIN()
-		EVENT_NAME_COMMAND(L"btn_close",OnClose)
-		EVENT_NAME_COMMAND(L"btn_min",OnMinimize)
-		EVENT_NAME_COMMAND(L"btn_max",OnMaximize)
-		EVENT_NAME_COMMAND(L"btn_restore",OnRestore)
+	EVENT_MAP_DECL()
 
-		EVENT_NAME_COMMAND(L"btn_icon",OnBtnIcon)
-		EVENT_NAME_COMMAND(L"btn_skins",OnBtnSkins)
-		EVENT_NAME_COMMAND(L"btn_feedback",OnBtnFeedback)
-		EVENT_NAME_COMMAND(L"btn_bg_open",OnBtnBgOpen)
-		EVENT_NAME_COMMAND(L"btn_bg_openmenu",OnBtnBgOpenMenu)
-		EVENT_NAME_COMMAND(L"btn_tools",OnBtnTools)
-		EVENT_NAME_COMMAND(L"btn_left_eye",OnBtnLEye)
-		EVENT_NAME_COMMAND(L"btn_left_eyed",OnBtnLEyed)
-		EVENT_NAME_COMMAND(L"btn_stop",OnBtnStop)
-		EVENT_NAME_COMMAND(L"btn_page_up",OnBtnPageUp)
-		EVENT_NAME_COMMAND(L"btn_play",OnBtnPlay)
-		EVENT_NAME_COMMAND(L"btn_pause",OnBtnPause)
-		EVENT_NAME_COMMAND(L"btn_page_down",OnBtnPageDown)
-		EVENT_NAME_COMMAND(L"btn_open",OnBtnOpen)
-		EVENT_NAME_COMMAND(L"btn_volume",OnBtnVolume)
-		EVENT_NAME_COMMAND(L"btn_volume_mute",OnBtnVolumeQuit)
-		EVENT_NAME_COMMAND(L"btn_fullscreen",OnBtnFullscreen)
-		EVENT_NAME_COMMAND(L"btn_quit_fullscreen",OnBtnQuitFullscreen)
-		EVENT_NAME_COMMAND(L"btn_list_show",OnBtnListShow)
-		EVENT_NAME_COMMAND(L"btn_list_showed",OnBtnListShowed)
-		EVENT_NAME_COMMAND(L"btn_box",OnBtnBox)
-		EVENT_NAME_COMMAND(L"btn_boxed",OnBtnBoxHide)
-
-		EVENT_NAME_COMMAND(L"btn_tools_close",OnBtnToolsWinClose)
-		EVENT_NAME_COMMAND(L"btn_tool_prev",OnBtnToolsWinPrev)
-		EVENT_NAME_COMMAND(L"btn_tool_next",OnBtnToolsWinNext)
-		EVENT_NAME_COMMAND(L"btn_tool_3D",OnBtnTool3D)
-		EVENT_NAME_COMMAND(L"btn_tool_lefteye",OnBtnToolLefteye)
-		EVENT_NAME_COMMAND(L"btn_tool_surround_sound",OnBtnToolSurronudsound)
-		EVENT_NAME_COMMAND(L"btn_tool_flyscreen",OnBtnToolFlyscreen)
-		EVENT_NAME_COMMAND(L"btn_tool_game",OnBtnToolGame)
-		EVENT_NAME_COMMAND(L"btn_tool_download",OnBtnToolDownload)
-		EVENT_NAME_COMMAND(L"btn_tool_transcode",OnBtnToolTranscode)
-		EVENT_NAME_COMMAND(L"btn_tool_movielib",OnBtnToolMovielib)
-		EVENT_NAME_COMMAND(L"btn_tool_barrage",OnBtnToolBarrage)
-		EVENT_NAME_COMMAND(L"btn_tool_dlna",OnBtnToolDlna)
-		EVENT_NAME_COMMAND(L"btn_tool_news",OnBtnToolNews)
-		EVENT_NAME_COMMAND(L"btn_tool_screenshots",OnBtnToolScreebshots)
-		EVENT_NAME_COMMAND(L"btn_tool_shoot",OnBtnToolShoot)
-
-		EVENT_NAME_COMMAND(L"btn_sortord_menu",OnBtnPage1SortordMenu)
-		EVENT_NAME_COMMAND(L"btn_sortord",OnBtnPage1Sortord)
-
-		EVENT_NAME_COMMAND(L"btn_all",OnBtnAll)
-		EVENT_NAME_COMMAND(L"btn_add",OnBtnAdd)
-		EVENT_NAME_COMMAND(L"btn_delete",OnBtnDelete)
-		EVENT_NAME_COMMAND(L"btn_clear",OnBtnClear)
-		EVENT_NAME_COMMAND(L"btn_OrderPlay",OnBtnOrderPlay)
-		EVENT_NAME_COMMAND(L"btn_SinglePlay",OnBtnSinglePlay)
-		EVENT_NAME_COMMAND(L"btn_RandomPlay",OnBtnRandomPlay)
-		EVENT_NAME_COMMAND(L"btn_SingleCycle",OnBtnSingleCycle)
-		EVENT_NAME_COMMAND(L"btn_ListCycle",OnBtnListCycle)
-		EVENT_MAP_END()    
-
-		//窗口消息处理映射表
-		BEGIN_MSG_MAP_EX(CMainWnd)
-		MSG_WM_INITDIALOG(OnInitDialog)
-		MSG_WM_CLOSE(OnClose)
-		MSG_WM_SIZE(OnSize)
-		MSG_WM_COMMAND(OnCommand)
-		CHAIN_MSG_MAP(SHostWnd)//注意将没有处理的消息交给基类处理
-		REFLECT_NOTIFICATIONS_EX()
-		END_MSG_MAP()
+	//窗口消息处理映射表
+	BEGIN_MSG_MAP_EX_DECL()
 private:
 	BOOL            m_bLayoutInited;
 	CSkinMgr		m_dlgSkinMgr;		//皮肤管理窗口

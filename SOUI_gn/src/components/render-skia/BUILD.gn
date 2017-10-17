@@ -7,6 +7,8 @@ component("render-skia") {
   sources = [
     #include files  
     "drawtext-skia.h",
+    "PathEffect-Skia.h",
+    "PathMeasure-Skia.h",
     "render-skia.h",
     "render-skia2-i.h",
     "render-skia2.h",
@@ -14,6 +16,8 @@ component("render-skia") {
     
     #source files 
     "drawtext-skia.cpp",
+    "PathEffect-Skia.cpp",
+    "PathMeasure-Skia.cpp",
     "render-skia.cpp",
     "render-skia2.cpp",
     "skia2rop2.cpp",

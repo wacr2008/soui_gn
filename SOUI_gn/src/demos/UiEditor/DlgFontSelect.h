@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "core/shostwnd.h"
 #include "core/smsgloop.h"
 #include "core/SHostDialog.h"
@@ -15,7 +15,7 @@ namespace SOUI
 {
 	class SDlgFontSelect: public SHostDialog
 	{
-		SOUI_CLASS_NAME(SDlgFontSelect,L"dlgfontselect")
+		SOUI_CLASS_NAME_DECL(SDlgFontSelect,L"dlgfontselect")
 	public:
 		SDlgFontSelect(SStringT strFont, SDesignerView *pDesignerView);
 
@@ -45,22 +45,9 @@ namespace SOUI
 
 		//virtual SMessageLoop * GetMsgLoop(){return m_MsgLoop;}
 
-		EVENT_MAP_BEGIN()
-			EVENT_NAME_COMMAND(L"btnOK", OnOK)
-			EVENT_NAME_COMMAND(L"btnCancel", OnCancel)
-			EVENT_NAME_COMMAND(L"chkBold", OnCKClick)
-			EVENT_NAME_COMMAND(L"chkItalic", OnCKClick)
-			EVENT_NAME_COMMAND(L"chkUnderline", OnCKClick)
-			EVENT_NAME_COMMAND(L"chkStrike", OnCKClick)
-			EVENT_MAP_END()
+		EVENT_MAP_DECL()
 
-			BEGIN_MSG_MAP_EX(SDlgNewSkin)
-			MSG_WM_INITDIALOG(OnInitDialog)
-			//MSG_WM_CLOSE(OnCancel)
-			//MSG_WM_KEYDOWN(OnKeyDown)
-			CHAIN_MSG_MAP(SHostDialog)
-			REFLECT_NOTIFICATIONS_EX()
-			END_MSG_MAP()
+		BEGIN_MSG_MAP_EX_DECL()
 
 	public:
 		

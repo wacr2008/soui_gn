@@ -1,4 +1,4 @@
-/********************************************************************
+ï»¿/********************************************************************
 created:	2014/10/01
 created:	01:10:2014   16:32
 filename: 	DuiSkinAPNG.h
@@ -6,8 +6,8 @@ file base:	DuiSkinAPNG
 file ext:	h
 author:		huangjianxiong
 
-purpose:	¶¯»­PNG£¨APNG£©À©Õ¹Ö§³Ö£¬ÒÀÀµÓÚµ±Ç°Ê¹ÓÃµÄÍ¼Æ¬½âÂëÆ÷¡£
-            Ä¿Ç°Ö»ÓĞimgdecoder-pngÖ§³ÖAPNG½âÂë
+purpose:	åŠ¨ç”»PNGï¼ˆAPNGï¼‰æ‰©å±•æ”¯æŒï¼Œä¾èµ–äºå½“å‰ä½¿ç”¨çš„å›¾ç‰‡è§£ç å™¨ã€‚
+            ç›®å‰åªæœ‰imgdecoder-pngæ”¯æŒAPNGè§£ç 
 *********************************************************************/
 #pragma once
 #include <interface/SSkinobj-i.h>
@@ -20,13 +20,13 @@ namespace SOUI
 
     /**
     * @class     SSkinAPNG
-    * @brief     APNGÍ¼Æ¬¼ÓÔØ¼°ÏÔÊ¾¶ÔÏó
+    * @brief     APNGå›¾ç‰‡åŠ è½½åŠæ˜¾ç¤ºå¯¹è±¡
     * 
     * Describe
     */
     class SSkinAPNG : public SSkinAni
     {
-        SOUI_CLASS_NAME(SSkinAPNG, L"apng")
+        SOUI_CLASS_NAME_DECL(SSkinAPNG, L"apng")
     public:
         SSkinAPNG()
         {
@@ -36,26 +36,24 @@ namespace SOUI
         
         /**
          * LoadFromFile
-         * @brief    ´ÓÎÄ¼ş¼ÓÔØAPNG
-         * @param    LPCTSTR pszFileName --  ÎÄ¼şÃû
-         * @return   int -- APNGÖ¡Êı£¬0-Ê§°Ü
+         * @brief    ä»æ–‡ä»¶åŠ è½½APNG
+         * @param    LPCTSTR pszFileName --  æ–‡ä»¶å
+         * @return   int -- APNGå¸§æ•°ï¼Œ0-å¤±è´¥
          * Describe  
          */    
         int LoadFromFile(LPCTSTR pszFileName);
 
         /**
          * LoadFromMemory
-         * @brief    ´ÓÄÚ´æ¼ÓÔØAPNG
-         * @param    LPVOID pBits --  ÄÚ´æµØÖ·
-         * @param    size_t szData --  ÄÚ´æÊı¾İ³¤¶È
-         * @return   int -- APNGÖ¡Êı£¬0-Ê§°Ü
+         * @brief    ä»å†…å­˜åŠ è½½APNG
+         * @param    LPVOID pBits --  å†…å­˜åœ°å€
+         * @param    size_t szData --  å†…å­˜æ•°æ®é•¿åº¦
+         * @return   int -- APNGå¸§æ•°ï¼Œ0-å¤±è´¥
          * Describe  
          */    
         int LoadFromMemory(LPVOID pBits,size_t szData);
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_CUSTOM(L"src",OnAttrSrc)   //XMLÎÄ¼şÖĞÖ¸¶¨µÄÍ¼Æ¬×ÊÔ´Ãû,(type:name)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL()
     protected:
         LRESULT OnAttrSrc(const SStringW &strValue,BOOL bLoading);
         

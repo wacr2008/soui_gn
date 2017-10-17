@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 namespace SOUI
 {
 	class SDesignerRoot : public SWindow
 	{
-		SOUI_CLASS_NAME(SDesignerRoot,L"designerRoot")
+		SOUI_CLASS_NAME_DECL(SDesignerRoot,L"designerRoot")
 	public:
 		SDesignerRoot(void);
 		~SDesignerRoot(void);

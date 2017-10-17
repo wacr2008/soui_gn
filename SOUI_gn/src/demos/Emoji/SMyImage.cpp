@@ -3,6 +3,8 @@
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SMyImage, L"myimg")
+
 	SMyImage::SMyImage()
 	{
 	}

@@ -1,7 +1,23 @@
-#include "SSwitch.h"
+﻿#include "SSwitch.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SSwitch, L"switch")
+
+
+	SOUI_MSG_MAP_BEGIN(SSwitch)
+		MSG_WM_TIMER_EX(OnTimer)    //定时器消息
+		MSG_WM_PAINT_EX(OnPaint)    //窗口绘制消息
+		MSG_WM_LBUTTONUP(OnLButtonUp)
+		MSG_WM_KEYDOWN(OnKeyDown)
+		SOUI_MSG_MAP_END()
+
+	SOUI_ATTRS_BEGIN(SSwitch)
+		ATTR_SKIN(L"skin", m_pSkin, TRUE)
+		ATTR_SKIN(L"skinforce", m_pSkinForce, TRUE)
+		ATTR_CUSTOM(L"open", OnAttrOpen)
+	SOUI_ATTRS_END()
+
 
 SSwitch::SSwitch(): m_BOpen(FALSE), m_BChangeing(FALSE), m_Iinterval(20), m_FrameCount(5), m_FrameNow(5),m_pSkin(NULL),m_pSkinForce(NULL)
 {

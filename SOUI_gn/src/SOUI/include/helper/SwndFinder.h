@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <core/SSingleton.h>
 #include <core/swnd.h>
@@ -10,7 +10,11 @@ namespace SOUI
         class SFindInfo
         {
         public:
-            SWND hParent;
+			SFindInfo();
+			SFindInfo(const SFindInfo &other);
+			~SFindInfo();
+            
+			SWND hParent;
             bool findByName;
             SStringW strName;
             int      nID;
@@ -19,6 +23,8 @@ namespace SOUI
             operator ULONG_PTR() const;
         };
     public:
+		SWindowFinder();
+		~SWindowFinder() override;
         SWindow * FindChildByName(SWindow *pParent,SStringW strName,int nDeep);
         template<class T>
         SWindow * FindChildByName2(SWindow *pParent,SStringW strName,int nDeep)

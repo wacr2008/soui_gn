@@ -1,4 +1,4 @@
-#include "UiAnimationWnd.h"
+Ôªø#include "UiAnimationWnd.h"
 #include <math.h>
 #include <helper/splitstring.h>
 
@@ -23,8 +23,24 @@ namespace SOUI{
 
     //////////////////////////////////////////////////////////////////////////
     //  CUiAnimation
-    template<> CUiAnimation* SSingleton<CUiAnimation>::ms_Singleton = NULL;
+    //template<> CUiAnimation* SSingleton<CUiAnimation>::ms_Singleton = NULL;
     
+
+	SOUI_CLASS_NAME(SUiAnimationWnd, L"uianimationwnd")
+	SOUI_MSG_MAP_BEGIN(SUiAnimationWnd)
+		MSG_WM_CREATE(OnCreate)
+		MSG_WM_DESTROY(OnDestroy)
+		MSG_WM_SIZE(OnSize)
+		MSG_WM_SHOWWINDOW(OnShowWindow)
+		MSG_WM_PAINT_EX(OnPaint)
+		MSG_WM_TIMER_EX(OnTimer)
+	SOUI_MSG_MAP_END()
+
+	SOUI_ATTRS_BEGIN(SUiAnimationWnd)
+		ATTR_SKIN(L"icon", m_pSkinIcon, FALSE)
+		ATTR_IMAGE(L"aniMode", m_pAniMode, FALSE)
+	SOUI_ATTRS_END()
+
 
     CUiAnimation::CUiAnimation(IUIAnimationTimer *pUiAniTimer)
     {
@@ -69,7 +85,7 @@ namespace SOUI{
             );
         if (SUCCEEDED(hr))
         {
-            //¥¥Ω®“ª∏ˆUIAnimationµƒµ•¿˝
+            //ÂàõÂª∫‰∏Ä‰∏™UIAnimationÁöÑÂçï‰æã
             new CUiAnimation(pAnimationTimer);
         }
 
@@ -205,7 +221,7 @@ namespace SOUI{
         int iX1=0;
         for(int i=0;i<=sz.cx;i++)
         {
-            if(i==sz.cx || pPixels[i] == 0xFFFF00FF) //∑÷∏Óœﬂ
+            if(i==sz.cx || pPixels[i] == 0xFFFF00FF) //ÂàÜÂâ≤Á∫ø
             {
                 int iX2=i;
                 SIZE szWord={iX2-iX1,sz.cy};

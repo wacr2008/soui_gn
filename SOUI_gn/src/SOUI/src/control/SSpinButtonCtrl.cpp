@@ -1,4 +1,4 @@
-#include "include\souistd.h"
+﻿#include "include\souistd.h"
 #include "control\SSpinButtonCtrl.h"
 
 static const wchar_t * KBTN_UP = L"btn_up";
@@ -6,14 +6,25 @@ static const wchar_t * KBTN_DOWN = L"btn_down";
 
 namespace SOUI
 {
+	SOUI_ATTRS_BEGIN(SSpinButtonCtrl)
+		ATTR_INT(L"max", m_nMax, FALSE)
+		ATTR_INT(L"min", m_nMin, FALSE)
+		ATTR_CUSTOM(L"value", OnAttrValue)
+		ATTR_UINT(L"step", m_uStep, FALSE)
+		ATTR_INT(L"circle", m_bCircle, FALSE)
+		ATTR_STRINGW(L"buddy", m_strBuddy, FALSE)
+	SOUI_ATTRS_END()
+
+	SOUI_CLASS_NAME(SSpinButtonCtrl, L"spinButton")
+
     SSpinButtonCtrl::SSpinButtonCtrl(void)
-    :m_btnUp(NULL)
-    ,m_btnDown(NULL)
-    ,m_nMin(0)
-    ,m_nMax(100)
-    ,m_nValue(0)
-    ,m_uStep(1)
-    ,m_bCircle(TRUE)
+		:m_nMax(100)
+		, m_nMin(0)
+		,m_nValue(0)
+		,m_uStep(1)
+		,m_bCircle(TRUE)
+		, m_btnUp(NULL)
+		, m_btnDown(NULL)
     {
         GetEventSet()->addEvent(EVENTID(EventSpinValue2String));
     }

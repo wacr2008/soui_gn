@@ -1,6 +1,8 @@
-#include "SDesignerRoot.h"
+﻿#include "SDesignerRoot.h"
 
 namespace SOUI{
+	SOUI_CLASS_NAME(SDesignerRoot, L"designerRoot")
+
 	SDesignerRoot::SDesignerRoot(void)
 	{
 	}

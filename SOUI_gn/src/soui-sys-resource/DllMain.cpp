@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 
 class __declspec(dllexport) soui_sys_res
 {

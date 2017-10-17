@@ -1,4 +1,4 @@
-// residbuilder.cpp : ¶¨Òå¿ØÖÆÌ¨Ó¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
+ï»¿// residbuilder.cpp : å®šä¹‰æ§åˆ¶å°åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
 //
 #include <Shlwapi.h>
 #include "tinyxml/tinyxml.h"
@@ -7,8 +7,7 @@
 #include <string>
 #include <vector>
 #include <tchar.h>
-
-#pragma comment (lib,"Shlwapi.lib")
+ 
 
 static bool bCheckResourction = true;
 
@@ -128,44 +127,34 @@ std::wstring toWideString(const char* str, size_t len, unsigned int code_page=CP
 	return buf;
 } 
 
-const wchar_t  RB_HEADER_RC[]=
-L"/*<------------------------------------------------------------------------------------------------->*/\n"\
-L"/*¸ÃÎÄ¼şÓÉuiresbuilderÉú³É£¬Çë²»ÒªÊÖ¶¯ĞŞ¸Ä*/\n"\
-L"/*<------------------------------------------------------------------------------------------------->*/\n"
-L"#define DEFINE_UIRES(name, type, file_path)\\\n"
-L"    name type file_path\n\n";
+const wchar_t  RB_HEADER_RC[] =
+L"/*<------------------------------------------------------------------------------------------------->*/\n /*è¯¥æ–‡ä»¶ç”±uiresbuilderç”Ÿæˆï¼Œè¯·ä¸è¦æ‰‹åŠ¨ä¿®æ”¹*/\n /*<------------------------------------------------------------------------------------------------->*/\n  #define DEFINE_UIRES(name, type, file_path)\n  name type file_path\n\n ";
 
-const wchar_t  RB_HEADER_ID[]=
-L"/*<------------------------------------------------------------------------------------------------->*/\n"\
-L"/*¸ÃÎÄ¼şÓÉuiresbuilderÉú³É£¬Çë²»ÒªÊÖ¶¯ĞŞ¸Ä*/\n"\
-L"/*<------------------------------------------------------------------------------------------------->*/\n";
+const wchar_t  RB_HEADER_ID[] =
+L"/*<------------------------------------------------------------------------------------------------->*/\n /*è¯¥æ–‡ä»¶ç”±uiresbuilderç”Ÿæˆï¼Œè¯·ä¸è¦æ‰‹åŠ¨ä¿®æ”¹*/\n /*<------------------------------------------------------------------------------------------------->*/\n";
+
 
 const wchar_t ROBJ_DEF[] =
-L"#define ROBJ_IN_CPP \\\n"
-L"namespace SOUI \\\n"
-L"{\\\n"
-L"    const _R R;\\\n"
-L"    const _UIRES UIRES;\\\n"
-L"}\n";
+L"#define ROBJ_IN_CPP \\\n namespace SOUI \\\n {\\\n     const _R R;\\\n     const _UIRES UIRES;\\\n }\n";
 
 struct IDMAPRECORD
 {
-	WCHAR szType[100];
-	WCHAR szName[200];
-	WCHAR szPath[MAX_PATH];
+	wchar_t szType[100];
+	wchar_t szName[200];
+	wchar_t szPath[MAX_PATH];
 };
 
-//½âÎöÎª²¼¾ÖµÄÎÄ¼şÀàĞÍ
+//è§£æä¸ºå¸ƒå±€çš„æ–‡ä»¶ç±»å‹
 const wchar_t KXML_LAYOUT[]= L"layout";
 const wchar_t KXML_SMENU[]= L"smenu";
 const wchar_t KXML_SMENUEX[]= L"smenuex";
-//È«¾Ö×ÊÔ´¶¨Òå
+//å…¨å±€èµ„æºå®šä¹‰
 const wchar_t KXML_UIDEF[] = L"uidef";
 
-//×Ô¶¯±àºÅ¿ªÊ¼ID
+//è‡ªåŠ¨ç¼–å·å¼€å§‹ID
 const int KStartID = 0x00010000; 
 
-//»ñµÃÎÄ¼şµÄ×îºóĞŞ¸ÄÊ±¼ä
+//è·å¾—æ–‡ä»¶çš„æœ€åä¿®æ”¹æ—¶é—´
 __int64 GetLastWriteTime(LPCSTR pszFileName)
 {
 	__int64 tmFile=-1;
@@ -179,7 +168,7 @@ __int64 GetLastWriteTime(LPCSTR pszFileName)
 	return tmFile;
 }
 
-//»ñµÃÎÄ¼şµÄ×îºóĞŞ¸ÄÊ±¼ä
+//è·å¾—æ–‡ä»¶çš„æœ€åä¿®æ”¹æ—¶é—´
 __int64 GetLastWriteTime(LPCWSTR pszFileName)
 {
     __int64 tmFile=0;
@@ -193,7 +182,7 @@ __int64 GetLastWriteTime(LPCWSTR pszFileName)
     return tmFile;
 }
 
-//½«µ¥·´Ğ±¿¸×ª»»³ÉË«·´Ğ±¿¸
+//å°†å•åæ–œæ‰›è½¬æ¢æˆåŒåæ–œæ‰›
 std::wstring BuildPath(LPCWSTR pszPath)
 {
 	LPCWSTR p=pszPath;
@@ -204,12 +193,12 @@ std::wstring BuildPath(LPCWSTR pszPath)
 		if(*p==L'\\')
 		{
 			if(*(p+1)!=L'\\')
-			{//µ¥Ğ±¿¸
+			{//å•æ–œæ‰›
 				p2[0]=p2[1]=L'\\';
 				p++;
 				p2+=2;
 			}else
-			{//ÒÑ¾­ÊÇË«Ğ±¿¸
+			{//å·²ç»æ˜¯åŒæ–œæ‰›
 				p2[0]=p2[1]=L'\\';
 				p+=2;
 				p2+=2;
@@ -275,7 +264,7 @@ void WriteFile(__int64 tmIdx, const std::string &strRes, const std::wstring &str
 		if(f)
 		{
 			FILEHEAD tmStamp(tmIdx);
-			fwrite(&tmStamp,sizeof(FILEHEAD)-sizeof(WCHAR),1,f);//Ğ´UTF16ÎÄ¼şÍ·¼°Ê±¼ä¡£-sizeof(WCHAR)ÓÃÀ´È¥³ıstamp×îºóÒ»¸ö\0
+			fwrite(&tmStamp,sizeof(FILEHEAD)-sizeof(WCHAR),1,f);//å†™UTF16æ–‡ä»¶å¤´åŠæ—¶é—´ã€‚-sizeof(WCHAR)ç”¨æ¥å»é™¤stampæœ€åä¸€ä¸ª\0
 			if (bWithHead)
 				fwrite(RB_HEADER_RC,sizeof(WCHAR),wcslen(RB_HEADER_RC),f);
 			fwrite(strOut.c_str(),sizeof(WCHAR),strOut.length(),f);
@@ -297,7 +286,7 @@ void WriteFile(__int64 tmIdx, const std::string &strRes, const std::wstring &str
 	}
 }
 
-//C++¹Ø¼ü×Ö
+//C++å…³é”®å­—
 wchar_t* szCppKey[] =
 {
     L"__asm",
@@ -411,7 +400,7 @@ wchar_t* szCppKey[] =
     L"while"
 };
 
-//ĞèÒª×ªÒåµÄÎŞĞ§×Ö·û,ÒÔÏÂ·ûºÅ¶¼×Ô¶¯×ª»»³É"_"
+//éœ€è¦è½¬ä¹‰çš„æ— æ•ˆå­—ç¬¦,ä»¥ä¸‹ç¬¦å·éƒ½è‡ªåŠ¨è½¬æ¢æˆ"_"
 const wchar_t g_CharEscape[] =L".+-*/~\'\"^%#!@?;|{[]}=";
 void EscapeChar(wchar_t &c)
 {
@@ -439,14 +428,14 @@ void MakeNameValid(const wchar_t * pszName,wchar_t * pszOut)
     const wchar_t * p1 = pszName;
     wchar_t * p2 = pszOut;
     
-    //Êı×Ö¿ªÍ·£¬Ç°Ãæ¼ÓÉÏnameÇ°×º
+    //æ•°å­—å¼€å¤´ï¼Œå‰é¢åŠ ä¸Šnameå‰ç¼€
     if(*p1 >= L'0' && *p1 <= L'9')
     {
         wcscpy(p2,L"name_");
         p2+=5;
     }
     
-    //×ªÒåpszNameÖĞµÄ²»ÄÜÓÃÓÚnameµÄ×Ö·û
+    //è½¬ä¹‰pszNameä¸­çš„ä¸èƒ½ç”¨äºnameçš„å­—ç¬¦
     while(*p1)
     {
         *p2 = *p1;
@@ -457,7 +446,7 @@ void MakeNameValid(const wchar_t * pszName,wchar_t * pszOut)
     
     *p2=0;
     
-    //·ÀÖ¹nameÊÇC++¹Ø¼ü×Ö
+    //é˜²æ­¢nameæ˜¯C++å…³é”®å­—
     void *pFind = bsearch(pszOut,szCppKey,ARRAYSIZE(szCppKey),sizeof(wchar_t*),wcscmp2);
     if(pFind)
     {
@@ -479,7 +468,7 @@ void ParseLayout(TiXmlElement *xmlNode,std::map<std::wstring,int> &vecName2ID,in
     const char * pszAttrName = xmlNode->Attribute("name");
 
     if(pszAttrName)
-    {//ÓĞnameÊôĞÔ²Å½âÎöid
+    {//æœ‰nameå±æ€§æ‰è§£æid
 		wchar_t szName[100]={0};
         int nID = nStartId;
 
@@ -502,7 +491,7 @@ void ParseLayout(TiXmlElement *xmlNode,std::map<std::wstring,int> &vecName2ID,in
 				{
 					nStartId++;
 				}else if(strnicmp(pszID,"ID",2) == 0)
-				{//IDÎªÃüÃûID£¬ÈçIDOK£¬IDCANCEL
+				{//IDä¸ºå‘½åIDï¼Œå¦‚IDOKï¼ŒIDCANCEL
 					if(stricmp(pszID,"IDOK")==0)
 						nID = IDOK;
 					if(stricmp(pszID,"IDCANCEL")==0)
@@ -559,7 +548,7 @@ void ParseLayoutFile(const wchar_t * pszFileName,std::map<std::wstring,int> &map
     if(xmlLayout.LoadFile(f))
     {
         TiXmlElement *pXmlNode = xmlLayout.RootElement();
-        //±ÜÃâ½âÎöµ½skin½áµã
+        //é¿å…è§£æåˆ°skinç»“ç‚¹
         if(stricmp(pXmlNode->Value(),"soui") == 0)
             ParseLayout(pXmlNode->FirstChildElement("root"),mapName2ID,nStartId);
         else if(stricmp(pXmlNode->Value(),"include") == 0 
@@ -573,14 +562,14 @@ void ParseLayoutFile(const wchar_t * pszFileName,std::map<std::wstring,int> &map
 		{
 			wchar_t err_msg[1024];
 			_swprintf(err_msg, L"!!!err: Load Layout XML Failed! file name: %s\n", pszFileName);
-			::MessageBoxW(NULL, err_msg, L"¼ÓÔØxmlÊ§°Ü", 0);
+			::MessageBoxW(NULL, err_msg, L"åŠ è½½xmlå¤±è´¥", 0);
 		}
         wprintf(L"!!!err: Load Layout XML Failed! file name: %s\n",pszFileName);
     }
     fclose(f);
 }
 
-//´ÓUIDefÖĞ½âÎöString,Color Table
+//ä»UIDefä¸­è§£æString,Color Table
 __int64 ParseUIDefFile(std::map<std::string, std::string> &mapFiles, const wchar_t * pszFileName, std::map<std::string, int> &mapString, std::map<std::string, int> &mapColor)
 {
     TiXmlDocument xmlUidef;
@@ -599,7 +588,7 @@ __int64 ParseUIDefFile(std::map<std::string, std::string> &mapFiles, const wchar
         TiXmlElement *pXmlNode = xmlUidef.RootElement();
         if(stricmp(pXmlNode->Value(),"uidef")==0)
         {
-            //½âÎö string table
+            //è§£æ string table
             TiXmlElement *pXmlString = pXmlNode->FirstChildElement("string");
             if(pXmlString)
             {
@@ -624,7 +613,7 @@ __int64 ParseUIDefFile(std::map<std::string, std::string> &mapFiles, const wchar
                     while(pStrEle)
                     {
                         std::string strName = pStrEle->Value();
-						//Òª±£Ö¤×Ö·û´®±íÖĞÃû×ÖÎ¨Ò»
+						//è¦ä¿è¯å­—ç¬¦ä¸²è¡¨ä¸­åå­—å”¯ä¸€
 						if(mapString.find(strName)!=mapString.end())
 						{
 							mapString.clear();
@@ -637,7 +626,7 @@ __int64 ParseUIDefFile(std::map<std::string, std::string> &mapFiles, const wchar
                 }
             }
             
-            //½âÎö color table
+            //è§£æ color table
             TiXmlElement *pXmlColor = pXmlNode->FirstChildElement("color");
             if(pXmlColor)
             {
@@ -662,7 +651,7 @@ __int64 ParseUIDefFile(std::map<std::string, std::string> &mapFiles, const wchar
                     while(pColorEle)
                     {
 						std::string strName = pColorEle->Value();
-						//Òª±£Ö¤ÑÕÉ«±íÖĞÃû×ÖÎ¨Ò»
+						//è¦ä¿è¯é¢œè‰²è¡¨ä¸­åå­—å”¯ä¸€
 						if(mapColor.find(strName)!=mapColor.end())
 						{
 							mapColor.clear();
@@ -712,11 +701,11 @@ std::string& trim(std::string &s)
 //uiresbuilder -p uires -i uires\uires.idx -r .\uires\winres.rc2 -h .\uires\resource.h idtable
 int _tmain(int argc, _TCHAR* argv[])
 {
-	std::string strCheckResourction; //ÊÇ·ñ×ö×ÊÔ´¼ì²é
-	std::string strSkinPath;	//Æ¤·ôÂ·¾¶,Ïà¶ÔÓÚ³ÌĞòµÄ.rcÎÄ¼ş
+	std::string strCheckResourction; //æ˜¯å¦åšèµ„æºæ£€æŸ¥
+	std::string strSkinPath;	//çš®è‚¤è·¯å¾„,ç›¸å¯¹äºç¨‹åºçš„.rcæ–‡ä»¶
 	std::string strIndexFile;
-	std::string strWorkingDir; //¹¤×÷Â·¾¶
-	std::string strRes;		//rc2ÎÄ¼şÃû
+	std::string strWorkingDir; //å·¥ä½œè·¯å¾„
+	std::string strRes;		//rc2æ–‡ä»¶å
 	std::string strHeadFile; // head file
     BOOL bBuildIDMap=FALSE;  //Build ID map
 	int c;
@@ -788,7 +777,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	indexName = sDir + toWideString(strIndexFile.c_str(), strIndexFile.length());
 
-	//strRes = toNarrowString(obj.getWorkDir().c_str(), obj.getWorkDir().length()) + "\\" + strRes;		//rc2ÎÄ¼şÃû
+	//strRes = toNarrowString(obj.getWorkDir().c_str(), obj.getWorkDir().length()) + "\\" + strRes;		//rc2æ–‡ä»¶å
 	//strHeadFile = toNarrowString(obj.getWorkDir().c_str(), obj.getWorkDir().length()) + "\\" + strHeadFile; // head file
 
 #ifdef _DEBUG
@@ -802,7 +791,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 #endif
 
-	//´ò¿ªuirex.idxÎÄ¼ş
+	//æ‰“å¼€uirex.idxæ–‡ä»¶
 	TiXmlDocument xmlIndexFile;
 	if(!xmlIndexFile.LoadFile(indexName.c_str()))
 	{
@@ -886,7 +875,7 @@ int _tmain(int argc, _TCHAR* argv[])
     strFiles += L"\t};\r\n";
     
 	if(strRes.length())
-	{//±àÒë×ÊÔ´.rc2ÎÄ¼ş
+	{//ç¼–è¯‘èµ„æº.rc2æ–‡ä»¶
 		//build output string by wide char
 		std::wstring strOut;
 		std::vector<IDMAPRECORD>::iterator it2 = vecIdMapRecord.begin();
@@ -896,7 +885,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			std::wstring strPath=BuildPath(it2->szPath);
             if(bCheckResourction && !isFileExist(strPath))
             {
-                ::MessageBoxW(NULL,strPath.c_str(),L"×ÊÔ´²»´æÔÚ",0);
+                ::MessageBoxW(NULL,strPath.c_str(),L"èµ„æºä¸å­˜åœ¨",0);
             }
 			swprintf(szRec,L"DEFINE_UIRES(%s,\t%s,\t%\"%s\")\n",it2->szName,it2->szType,strPath.c_str());
 			strOut+=szRec;
@@ -906,7 +895,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		WriteFile(tmIdx, strRes, strOut, TRUE);
 	}
 
-    //ÊäÈëname,id¶¨Òå,Ö»½âÎö×ÊÔ´ÖĞlayout×ÊÔ´µÄXML×ÊÔ´
+    //è¾“å…¥name,idå®šä¹‰,åªè§£æèµ„æºä¸­layoutèµ„æºçš„XMLèµ„æº
 	if (!strHeadFile.empty())
 	{
 		std::map<std::wstring, int> mapNameID;
@@ -916,16 +905,18 @@ int _tmain(int argc, _TCHAR* argv[])
 
         __int64 tmResource = bBuildIDMap;
         
+		mapNameID[L"_name_start"] = KStartID-1;//å¢åŠ ä¸€ä¸ª_name_startçš„é¡¹ï¼Œé˜²æ­¢äº§ç”Ÿä¸€ä¸ªä¸ºç©ºçš„name-idæ•°ç»„ã€‚
+
         int nStartID = KStartID;
 		std::vector<IDMAPRECORD>::iterator it2 = vecIdMapRecord.begin();
         while(it2!=vecIdMapRecord.end())
         {
             if(wcsicmp(it2->szType,KXML_LAYOUT)==0 || wcsicmp(it2->szType,KXML_SMENU) == 0 || wcsicmp(it2->szType,KXML_SMENUEX) == 0)
-            {//·¢ÏÖ²¼¾Ö»òÕß²Ëµ¥ÎÄ¼ş
+            {//å‘ç°å¸ƒå±€æˆ–è€…èœå•æ–‡ä»¶
                 tmResource += GetLastWriteTime(it2->szPath);
                 ParseLayoutFile(it2->szPath,mapNameID,nStartID);
             }else if(wcsicmp(it2->szType,KXML_UIDEF)==0)
-            {//ÕÒµ½UIDEF
+            {//æ‰¾åˆ°UIDEF
                 tmResource += GetLastWriteTime(it2->szPath);
                 tmResource += ParseUIDefFile(mapFiles,it2->szPath,mapString,mapColor);
             }
@@ -934,9 +925,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		std::wstring strName, 
 		        strId ,     //.id
-		        strNamedID; //{name,id}Êı×é
-		std::wstring strNameConstrutor;  //.nameµÄ¹¹Ôìº¯Êı
-		std::wstring strNameVariables;    //.nameµÄ³ÉÔ±±äÁ¿
+		        strNamedID; //{name,id}æ•°ç»„
+		std::wstring strNameConstrutor;  //.nameçš„æ„é€ å‡½æ•°
+		std::wstring strNameVariables;    //.nameçš„æˆå‘˜å˜é‡
 		
         strNamedID = L"\tconst SNamedID::NAMEDVALUE namedXmlID[]={\r\n";
         strNameConstrutor = L"_name(){\r\n";
@@ -951,7 +942,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		int idx = 0;
 		while(it!=mapNameID.end())
 		{
-			WCHAR szName[200],szBuf[2000] = { 0 };
+			WCHAR szName[200]={0},szBuf[2000] = { 0 };
 			MakeNameValid(it->first.c_str(),szName);
             
             if(!bBuildIDMap)
@@ -985,7 +976,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		
 		if(mapNameID.size()>0)
 		{
-		    strNamedID = strNamedID.substr(0,strNamedID.size()-3); //È¥³ıÊı×é×îºóÒ»¸ö","
+		    strNamedID = strNamedID.substr(0,strNamedID.size()-3); //å»é™¤æ•°ç»„æœ€åä¸€ä¸ª","
 		}
 		strNamedID += L"\t\t};\r\n";
 		

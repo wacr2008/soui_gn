@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 #include "core/SWnd.h"
 
 namespace SOUI
 {
 class SImageEx : public SImageWnd
 {
-    SOUI_CLASS_NAME(SImageWnd, L"imgex")
+    SOUI_CLASS_NAME_DECL(SImageWnd, L"imgex")
 public:
     SImageEx();
     ~SImageEx();
@@ -13,9 +13,7 @@ public:
 protected:
     HRESULT OnSrc(const SStringW& strValue, BOOL bLoading);
 
-    SOUI_ATTRS_BEGIN()
-        ATTR_CUSTOM(L"src", OnSrc)
-    SOUI_ATTRS_END()
+    SOUI_ATTRS_DECL()
 };
 
 };

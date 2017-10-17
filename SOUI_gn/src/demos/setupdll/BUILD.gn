@@ -21,7 +21,7 @@ shared_library("setupdll") {
 
     "trayicon/SShellNotifyIcon.cpp",
     "trayicon/SShellNotifyIcon.h",
-    
+    "setupdll.rc",    
   ]
 
   include_dirs = [

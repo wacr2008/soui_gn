@@ -1,4 +1,15 @@
-#include "SToolbox.h"
+﻿#include "SToolbox.h"
+
+SOUI_MSG_MAP_BEGIN(SOUI::SToolbox)
+	MSG_WM_PAINT_EX(OnPaint)
+SOUI_MSG_MAP_END()
+
+SOUI_ATTRS_BEGIN(SOUI::SToolbox)
+	ATTR_SKIN(L"icon", m_pIcon, TRUE)
+	ATTR_STRINGT(L"text", m_strText, FALSE)
+SOUI_ATTRS_END()
+
+SOUI_CLASS_NAME(SOUI::SToolbox, L"toolbox")
 
 void SOUI::SToolbox::OnPaint( IRenderTarget *pRT )
 {

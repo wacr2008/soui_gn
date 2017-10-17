@@ -1,4 +1,4 @@
-// Copyright (C) 2004, Matt Conover (mconover@gmail.com)
+﻿// Copyright (C) 2004, Matt Conover (mconover@gmail.com)
 //
 // WARNING:
 // I wouldn't recommend changing any flags like OP_*, ITYPE_*, or *_MASK
@@ -420,6 +420,7 @@ typedef enum _ARCHITECTURE_TYPE
 
 } ARCHITECTURE_TYPE;
 
+struct _INSTRUCTION;
 typedef BOOL (*INIT_INSTRUCTION)(struct _INSTRUCTION *Instruction);
 typedef void (*DUMP_INSTRUCTION)(struct _INSTRUCTION *Instruction, BOOL ShowBytes, BOOL Verbose);
 typedef BOOL (*GET_INSTRUCTION)(struct _INSTRUCTION *Instruction, U8 *Address, U32 Flags);

@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 namespace SOUI
 {
     class SFreeMoveWindow : public SWindow
     {
-    SOUI_CLASS_NAME(SFreeMoveWindow,L"freeMoveWindow")
+    SOUI_CLASS_NAME_DECL(SFreeMoveWindow,L"freeMoveWindow")
     public:
         SFreeMoveWindow(void);
         ~SFreeMoveWindow(void);
@@ -18,11 +18,8 @@ namespace SOUI
 
         void OnMouseMove(UINT nFlags,CPoint pt);
 
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_LBUTTONDOWN(OnLButtonDown)
-            MSG_WM_LBUTTONUP(OnLButtonUp)
-            MSG_WM_MOUSEMOVE(OnMouseMove)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
+		SOUI_ATTRS_DECL()
         
     protected:
         enum {
@@ -32,12 +29,6 @@ namespace SOUI
         VALIGN_BOTTOM = 0x20,
         };
         
-        SOUI_ATTRS_BEGIN()
-            ATTR_INT(L"vAlign",m_nFloatVAlign,FALSE)
-            ATTR_INT(L"hAlign",m_nFloatHAlign,FALSE)
-            ATTR_INT(L"distX",m_nDistX,FALSE)
-            ATTR_INT(L"distY",m_nDistY,FALSE)
-        SOUI_ATTRS_END()
         
         int m_nFloatVAlign;
         int m_nFloatHAlign;

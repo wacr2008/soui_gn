@@ -1,10 +1,41 @@
-#include "souistd.h"
+﻿#include "souistd.h"
 #include <helper/swndfinder.h>
 
 namespace SOUI
 {
-    SWindowFinder * SSingleton<SWindowFinder>::ms_Singleton = NULL;
-    
+//    template <> SWindowFinder * SSingleton<SWindowFinder>::ms_Singleton = NULL;
+	
+
+	SWindowFinder::SFindInfo::SFindInfo()
+	{
+
+	}
+
+	SWindowFinder::SFindInfo::SFindInfo(const SFindInfo &other)
+	{
+		this->hParent = other.hParent;
+		this->findByName = other.findByName;
+		this->strName = other.strName;
+		this->nID = other.nID;
+		this->nDeep = other.nDeep;
+	}
+	
+	SWindowFinder::SFindInfo::~SFindInfo()
+	{
+
+	}
+
+
+	SWindowFinder::SWindowFinder()
+	{
+
+	}
+
+	SWindowFinder::~SWindowFinder()
+	{
+
+	}
+
     SWindow * SWindowFinder::FindChildByName(SWindow *pParent,SStringW strName,int nDeep)
     {
         SFindInfo fi;

@@ -1,4 +1,4 @@
-#include "souistd.h"
+ï»¿#include "souistd.h"
 #include "layout/SLayoutSize.h"
 #include <math.h>
 
@@ -14,12 +14,16 @@ namespace SOUI
 
 	}
 
+	SLayoutSize::SLayoutSize(float _fSize,Unit _unit):fSize(_fSize),unit(_unit)
+	{
+	}
+
 	static int fround(float v)
 	{
 		return (int)floor(v+0.5f);
 	}
 
-	static bool fequal(float a, float b)
+	bool SLayoutSize::fequal(float a, float b)
 	{
 		return fabs(a-b)<0.00000001f;
 	}
@@ -27,7 +31,7 @@ namespace SOUI
 	SStringW SLayoutSize::toString() const
 	{
 		SStringW strValue = SStringW().Format(L"%f",fSize);
-		//È¥µôsprintf("%f")Éú³ÉµÄÐ¡Êýµã×îºóÎÞÐ§µÄ0
+		//åŽ»æŽ‰sprintf("%f")ç”Ÿæˆçš„å°æ•°ç‚¹æœ€åŽæ— æ•ˆçš„0
 		LPCWSTR pszData = strValue;
 		for(int i=strValue.GetLength()-1;i>=0;i--)
 		{
@@ -38,7 +42,7 @@ namespace SOUI
 				break;
 			}
 		}
-		return SStringW().Format(L"%s%s",strValue,s_pszUnit[unit]);
+		return SStringW().Format(L"%s%s",(const wchar_t *)strValue,s_pszUnit[unit]);
 	}
 
 
@@ -102,10 +106,11 @@ namespace SOUI
 
 	void SLayoutSize::parseString(const SStringW & strSize)
 	{
+		if(strSize.IsEmpty()) return;
 		SStringW strUnit = strSize.Right(2);
 		strUnit.MakeLower();
 		unit = px;
-		for(int i=0; i< ARRAYSIZE(s_pszUnit);i++)
+		for(unsigned int i=0; i< ARRAYSIZE(s_pszUnit);i++)
 		{
 			if(strUnit.Compare(s_pszUnit[i]) == 0)
 			{
@@ -116,7 +121,7 @@ namespace SOUI
 		fSize = (float)_wtof(strSize);
 	}
 
-	//Ö»¸´ÖÆÊýÖµ,²»¸´ÖÆ·½Ïò
+	//åªå¤åˆ¶æ•°å€¼,ä¸å¤åˆ¶æ–¹å‘
 	SLayoutSize & SLayoutSize::operator=(const SLayoutSize & src)
 	{
 		fSize = src.fSize;

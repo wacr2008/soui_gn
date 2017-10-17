@@ -1,4 +1,5 @@
-﻿#include "SPropertyItem-Option.h"
+﻿
+#include "SPropertyItem-Option.h"
 #include "../SPropertyEmbedWndHelper.hpp"
 #include "../SPropertyGrid.h"
 #include <helper/SplitString.h>
@@ -25,33 +26,37 @@ namespace SOUI
             }
         }
         
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_KEYDOWN(OnKeyDown)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
         
         virtual IPropertyItem* GetOwner(){return m_pOwner;}
         
         virtual void UpdateData()
         {
-            //int nCurSel=GetCurSel();
-            //m_pOwner->SetValue(&nCurSel);
-			int nCurSel=GetCurSel();
-			SStringT strText = GetLBText(nCurSel);
-
-			m_pOwner->SetString(strText);
+            int nCurSel=GetCurSel();
+            m_pOwner->SetValue(&nCurSel);
         }
-
-		
 
     protected:
         CAutoRefPtr<IPropertyItem> m_pOwner;
 
     };
     
+    SOUI_MSG_MAP_BEGIN(SPropCombobox)
+        MSG_WM_KEYDOWN(OnKeyDown)
+    SOUI_MSG_MAP_END()
+
+	SOUI_CLASS_NAME(SPropertyItemOption, L"propoption")
+
+	SOUI_ATTRS_BEGIN(SPropertyItemOption)
+		ATTR_CUSTOM(L"options", OnAttrOptions)
+		ATTR_INT(L"dropHeight", m_nDropHeight, FALSE)
+		ATTR_INT(L"value", m_nValue, FALSE)
+    SOUI_ATTRS_END()
+
     void SPropertyItemOption::DrawItem( IRenderTarget *pRT,CRect rc )
     {
-
-        pRT->DrawText(m_strDisplay,m_strDisplay.GetLength(),rc,DT_SINGLELINE|DT_VCENTER);
+        SStringT strValue=GetString();
+        pRT->DrawText(strValue,strValue.GetLength(),rc,DT_SINGLELINE|DT_VCENTER);
     }
     
     void SPropertyItemOption::OnInplaceActive(bool bActive)
@@ -70,46 +75,11 @@ namespace SOUI
             xmlNode.append_attribute(L"dropHeght").set_value(m_nDropHeight);
             xmlNode.append_attribute(L"dropDown").set_value(1);
             m_pOwner->OnInplaceActiveWndCreate(this,m_pCombobox,xmlNode);
-
-			m_pCombobox->GetEventSet()->subscribeEvent(EventCBSelChange::EventID,Subscriber(&SPropertyItemOption::OnCBSelChange,this));
-
-			UINT i = 0;
-			if (m_bCanEmpty)
-			{
-				m_pCombobox->InsertItem(0, _T(""), 0, 0);
-				i++;
-			}
-			
-			SPOSITION nPos = m_options.GetStartPosition();
-
-			SStringT str;
-			int nCurSel=-1;
-
-			while (nPos)
-			{
-				SMap<SStringT, SStringT>::CPair *p = m_options.GetNext(nPos);
-			    m_pCombobox->InsertItem(i, p->m_key, 0, i);
-
-				str = p->m_value;
-				if (str.CompareNoCase(m_strValue) == 0)
-				{
-					nCurSel = i;
-					m_strDisplay = p->m_key;
-				}
-				
-
-				i++;
-			}
-
-
-			m_pCombobox->SetCurSel(nCurSel);
-
-            //m_pCombobox->SetCurSel(m_nValue);
-			//int n = ((SPropCombobox*)m_pCombobox)->GetIndexFromText(m_strValue);
-			//m_pCombobox->SetCurSel(n);
-
-
-			m_pCombobox->SetFocus();/////
+            for(UINT i=0;i<m_options.GetCount();i++)
+            {
+                m_pCombobox->InsertItem(i,m_options[i],0,i);
+            }
+            m_pCombobox->SetCurSel(m_nValue);
         }else
         {
             if(m_pCombobox)
@@ -121,109 +91,34 @@ namespace SOUI
         }
     }
 
+    void SPropertyItemOption::SetValue( void *pValue)
+    {
+        m_nValue = *(int*)pValue;
+        OnValueChanged();
+    }
 
+    const void * SPropertyItemOption::GetValue() const
+    {
+        return &m_nValue;
+    }
 
     SStringT SPropertyItemOption::GetString() const
     {
-        //if(m_nValue<0 || m_nValue>=(int)m_options.GetCount()) return _T("");
-        //return m_options[m_nValue];
-		return m_strValue;
+        if(m_nValue<0 || m_nValue>=(int)m_options.GetCount()) return _T("");
+        return m_options[m_nValue];
     }
 
     void SPropertyItemOption::SetString( const SStringT & strValue )
     {
-		if (strValue.CompareNoCase(m_strValue) == 0)
-		{
-			return;
-		}
-
-		if (strValue.IsEmpty())
-		{
-			m_strValue.Empty();
-			m_strDisplay.Empty();
-			OnValueChanged();
-			return;
-		}
-
-
-		SMap<SStringT, SStringT>::CPair *p = m_options.Lookup(strValue);
-		if (p)
-		{
-			if (m_strValue.CompareNoCase(p->m_value) != 0)
-			{
-				m_strValue = p->m_value;
-				m_strDisplay = p->m_key;
-			    OnValueChanged();
-			}
-
-		}
-
-
+        m_nValue = _ttoi(strValue);
+        OnValueChanged();
     }
-
-	void SPropertyItemOption::SetStringOnly( const SStringT & strValue )
-	{
-
-		SPOSITION nPos = m_options.GetStartPosition();
-		SStringT str;
-		while (nPos)
-		{
-			SMap<SStringT, SStringT>::CPair *p = m_options.GetNext(nPos);
-
-			str = p->m_value;
-			if (str.CompareNoCase(strValue) == 0)
-			{
-				m_strDisplay = p->m_key;
-				break;
-			}
-		}
-
-		m_strValue = strValue;
-	}
 
     HRESULT SPropertyItemOption::OnAttrOptions( const SStringW & strValue,BOOL bLoading )
     {
         SStringT strValueT = S_CW2T(strValue);
-
-		// 可见:1|不可见:0
-		// top|buttom|left|右:right
-
-		SStringTList strList;
-        SplitString(strValueT,_T('|'),strList);
-		for (unsigned int i = 0; i < strList.GetCount(); i++)
-		{
-		    SStringT strItem = strList[i];
-
-			if (-1 == strItem.Find(':'))
-			{
-				m_options[strItem] = strItem;
-			}else
-			{
-				SStringTList strList1;
-				SplitString(strItem,_T(':'),strList1);
-				if (strList1.GetCount() == 2)
-				{
-					m_options[strList1[0]] = strList1[1];
-				}else
-				{
-					m_options[strList1[0]] = _T("");
-				}
-			}
-
-
-
-		}
+        SplitString(strValueT,_T('|'),m_options);
         return S_FALSE;
     }
-
-	bool SPropertyItemOption::OnCBSelChange(EventArgs *pEvt)
-	{
-
-		int nCurSel=m_pCombobox->GetCurSel();
-		SStringT strText = m_pCombobox->GetLBText(nCurSel);
-
-		SetString(strText);
-		return true;
-	}
 
 }

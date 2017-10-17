@@ -1,4 +1,4 @@
-/* Crypto/Sha256.c -- SHA-256 Hash
+﻿/* Crypto/Sha256.c -- SHA-256 Hash
 2015-11-14 : Igor Pavlov : Public domain
 This code is based on public domain code from Wei Dai's Crypto++ library. */
 

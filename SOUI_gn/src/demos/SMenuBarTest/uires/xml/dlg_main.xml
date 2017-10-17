@@ -1,0 +1,23 @@
+﻿<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="400"  margin="20,5,5,5"  resizable="1" wndType="appMain"
+appWnd="1"
+translucent="1" 
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1">
+    <caption pos="0,0,-0,30" show="1" font="adding:0">
+      <icon pos="10,8" src="ICON_LOGO:16"/>
+      <text pos="29,9">@string/title</text>
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+      <imgbtn name="btn_max" skin="_skin.sys.btn.maximize"  pos="-83,0" animate="1" />
+      <imgbtn name="btn_restore" skin="_skin.sys.btn.restore"  pos="-83,0" show="0" animate="1" />
+      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-121,0" animate="1" />
+    </caption>
+    <menubar name="menu_test" pos="5,[5,-5,@30" layout="hbox">
+      <btnStyle skin="SKIN_MENU_BTN" padding="10,5,10,5" />
+      <menus>
+        <menuItem menuName="menu_file" src="MYMENU:MENU_FILE" accel="ALT+F">文件(&amp;F)</menuItem>
+        <menuItem menuName="menu_edit" src="MYMENU:MENU_EDIT" accel="ALT+E">编辑123(&amp;E)</menuItem>
+        <menuItem menuName="menu_project" src="MYMENU:MENU_PROJ" accel="ALT+P">项目(&amp;P)</menuItem>
+      </menus>
+    </menubar>
+  </root>
+</SOUI>

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "interface/LvItemLocator-i.h"
 #include "control/stree.hpp"
 
@@ -8,28 +8,28 @@ namespace SOUI
     {
     public:
         SListViewItemLocatorFix(SLayoutSize nItemHei,SLayoutSize nDividerSize=SLayoutSize());
+		~SListViewItemLocatorFix() override;
+        void SetAdapter(ILvAdapter *pAdapter) override;
 
-        virtual void SetAdapter(ILvAdapter *pAdapter);
+		void OnDataSetChanged() override;
 
-        virtual void OnDataSetChanged(){}
+        bool IsFixHeight() const override;
 
-        virtual bool IsFixHeight() const;
+        int GetItemHeight(int iItem) const override;
 
-        virtual int GetItemHeight(int iItem) const ;
-
-        virtual void SetItemHeight(int iItem,int nHeight);
+        void SetItemHeight(int iItem,int nHeight) override;
 
 
-        virtual int GetTotalHeight();
-        virtual int Item2Position(int iItem);
+        int GetTotalHeight() override;
+        int Item2Position(int iItem) override;
 
-        virtual int Position2Item(int position);
+        int Position2Item(int position) override;
 
-        virtual int GetScrollLineSize() const;
+        int GetScrollLineSize() const override;
 
-		virtual int GetDividerSize() const;
+		int GetDividerSize() const override;
 
-		virtual void SetScale(int nScale);
+		void SetScale(int nScale) override;
     protected:
 		int GetFixItemHeight() const;
 
@@ -45,29 +45,29 @@ namespace SOUI
     public:
 
         SListViewItemLocatorFlex(SLayoutSize nItemHei,SLayoutSize nDividerSize=SLayoutSize());
-        ~SListViewItemLocatorFlex();
+        ~SListViewItemLocatorFlex() override;
 
 
-        virtual void SetAdapter(ILvAdapter *pAdapter);
-        virtual void OnDataSetChanged();
+        void SetAdapter(ILvAdapter *pAdapter) override;
+        void OnDataSetChanged() override;
 
-        virtual bool IsFixHeight() const;
+        bool IsFixHeight() const override;
 
-        virtual int GetItemHeight(int iItem) const;
+        int GetItemHeight(int iItem) const override;
 
-        virtual void SetItemHeight(int iItem,int nHeight);
+        void SetItemHeight(int iItem,int nHeight) override;
 
 
-        virtual int GetTotalHeight();
-        virtual int Item2Position(int iItem);
+        int GetTotalHeight() override;
+        int Item2Position(int iItem) override;
 
-        virtual int Position2Item(int position);
+        int Position2Item(int position) override;
 
-        virtual int GetScrollLineSize() const;   
+        int GetScrollLineSize() const override;   
 
-		virtual int GetDividerSize() const;
+		int GetDividerSize() const override;
 
-		virtual void SetScale(int nScale);
+		void SetScale(int nScale) override;
     protected:
         void InitIndex(HSTREEITEM hParent,int nItems,int nSubBranchSize);
 		int GetFixItemHeight() const;
@@ -77,16 +77,16 @@ namespace SOUI
         int Branch2Index(HSTREEITEM hBranch) const;
         HSTREEITEM Offset2Branch(HSTREEITEM hParent,int nOffset);
 
-        SLayoutSize m_nItemHeight;  //Ä¬ÈÏ±íÏî¸ß¶È
+        SLayoutSize m_nItemHeight;  //é»˜è®¤è¡¨é¡¹é«˜åº¦
         SLayoutSize m_nDividerSize;
 		int m_nScale;
         struct BranchInfo
         {
-            int nBranchHei; //·ÖÖ¦¸ß¶È
-            int nBranchSize;//·ÖÖ¦ÖĞ°üº¬µÄ½ÚµãÊıÁ¿
+            int nBranchHei; //åˆ†æé«˜åº¦
+            int nBranchSize;//åˆ†æä¸­åŒ…å«çš„èŠ‚ç‚¹æ•°é‡
         };
 
-        CSTree<BranchInfo>    m_itemPosIndex;//¼ÇÂ¼·ÖÖ¦¸ß¶È
+        CSTree<BranchInfo>    m_itemPosIndex;//è®°å½•åˆ†æé«˜åº¦
         class SegmentInfo
         {
         public:
@@ -102,7 +102,7 @@ namespace SOUI
 
             HSTREEITEM hItem;
             int        nItems;
-            int*       pItemHeight;//¶ÎÖĞÃ¿Ò»¸ö±íÏîµÄ¸ß¶È
+            int*       pItemHeight;//æ®µä¸­æ¯ä¸€ä¸ªè¡¨é¡¹çš„é«˜åº¦
         };
 
         SArray<SegmentInfo*>     m_segments;

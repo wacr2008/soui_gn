@@ -1,3 +1,4 @@
+ï»¿
 #include "SComboBoxEx.h"
 
 namespace SOUI
@@ -20,7 +21,7 @@ namespace SOUI
     BOOL SComboBoxEx::CreateListBox( pugi::xml_node xmlNode )
     {
         SASSERT(xmlNode);
-        //´´½¨ÁĞ±í¿Ø¼ş
+        //åˆ›å»ºåˆ—è¡¨æ§ä»¶
         m_pListBox=(SListBoxEx*)SApplication::getSingleton().CreateWindowByName(SListBoxEx::GetClassName());
         m_pListBox->SetContainer(GetContainer());
 
@@ -30,7 +31,7 @@ namespace SOUI
         m_pListBox->SetOwner(this);         //chain notify message to combobox
         m_pListBox->SetID(IDC_DROPDOWN_LIST);
 
-        //³õÊ¼»¯ÁĞ±íÊı¾İ
+        //åˆå§‹åŒ–åˆ—è¡¨æ•°æ®
         pugi::xml_node xmlNode_Items=xmlNode.child(L"items");
         if(xmlNode_Items)
         {
@@ -129,7 +130,7 @@ namespace SOUI
         if(evt.idFrom == IDC_DROPDOWN_LIST && m_pDropDownWnd)
         {
             if(evt.GetID()==EventLBSelChanged::EventID)
-            {//ÁĞ±íÑ¡ÖĞÏî¸Ä±äÊÂ¼ş
+            {//åˆ—è¡¨é€‰ä¸­é¡¹æ”¹å˜äº‹ä»¶
                 OnSelChanged();
                 return TRUE;
             }
@@ -142,7 +143,7 @@ namespace SOUI
                 EventOfComoboxExItem evt2(this,(EventCmd*)pEvtOfPanel->pOrgEvt);
                 __super::FireEvent(evt2);
                 if(!evt2.bCancel)
-                {//¿ÉÒÔ¹Ø±ÕÏÂÀ­ÁĞ±í
+                {//å¯ä»¥å…³é—­ä¸‹æ‹‰åˆ—è¡¨
                     CloseUp();
                 }
                 return TRUE;        

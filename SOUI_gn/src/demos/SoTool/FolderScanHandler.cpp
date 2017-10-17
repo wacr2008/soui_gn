@@ -1,6 +1,13 @@
-#include "FolderScanHandler.h"
+﻿#include "FolderScanHandler.h"
 using namespace SOUI;
 //////////////////////////////////////////////////////////////////////////
+EVENT_MAP_BEGIN(CFolderScanHandler)
+	EVENT_CHECK_SENDER_ROOT(m_pPageRoot)
+	EVENT_NAME_HANDLER(L"btn_go", SOUI::EventCmd::EventID, OnGo)
+	EVENT_NAME_HANDLER(L"edit_dir", SOUI::EventKeyEnter::EventID, OnGo)
+EVENT_MAP_BREAK()
+
+
 CFolderScanHandler::CFolderScanHandler(void):m_pPageRoot(NULL)
 {
 }

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 namespace SOUI{
     class SOUI_EXP SCaret : public TObjRefImpl<IObjRef>
@@ -6,13 +6,13 @@ namespace SOUI{
     public:
         SCaret(SWND swnd,HBITMAP hBmp,int nWid,int nHei);
         
-        virtual ~SCaret(void);
+        ~SCaret(void) override;
         
         virtual RECT Draw(IRenderTarget *pRT,int x, int y, BOOL bErase);
         
     protected:
-        CAutoRefPtr<IBitmap>    m_bmpCaret;         /**< Ä£Äâ²åÈë·û*/
-        SWND                    m_owner;            /**< ¹â±êËÞÖ÷´°¿Ú*/
+        CAutoRefPtr<IBitmap>    m_bmpCaret;         /**< æ¨¡æ‹Ÿæ’å…¥ç¬¦*/
+        SWND                    m_owner;            /**< å…‰æ ‡å®¿ä¸»çª—å£*/
     };
 }
 

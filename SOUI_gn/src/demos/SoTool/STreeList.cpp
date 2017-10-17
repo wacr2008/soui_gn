@@ -1,8 +1,20 @@
-#include "STreeList.h"
-#include <algorithm>
+﻿#include "STreeList.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SMCTreeCtrl, L"mctreectrl")
+
+	SOUI_ATTRS_BEGIN(SMCTreeCtrl)
+		ATTR_INT(L"treeWidth", m_nTreeWidth, FALSE)
+	SOUI_ATTRS_END()
+
+	SOUI_CLASS_NAME(STreeList, L"treelist")
+
+	SOUI_ATTRS_BEGIN(STreeList)
+		ATTR_INT(L"headerHeight", m_nHeaderHeight, FALSE)
+		ATTR_I18NSTRT(L"treeLabel", m_strTreeLabel, FALSE)
+	SOUI_ATTRS_END()
+
     SMCTreeCtrl::SMCTreeCtrl():m_nTreeWidth(100),m_nItemWid(-1)
     {
     }
@@ -230,7 +242,7 @@ namespace SOUI
         CPoint ptOrg = m_pTreeCtrl->GetViewOrigin();
         CRect rcHeader = rcWnd;
         rcHeader.left -= ptOrg.x;
-        rcHeader.right =rcHeader.left + (std::max)(rcWnd.Width(),(int)m_pTreeCtrl->GetViewSize().cx);
+        rcHeader.right =rcHeader.left + (std::max)((int)rcWnd.Width(),(int)m_pTreeCtrl->GetViewSize().cx);
         rcHeader.bottom = rcWnd.top + m_nHeaderHeight;
         m_pHeader->Move(rcHeader);
 		return TRUE;
@@ -270,7 +282,7 @@ namespace SOUI
 
             CRect rcHeader = rcClient;
             rcHeader.bottom=rcHeader.top + m_nHeaderHeight;
-            rcHeader.right =rcHeader.left + (std::max)((int)szView.cx,rcClient.Width());
+            rcHeader.right =rcHeader.left + (std::max)((int)szView.cx,(int)rcClient.Width());
             CPoint ptOrg = m_pTreeCtrl->GetViewOrigin();
             rcHeader.OffsetRect(-ptOrg.x,0);
             m_pHeader->Move(rcHeader);

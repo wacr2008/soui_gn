@@ -1,7 +1,31 @@
+﻿
 #include "SButtonEx.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SButtonEx, L"buttonex")
+
+	SOUI_ATTRS_BEGIN(SButtonEx)
+		ATTR_POINT(L"pushOffset", m_ptPushOffet, TRUE)//下压状态整体偏移
+		ATTR_SKIN(L"icon", m_pIcon, TRUE) //图标SKIN
+		ATTR_INT(L"iconIndex", m_iIcon, TRUE)//图标在Skin中的索引
+		ATTR_ENUM_BEGIN(L"drawMode", int, TRUE)
+		ATTR_ENUM_VALUE(L"freeDraw", FREE_DRAW)
+		ATTR_ENUM_VALUE(L"vertIconText", VERT_ICON_TEXT)
+		ATTR_ENUM_VALUE(L"vertTextIcon", VERT_TEXT_ICON)
+		ATTR_ENUM_VALUE(L"horzIconText", HORZ_ICON_TEXT)
+		ATTR_ENUM_VALUE(L"horzTextIcon", HORZ_TEXT_ICON)
+		ATTR_ENUM_END(m_drawMode)
+		ATTR_INT(L"sepSize", m_nSepSize, TRUE)    //FREE_DRAW时无效
+		ATTR_POINT(L"iconPos", m_ptIcon, TRUE)//图标显示位置,FREE_DRAW时有效
+		ATTR_POINT(L"textPos", m_ptText, TRUE)//文本显示位置,FREE_DRAW时有效
+
+	SOUI_ATTRS_END()
+
+	SOUI_MSG_MAP_BEGIN(SButtonEx)
+		MSG_WM_PAINT_EX(OnPaint)
+	SOUI_MSG_MAP_END()
+
     SButtonEx::SButtonEx(void):m_ptPushOffet(2,2),m_drawMode(HORZ_ICON_TEXT),m_nSepSize(5),m_hIcon(0),m_nIconSize(32),m_iIcon(0),m_bIconVisible(true),m_pIcon(NULL)
     {
         m_bClipClient = TRUE;
@@ -66,14 +90,14 @@ namespace SOUI
         if(m_pBgSkin)
         {
             if(m_byAlphaAni==0xFF)
-            {//���ڶ���������
+            {//不在动画过程中
                 m_pBgSkin->Draw(
                     pRT, rcClient,
                     IIF_STATE4(GetState(), 0, 1, 2, 3)
                     );
             }
             else
-            {//�ڶ���������
+            {//在动画过程中
                 BYTE byNewAlpha=(BYTE)(((UINT)m_byAlphaAni*m_pBgSkin->GetAlpha())>>8);
                 if(GetState()&WndState_Hover)
                 {

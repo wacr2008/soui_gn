@@ -1,4 +1,4 @@
-#include "souistd.h"
+ï»¿#include "souistd.h"
 #include "helper/STileViewItemLocator.h"
 
 namespace SOUI
@@ -6,11 +6,16 @@ namespace SOUI
 //////////////////////////////////////////////////////////////////////////
 // STileViewItemLocatorFix
 STileViewItemLocator::STileViewItemLocator(int nItemHei, int nItemWid, int nMarginSize /*= 0*/) :
-    m_nItemHeight(nItemHei),
     m_nItemWidth(nItemWid),
-    m_nItemMargin(nMarginSize),
-    m_nTileViewWidth(0),
-    m_nCountInRow(1)
+	m_nItemHeight(nItemHei),
+	m_nTileViewWidth(0),
+	m_nItemMargin(nMarginSize),
+	m_nCountInRow(1)
+{
+
+}
+
+STileViewItemLocator::~STileViewItemLocator()
 {
 
 }
@@ -70,7 +75,7 @@ void STileViewItemLocator::SetAdapter(ILvAdapter *pAdapter)
 
 CRect STileViewItemLocator::GetItemRect(int iItem)
 {
-    //·µ»ØÏà¶ÔÓÚTileViewÄÚ²¿µÄRect
+    //è¿”å›žç›¸å¯¹äºŽTileViewå†…éƒ¨çš„Rect
     int nRowIdx, nColIdx;
     GetItemRowAndColIndex(iItem, nRowIdx, nColIdx);
     
@@ -107,7 +112,7 @@ BOOL STileViewItemLocator::IsLastInRow(int iItem)
 int STileViewItemLocator::GetUpItem(int iItem)
 {
     int up_idx = iItem - m_nCountInRow;
-    //Ã»ÓÐÉÏÒ»ÐÐÁË£¬·µ»ØÔ­Öµ
+    //æ²¡æœ‰ä¸Šä¸€è¡Œäº†ï¼Œè¿”å›žåŽŸå€¼
     return up_idx < 0 ? iItem : up_idx;
 }
 
@@ -120,10 +125,10 @@ int STileViewItemLocator::GetDownItem(int iItem)
     }
     else if((m_adapter->getCount() - 1) / m_nCountInRow == iItem / m_nCountInRow)
     {
-        //Ã»ÓÐÏÂÒ»ÐÐÁË£¬·µ»ØÔ­Öµ
+        //æ²¡æœ‰ä¸‹ä¸€è¡Œäº†ï¼Œè¿”å›žåŽŸå€¼
         return iItem;
     }
-    //ÓÐÏÂÒ»ÐÐ£¬µ«Í¬Ò»ÁÐÃ»ÓÐÔªËØ£¬·µ»ØÏÂÒ»ÐÐ×îºóÒ»¸öÔªËØ
+    //æœ‰ä¸‹ä¸€è¡Œï¼Œä½†åŒä¸€åˆ—æ²¡æœ‰å…ƒç´ ï¼Œè¿”å›žä¸‹ä¸€è¡Œæœ€åŽä¸€ä¸ªå…ƒç´ 
     return m_adapter->getCount() - 1;
 }
 

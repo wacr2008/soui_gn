@@ -1,7 +1,23 @@
+﻿
 #include "SFreeMoveWindow.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SFreeMoveWindow, L"freeMoveWindow")
+
+	SOUI_MSG_MAP_BEGIN(SFreeMoveWindow)
+		MSG_WM_LBUTTONDOWN(OnLButtonDown)
+		MSG_WM_LBUTTONUP(OnLButtonUp)
+		MSG_WM_MOUSEMOVE(OnMouseMove)
+	SOUI_MSG_MAP_END()
+
+	SOUI_ATTRS_BEGIN(SFreeMoveWindow)
+		ATTR_INT(L"vAlign", m_nFloatVAlign, FALSE)
+		ATTR_INT(L"hAlign", m_nFloatHAlign, FALSE)
+		ATTR_INT(L"distX", m_nDistX, FALSE)
+		ATTR_INT(L"distY", m_nDistY, FALSE)
+	SOUI_ATTRS_END()
+
     SFreeMoveWindow::SFreeMoveWindow(void)
     :m_nFloatHAlign(HALIGN_RIGHT),m_nFloatVAlign(VALIGN_BOTTOM)
     ,m_nDistX(10),m_nDistY(10)

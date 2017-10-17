@@ -1,4 +1,4 @@
-
+﻿
 /* pngwrite.c - general routines to write a PNG file
  *
  * Last changed in libpng 1.5.15 [March 28, 2013]

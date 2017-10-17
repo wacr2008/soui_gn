@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+Ôªø//////////////////////////////////////////////////////////////////////////
 //   File Name: Dui3DView.h
 // Description: SImg3DView
 //     Creator: ZhangZhiBin QQ->276883782
@@ -13,7 +13,7 @@ namespace SOUI
 {
     class EventTurn3d : public TplEventArgs<EventTurn3d>
     {
-        SOUI_CLASS_NAME(EventTurn3d,L"on_turn3d")
+        SOUI_CLASS_NAME_DECL(EventTurn3d,L"on_turn3d")
     public:
         EventTurn3d(SWindow *pWnd,BOOL bTurn2Front):TplEventArgs<EventTurn3d>(pWnd),bTurn2Front_(bTurn2Front){}
         enum{EventID=EVT_EXTERNAL_BEGIN};
@@ -22,38 +22,32 @@ namespace SOUI
     
     class STurn3dView : public SWindow
     {
-        SOUI_CLASS_NAME(STurn3dView, L"Turn3dView")
+        SOUI_CLASS_NAME_DECL(STurn3dView, L"Turn3dView")
     public:
         STurn3dView();
         virtual ~STurn3dView();
 
         BOOL Turn(SWindow *pWndFront,SWindow *pWndBack,BOOL bTurn2Front=TRUE);
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_INT(L"zStep", m_nZStep,FALSE)
-            ATTR_INT(L"yStep", m_nYStep,FALSE)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL()
 
     protected:
         void OnTimer(char idEvent);
         void OnPaint(IRenderTarget *pRT);
 
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_PAINT_EX(OnPaint)
-            MSG_WM_TIMER_EX(OnTimer)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
     protected:
-        int              m_nZStep;             //z÷·µƒ√ø“ª≤Ωæ‡¿Î
-        int              m_nYStep;             //√ø¥Œ∂Øª≠»∆Y÷·–˝◊™m_nYStepΩ«∂»
-        BOOL             m_bTurn2Front;          //∑≠◊™∑ΩœÚ
+        int              m_nZStep;             //zËΩ¥ÁöÑÊØè‰∏ÄÊ≠•Ë∑ùÁ¶ª
+        int              m_nYStep;             //ÊØèÊ¨°Âä®ÁîªÁªïYËΩ¥ÊóãËΩ¨m_nYStepËßíÂ∫¶
+        BOOL             m_bTurn2Front;          //ÁøªËΩ¨ÊñπÂêë
 
         IMAGE3D::PARAM3DTRANSFORM	m_3dparam;
         CAutoRefPtr<IBitmap>    m_bmpBefore;
         CAutoRefPtr<IBitmap>    m_bmpAfter;
         CAutoRefPtr<IBitmap>    m_bmpTrans;
 
-        int              m_nFrameIndex;        //∑≠◊™µΩµ⁄º∏÷°
-        BOOL             m_bTurning;            //’˝‘⁄∑≠◊™
+        int              m_nFrameIndex;        //ÁøªËΩ¨Âà∞Á¨¨Âá†Â∏ß
+        BOOL             m_bTurning;            //Ê≠£Âú®ÁøªËΩ¨
     };
 
 }

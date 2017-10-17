@@ -305,10 +305,8 @@ SkBlurMaskFilterImpl::filterRRectToNine(const SkRRect& rrect, const SkMatrix& ma
         return kUnimplemented_FilterReturn;
     }
 
-	SkIPoint margin = SkIPoint::Make(0, 0);
+    SkIPoint margin;
     SkMask  srcM, dstM;
-	memset(&dstM, 0, sizeof(SkMask));
-
     rrect.rect().roundOut(&srcM.fBounds);
     srcM.fImage = NULL;
     srcM.fFormat = SkMask::kA8_Format;

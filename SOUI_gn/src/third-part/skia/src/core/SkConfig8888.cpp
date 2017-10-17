@@ -84,11 +84,9 @@ bool SkSrcPixelInfo::convertPixelsTo(SkDstPixelInfo* dst, int width, int height)
     }
 
     void (*proc)(uint32_t* dst, const uint32_t* src, int count);
-
-	proc = NULL;
     AlphaVerb doAlpha = compute_AlphaVerb(fAlphaType, dst->fAlphaType);
     bool doSwapRB = fColorType != dst->fColorType;
-
+	proc = NULL;
     switch (doAlpha) {
         case kNothing_AlphaVerb:
             if (doSwapRB) {

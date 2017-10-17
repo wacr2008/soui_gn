@@ -1,16 +1,40 @@
-#include "DlgNewLayout.h"
+ï»¿#include "DlgNewLayout.h"
 #include "CDebug.h"
 #include "FileHelper.h"
 
 namespace SOUI
 {
 
+	SOUI_CLASS_NAME(SDlgNewLayout, L"dlgnewlayout")
+
+	EVENT_MAP_BEGIN(SDlgNewLayout)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_close", OnClose)
+
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_dlg", OnBtnDlgOpenFile)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_OK", OnOK)
+		//EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZY_NEW", OnZYNew)
+		//EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZY_DEL", OnZYDel)
+		//EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_NEW", OnSkinNew)
+		//EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_DEL", OnSkinDel)
+
+		//EVENT_ID_COMMAND(IDOK,OnOK)
+		//EVENT_ID_COMMAND(IDCANCEL,OnCancel)
+	EVENT_MAP_END()
+
+	BEGIN_MSG_MAP_EX(SDlgNewLayout)
+		MSG_WM_INITDIALOG(OnInitDialog)
+		//MSG_WM_CLOSE(OnCancel)
+		//MSG_WM_KEYDOWN(OnKeyDown)
+		CHAIN_MSG_MAP(SHostDialog)
+		REFLECT_NOTIFICATIONS_EX()
+	END_MSG_MAP()
+
 	SDlgNewLayout::SDlgNewLayout(LPCTSTR pszXmlName, SStringT strProPath):SHostDialog(pszXmlName)
 	{
 		m_strProPath = strProPath;
 	}
 
-	//TODO:ÏûÏ¢Ó³Éä
+	//TODO:æ¶ˆæ¯æ˜ å°„
 	void SDlgNewLayout::OnClose()
 	{
 		SHostDialog::OnCancel();
@@ -22,7 +46,7 @@ namespace SOUI
 		m_strName = m_edtName->GetWindowText();
 		if (m_strPath.IsEmpty() || m_strName.IsEmpty())
 		{
-			CDebug::Debug(_T("×ÊÔ´Ãû³Æ»òÂ·¾¶²»ÄÜÎª¿Õ"));
+			CDebug::Debug(_T("èµ„æºåç§°æˆ–è·¯å¾„ä¸èƒ½ä¸ºç©º"));
 			return;
 
 		}
@@ -30,7 +54,7 @@ namespace SOUI
 		int n = m_strPath.Find(m_strProPath);
 		if (n != 0)
 		{
-			CDebug::Debug(_T("Çë½«×ÊÔ´±£´æµ½uiresÄ¿Â¼ÏÂ"));
+			CDebug::Debug(_T("è¯·å°†èµ„æºä¿å­˜åˆ°uiresç›®å½•ä¸‹"));
 			return;
 		}
 
@@ -49,14 +73,14 @@ namespace SOUI
 
     void SDlgNewLayout::OnBtnDlgOpenFile()	
 	{
-		CFileDialogEx OpenDlg(FALSE, NULL, NULL, 6, _T("ËùÓĞÎÄ¼ş (*.*)\0*.*\0\0"));
+		CFileDialogEx OpenDlg(FALSE, NULL, NULL, 6, _T("æ‰€æœ‰æ–‡ä»¶ (*.*)\0*.*\0\0"));
 		if (IDOK ==OpenDlg.DoModal())
 		{
 			SStringT strFileName = OpenDlg.m_szFileName;
 			int n = strFileName.Find(m_strProPath);
 			if (n != 0)
 			{
-				SMessageBox(NULL, _T("Çë½«×ÊÔ´±£´æµ½uiresÄ¿Â¼ÏÂ"), _T("ÌáÊ¾"), MB_OK);
+				SMessageBox(NULL, _T("è¯·å°†èµ„æºä¿å­˜åˆ°uiresç›®å½•ä¸‹"), _T("æç¤º"), MB_OK);
 				return;
 			}
 

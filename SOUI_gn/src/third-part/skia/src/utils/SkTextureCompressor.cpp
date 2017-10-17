@@ -207,6 +207,8 @@ SkBlitter* CreateBlitterForFormat(int width, int height, void* compressedBuffer,
         default:
             return NULL;
     }
+
+    return NULL;
 }
 
 bool DecompressBufferFromFormat(uint8_t* dst, int dstRowBytes, const uint8_t* src,

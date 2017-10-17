@@ -1,4 +1,4 @@
-
+﻿
 /* pngwio.c - functions for data output
  *
  * Last changed in libpng 1.5.18 [February 6, 2014]

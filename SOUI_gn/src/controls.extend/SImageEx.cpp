@@ -1,7 +1,15 @@
+﻿
 #include "SImageEx.h"
-#include "extend.skins\SSkinMutiFrameImg.h"
+#include "SSkinMutiFrameImg.h"
 
 using namespace SOUI;
+
+SOUI_CLASS_NAME(SImageEx, L"imgex")
+
+SOUI_ATTRS_BEGIN(SImageEx)
+	ATTR_CUSTOM(L"src", OnSrc)
+SOUI_ATTRS_END()
+
 SImageEx::SImageEx()
 {
 }

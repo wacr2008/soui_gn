@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿
 #include "SLoopButton.h"
 
 SLoopButton::SLoopButton():m_iSkinStates(1),m_iCurState(0),m_iState(4)
@@ -16,13 +16,13 @@ void SLoopButton::OnStateChanged(DWORD dwOldState, DWORD dwNewState)
 	SWindow::OnStateChanged(dwOldState, dwNewState);
 	StopCurAnimate();
 
-	if (GetCapture() == m_swnd||m_iSkinStates<2)    //µã»÷ÖÐ
+	if (GetCapture() == m_swnd||m_iSkinStates<2)    //ç‚¹å‡»ä¸­
 		return;
 
 	if (m_bAnimate &&
 		((dwOldState == WndState_Normal && dwNewState == WndState_Hover)
 			|| (dwOldState == WndState_Hover && dwNewState == WndState_Normal)))
-	{//Æô¶¯¶¯»­
+	{//å¯åŠ¨åŠ¨ç”»
 		m_byAlphaAni = 5;
 		GetContainer()->RegisterTimelineHandler(this);
 	}
@@ -35,14 +35,14 @@ void SLoopButton::OnPaint(IRenderTarget * pRT)
 	GetClientRect(&rcClient);
 
 	if (m_byAlphaAni == 0xFF)
-	{//²»ÔÚ¶¯»­¹ý³ÌÖÐ
+	{//ä¸åœ¨åŠ¨ç”»è¿‡ç¨‹ä¸­
 		m_pBgSkin->Draw(
 			pRT, rcClient,
 			GetSkinState()
 		);
 	}
 	else
-	{//ÔÚ¶¯»­¹ý³ÌÖÐ
+	{//åœ¨åŠ¨ç”»è¿‡ç¨‹ä¸­
 		BYTE byNewAlpha = (BYTE)(((UINT)m_byAlphaAni*m_pBgSkin->GetAlpha()) >> 8);
 		if (GetState()&WndState_Hover)
 		{

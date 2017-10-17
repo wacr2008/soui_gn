@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include <tchar.h>
 #include "pluginapi.h"
 #include <stdio.h>
@@ -21,32 +21,32 @@ char *g_variables;
 
 int NSISCALL popstringA(char* str)
 {
-	stack_t *th;
-	if (!g_stacktop || !*g_stacktop) return 1;
-	th=(*g_stacktop);
-	if (str) lstrcpyA(str,th->text);
-	*g_stacktop = th->next;
-	GlobalFree((HGLOBAL)th);
-	return 0;
+    stack_t *th;
+    if (!g_stacktop || !*g_stacktop) return 1;
+    th = (*g_stacktop);
+    if (str) lstrcpyA(str, th->text);
+    *g_stacktop = th->next;
+    GlobalFree((HGLOBAL)th);
+    return 0;
 }
 
 int NSISCALL popint()
 {
-	char buf[128];
-	if (popstringn(buf, sizeof(buf)))
-		return 0;
-	return atoi(buf);
+    char buf[128];
+    if (popstringn(buf, sizeof(buf)))
+        return 0;
+    return atoi(buf);
 }
 
 int NSISCALL popstringn(char* str, int maxlen)
 {
-  stack_t *th;
-  if (!g_stacktop || !*g_stacktop) return 1;
-  th=(*g_stacktop);
-  if (str) lstrcpynA(str,th->text,maxlen?maxlen:g_stringsize);
-  *g_stacktop = th->next;
-  GlobalFree((HGLOBAL)th);
-  return 0;
+    stack_t *th;
+    if (!g_stacktop || !*g_stacktop) return 1;
+    th = (*g_stacktop);
+    if (str) lstrcpynA(str, th->text, maxlen ? maxlen : g_stringsize);
+    *g_stacktop = th->next;
+    GlobalFree((HGLOBAL)th);
+    return 0;
 }
 
 /*void NSISCALL pushstring(const TCHAR *str)
@@ -60,19 +60,19 @@ int NSISCALL popstringn(char* str, int maxlen)
 }*/
 void NSISCALL pushstringA(const char* str)
 {
-	stack_t *th;
-	if (!g_stacktop) return;
-	th = (stack_t*)GlobalAlloc(GPTR, sizeof(stack_t) + g_stringsize);
-	lstrcpynA(th->text, str, g_stringsize);
-	th->next = *g_stacktop;
-	*g_stacktop = th;
+    stack_t *th;
+    if (!g_stacktop) return;
+    th = (stack_t*)GlobalAlloc(GPTR, sizeof(stack_t) + g_stringsize);
+    lstrcpynA(th->text, str, g_stringsize);
+    th->next = *g_stacktop;
+    *g_stacktop = th;
 }
 void NSISCALL pushint(int value)
 {
-	char buffer[1024];
-	ZeroMemory(buffer, 1024);
-	sprintf(buffer, "%d", value);
-	pushstringA(buffer);
+    char buffer[1024];
+    ZeroMemory(buffer, 1024);
+    sprintf(buffer, "%d", value);
+    pushstringA(buffer);
 }
 
 
@@ -80,127 +80,127 @@ void NSISCALL pushint(int value)
 
 char * NSISCALL getuservariable(const int varnum)
 {
-  if (varnum < 0 || varnum >= __INST_LAST) return NULL;
-  return g_variables+varnum*g_stringsize;
+    if (varnum < 0 || varnum >= __INST_LAST) return NULL;
+    return g_variables + varnum*g_stringsize;
 }
 
 void NSISCALL setuservariable(const int varnum, const char *var)
 {
-	if (var != NULL && varnum >= 0 && varnum < __INST_LAST) 
-		lstrcpyA(g_variables + varnum*g_stringsize, var);
+    if (var != NULL && varnum >= 0 && varnum < __INST_LAST)
+        lstrcpyA(g_variables + varnum*g_stringsize, var);
 }
 
 // playing with integers
 
 int NSISCALL myatoi(const char *s)
 {
-  int v=0;
-  if (*s == '0' && (s[1] == 'x' || s[1] == 'X'))
-  {
-    s++;
-    for (;;)
+    int v = 0;
+    if (*s == '0' && (s[1] == 'x' || s[1] == 'X'))
     {
-      int c=*(++s);
-      if (c >= '0' && c <= '9') c-='0';
-      else if (c >= 'a' && c <= 'f') c-='a'-10;
-      else if (c >= 'A' && c <= 'F') c-='A'-10;
-      else break;
-      v<<=4;
-      v+=c;
+        s++;
+        for (;;)
+        {
+            int c = *(++s);
+            if (c >= '0' && c <= '9') c -= '0';
+            else if (c >= 'a' && c <= 'f') c -= 'a' - 10;
+            else if (c >= 'A' && c <= 'F') c -= 'A' - 10;
+            else break;
+            v <<= 4;
+            v += c;
+        }
     }
-  }
-  else if (*s == '0' && s[1] <= '7' && s[1] >= '0')
-  {
-    for (;;)
+    else if (*s == '0' && s[1] <= '7' && s[1] >= '0')
     {
-      int c=*(++s);
-      if (c >= '0' && c <= '7') c-='0';
-      else break;
-      v<<=3;
-      v+=c;
+        for (;;)
+        {
+            int c = *(++s);
+            if (c >= '0' && c <= '7') c -= '0';
+            else break;
+            v <<= 3;
+            v += c;
+        }
     }
-  }
-  else
-  {
-    int sign=0;
-    if (*s == '-') sign++; else s--;
-    for (;;)
+    else
     {
-      int c=*(++s) - '0';
-      if (c < 0 || c > 9) break;
-      v*=10;
-      v+=c;
+        int sign = 0;
+        if (*s == '-') sign++; else s--;
+        for (;;)
+        {
+            int c = *(++s) - '0';
+            if (c < 0 || c > 9) break;
+            v *= 10;
+            v += c;
+        }
+        if (sign) v = -v;
     }
-    if (sign) v = -v;
-  }
 
-  return v;
+    return v;
 }
 
 unsigned NSISCALL myatou(const char *s)
 {
-  unsigned int v=0;
+    unsigned int v = 0;
 
-  for (;;)
-  {
-    unsigned int c=*s++;
-    if (c >= '0' && c <= '9') c-='0';
-    else break;
-    v*=10;
-    v+=c;
-  }
-  return v;
+    for (;;)
+    {
+        unsigned int c = *s++;
+        if (c >= '0' && c <= '9') c -= '0';
+        else break;
+        v *= 10;
+        v += c;
+    }
+    return v;
 }
 
 int NSISCALL myatoi_or(const char *s)
 {
-  int v=0;
-  if (*s == '0' && (s[1] == 'x' || s[1] == 'X'))
-  {
-    s++;
-    for (;;)
+    int v = 0;
+    if (*s == '0' && (s[1] == 'x' || s[1] == 'X'))
     {
-      int c=*(++s);
-      if (c >= '0' && c <= '9') c-='0';
-      else if (c >= 'a' && c <= 'f') c-='a'-10;
-      else if (c >= 'A' && c <= 'F') c-='A'-10;
-      else break;
-      v<<=4;
-      v+=c;
+        s++;
+        for (;;)
+        {
+            int c = *(++s);
+            if (c >= '0' && c <= '9') c -= '0';
+            else if (c >= 'a' && c <= 'f') c -= 'a' - 10;
+            else if (c >= 'A' && c <= 'F') c -= 'A' - 10;
+            else break;
+            v <<= 4;
+            v += c;
+        }
     }
-  }
-  else if (*s == '0' && s[1] <= '7' && s[1] >= '0')
-  {
-    for (;;)
+    else if (*s == '0' && s[1] <= '7' && s[1] >= '0')
     {
-      int c=*(++s);
-      if (c >= '0' && c <= '7') c-='0';
-      else break;
-      v<<=3;
-      v+=c;
+        for (;;)
+        {
+            int c = *(++s);
+            if (c >= '0' && c <= '7') c -= '0';
+            else break;
+            v <<= 3;
+            v += c;
+        }
     }
-  }
-  else
-  {
-    int sign=0;
-    if (*s == '-') sign++; else s--;
-    for (;;)
+    else
     {
-      int c=*(++s) - '0';
-      if (c < 0 || c > 9) break;
-      v*=10;
-      v+=c;
+        int sign = 0;
+        if (*s == '-') sign++; else s--;
+        for (;;)
+        {
+            int c = *(++s) - '0';
+            if (c < 0 || c > 9) break;
+            v *= 10;
+            v += c;
+        }
+        if (sign) v = -v;
     }
-    if (sign) v = -v;
-  }
 
-  // Support for simple ORed expressions
-  if (*s == '|') 
-  {
-      v |= myatoi_or(s+1);
-  }
+    // Support for simple ORed expressions
+    if (*s == '|')
+    {
+        v |= myatoi_or(s + 1);
+    }
 
-  return v;
+    return v;
 }
 
 

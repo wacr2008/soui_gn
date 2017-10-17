@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 #include "core/Swnd.h"
 #include "core/SItemPanel.h"
@@ -11,12 +11,12 @@ namespace SOUI
 class SOUI_EXP STileView : public SPanel
     , protected IItemContainer
 {
-    SOUI_CLASS_NAME(STileView, L"tileview")
+    SOUI_CLASS_NAME_DECL(STileView, L"tileview")
     
     friend class STileViewDataSetObserver;
 public:
     STileView();
-    ~STileView();
+    ~STileView() override;
     
     BOOL SetAdapter(ILvAdapter *adapter);
     
@@ -42,10 +42,10 @@ public:
     SItemPanel *HitTest(CPoint &pt);
 
 protected:
-    virtual void OnItemSetCapture(SItemPanel *pItem, BOOL bCapture);
-    virtual BOOL OnItemGetRect(SItemPanel *pItem, CRect &rcItem);
-    virtual BOOL IsItemRedrawDelay();
-    virtual void OnItemRequestRelayout(SItemPanel *pItem);
+    void OnItemSetCapture(SItemPanel *pItem, BOOL bCapture) override;
+    BOOL OnItemGetRect(SItemPanel *pItem, CRect &rcItem) override;
+    BOOL IsItemRedrawDelay() override;
+    void OnItemRequestRelayout(SItemPanel *pItem) override;
     
 protected:
     void onDataSetChanged();
@@ -55,22 +55,22 @@ protected:
     bool OnItemClick(EventArgs *pEvt);
 
 protected:
-    virtual BOOL OnScroll(BOOL bVertical, UINT uCode, int nPos);
-    virtual int  GetScrollLineSize(BOOL bVertical);
-    virtual BOOL CreateChildren(pugi::xml_node xmlNode);
+    BOOL OnScroll(BOOL bVertical, UINT uCode, int nPos) override;
+    int  GetScrollLineSize(BOOL bVertical) override;
+    BOOL CreateChildren(pugi::xml_node xmlNode) override;
     
-    virtual BOOL OnUpdateToolTip(CPoint pt, SwndToolTipInfo &tipInfo);
-    virtual UINT OnGetDlgCode();
-    virtual BOOL OnSetCursor(const CPoint &pt);
-    virtual void OnColorize(COLORREF cr);
-	virtual void OnScaleChanged(int nScale);
-	virtual HRESULT OnLanguageChanged();
+    BOOL OnUpdateToolTip(CPoint pt, SwndToolTipInfo &tipInfo) override;
+    UINT OnGetDlgCode() override;
+    BOOL OnSetCursor(const CPoint &pt) override;
+    void OnColorize(COLORREF cr) override;
+	void OnScaleChanged(int nScale) override;
+	HRESULT OnLanguageChanged() override;
 protected:
     void DispatchMessage2Items(UINT uMsg,WPARAM wParam,LPARAM lParam);
     void UpdateScrollBar();
     void RedrawItem(SItemPanel *pItem);
     SItemPanel *GetItemPanel(int iItem);
-    CRect CalcItemDrawRect(int iItem);//º∆À„item µº ªÊ÷∆µƒŒª÷√
+    CRect CalcItemDrawRect(int iItem);//ËÆ°ÁÆóitemÂÆûÈôÖÁªòÂà∂ÁöÑ‰ΩçÁΩÆ
     
     void UpdateVisibleItems();
     
@@ -91,42 +91,27 @@ protected:
     
     void OnSetFocus(SWND wndOld);
     
-    SOUI_MSG_MAP_BEGIN()
-		MSG_WM_PAINT_EX(OnPaint)
-		MSG_WM_SIZE(OnSize)
-		MSG_WM_DESTROY(OnDestroy)
-		MSG_WM_MOUSEWHEEL(OnMouseWheel)
-		MSG_WM_MOUSELEAVE(OnMouseLeave)
-		MSG_WM_KEYDOWN(OnKeyDown)
-		MSG_WM_KILLFOCUS_EX(OnKillFocus)
-		MSG_WM_SETFOCUS_EX(OnSetFocus)
-		MESSAGE_RANGE_HANDLER_EX(WM_MOUSEFIRST, WM_MOUSELAST, OnMouseEvent)
-		MESSAGE_RANGE_HANDLER_EX(WM_KEYFIRST, WM_KEYLAST, OnKeyEvent)
-		MESSAGE_RANGE_HANDLER_EX(WM_IME_STARTCOMPOSITION, WM_IME_KEYLAST, OnKeyEvent)
-    SOUI_MSG_MAP_END()
+    SOUI_MSG_MAP_DECL() 
     
-    SOUI_ATTRS_BEGIN()
-		ATTR_INT(L"marginSize", m_nMarginSize, FALSE)
-		ATTR_INT(L"wantTab", m_bWantTab, FALSE)
-    SOUI_ATTRS_END()
+    SOUI_ATTRS_DECL() 
 protected:
     CAutoRefPtr<ILvAdapter>           m_adapter;
     CAutoRefPtr<ILvDataSetObserver>   m_observer;
-    CAutoRefPtr<STileViewItemLocator>  m_tvItemLocator;//¡–±ÌœÓ∂®ŒªΩ”ø⁄
+    CAutoRefPtr<STileViewItemLocator>  m_tvItemLocator;//ÂàóË°®È°πÂÆö‰ΩçÊé•Âè£
     struct ItemInfo
     {
         SItemPanel *pItem;
         int nType;
     };
     
-    int                             m_iFirstVisible;//µ⁄“ª∏ˆœ‘ æœÓÀ˜“˝
-    SList<ItemInfo>                 m_lstItems; //µ±«∞’˝‘⁄œ‘ æµƒœÓ
+    int                             m_iFirstVisible;//Á¨¨‰∏Ä‰∏™ÊòæÁ§∫È°πÁ¥¢Âºï
+    SList<ItemInfo>                 m_lstItems; //ÂΩìÂâçÊ≠£Âú®ÊòæÁ§∫ÁöÑÈ°π
     SItemPanel                     *m_itemCapture;//The item panel that has been set capture.
     
     int                             m_iSelItem;
     SItemPanel                     *m_pHoverItem;
     
-    SArray<SList<SItemPanel *> *>    m_itemRecycle; //itemªÿ ’’æ,√ø“ª÷÷—˘ Ω‘⁄ªÿ ’’æ÷–±£≥÷“ª∏ˆ¡–±Ì£¨“‘±„÷ÿ∏¥¿˚”√
+    SArray<SList<SItemPanel *> *>    m_itemRecycle; //itemÂõûÊî∂Á´ô,ÊØè‰∏ÄÁßçÊ†∑ÂºèÂú®ÂõûÊî∂Á´ô‰∏≠‰øùÊåÅ‰∏Ä‰∏™ÂàóË°®Ôºå‰ª•‰æøÈáçÂ§çÂà©Áî®
     
     pugi::xml_document              m_xmlTemplate;
     int                             m_nMarginSize;

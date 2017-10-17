@@ -1,3 +1,4 @@
+ï»¿
 #include "SChatEdit.h"
 #include "reole/RichEditOle.h"
 
@@ -17,6 +18,15 @@ namespace SOUI{
     const SStringW KLabelStrike     = L"strike";
     const SStringW KLabelSize       = L"size";
     const SStringW KLabelSmiley     = L"smiley";
+
+	SOUI_CLASS_NAME(EventChatEditKeyReturn, L"on_chatedit_key_return")
+
+	SOUI_CLASS_NAME(SChatEdit, L"chatedit")
+
+	SOUI_MSG_MAP_BEGIN(SChatEdit)
+		MSG_WM_CREATE(OnCreate)
+		MSG_WM_KEYDOWN(OnKeyDown)
+	SOUI_MSG_MAP_END()
 
     SChatEdit::SChatEdit(void)
     {
@@ -45,10 +55,10 @@ namespace SOUI{
 
     BOOL SChatEdit::AppendFormatText(const pugi::xml_node xmlMsg,BOOL bNewLine,BOOL bCanUndo)
     {
-        //TCHAR szRet[]={0x0a,0};
+        TCHAR szRet[]={0x0a,0};
         int nLen = (int)SSendMessage(WM_GETTEXTLENGTH);
         if(bNewLine)
-        {//²åÈëÒ»¸ö»»ÐÐ·û
+        {//æ’å…¥ä¸€ä¸ªæ¢è¡Œç¬¦
             SSendMessage(EM_SETSEL,nLen,nLen);
             SSendMessage(EM_REPLACESEL,bCanUndo,(LPARAM)L"\r\n");
             nLen = (int)SSendMessage(WM_GETTEXTLENGTH);
@@ -118,7 +128,7 @@ namespace SOUI{
                 hr = host->CreateSource(&pSource);
                 if(FAILED(hr)) return 0;
                 {
-                    int uID = xmlText.attribute(L"id").as_uint((unsigned int)-1);
+                    UINT uID = xmlText.attribute(L"id").as_uint((UINT)-1);
                     SStringW strPath = xmlText.attribute(L"path").value();
                     if(uID != -1)
                         hr = pSource->LoadFromID(uID);
@@ -254,7 +264,7 @@ namespace SOUI{
         for(int i=0;i<strTxt.GetLength();i++)
         {
             if(strTxt[i] == 0xfffc)
-            {//ÕÒµ½Ò»¸öOLE¶ÔÏó
+            {//æ‰¾åˆ°ä¸€ä¸ªOLEå¯¹è±¡
                 strMsg += strTxt.Mid(iPlainTxtBegin,i-iPlainTxtBegin);
                 iPlainTxtBegin = i+1;
 
@@ -272,7 +282,7 @@ namespace SOUI{
                             SComPtr<ISmileySource> source;
                             hr = smiley->GetSource(&source);
                             SASSERT(SUCCEEDED(hr));
-                            int uID = -1;
+                            UINT uID = (UINT)-1;
                             SStringW strSmiley = L"<smiley";
                             if(SUCCEEDED(source->GetID(&uID)))
                             {

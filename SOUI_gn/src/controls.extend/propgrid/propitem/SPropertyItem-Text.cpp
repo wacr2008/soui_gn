@@ -1,3 +1,4 @@
+ï»¿
 #include "SPropertyItem-Text.h"
 #include "../SPropertyEmbedWndHelper.hpp"
 #include "../SPropertyGrid.h"
@@ -24,9 +25,7 @@ namespace SOUI
             }
         }
         
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_KEYDOWN(OnKeyDown)
-        SOUI_MSG_MAP_END()
+        SOUI_MSG_MAP_DECL()
         
         virtual IPropertyItem* GetOwner(){return m_pOwner;}
         
@@ -41,6 +40,18 @@ namespace SOUI
 
     };
     
+
+	SOUI_MSG_MAP_BEGIN(SPropEdit)
+		MSG_WM_KEYDOWN(OnKeyDown)
+	SOUI_MSG_MAP_END()
+
+
+	SOUI_CLASS_NAME(SPropertyItemText, L"proptext")
+
+	SOUI_ATTRS_BEGIN(SPropertyItemText)
+		ATTR_STRINGT(L"value", m_strValue, TRUE)
+	SOUI_ATTRS_END()
+
     void SPropertyItemText::DrawItem( IRenderTarget *pRT,CRect rc )
     {
         SStringT strValue = GetString();
@@ -56,10 +67,9 @@ namespace SOUI
             m_pEdit = new TplPropEmbedWnd<SPropEdit>(this);
             pugi::xml_document xmlDoc;
             pugi::xml_node xmlNode=xmlDoc.append_child(L"root");
-            xmlNode.append_attribute(L"colorBkgnd").set_value(L"#000000");
+            xmlNode.append_attribute(L"colorBkgnd").set_value(L"#ffffff");
             m_pOwner->OnInplaceActiveWndCreate(this,m_pEdit,xmlNode);
             m_pEdit->SetWindowText(GetString());
-			m_pEdit->SetFocus();
         }else
         {
             if(m_pEdit)
@@ -71,36 +81,16 @@ namespace SOUI
         }
     }
 
+    void SPropertyItemText::SetValue( void *pValue)
+    {
+        m_strValue = *(SStringT*)pValue;
+        OnValueChanged();
+    }
 
     void SPropertyItemText::SetString( const SStringT & strValue )
     {
-		//Èç¹ûÖµÃ»ÓÐ¸Ä±ä£¬¾Í²»·¢ËÍÍ¨Öª
-		if (m_strValue.CompareNoCase(strValue) != 0)
-		{
-			m_strValue = strValue;
-			OnValueChanged();
-		}
-		
+        m_strValue = strValue;
+        OnValueChanged();
     }
 
-	void SPropertyItemText::SetStringOnly( const SStringT & strValue )
-	{
-		m_strValue = strValue;
-	}
-
-
-    void SPropertyItemText::OnButtonClick()
-	{
-		GetOwner()->OnItemButtonClick(this, m_strButtonType);
-	}
-
-    BOOL SPropertyItemText::HasButton() const 
-	{
-		if (m_strButtonType.IsEmpty())
-		{
-			return FALSE;
-		}
-		
-		return TRUE;
-	}
 }

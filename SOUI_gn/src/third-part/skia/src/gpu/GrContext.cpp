@@ -1381,8 +1381,7 @@ bool GrContext::readTexturePixels(GrTexture* texture,
         desc.fOrigin = kTopLeft_GrSurfaceOrigin;
         ast.set(this, desc, kExact_ScratchTexMatch);
         GrTexture* dst = ast.texture();
-		target = dst->asRenderTarget();
-		if (dst && (target)) {
+        if (dst && (target = dst->asRenderTarget())) {
             this->copyTexture(texture, target, NULL);
             return this->readRenderTargetPixels(target,
                                                 left, top, width, height,

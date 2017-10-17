@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+ï»¿//////////////////////////////////////////////////////////////////////////
 //   File Name: STurn3DView.h
 // Description: STurn3DView
 //     Creator: ZhangZhiBin QQ->276883782
@@ -6,10 +6,25 @@
 //              2012.08.18 - 2.0 huangjianxiong
 //////////////////////////////////////////////////////////////////////////
 
+
 #include "STurn3DView.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(EventTurn3d, L"on_turn3d")
+
+	SOUI_CLASS_NAME(STurn3dView, L"Turn3dView")
+
+	SOUI_ATTRS_BEGIN(STurn3dView)
+		ATTR_INT(L"zStep", m_nZStep, FALSE)
+		ATTR_INT(L"yStep", m_nYStep, FALSE)
+	SOUI_ATTRS_END()
+
+	SOUI_MSG_MAP_BEGIN(STurn3dView)
+		MSG_WM_PAINT_EX(OnPaint)
+		MSG_WM_TIMER_EX(OnTimer)
+	SOUI_MSG_MAP_END()
+
     STurn3dView::STurn3dView()
         : m_bTurn2Front(FALSE)
         , m_nZStep(50)
@@ -37,7 +52,7 @@ namespace SOUI
         {//turn over finished
             KillTimer(idEvent);  
             GetWindow(GSW_PREVSIBLING)->SetVisible(TRUE,FALSE);
-            SetVisible(FALSE,TRUE);//Òş²Ø´°¿Ú
+            SetVisible(FALSE,TRUE);//éšè—çª—å£
             m_bTurning = FALSE;
             m_bmpBefore = NULL;
             m_bmpAfter = NULL;
@@ -83,7 +98,7 @@ namespace SOUI
         CRect rcWnd;
         GetWindowRect(&rcWnd);
 
-        //¸´ÖÆÕıÃæ´°ÌåµÄÍ¼Ïñ
+        //å¤åˆ¶æ­£é¢çª—ä½“çš„å›¾åƒ
         SWindow *pFrmWnd = GetWindow(GSW_PREVSIBLING);
         if(!pFrmWnd) return FALSE;
                 
@@ -92,7 +107,7 @@ namespace SOUI
         pWndFront->SetVisible(TRUE,FALSE);
         pWndBack->SetVisible(FALSE,FALSE);
         
-        //äÖÈ¾´°¿Ú±ä»¯Ç°×´Ì¬
+        //æ¸²æŸ“çª—å£å˜åŒ–å‰çŠ¶æ€
         pRT->ClearRect(&rcWnd,0);
         pFrmWnd->RedrawRegion(pRT,NULL);
         
@@ -102,7 +117,7 @@ namespace SOUI
         pRTCopy1->BitBlt(CRect(CPoint(0,0),rcWnd.Size()),pRT,rcWnd.left,rcWnd.top,SRCCOPY);
         m_bmpBefore = (IBitmap*)pRTCopy1->GetCurrentObject(OT_BITMAP);        
         
-        //äÖÈ¾´°¿Ú±ä»¯ºó×´Ì¬
+        //æ¸²æŸ“çª—å£å˜åŒ–åçŠ¶æ€
         pWndFront->SetVisible(FALSE,FALSE);
         pWndBack->SetVisible(TRUE,FALSE);
 
@@ -117,13 +132,13 @@ namespace SOUI
         pFrmWnd->ReleaseRenderTarget(pRT);
 
         
-        //ÏÈ°ÑFrameWindow HIDE
+        //å…ˆæŠŠFrameWindow HIDE
         pFrmWnd->SetVisible(FALSE,FALSE);
 
         GETRENDERFACTORY->CreateBitmap(&m_bmpTrans);
         m_bmpTrans->Init(rcWnd.Width(),rcWnd.Height());
         
-        //ÈÃ´°¿Ú¿É¼û
+        //è®©çª—å£å¯è§
         SetVisible(TRUE,TRUE);
         m_3dparam.nOffsetZ = m_nZStep ;
         m_3dparam.nRotateY = -10;

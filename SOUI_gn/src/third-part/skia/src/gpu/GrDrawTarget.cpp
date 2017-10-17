@@ -353,7 +353,7 @@ bool GrDrawTarget::checkDraw(GrPrimitiveType type, int startVertex,
 #ifdef SK_DEBUG
     const GeometrySrcState& geoSrc = fGeoSrcStateStack.back();
     int maxVertex = startVertex + vertexCount;
-    int maxValidVertex=0;
+    int maxValidVertex;
     switch (geoSrc.fVertexSrc) {
         case kNone_GeometrySrcType:
             SkFAIL("Attempting to draw without vertex src.");
@@ -370,7 +370,7 @@ bool GrDrawTarget::checkDraw(GrPrimitiveType type, int startVertex,
     }
     if (indexCount > 0) {
         int maxIndex = startIndex + indexCount;
-        int maxValidIndex=0;
+        int maxValidIndex;
         switch (geoSrc.fIndexSrc) {
             case kNone_GeometrySrcType:
                 SkFAIL("Attempting to draw indexed geom without index src.");

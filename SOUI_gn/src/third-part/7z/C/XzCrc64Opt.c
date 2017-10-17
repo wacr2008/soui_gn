@@ -1,4 +1,4 @@
-/* XzCrc64Opt.c -- CRC64 calculation
+﻿/* XzCrc64Opt.c -- CRC64 calculation
 2015-03-01 : Igor Pavlov : Public domain */
 
 #include "Precomp.h"

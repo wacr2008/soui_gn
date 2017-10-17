@@ -3,6 +3,8 @@
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SMyGifPlayer, L"mygifplayer")
+
 	SMyGifPlayer::SMyGifPlayer()
 	{
 	}

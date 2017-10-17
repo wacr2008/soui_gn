@@ -1,7 +1,7 @@
-; è¯¥è„šæœ¬ä½¿ç”¨ HM VNISEdit è„šæœ¬ç¼–è¾‘å™¨å‘å¯¼äº§ç”Ÿ
+; ¸Ã½Å±¾Ê¹ÓÃ HM VNISEdit ½Å±¾±à¼­Æ÷Ïòµ¼²úÉú
 
-; ############################ åˆå§‹åŒ–å®šä¹‰å˜é‡ ####################################
-;ä¸»çª—å£å¥æŸ„
+; ############################ ³õÊ¼»¯¶¨Òå±äÁ¿ ####################################
+;Ö÷´°¿Ú¾ä±ú
 Var Dialog
 
 SetCompressor lzma
@@ -9,7 +9,7 @@ SetCompressor lzma
 RequestExecutionLevel admin
 
 !AddPluginDir ".\plugins"
-;############################# å¼•å…¥nshè„šæœ¬ ######################################
+;############################# ÒıÈënsh½Å±¾ ######################################
 
 !include "MUI.nsh"
 !include "WinCore.nsh"
@@ -18,38 +18,38 @@ RequestExecutionLevel admin
 !include "FileFunc.nsh"
 !include  "LogicLib.nsh"
 !include  "WinMessages.nsh"
-!include    "MUI2.nsh"
-!include    "WordFunc.nsh"
-!include    "Library.nsh"
+!include 	"MUI2.nsh"
+!include 	"WordFunc.nsh"
+!include 	"Library.nsh"
 
 
-; ########################### å®‰è£…ç¨‹åºåˆå§‹å®šä¹‰å¸¸é‡ ###############################
-!define PRODUCT_NAME "SOUI NSISæ’ä»¶æ¼”ç¤º"
+; ########################### °²×°³ÌĞò³õÊ¼¶¨Òå³£Á¿ ###############################
+!define PRODUCT_NAME "SOUI NSIS²å¼şÑİÊ¾"
 !define PRODUCT_VERSION "1.0"
 !define PRODUCT_PUBLISHER "setoutsoft"
 !define PRODUCT_WEB_SITE "http://www.ui520.cn"
 !define PRODUCT_MAIN_EXE          "demo.exe"
-; å›¾æ ‡
-!define MUI_ICON    ".\file\logo.ico"
-;å¸è½½å›¾æ ‡
-!define MUI_UNICON  ".\file\logo.ico"
-;è‹±æ–‡äº§å“åç§°
+; Í¼±ê
+!define MUI_ICON	".\logo.ico"
+;Ğ¶ÔØÍ¼±ê
+!define MUI_UNICON	".\logo.ico"
+;Ó¢ÎÄ²úÆ·Ãû³Æ
 !define PRODUCT_NAME_EN  "soui-nsis demo"
-;æç¤ºè¯­
-!define ERROR_MESSAGE           "å®‰è£…åŒ…ä¸æ­£ç¡®ï¼Œè¯·é‡æ–°ä¸‹è½½"
-;é¢„è®¡è½¯ä»¶æ‰€éœ€ç©ºé—´å¤§å°(M)ï¼Œæ³¨å†Œè¡¨ä¸­ä¸ºçœŸå®å¤§å°ï¼Œä»…ç”¨äºåˆ¤æ–­ç©ºé—´æ˜¯å¦å¤Ÿç”¨ã€‚
+;ÌáÊ¾Óï
+!define ERROR_MESSAGE           "°²×°°ü²»ÕıÈ·£¬ÇëÖØĞÂÏÂÔØ"
+;Ô¤¼ÆÈí¼şËùĞè¿Õ¼ä´óĞ¡(M)£¬×¢²á±íÖĞÎªÕæÊµ´óĞ¡£¬½öÓÃÓÚÅĞ¶Ï¿Õ¼äÊÇ·ñ¹»ÓÃ¡£
 !define REQUIRED_SPACE  "15"
-;å®šä¹‰äº’æ–¥åç§°
+;¶¨Òå»¥³âÃû³Æ
 !define MyMutex_Install     "MyMutex_Install"
 !define MyMutex_UnInstall   "MyMutex_UnInstall"
 
 !define Unstall_KeyPath "Software\Microsoft\Windows\CurrentVersion\Uninstall\"
 
-;Languages å¦‚æœä¸ä½¿ç”¨MUIï¼Œè‡ªå®šä¹‰setupå›¾æ ‡å°±å¤±æ•ˆäº†ï¼Œç®€ç®€å•å•ç”¨ä¸Šä¸€æ¡å°±OKäº†ã€‚
+;Languages Èç¹û²»Ê¹ÓÃMUI£¬×Ô¶¨ÒåsetupÍ¼±ê¾ÍÊ§Ğ§ÁË£¬¼ò¼òµ¥µ¥ÓÃÉÏÒ»Ìõ¾ÍOKÁË¡£
 !insertmacro MUI_LANGUAGE "SimpChinese"
 
 
-;############################ å®‰è£…æ–‡ä»¶å®šä¹‰ ############################
+;############################ °²×°ÎÄ¼ş¶¨Òå ############################
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "Setup.exe"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME_EN}"
@@ -59,51 +59,51 @@ ShowInstDetails show
 ShowUnInstDetails show
 BrandingText " "
 
-;############################ å®‰è£…ç•Œé¢ ################################
-;è‡ªå®šä¹‰é¡µé¢
+;############################ °²×°½çÃæ ################################
+;×Ô¶¨ÒåÒ³Ãæ
 Page custom MyPage
-;å®‰è£…è¿›åº¦ç•Œé¢
+;°²×°½ø¶È½çÃæ
 Page instfiles "" MyInstallNow
-;è‡ªå®šä¹‰å¸è½½é¡µé¢
+;×Ô¶¨ÒåĞ¶ÔØÒ³Ãæ
 UninstPage   custom     un.MyUninstallPage
-;å¸è½½è¿›åº¦ç•Œé¢
-UninstPage   instfiles  ""  un.MyUninstallNow
+;Ğ¶ÔØ½ø¶È½çÃæ
+UninstPage   instfiles	""	un.MyUninstallNow
 
-;############################ å…³é”®Sectionä»£ç æ®µ #######################
-/*ç¨‹åºæ–‡ä»¶ã€åˆ›å»ºå¿«æ·æ–¹å¼*/
+;############################ ¹Ø¼üSection´úÂë¶Î #######################
+/*³ÌĞòÎÄ¼ş¡¢´´½¨¿ì½İ·½Ê½*/
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File /r "file\*.*"
 
-    ;åˆ›å»ºå¼€å§‹èœå•å†…å®¹
-    CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
+	;´´½¨¿ªÊ¼²Ëµ¥ÄÚÈİ
+ 	CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAIN_EXE}"
-    ;åˆ›å»ºæ¡Œé¢å¿«æ·æ–¹å¼
-    CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAIN_EXE}"
-    
-    ;è®¡ç®—ç¨‹åºå¤§å°ï¼Œå¹¶å†™å…¥æ³¨å†Œè¡¨
-    ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
-    IntFmt $0 "0x%08X" $0
+	;´´½¨×ÀÃæ¿ì½İ·½Ê½
+	CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAIN_EXE}"
+	
+	;¼ÆËã³ÌĞò´óĞ¡£¬²¢Ğ´Èë×¢²á±í
+	${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+ 	IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKLM "${Unstall_KeyPath}${PRODUCT_NAME_EN}" "EstimatedSize" "$0"
 
    
 SectionEnd
 
 Section -AdditionalIcons
-    ;å…¬å¸å®˜ç½‘é“¾æ¥
+	;¹«Ë¾¹ÙÍøÁ´½Ó
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-  ;å¼€å§‹èœå•-å…¬å¸å®˜ç½‘é“¾æ¥
+  ;¿ªÊ¼²Ëµ¥-¹«Ë¾¹ÙÍøÁ´½Ó
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
-  ;å¼€å§‹èœå•-å¸è½½ç¨‹åºå¿«æ·æ–¹å¼
+  ;¿ªÊ¼²Ëµ¥-Ğ¶ÔØ³ÌĞò¿ì½İ·½Ê½
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
 
 Section -Post
-    ;åˆ›å»ºé€€å‡ºç¨‹åº
+	;´´½¨ÍË³ö³ÌĞò
   WriteUninstaller "$INSTDIR\uninst.exe"
   
-  ;å¸è½½ä¿¡æ¯æ³¨å†Œè¡¨
+  ;Ğ¶ÔØĞÅÏ¢×¢²á±í
   WriteRegStr HKLM "${Unstall_KeyPath}${PRODUCT_NAME_EN}" "DisplayName" "${PRODUCT_NAME}"
   WriteRegStr HKLM "${Unstall_KeyPath}${PRODUCT_NAME_EN}" "UninstallString" '"$INSTDIR\uninst.exe"'
   WriteRegStr HKLM "${Unstall_KeyPath}${PRODUCT_NAME_EN}" "DisplayIcon" '"$INSTDIR\${PRODUCT_MAIN_EXE}"'
@@ -111,30 +111,30 @@ Section -Post
   WriteRegStr HKLM "${Unstall_KeyPath}${PRODUCT_NAME_EN}" "Publisher" "${PRODUCT_PUBLISHER}"
   WriteRegStr HKLM "${Unstall_KeyPath}${PRODUCT_NAME_EN}" "HelpLink" "${PRODUCT_WEB_SITE}"
   WriteRegStr HKLM "${Unstall_KeyPath}${PRODUCT_NAME_EN}" "DisplayVersion" "${PRODUCT_VERSION}"
-        /*
-      å¸è½½æ³¨å†Œè¡¨-å¯é€‰å‚æ•°
-      InstallLocation (string) - Installation directory ($INSTDIR)
-        DisplayIcon (string) - Path, filename and index of of the icon that will be displayed next to your application name
-        Publisher (string) - (Company) name of the publisher
-        ModifyPath (string) - Path and filename of the application modify program
-        InstallSource (string) - Location where the application was installed from
-        ProductID (string) - Product ID of the application
-        Readme (string) - Path (File or URL) to readme information
-        RegOwner (string) - Registered owner of the application
-        RegCompany (string) - Registered company of the application
-        HelpLink (string) - Link to the support website
-        HelpTelephone (string) - Telephone number for support
-        URLUpdateInfo (string) - Link to the website for application updates
-        URLInfoAbout (string) - Link to the application home page
-        DisplayVersion (string) - Displayed version of the application
-        VersionMajor (DWORD) - Major version number of the application
-        VersionMinor (DWORD) - Minor version number of the application
-        NoModify (DWORD) - 1 if uninstaller has no option to modify the installed application
-        NoRepair (DWORD) - 1 if the uninstaller has no option to repair the installation
-        SystemComponent (DWORD) - Set 1 to prevents display of the application in the Programs List of the Add/Remove Programs in the Control Panel.
-        EstimatedSize (DWORD) - The size of the installed files (in KB)
-        Comments (string) - A comment describing the installer package
-    */
+		/*
+  	  Ğ¶ÔØ×¢²á±í-¿ÉÑ¡²ÎÊı
+	  InstallLocation (string) - Installation directory ($INSTDIR)
+		DisplayIcon (string) - Path, filename and index of of the icon that will be displayed next to your application name
+		Publisher (string) - (Company) name of the publisher
+		ModifyPath (string) - Path and filename of the application modify program
+		InstallSource (string) - Location where the application was installed from
+		ProductID (string) - Product ID of the application
+		Readme (string) - Path (File or URL) to readme information
+		RegOwner (string) - Registered owner of the application
+		RegCompany (string) - Registered company of the application
+		HelpLink (string) - Link to the support website
+		HelpTelephone (string) - Telephone number for support
+		URLUpdateInfo (string) - Link to the website for application updates
+		URLInfoAbout (string) - Link to the application home page
+		DisplayVersion (string) - Displayed version of the application
+		VersionMajor (DWORD) - Major version number of the application
+		VersionMinor (DWORD) - Minor version number of the application
+		NoModify (DWORD) - 1 if uninstaller has no option to modify the installed application
+		NoRepair (DWORD) - 1 if the uninstaller has no option to repair the installation
+		SystemComponent (DWORD) - Set 1 to prevents display of the application in the Programs List of the Add/Remove Programs in the Control Panel.
+		EstimatedSize (DWORD) - The size of the installed files (in KB)
+		Comments (string) - A comment describing the installer package
+	*/
 
 SectionEnd
 
@@ -143,7 +143,7 @@ SectionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
-  ;æ‰§è¡Œuninstall.exe
+  ;Ö´ĞĞuninstall.exe
   Delete "$SMSTARTUP\${PRODUCT_NAME}.lnk"
   Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
   Delete "$QUICKLAUNCH\${PRODUCT_NAME}.lnk"
@@ -165,70 +165,70 @@ Section "Uninstall"
   ;RMDir "$INSTDIR"
 SectionEnd
 
-;############################ å®‰è£…è¿‡ç¨‹å‡½æ•°å®šä¹‰ ############################
+;############################ °²×°¹ı³Ìº¯Êı¶¨Òå ############################
 
-; åè®®é“¾æ¥ç‚¹å‡»å¤„ç†å‡½æ•°
+; Ğ­ÒéÁ´½Óµã»÷´¦Àíº¯Êı
 Function OnLinkAgreementClick
-    setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJONELINKAGREEMENT"
+  	setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJONELINKAGREEMENT"
 FunctionEnd
 
-;è‡ªå®šä¹‰å®‰è£…
+;×Ô¶¨Òå°²×°
 Function OnCustomInstallClick
  setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJONECUSTOMINSTALL"
 FunctionEnd
 
-; å¿«é€Ÿå®‰è£…æŒ‰é’®ç‚¹å‡»å¤„ç†å‡½æ•°
+; ¿ìËÙ°²×°°´Å¥µã»÷´¦Àíº¯Êı
 Function OnBtnInstallClick
  ;setupdll::NSISScriptSendMessage $Dialog "WM_SJONEINSTALL"
-    ;åœæ­¢æ¶ˆæ¯å¾ªç¯
-    setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJMSGLOOPSTOP"
+ 	;Í£Ö¹ÏûÏ¢Ñ­»·
+	setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJMSGLOOPSTOP"
 FunctionEnd
 
-; åŒæ„åè®®å¤é€‰æ¡†ç‚¹å‡»å¤„ç†å‡½æ•°
+; Í¬ÒâĞ­Òé¸´Ñ¡¿òµã»÷´¦Àíº¯Êı
 Function OnChkAgreementClick
-        setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJONECHECKSTATUS"
+		setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJONECHECKSTATUS"
 FunctionEnd
-; åè®®é¡µé¢ç¡®å®šæŒ‰é’®ç‚¹å‡»å¤„ç†å‡½æ•°
+; Ğ­ÒéÒ³ÃæÈ·¶¨°´Å¥µã»÷´¦Àíº¯Êı
 Function OnAgreementSureClick
-        setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTWOSURE"
+		setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTWOSURE"
 FunctionEnd
-;è‡ªå®šä¹‰é€‰æ‹©é¡µé¢è¿”å›ä¸Šä¸€æ­¥
+;×Ô¶¨ÒåÑ¡ÔñÒ³Ãæ·µ»ØÉÏÒ»²½
 Function OnPreviousClick
-        setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEPREVIOUS"
+		setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEPREVIOUS"
 FunctionEnd
 
-;å˜æ›´è·¯å¾„
+;±ä¸üÂ·¾¶
 Function OnChangePathClick
-        ;æ‰“å¼€æ–‡ä»¶å¯¹è¯æ¡†
-        setupdll::NSISOpenFolderDialog /NOUNLOAD "è¯·é€‰æ‹©å®‰è£…ç›®å½•"
-        Pop $0
-        
-        ${If} $0 == "-1"
-        ${Else}
+		;´ò¿ªÎÄ¼ş¶Ô»°¿ò
+		setupdll::NSISOpenFolderDialog /NOUNLOAD "ÇëÑ¡Ôñ°²×°Ä¿Â¼"
+		Pop $0
+		
+		${If} $0 == "-1"
+		${Else}
       StrCpy $INSTDIR "$0\${PRODUCT_NAME_EN}"
-      ;å¯ç”¨ç£ç›˜ç©ºé—´
-            ${GetRoot} $INSTDIR $1
-            ${DriveSpace} $1 "/D=F /S=M" $2
-            setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEUPDATEFREESPACE" "$2"
-            ;è½¯ä»¶æ‰€éœ€ç©ºé—´å¤§å°
-            setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEUPDATEREQUIREDSPACE" "${REQUIRED_SPACE}"
-            ;é»˜è®¤å®‰è£…è·¯å¾„
-            setupdll::SetControlProperties /NOUNLOAD "SEdit" "edit_choose_url" "text" $INSTDIR
+      ;¿ÉÓÃ´ÅÅÌ¿Õ¼ä
+			${GetRoot} $INSTDIR $1
+			${DriveSpace} $1 "/D=F /S=M" $2
+			setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEUPDATEFREESPACE" "$2"
+			;Èí¼şËùĞè¿Õ¼ä´óĞ¡
+			setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEUPDATEREQUIREDSPACE" "${REQUIRED_SPACE}"
+			;Ä¬ÈÏ°²×°Â·¾¶
+			setupdll::SetControlProperties /NOUNLOAD "SEdit" "edit_choose_url" "text" $INSTDIR
    ${EndIf}
 FunctionEnd
 
 
-;å¼€å§‹å®‰è£…
+;¿ªÊ¼°²×°
 Function OnInstall
 
-        ;åœæ­¢æ¶ˆæ¯å¾ªç¯
-        setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJMSGLOOPSTOP"
+		;Í£Ö¹ÏûÏ¢Ñ­»·
+		setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJMSGLOOPSTOP"
 FunctionEnd
 
-;ç‚¹å‡»â€œç«‹å³ä½“éªŒ",å®Œæˆå¹¶å¼€å§‹è¿è¡Œç¨‹åº(æ¶ˆæ¯å¾ªç¯å·²ç»åœæ­¢ï¼Œä¸ä¼šé˜»å¡ï¼Œå¯ç›´æ¥æ“ä½œç•Œé¢)
+;µã»÷¡°Á¢¼´ÌåÑé",Íê³É²¢¿ªÊ¼ÔËĞĞ³ÌĞò(ÏûÏ¢Ñ­»·ÒÑ¾­Í£Ö¹£¬²»»á×èÈû£¬¿ÉÖ±½Ó²Ù×÷½çÃæ)
 Function OnFinishRun
-    ;æ‰“å¼€ç¨‹åºè¿è¡Œ
-    Exec '"$INSTDIR\${PRODUCT_MAIN_EXE}"'
+	;´ò¿ª³ÌĞòÔËĞĞ
+	Exec '"$INSTDIR\${PRODUCT_MAIN_EXE}"'
   setupdll::ClosePage /NOUNLOAD
 FunctionEnd
 
@@ -236,242 +236,242 @@ Function OnFinishRunEx
   setupdll::ClosePage /NOUNLOAD
 FunctionEnd
 
-;å…³é—­ç¨‹åº
+;¹Ø±Õ³ÌĞò
 Function OnClose
-  setupdll::NSISMessageBox /NOUNLOAD 3 "ç¡®è®¤è¦å–æ¶ˆå®‰è£…å—ï¼Ÿ" "æç¤ºï¼š"
+  setupdll::NSISMessageBox /NOUNLOAD 3 "È·ÈÏÒªÈ¡Ïû°²×°Âğ£¿" "ÌáÊ¾"
   Pop $0
   ${If} $0 == "1"
-    ;å…³é—­ç¨‹åº
-      setupdll::ClosePage /NOUNLOAD
-    ${EndIf}
+    ;¹Ø±Õ³ÌĞò
+	  setupdll::ClosePage /NOUNLOAD
+	${EndIf}
 FunctionEnd
 
 
 Function MyPage
 
-    ;è§£å†³é—ªå±
-    ;ShowWindow $HWNDPARENT ${SW_HIDE}
-    ${NSW_SetWindowSize} $HWNDPARENT 0 0 ;æ”¹å˜è‡ªå®šä¹‰çª—ä½“å¤§å°
+	;½â¾öÉÁÆÁ
+ 	;ShowWindow $HWNDPARENT ${SW_HIDE}
+	${NSW_SetWindowSize} $HWNDPARENT 0 0 ;¸Ä±ä×Ô¶¨Òå´°Ìå´óĞ¡
 
 
-    ;/////åˆå§‹åŒ–çª—å£/////
-    setupdll::InitWindow /NOUNLOAD "$PLUGINSDIR"
-    Pop $Dialog
-    ;/////ç»‘å®šæ§ä»¶ä¸è„šæœ¬å‡½æ•°å¯¹åº”å…³ç³»//////
-    
-    setupdll::FindChildByName /NOUNLOAD "link_agreement"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnLinkAgreementClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD  "link_agreement" $0
-    ${EndIf}
+	;/////³õÊ¼»¯´°¿Ú/////
+	setupdll::InitWindow /NOUNLOAD "$PLUGINSDIR"
+	Pop $Dialog
+	;/////°ó¶¨¿Ø¼şÓë½Å±¾º¯Êı¶ÔÓ¦¹ØÏµ//////
+	
+	setupdll::FindChildByName /NOUNLOAD "link_agreement"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnLinkAgreementClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD  "link_agreement" $0
+	${EndIf}
 
-    setupdll::FindChildByName /NOUNLOAD  "btn_custominstall"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnCustomInstallClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD  "btn_custominstall" $0
-    ${EndIf}
+	setupdll::FindChildByName /NOUNLOAD  "btn_custominstall"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnCustomInstallClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD  "btn_custominstall" $0
+	${EndIf}
 
-    setupdll::FindChildByName /NOUNLOAD "btn_install"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnBtnInstallClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_install" $0
-    ${EndIf}
+	setupdll::FindChildByName /NOUNLOAD "btn_install"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnBtnInstallClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_install" $0
+	${EndIf}
 
 
-    setupdll::FindChildByName /NOUNLOAD "chk_agreement"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnChkAgreementClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD "chk_agreement" $0
-    ${EndIf}
-    
-    setupdll::FindChildByName /NOUNLOAD "btn_agreement_sure"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnAgreementSureClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_agreement_sure" $0
-    ${EndIf}
-    
-    setupdll::FindChildByName /NOUNLOAD "btn_choose_previous"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnPreviousClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_choose_previous" $0
-    ${EndIf}
+	setupdll::FindChildByName /NOUNLOAD "chk_agreement"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnChkAgreementClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD "chk_agreement" $0
+	${EndIf}
+	
+	setupdll::FindChildByName /NOUNLOAD "btn_agreement_sure"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnAgreementSureClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_agreement_sure" $0
+	${EndIf}
+	
+	setupdll::FindChildByName /NOUNLOAD "btn_choose_previous"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnPreviousClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_choose_previous" $0
+	${EndIf}
 
   setupdll::FindChildByName /NOUNLOAD "btn_choose_changedir"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnChangePathClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_choose_changedir" $0
-    ${EndIf}
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnChangePathClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_choose_changedir" $0
+	${EndIf}
 
  setupdll::FindChildByName /NOUNLOAD "btn_choose_install"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnInstall
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_choose_install" $0
-    ${EndIf}
-    
-    setupdll::FindChildByName /NOUNLOAD "btn_finish_feel"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnFinishRun
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_finish_feel" $0
-    ${EndIf}
-    
-        setupdll::FindChildByName /NOUNLOAD "btn_finish_finish"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnFinishRunEx
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_finish_finish" $0
-    ${EndIf}
-    
-    
-    setupdll::FindChildByName /NOUNLOAD "btn_close"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 OnClose
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_close" $0
-    ${EndIf}
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnInstall
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_choose_install" $0
+	${EndIf}
+	
+	setupdll::FindChildByName /NOUNLOAD "btn_finish_feel"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnFinishRun
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_finish_feel" $0
+	${EndIf}
+	
+		setupdll::FindChildByName /NOUNLOAD "btn_finish_finish"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnFinishRunEx
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_finish_finish" $0
+	${EndIf}
+	
+	
+	setupdll::FindChildByName /NOUNLOAD "btn_close"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 OnClose
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_close" $0
+	${EndIf}
 
-    ;åˆå§‹åŒ–æŒ‰é’®çŠ¶æ€
-    setupdll::SetControlProperties /NOUNLOAD "STabCtrl" "tab_main" "curSel" "0"
-    setupdll::SetControlProperties /NOUNLOAD  "SImageButton" "btn_install" "enable" "false"
-    setupdll::SetControlProperties /NOUNLOAD  "SImageButton" "btn_custominstall" "enable" "false"
-    setupdll::SetControlProperties /NOUNLOAD  "SCheckBox" "chk_agreement" "checked" "false"
-    
-    ;/////åˆå§‹åŒ–æ•°æ®/////
+	;³õÊ¼»¯°´Å¥×´Ì¬
+	setupdll::SetControlProperties /NOUNLOAD "STabCtrl" "tab_main" "curSel" "0"
+	setupdll::SetControlProperties /NOUNLOAD  "SImageButton" "btn_install" "enable" "false"
+	setupdll::SetControlProperties /NOUNLOAD  "SImageButton" "btn_custominstall" "enable" "false"
+	setupdll::SetControlProperties /NOUNLOAD  "SCheckBox" "chk_agreement" "checked" "false"
+	
+	;/////³õÊ¼»¯Êı¾İ/////
 
-    ;å¯ç”¨ç£ç›˜ç©ºé—´
-    ${GetRoot} $INSTDIR $0
-    ${DriveSpace} $0 "/D=F /S=M" $2
-    setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEUPDATEFREESPACE" "$2"
-    
-    ;è½¯ä»¶æ‰€éœ€ç©ºé—´å¤§å°
-    setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEUPDATEREQUIREDSPACE" "${REQUIRED_SPACE}"
-    
-    ;é»˜è®¤å®‰è£…è·¯å¾„
-    setupdll::SetControlProperties /NOUNLOAD "SEdit" "edit_choose_url" "text" $INSTDIR
-    
-    ;/////æ˜¾ç¤ºçª—å£/////
-    setupdll::ShowPage /NOUNLOAD
+	;¿ÉÓÃ´ÅÅÌ¿Õ¼ä
+	${GetRoot} $INSTDIR $0
+	${DriveSpace} $0 "/D=F /S=M" $2
+	setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEUPDATEFREESPACE" "$2"
+	
+	;Èí¼şËùĞè¿Õ¼ä´óĞ¡
+	setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTHREEUPDATEREQUIREDSPACE" "${REQUIRED_SPACE}"
+	
+	;Ä¬ÈÏ°²×°Â·¾¶
+	setupdll::SetControlProperties /NOUNLOAD "SEdit" "edit_choose_url" "text" $INSTDIR
+	
+	;/////ÏÔÊ¾´°¿Ú/////
+	setupdll::ShowPage /NOUNLOAD
 FunctionEnd
 
 Function MyInstallNow
 
-    
-    ;è§£å†³é—ªå±
+	
+	;½â¾öÉÁÆÁ
   ShowWindow $HWNDPARENT ${SW_HIDE}
-    ${NSW_SetWindowSize} $HWNDPARENT 0 0 ;æ”¹å˜è‡ªå®šä¹‰çª—ä½“å¤§å°
+	${NSW_SetWindowSize} $HWNDPARENT 0 0 ;¸Ä±ä×Ô¶¨Òå´°Ìå´óĞ¡
 
-    ;åˆ‡æ¢è§†å›¾
-    ;setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTABSETSEL" "3"
-    setupdll::SetControlProperties /NOUNLOAD "STabCtrl" "tab_main" "curSel" "3"
+	;ÇĞ»»ÊÓÍ¼
+	;setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTABSETSEL" "3"
+	setupdll::SetControlProperties /NOUNLOAD "STabCtrl" "tab_main" "curSel" "3"
 
-   ;ç»‘å®šè¿›åº¦
+   ;°ó¶¨½ø¶È
   setupdll::BindingProgress  /NOUNLOAD "pg_installing"
-    
-    ;setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJMSGLOOPSTOP"
+  	
+	;setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJMSGLOOPSTOP"
 FunctionEnd
 
 Function CreateMutex
-    ;æ£€æŸ¥å®‰è£…äº’æ–¥
-    ReCheck:
-    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "${MyMutex_Install}") i .R1 ?e'
-    Pop $R0
-    System::Call 'kernel32::CloseHandle(i R1) i.s'
-    ;æ£€æŸ¥å¸è½½äº’æ–¥ï¼š
-    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "${MyMutex_UnInstall}") i .R3 ?e'
-    Pop $R2
-    System::Call 'kernel32::CloseHandle(i R3) i.s'
-    ;åˆ¤æ–­å®‰è£…/å¸è½½äº’æ–¥çš„å­˜åœ¨
-    ${If} $R0 != 0
-        MessageBox MB_RetryCancel|MB_ICONEXCLAMATION "å®‰è£…ç¨‹åºå·²ç»è¿è¡Œï¼" IdRetry ReCheck
-        Quit
-    ${ElseIf} $R2 != 0
-        MessageBox MB_RetryCancel|MB_ICONEXCLAMATION "å¸è½½ç¨‹åºå·²ç»è¿è¡Œï¼" IdRetry ReCheck
-        Quit
-    ${Else}
-        ;åˆ›å»ºå®‰è£…äº’æ–¥ï¼š
-        System::Call 'kernel32::CreateMutexA(i 0, i 0, t "${MyMutex_Install}") i .R1 ?e'
-        Pop $R0
-        StrCmp $R0 0 +2
-        Quit
-    ${EndIf}
+	;¼ì²é°²×°»¥³â
+	ReCheck:
+	System::Call 'kernel32::CreateMutexA(i 0, i 0, t "${MyMutex_Install}") i .R1 ?e'
+	Pop $R0
+	System::Call 'kernel32::CloseHandle(i R1) i.s'
+	;¼ì²éĞ¶ÔØ»¥³â£º
+	System::Call 'kernel32::CreateMutexA(i 0, i 0, t "${MyMutex_UnInstall}") i .R3 ?e'
+	Pop $R2
+	System::Call 'kernel32::CloseHandle(i R3) i.s'
+	;ÅĞ¶Ï°²×°/Ğ¶ÔØ»¥³âµÄ´æÔÚ
+	${If} $R0 != 0
+		MessageBox MB_RetryCancel|MB_ICONEXCLAMATION "°²×°³ÌĞòÒÑ¾­ÔËĞĞ£¡" IdRetry ReCheck
+		Quit
+	${ElseIf} $R2 != 0
+		MessageBox MB_RetryCancel|MB_ICONEXCLAMATION "Ğ¶ÔØ³ÌĞòÒÑ¾­ÔËĞĞ£¡" IdRetry ReCheck
+		Quit
+	${Else}
+		;´´½¨°²×°»¥³â£º
+		System::Call 'kernel32::CreateMutexA(i 0, i 0, t "${MyMutex_Install}") i .R1 ?e'
+		Pop $R0
+		StrCmp $R0 0 +2
+		Quit
+	${EndIf}
 FunctionEnd
 
 Function .onInit
 
-    ;åŠ è½½UIç•Œé¢éœ€è¦çš„èµ„æº
-    InitPluginsDir
-    ;File `/ONAME=$PLUGINSDIR\setupdll.dll` `plugins\setupdll.dll`
-    ;File `/ONAME=$PLUGINSDIR\soui-sys-resource.dll` `plugins\soui-sys-resource.dll`
-    ;File `/ONAME=$PLUGINSDIR\ui.dll` `plugins\ui.dll`
-    ;File `/ONAME=$PLUGINSDIR\imgdecoder-gdip.dll` `plugins\imgdecoder-gdip.dll`
-    ;File `/ONAME=$PLUGINSDIR\render-gdi.dll` `plugins\render-gdi.dll`
-    ;File `/ONAME=$PLUGINSDIR\translator.dll` `plugins\translator.dll`
+	;¼ÓÔØUI½çÃæĞèÒªµÄ×ÊÔ´
+	InitPluginsDir
+	;File `/ONAME=$PLUGINSDIR\setupdll.dll` `plugins\setupdll.dll`
+	;File `/ONAME=$PLUGINSDIR\soui-sys-resource.dll` `plugins\soui-sys-resource.dll`
+	;File `/ONAME=$PLUGINSDIR\ui.dll` `plugins\ui.dll`
+	;File `/ONAME=$PLUGINSDIR\imgdecoder-gdip.dll` `plugins\imgdecoder-gdip.dll`
+	;File `/ONAME=$PLUGINSDIR\render-gdi.dll` `plugins\render-gdi.dll`
+	;File `/ONAME=$PLUGINSDIR\translator.dll` `plugins\translator.dll`
   ;File `/ONAME=$PLUGINSDIR\utilities.dll` `plugins\utilities.dll`
   ;File `/ONAME=$PLUGINSDIR\soui.dll` `plugins\soui.dll`
   ;File `/ONAME=$PLUGINSDIR\resprovider-zip.dll` `plugins\resprovider-zip.dll`
   SetOutPath $PLUGINSDIR
   File /r `.\plugins\*.*`
-    ;æ£€æŸ¥ç¨‹åºäº’æ–¥
-    Call CreateMutex
+	;¼ì²é³ÌĞò»¥³â
+	Call CreateMutex
 
 FunctionEnd
 
-;############################################å¸è½½############################################
+;############################################Ğ¶ÔØ############################################
 Function un.OnClose
-  setupdll::NSISMessageBox /NOUNLOAD 3 "ç¡®è®¤è¦å–æ¶ˆå¸è½½å—ï¼Ÿ" "æç¤ºï¼š"
+  setupdll::NSISMessageBox /NOUNLOAD 3 "È·ÈÏÒªÈ¡ÏûĞ¶ÔØÂğ£¿" "ÌáÊ¾"
   Pop $0
   ${If} $0 == "1"
-    ;å…³é—­ç¨‹åº
-      setupdll::ClosePage /NOUNLOAD
-    ${EndIf}
+    ;¹Ø±Õ³ÌĞò
+	  setupdll::ClosePage /NOUNLOAD
+	${EndIf}
 FunctionEnd
-;å¸è½½ç¬¬ä¸€é¡µè¿›å…¥ä¸‹ä¸€é¡µ
+;Ğ¶ÔØµÚÒ»Ò³½øÈëÏÂÒ»Ò³
 Function un.OnBtnNextClick
-    setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJUNSTALLSTARTNEXT"
+	setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJUNSTALLSTARTNEXT"
 FunctionEnd
 
 Function un.OnBtnCancellClick
-    setupdll::NSISMessageBox /NOUNLOAD 3 "ç¡®è®¤è¦å–æ¶ˆå¸è½½å—ï¼Ÿ" "æç¤ºï¼š"
+	setupdll::NSISMessageBox /NOUNLOAD 3 "È·ÈÏÒªÈ¡ÏûĞ¶ÔØÂğ£¿" "ÌáÊ¾"
   Pop $0
   ${If} $0 == "1"
-    ;å…³é—­ç¨‹åº
-      setupdll::ClosePage /NOUNLOAD
-    ${EndIf}
+    ;¹Ø±Õ³ÌĞò
+	  setupdll::ClosePage /NOUNLOAD
+	${EndIf}
 FunctionEnd
 
 Function un.OnUnstallClick
-        ;åœæ­¢æ¶ˆæ¯å¾ªç¯
-        setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJMSGLOOPSTOP"
+		;Í£Ö¹ÏûÏ¢Ñ­»·
+		setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJMSGLOOPSTOP"
 FunctionEnd
 
 Function un.OnFinishClick
@@ -479,85 +479,85 @@ Function un.OnFinishClick
 FunctionEnd
 
 Function un.MyUninstallPage
-  ;è§£å†³é—ªå±
-    ShowWindow $HWNDPARENT ${SW_HIDE}
-    ${NSW_SetWindowSize} $HWNDPARENT 0 0 ;æ”¹å˜è‡ªå®šä¹‰çª—ä½“å¤§å°
+  ;½â¾öÉÁÆÁ
+ 	ShowWindow $HWNDPARENT ${SW_HIDE}
+	${NSW_SetWindowSize} $HWNDPARENT 0 0 ;¸Ä±ä×Ô¶¨Òå´°Ìå´óĞ¡
 
-    ;/////åˆå§‹åŒ–çª—å£/////
-    setupdll::InitWindow /NOUNLOAD "$PLUGINSDIR"
-    Pop $Dialog
+	;/////³õÊ¼»¯´°¿Ú/////
+	setupdll::InitWindow /NOUNLOAD "$PLUGINSDIR"
+	Pop $Dialog
 
-    ;åˆ‡æ¢åˆ°å¸è½½ç•Œé¢
-    setupdll::SetControlProperties /NOUNLOAD "STabCtrl" "tab_main" "curSel" "5"
-    ;éšè—æœ€å°åŒ–æŒ‰é’®
-    setupdll::SetControlProperties /NOUNLOAD "SImageButton" "btn_min" "visible" "false"
-    ;æ˜¾ç¤ºå¸è½½æ ‡é¢˜
-    setupdll::SetControlProperties /NOUNLOAD "SStatic" "txt_titlename" "text" "Sha Monk MM UnInstall Guide"
+	;ÇĞ»»µ½Ğ¶ÔØ½çÃæ
+	setupdll::SetControlProperties /NOUNLOAD "STabCtrl" "tab_main" "curSel" "5"
+	;Òş²Ø×îĞ¡»¯°´Å¥
+	setupdll::SetControlProperties /NOUNLOAD "SImageButton" "btn_min" "visible" "false"
+	;ÏÔÊ¾Ğ¶ÔØ±êÌâ
+	setupdll::SetControlProperties /NOUNLOAD "SStatic" "txt_titlename" "text" "Sha Monk MM UnInstall Guide"
 
-    ;ç»‘å®šå…³é—­æŒ‰é’®
-    setupdll::FindChildByName /NOUNLOAD "btn_close"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 un.OnClose
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_close" $0
-    ${EndIf}
-    ;/////ç¬¬ä¸€é¡µé¢/////
-    ;ç»‘å®šä¸‹ä¸€é¡µ
-    setupdll::FindChildByName /NOUNLOAD "btn_unstallstart_next"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 un.OnBtnNextClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_unstallstart_next" $0
-    ${EndIf}
-    ;/////ç¬¬äºŒé¡µé¢/////
-    ;å–æ¶ˆæŒ‰é’®
-    setupdll::FindChildByName /NOUNLOAD "btn_unstallchoose_previous"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 un.OnBtnCancellClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_unstallchoose_previous" $0
-    ${EndIf}
-    ;å¸è½½æŒ‰é’®
-        setupdll::FindChildByName /NOUNLOAD "btn_unstallchoose_unnstall"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 un.OnUnstallClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_unstallchoose_unnstall" $0
-    ${EndIf}
-    ;////æœ€åä¸€ä¸ªé¡µé¢/////
-    ;å®ŒæˆæŒ‰é’®
-    setupdll::FindChildByName /NOUNLOAD "btn_unstallfinish"
-    Pop $0
-    ${If} $0 == "-1"
-        MessageBox MB_OK ERROR_MESSAGE
-    ${Else}
-        GetFunctionAddress $0 un.OnFinishClick
-        setupdll::BindControlAndNSISScript /NOUNLOAD "btn_unstallfinish" $0
-    ${EndIf}
-    
-    ;è·å–è¦å¸è½½çš„ç›®å½•
-    ReadRegStr $0 HKLM "${Unstall_KeyPath}${PRODUCT_NAME_EN}" "InstallLocation"
-  ;æ˜¾ç¤ºå¸è½½çš„ç›®å½•
-    setupdll::SetControlProperties /NOUNLOAD "SEdit" "edit_unstallchoose_url" "text" "$0"
+	;°ó¶¨¹Ø±Õ°´Å¥
+	setupdll::FindChildByName /NOUNLOAD "btn_close"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 un.OnClose
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_close" $0
+	${EndIf}
+	;/////µÚÒ»Ò³Ãæ/////
+	;°ó¶¨ÏÂÒ»Ò³
+	setupdll::FindChildByName /NOUNLOAD "btn_unstallstart_next"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 un.OnBtnNextClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_unstallstart_next" $0
+	${EndIf}
+	;/////µÚ¶şÒ³Ãæ/////
+	;È¡Ïû°´Å¥
+	setupdll::FindChildByName /NOUNLOAD "btn_unstallchoose_previous"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 un.OnBtnCancellClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_unstallchoose_previous" $0
+	${EndIf}
+	;Ğ¶ÔØ°´Å¥
+		setupdll::FindChildByName /NOUNLOAD "btn_unstallchoose_unnstall"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 un.OnUnstallClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_unstallchoose_unnstall" $0
+	${EndIf}
+	;////×îºóÒ»¸öÒ³Ãæ/////
+	;Íê³É°´Å¥
+	setupdll::FindChildByName /NOUNLOAD "btn_unstallfinish"
+	Pop $0
+	${If} $0 == "-1"
+		MessageBox MB_OK ERROR_MESSAGE
+	${Else}
+		GetFunctionAddress $0 un.OnFinishClick
+		setupdll::BindControlAndNSISScript /NOUNLOAD "btn_unstallfinish" $0
+	${EndIf}
+	
+	;»ñÈ¡ÒªĞ¶ÔØµÄÄ¿Â¼
+	ReadRegStr $0 HKLM "${Unstall_KeyPath}${PRODUCT_NAME_EN}" "InstallLocation"
+  ;ÏÔÊ¾Ğ¶ÔØµÄÄ¿Â¼
+	setupdll::SetControlProperties /NOUNLOAD "SEdit" "edit_unstallchoose_url" "text" "$0"
 
-    ;/////æ˜¾ç¤ºçª—å£/////
-    setupdll::ShowPage /NOUNLOAD
+	;/////ÏÔÊ¾´°¿Ú/////
+	setupdll::ShowPage /NOUNLOAD
 FunctionEnd
 
 Function un.MyUninstallNow
-    ;è§£å†³é—ªå±
-    ShowWindow $HWNDPARENT ${SW_HIDE}
-    ${NSW_SetWindowSize} $HWNDPARENT 0 0 ;æ”¹å˜è‡ªå®šä¹‰çª—ä½“å¤§å°
+	;½â¾öÉÁÆÁ
+ 	ShowWindow $HWNDPARENT ${SW_HIDE}
+	${NSW_SetWindowSize} $HWNDPARENT 0 0 ;¸Ä±ä×Ô¶¨Òå´°Ìå´óĞ¡
 
-    ;setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTABSETSEL" "7"
+	;setupdll::NSISScriptSendMessage /NOUNLOAD $Dialog "WM_SJTABSETSEL" "7"
   setupdll::SetControlProperties /NOUNLOAD "STabCtrl" "tab_main" "curSel" "7"
   setupdll::BindingProgress  /NOUNLOAD "pg_unstalling"
   
@@ -565,11 +565,11 @@ FunctionEnd
 
 Function un.onInit
 
-  ;åŠ è½½UIç•Œé¢éœ€è¦çš„èµ„æº
-    InitPluginsDir
-    ;File `/ONAME=$PLUGINSDIR\setupdll.dll` `plugins\setupdll.dll`
-    ;File `/ONAME=$PLUGINSDIR\ui.dll` `plugins\ui.dll`
-    ;File `/ONAME=$PLUGINSDIR\soui-sys-resource.dll` `plugins\soui-sys-resource.dll`
-    SetOutPath $PLUGINSDIR
+  ;¼ÓÔØUI½çÃæĞèÒªµÄ×ÊÔ´
+	InitPluginsDir
+	;File `/ONAME=$PLUGINSDIR\setupdll.dll` `plugins\setupdll.dll`
+	;File `/ONAME=$PLUGINSDIR\ui.dll` `plugins\ui.dll`
+	;File `/ONAME=$PLUGINSDIR\soui-sys-resource.dll` `plugins\soui-sys-resource.dll`
+	SetOutPath $PLUGINSDIR
   File /r `plugins\*.*`
 FunctionEnd

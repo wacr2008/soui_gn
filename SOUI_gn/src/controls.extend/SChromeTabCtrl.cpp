@@ -1,3 +1,4 @@
+Ôªø
 #include "SChromeTabCtrl.h"
 #include <control/SCmnCtrl.h>
 
@@ -8,11 +9,32 @@ namespace SOUI
     const wchar_t KXmlCloseBtnStyle[]=L"closeBtnStyle";
     const wchar_t KXmlNewBtnStyle[]=L"newBtnStyle";
 
+	SOUI_CLASS_NAME(EventChromeTabNew, L"on_chrometab_new")
+	
+	SOUI_CLASS_NAME(EventChromeTabClose, L"on_chrometab_close")
+
+	SOUI_CLASS_NAME(EventChromeTabSelChanged, L"on_chrometab_sel_changed")
+
+	SOUI_CLASS_NAME(SChromeTabCtrl, L"chromeTabCtrl")
+
+	SOUI_MSG_MAP_BEGIN(SChromeTabCtrl)
+		MSG_WM_CREATE(OnCreate)
+		MSG_WM_DESTROY(OnDestroy)
+	SOUI_MSG_MAP_END()
+
+	SOUI_ATTRS_BEGIN(SChromeTabCtrl)
+		ATTR_INT(L"tabDesiredSize", m_nDesiredSize, FALSE)
+		ATTR_INT(L"enableDrag", m_bEnableDrag, FALSE)
+		ATTR_ENUM_BEGIN(L"tabAlign", TABDIR, FALSE)
+		ATTR_ENUM_VALUE(L"vertical", TDIR_VERT)
+		ATTR_ENUM_VALUE(L"horizontal", TDIR_HORZ)
+		ATTR_ENUM_END(m_tabAlign)
+	SOUI_ATTRS_END()
     //////////////////////////////////////////////////////////////////////////
     // SChromeTab
     class SChromeTab : public SWindow , public SAnimator
     {
-        SOUI_CLASS_NAME(SChromeTab,L"chromeTab")
+        SOUI_CLASS_NAME_DECL(SChromeTab,L"chromeTab")
         friend class SChromeTabCtrl;
     public:
         SChromeTab(SChromeTabCtrl* pHost);
@@ -20,15 +42,9 @@ namespace SOUI
         void MoveTo(const CRect & rcEnd);
         BOOL IsDragable() { return m_iOrder!=-1 && m_pHost->m_bEnableDrag;}
         
-        SOUI_ATTRS_BEGIN()
-            ATTR_INT(L"allowClose",m_bAllowClose,FALSE)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL()
 
-		SOUI_MSG_MAP_BEGIN()
-		    MSG_WM_MOUSEMOVE(OnMouseMove)
-			MSG_WM_LBUTTONDOWN(OnLButtonDown)
-		    MSG_WM_LBUTTONUP(OnLButtonUp)
-		SOUI_MSG_MAP_END()
+		SOUI_MSG_MAP_DECL()
         
     protected:
         virtual void OnAnimatorState(int percent);
@@ -45,6 +61,18 @@ namespace SOUI
 		bool    m_bDrag;
 		SChromeTabCtrl* m_pHost;
     };
+
+	SOUI_CLASS_NAME(SChromeTab, L"chromeTab")
+
+	SOUI_ATTRS_BEGIN(SChromeTab)
+		ATTR_INT(L"allowClose", m_bAllowClose, FALSE)
+	SOUI_ATTRS_END()
+
+	SOUI_MSG_MAP_BEGIN(SChromeTab)
+		MSG_WM_MOUSEMOVE(OnMouseMove)
+		MSG_WM_LBUTTONDOWN(OnLButtonDown)
+		MSG_WM_LBUTTONUP(OnLButtonUp)
+	SOUI_MSG_MAP_END()
     
     SChromeTab::SChromeTab(SChromeTabCtrl* pHost)
         :m_bAllowClose(TRUE)
@@ -190,7 +218,7 @@ namespace SOUI
             m_xmlStyle.append_copy(xmlTabStyle);
         }
 
-        pugi::xml_node xmlTabs = xmlNode.child(L"tabs");//À˘”–tab∂º±ÿ–Î‘⁄tabs±Í«©ƒ⁄
+        pugi::xml_node xmlTabs = xmlNode.child(L"tabs");//ÊâÄÊúâtabÈÉΩÂøÖÈ°ªÂú®tabsÊ†áÁ≠æÂÜÖ
 
         for (pugi::xml_node xmlChild=xmlTabs.first_child(); xmlChild; xmlChild=xmlChild.next_sibling())
         {
@@ -222,7 +250,7 @@ namespace SOUI
             m_xmlStyle.append_copy(xmlCloseBtn);
 
             for(UINT i = 0;i<m_lstTabOrder.GetCount();i++)
-            {//◊‘∂Ø≤Â»Î“ª∏ˆcloseBtn
+            {//Ëá™Âä®ÊèíÂÖ•‰∏Ä‰∏™closeBtn
                 if(!m_lstTabOrder[i]->m_bAllowClose) continue;
                 
                 SWindow *pBtn = SApplication::getSingleton().CreateWindowByName(SImageButton::GetClassName());
@@ -403,7 +431,7 @@ namespace SOUI
             pBtn->GetEventSet()->subscribeEvent(EventCmd::EventID,Subscriber(&SChromeTabCtrl::OnBtnCloseTabClick,this));
         }
         
-        //≤Â»ÎµΩ≥ı ºŒª÷√
+        //ÊèíÂÖ•Âà∞ÂàùÂßã‰ΩçÁΩÆ
         CRect rcInit=rcLeft;
         rcInit.left=rcInit.right;
         rcInit.right=rcInit.left+m_nDesiredSize;

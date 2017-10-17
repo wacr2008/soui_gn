@@ -1,7 +1,22 @@
-#include "SCaptureButton.h"
+﻿#include "SCaptureButton.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(EventCapture, L"on_capture")
+
+	
+	SOUI_CLASS_NAME(EventCaptureFinish, L"on_capture_finish")
+
+	SOUI_CLASS_NAME(SCaptureButton, L"captureButton")
+
+	SOUI_MSG_MAP_BEGIN(SCaptureButton)
+		MSG_WM_LBUTTONDOWN(OnLButtonDown)
+		MSG_WM_LBUTTONUP(OnLButtonUp)
+		MSG_WM_MOUSEMOVE(OnMouseMove)
+		MSG_WM_MOUSELEAVE(OnMouseLeave)
+		MSG_WM_PAINT_EX(OnPaint)
+	SOUI_MSG_MAP_END()
+
     SCaptureButton::SCaptureButton(void)
     {
         m_evtSet.addEvent(EVENTID(EventCapture));

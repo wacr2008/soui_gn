@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <core/Swnd.h>
 #include <control/SCmnCtrl.h>
 
@@ -6,26 +6,24 @@ namespace SOUI
 {
 class SToolbox:public SImageButton
 {
-	SOUI_CLASS_NAME(SSwitch,L"toolbox")
+	SOUI_CLASS_NAME_DECL(SSwitch,L"toolbox")
 public:
 	SToolbox():m_IconOffsetX(0), m_IconOffsetY(-8), m_TextOffsetX(0), m_TextOffsetY(18), m_pIcon(NULL)
 	{
 
 	}
 	~SToolbox(){}
-protected://ÏûÏ¢´¦Àí£¬SOUI¿Ø¼şµÄÏûÏ¢´¦ÀíºÍWTL£¬MFCºÜÏàËÆ£¬²ÉÓÃÏàËÆµÄÓ³Éä±í£¬ÏàÍ¬»òÕßÏàËÆµÄÏûÏ¢Ó³Éäºê
+protected://æ¶ˆæ¯å¤„ç†ï¼ŒSOUIæ§ä»¶çš„æ¶ˆæ¯å¤„ç†å’ŒWTLï¼ŒMFCå¾ˆç›¸ä¼¼ï¼Œé‡‡ç”¨ç›¸ä¼¼çš„æ˜ å°„è¡¨ï¼Œç›¸åŒæˆ–è€…ç›¸ä¼¼çš„æ¶ˆæ¯æ˜ å°„å®
 	void OnPaint(IRenderTarget *pRT);
-	//SOUI¿Ø¼şÏûÏ¢Ó³Éä±í
-	SOUI_MSG_MAP_BEGIN()	
-		MSG_WM_PAINT_EX(OnPaint)   
-	SOUI_MSG_MAP_END()
+	//SOUIæ§ä»¶æ¶ˆæ¯æ˜ å°„è¡¨
+	SOUI_MSG_MAP_DECL()
+		
+	SOUI_ATTRS_DECL()
 
-	ISkinObj    *m_pIcon;	//Í¼±ê
-	SStringT    m_strText; //ÎÄ×Ö
-	int			m_IconOffsetX, m_IconOffsetY, m_TextOffsetX, m_TextOffsetY;//Ïà¶Ô¾ÓÖĞÎ»ÖÃÆ«ÒÆÁ¿
-	SOUI_ATTRS_BEGIN()
-		ATTR_SKIN(L"icon", m_pIcon, TRUE)
-		ATTR_STRINGT(L"text", m_strText, FALSE)
-	SOUI_ATTRS_END()
+
+	ISkinObj    *m_pIcon;	//å›¾æ ‡
+	SStringT    m_strText; //æ–‡å­—
+	int			m_IconOffsetX, m_IconOffsetY, m_TextOffsetX, m_TextOffsetY;//ç›¸å¯¹å±…ä¸­ä½ç½®åç§»é‡
+	
 };
 }

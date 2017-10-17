@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "slistboxex.h"
 namespace SOUI
@@ -28,25 +28,25 @@ class  SComboBoxEx : public SComboBase
 public:
     /**
      * SComboBoxEx::SComboBoxEx
-     * @brief    ¹¹Ôìº¯Êı
+     * @brief    æ„é€ å‡½æ•°
      *
-     * Describe  ¹¹Ôìº¯Êı
+     * Describe  æ„é€ å‡½æ•°
      */
     SComboBoxEx();
     /**
      * SComboBoxEx::~SComboBoxEx
-     * @brief    Îö¹¹º¯Êı
+     * @brief    ææ„å‡½æ•°
      *
-     * Describe  Îö¹¹º¯Êı
+     * Describe  ææ„å‡½æ•°
      */    
     virtual ~SComboBoxEx();
 
     /**
      * SComboBoxEx::SetCurSel
-     * @brief    ÉèÖÃµ±Ç°Ñ¡ÖĞ
-     * @param    int iSel -- Ñ¡ÖĞË÷Òı
+     * @brief    è®¾ç½®å½“å‰é€‰ä¸­
+     * @param    int iSel -- é€‰ä¸­ç´¢å¼•
      * 
-     * Describe  ÉèÖÃµ±Ç°Ñ¡ÖĞ
+     * Describe  è®¾ç½®å½“å‰é€‰ä¸­
      */
     BOOL SetCurSel(int iSel)
     {
@@ -62,10 +62,10 @@ public:
 
     /**
      * SComboBoxEx::GetCurSel
-     * @brief    »ñÈ¡Ñ¡ÖĞË÷Òı
-     * @return   ·µ»Øint -- Ñ¡ÖĞË÷Òı
+     * @brief    è·å–é€‰ä¸­ç´¢å¼•
+     * @return   è¿”å›int -- é€‰ä¸­ç´¢å¼•
      * 
-     * Describe  »ñÈ¡Ñ¡ÖĞË÷Òı
+     * Describe  è·å–é€‰ä¸­ç´¢å¼•
      */ 
     int GetCurSel() const
     {
@@ -74,10 +74,10 @@ public:
 
     /**
      * SComboBox::GetCount
-     * @brief    »ñÈ¡ÏÂÀ­Ïî¸öÊı
-     * @return   ·µ»Øint
+     * @brief    è·å–ä¸‹æ‹‰é¡¹ä¸ªæ•°
+     * @return   è¿”å›int
      * 
-     * Describe  »ñÈ¡ÏÂÀ­Ïî¸öÊı
+     * Describe  è·å–ä¸‹æ‹‰é¡¹ä¸ªæ•°
      */ 
     int  GetCount() const
     {
@@ -87,10 +87,10 @@ public:
 
     /**
      * SComboBoxEx::GetItemData
-     * @brief    »ñÈ¡¸½¼ÓÊı¾İ
-     * @param    UINT iItem -- Ñ¡ÏîÖµ
+     * @brief    è·å–é™„åŠ æ•°æ®
+     * @param    UINT iItem -- é€‰é¡¹å€¼
      *
-     * Describe  »ñÈ¡¸½¼ÓÊı¾İ
+     * Describe  è·å–é™„åŠ æ•°æ®
      */
     LPARAM GetItemData(UINT iItem) const
     {
@@ -99,11 +99,11 @@ public:
 
     /**
      * SComboBoxEx::SetItemData
-     * @brief    ÉèÖÃ¸½¼ÓÊı¾İ
-     * @param    UINT iItem -- Ë÷ÒıÖµ
-     * @param    LPARAM lParam -- ¸½¼ÓÖµ
+     * @brief    è®¾ç½®é™„åŠ æ•°æ®
+     * @param    UINT iItem -- ç´¢å¼•å€¼
+     * @param    LPARAM lParam -- é™„åŠ å€¼
      *
-     * Describe  ÉèÖÃ¸½¼ÓÊı¾İ
+     * Describe  è®¾ç½®é™„åŠ æ•°æ®
      */
     void SetItemData(UINT iItem, LPARAM lParam)
     {
@@ -112,13 +112,13 @@ public:
     
     /**
      * SComboBoxEx::InsertItem
-     * @brief    ²åÈëĞÂÏî
-     * @param    UINT iPos -- Î»ÖÃ
-     * @param    LPCTSTR pszText -- ÎÄ±¾Öµ
-     * @param    int iIcon -- Í¼±ê
-     * @param    LPARAM lParam -- ¸½¼ÓÖµ
+     * @brief    æ’å…¥æ–°é¡¹
+     * @param    UINT iPos -- ä½ç½®
+     * @param    LPCTSTR pszText -- æ–‡æœ¬å€¼
+     * @param    int iIcon -- å›¾æ ‡
+     * @param    LPARAM lParam -- é™„åŠ å€¼
      *
-     * Describe  ²åÈëĞÂÏî
+     * Describe  æ’å…¥æ–°é¡¹
      */
 
     int InsertItem(UINT iPos,LPCTSTR pszText,int iIcon,LPARAM lParam)
@@ -142,10 +142,10 @@ public:
     }
     /**
      * SComboBoxEx::DeleteString
-     * @brief    É¾³ıÄ³Ò»Ïî
-     * @param    UINT iItem -- Ë÷ÒıÖµ
+     * @brief    åˆ é™¤æŸä¸€é¡¹
+     * @param    UINT iItem -- ç´¢å¼•å€¼
      *
-     * Describe  É¾³ıÄ³Ò»Ïî
+     * Describe  åˆ é™¤æŸä¸€é¡¹
      */
     void DeleteString(UINT iItem)
     {
@@ -154,9 +154,9 @@ public:
 
     /**
      * SComboBoxEx::ResetContent
-     * @brief    É¾³ıËùÓĞÏî
+     * @brief    åˆ é™¤æ‰€æœ‰é¡¹
      *
-     * Describe  ÉèÖÃ¸½¼ÓÊı¾İ
+     * Describe  è®¾ç½®é™„åŠ æ•°æ®
      */
     void ResetContent()
     {
@@ -165,10 +165,10 @@ public:
     
     /**
      * SComboBoxEx::GetLBText
-     * @brief    »ñÈ¡ÎÄ±¾
-     * @param    int iItem -- Ë÷ÒıÖµ
+     * @brief    è·å–æ–‡æœ¬
+     * @param    int iItem -- ç´¢å¼•å€¼
      *
-     * Describe  »ñÈ¡ÎÄ±¾
+     * Describe  è·å–æ–‡æœ¬
      */
     SStringT GetLBText(int iItem);
 
@@ -178,54 +178,54 @@ protected:
     
     /**
      * SComboBox::OnSelChanged
-     * @brief    ÏÂÀ­ÁĞ±íselectedÊÂ¼ş
+     * @brief    ä¸‹æ‹‰åˆ—è¡¨selectedäº‹ä»¶
      *
-     * Describe  ÏÂÀ­ÁĞ±íselectedÊÂ¼ş
+     * Describe  ä¸‹æ‹‰åˆ—è¡¨selectedäº‹ä»¶
      */
     virtual void OnSelChanged();
 protected:
     /**
      * SComboBoxEx::FireEvent
-     * @brief    Í¨ÖªÏûÏ¢
-     * @param    EventArgs &evt -- ÊÂ¼ş¶ÔÏó 
+     * @brief    é€šçŸ¥æ¶ˆæ¯
+     * @param    EventArgs &evt -- äº‹ä»¶å¯¹è±¡ 
      * 
-     * Describe  ´Ëº¯ÊıÊÇÏûÏ¢ÏìÓ¦º¯Êı
+     * Describe  æ­¤å‡½æ•°æ˜¯æ¶ˆæ¯å“åº”å‡½æ•°
      */ 
     virtual BOOL FireEvent(EventArgs &evt);
 
     /**
      * SComboBoxEx::CreateListBox
-     * @brief    ´´½¨ÏÂÀ­ÁĞ±í
-     * @param    ·µ»ØBOOL TRUE -- ³É¹¦ FALSE -- Ê§°Ü
+     * @brief    åˆ›å»ºä¸‹æ‹‰åˆ—è¡¨
+     * @param    è¿”å›BOOL TRUE -- æˆåŠŸ FALSE -- å¤±è´¥
      *
-     * Describe  ´´½¨ÏÂÀ­ÁĞ±í
+     * Describe  åˆ›å»ºä¸‹æ‹‰åˆ—è¡¨
      */
     virtual BOOL CreateListBox(pugi::xml_node xmlNode);
 
     /**
      * SComboBoxEx::GetListBoxHeight
-     * @brief    »ñÈ¡ÏÂÀ­ÁĞ±í¸ß¶È
-     * @param    ·µ»Øint
+     * @brief    è·å–ä¸‹æ‹‰åˆ—è¡¨é«˜åº¦
+     * @param    è¿”å›int
      *
-     * Describe  »ñÈ¡ÏÂÀ­ÁĞ±í¸ß¶È
+     * Describe  è·å–ä¸‹æ‹‰åˆ—è¡¨é«˜åº¦
      */    
     virtual int  GetListBoxHeight();
 
     /**
      * SComboBoxEx::OnDropDown
-     * @brief    ÏÂÀ­ÁĞ±íÊÂ¼ş
-     * @param    SDropDownWnd *pDropDown -- ÏÂÀ­ÁĞ±íÖ¸Õë
+     * @brief    ä¸‹æ‹‰åˆ—è¡¨äº‹ä»¶
+     * @param    SDropDownWnd *pDropDown -- ä¸‹æ‹‰åˆ—è¡¨æŒ‡é’ˆ
      *
-     * Describe  ÏÂÀ­ÁĞ±íÊÂ¼ş
+     * Describe  ä¸‹æ‹‰åˆ—è¡¨äº‹ä»¶
      */
     virtual void OnCreateDropDown(SDropDownWnd *pDropDown);
 
     /**
      * SComboBox::OnCloseUp
-     * @brief    ÏÂÀ­ÁĞ±í¹Ø±ÕÊÂ¼ş
-     * @param    SDropDownWnd *pDropDown -- ÏÂÀ­ÁĞ±íÖ¸Õë
+     * @brief    ä¸‹æ‹‰åˆ—è¡¨å…³é—­äº‹ä»¶
+     * @param    SDropDownWnd *pDropDown -- ä¸‹æ‹‰åˆ—è¡¨æŒ‡é’ˆ
      *
-     * Describe  »ñÈ¡ÏÂÀ­ÁĞ±íÖ¸Õë
+     * Describe  è·å–ä¸‹æ‹‰åˆ—è¡¨æŒ‡é’ˆ
      */
     virtual void OnDestroyDropDown(SDropDownWnd *pDropDown);
 
@@ -236,9 +236,9 @@ protected:
         ATTR_UINT(L"id_icon", m_uIconID, FALSE)
     SOUI_ATTRS_END()
 
-    SListBoxEx *m_pListBox;  /**< SListBoxÖ¸Õë */
-    UINT   m_uTxtID;  /**< ÎÄ±¾ID */
-    UINT   m_uIconID; /**< Í¼±êID */
+    SListBoxEx *m_pListBox;  /**< SListBoxæŒ‡é’ˆ */
+    UINT   m_uTxtID;  /**< æ–‡æœ¬ID */
+    UINT   m_uIconID; /**< å›¾æ ‡ID */
 };
 
 

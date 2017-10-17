@@ -44,7 +44,6 @@ SkData* SkOTUtils::RenameFont(SkStream* fontData, const char* fontName, int font
     // Find the existing 'name' table.
     int tableIndex;
     SkSFNTHeader::TableDirectoryEntry tableEntry;
-	memset(&tableEntry, 0, sizeof(SkSFNTHeader::TableDirectoryEntry));
     int numTables = SkEndian_SwapBE16(sfntHeader.numTables);
     for (tableIndex = 0; tableIndex < numTables; ++tableIndex) {
         if (fontData->read(&tableEntry, sizeof(tableEntry)) < sizeof(tableEntry)) {

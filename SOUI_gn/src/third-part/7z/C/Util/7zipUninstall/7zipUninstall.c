@@ -1,4 +1,4 @@
-/* 7zipUninstall.c - 7-Zip Uninstaller
+﻿/* 7zipUninstall.c - 7-Zip Uninstaller
 2016-05-16 : Igor Pavlov : Public domain */
 
 #include "Precomp.h"

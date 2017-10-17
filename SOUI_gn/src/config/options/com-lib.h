@@ -1,2 +1,2 @@
-//Ê¹ÓÃLIB·½Ê½±àÒëSOUI×é¼þ
+ï»¿//ä½¿ç”¨LIBæ–¹å¼ç¼–è¯‘SOUIç»„ä»¶
 #define LIB_SOUI_COM

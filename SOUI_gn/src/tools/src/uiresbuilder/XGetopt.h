@@ -1,4 +1,4 @@
-// XGetopt.h  Version 1.2
+﻿// XGetopt.h  Version 1.2
 //
 // Author:  Hans Dietrich
 //          hdietrich2@hotmail.com
@@ -16,7 +16,6 @@
 #define XGETOPT_H
 
 #include <windows.h>
-
 extern int optind, opterr;
 extern TCHAR *optarg;
 

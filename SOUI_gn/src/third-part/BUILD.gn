@@ -7,7 +7,10 @@ group("third-part") {
     "png",
     "skia",
     "smiley", 
-    "zlib",
-    "7z",
+    "zlib:zlib",
+    "zlib:zlib_static",
+    #"7z",
+    "Scintilla",
+    "sqlite3",
   ] 
 }

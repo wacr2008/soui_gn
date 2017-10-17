@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "core/Swnd.h"
 #include "core/SItemPanel.h"
@@ -13,40 +13,40 @@ namespace SOUI
     public:
         STreeViewItemLocator(int nIndent=10);
 
-        ~STreeViewItemLocator();
+        ~STreeViewItemLocator() override;
 
-        virtual void SetAdapter(ITvAdapter *pAdapter);
+        void SetAdapter(ITvAdapter *pAdapter) override;
 
-        virtual void OnBranchChanged(HTREEITEM hItem);
+        void OnBranchChanged(HTREEITEM hItem) override;
 
-        virtual void OnBranchExpandedChanged(HTREEITEM hItem,BOOL bExpandedOld,BOOL bExpandedNew);
+        void OnBranchExpandedChanged(HTREEITEM hItem,BOOL bExpandedOld,BOOL bExpandedNew) override;
 
-        virtual int GetTotalHeight() const;
+        int GetTotalHeight() const override;
 
-        virtual int GetTotalWidth() const;
+        int GetTotalWidth() const override;
 
-        virtual int GetScrollLineSize() const;
+        int GetScrollLineSize() const override;
 
-        virtual int Item2Position(HTREEITEM hItem) const;
+        int Item2Position(HTREEITEM hItem) const override;
 
-        virtual HTREEITEM Position2Item(int position) const;
+        HTREEITEM Position2Item(int position) const override;
 
-        virtual void SetItemWidth(HTREEITEM hItem,int nWidth);
+        void SetItemWidth(HTREEITEM hItem,int nWidth) override;
 
-        virtual void SetItemHeight(HTREEITEM hItem,int nHeight);
+        void SetItemHeight(HTREEITEM hItem,int nHeight) override;
 
-        virtual int GetItemWidth(HTREEITEM hItem) const;
+        int GetItemWidth(HTREEITEM hItem) const override;
 
-        virtual int GetItemHeight(HTREEITEM hItem) const;
+        int GetItemHeight(HTREEITEM hItem) const override;
 
-        virtual int GetItemIndent(HTREEITEM hItem) const;
+        int GetItemIndent(HTREEITEM hItem) const override;
     protected:
         BOOL IsItemExpanded(HTREEITEM hItem) const;
 
-        //¸üĞÂhItemËùÔÚµÄ¸¸´°¿ÚÖĞ·ÖÖ¦¿í¶ÈÊı¾İ
-        //hItem:ÏÔÊ¾¿í¶È·¢Éú±ä»¯µÄ½Úµã£¬¿ÉÒÔÊÇ½Úµã±¾Éí¿í¶È±ä»¯£¬Ò²¿ÉÄÜÊÇ×Ó½Úµã¿í¶È·¢ÉúÁË±ä»¯
-        //nOldWidth£ºÔ­ÏÔÊ¾¿í¶È
-        //nNewWidth: ĞÂÏÔÊ¾¿í¶È
+        //æ›´æ–°hItemæ‰€åœ¨çš„çˆ¶çª—å£ä¸­åˆ†æå®½åº¦æ•°æ®
+        //hItem:æ˜¾ç¤ºå®½åº¦å‘ç”Ÿå˜åŒ–çš„èŠ‚ç‚¹ï¼Œå¯ä»¥æ˜¯èŠ‚ç‚¹æœ¬èº«å®½åº¦å˜åŒ–ï¼Œä¹Ÿå¯èƒ½æ˜¯å­èŠ‚ç‚¹å®½åº¦å‘ç”Ÿäº†å˜åŒ–
+        //nOldWidthï¼šåŸæ˜¾ç¤ºå®½åº¦
+        //nNewWidth: æ–°æ˜¾ç¤ºå®½åº¦
         void _UpdateBranchWidth(HTREEITEM hItem,int nOldWidth,int nNewWidth);
 
         int _GetBranchWidth(HTREEITEM hBranch) const;
@@ -62,7 +62,7 @@ namespace SOUI
 
         void _UpdateBranchHeight(HTREEITEM hItem,int nDiff);
 
-        //Ïòºó¸üĞÂĞÖµÜ½áµãµÄÆ«ÒÆÁ¿
+        //å‘åæ›´æ–°å…„å¼Ÿç»“ç‚¹çš„åç§»é‡
         void _UpdateSiblingsOffset(HTREEITEM hItem);
 
         int _GetItemOffset(HTREEITEM hItem) const;
@@ -92,11 +92,11 @@ namespace SOUI
 
 	class SOUI_EXP STreeView : public SPanel, protected IItemContainer
 	{
-		SOUI_CLASS_NAME(STreeView, L"treeview")
+		SOUI_CLASS_NAME_DECL(STreeView, L"treeview")
 		
 	public:
 		STreeView();
-		~STreeView();
+		~STreeView() override;
 			
 		BOOL SetAdapter(ITvAdapter * adapter);
 		ITvAdapter * GetAdapter () { return m_adapter; }
@@ -126,7 +126,7 @@ namespace SOUI
 		void OnPaint(IRenderTarget * pRT);
 		void OnSize(UINT nType, CSize size);
 		void OnDestroy();
- 		void OnKeyDown(TCHAR nChar, UINT nRepCnt, UINT nFlags);//ÊµÏÖ¼üÅÌÑ¡Ôñ
+ 		void OnKeyDown(TCHAR nChar, UINT nRepCnt, UINT nFlags);//å®ç°é”®ç›˜é€‰æ‹©
 		LRESULT OnKeyEvent( UINT uMsg,WPARAM wParam,LPARAM lParam );
 		
 		void OnMouseLeave();
@@ -137,43 +137,28 @@ namespace SOUI
 		void OnSetFocus(SWND wndOld);
 		
 
-		SOUI_MSG_MAP_BEGIN()
-			MSG_WM_PAINT_EX(OnPaint)
-			MSG_WM_SIZE(OnSize)
-			MSG_WM_DESTROY(OnDestroy)
-			MSG_WM_KEYDOWN(OnKeyDown)
-			MSG_WM_KILLFOCUS_EX(OnKillFocus)
-			MSG_WM_SETFOCUS_EX(OnSetFocus)
-			MSG_WM_MOUSEWHEEL(OnMouseWheel)
-			MSG_WM_MOUSELEAVE(OnMouseLeave)
-			MESSAGE_RANGE_HANDLER_EX(WM_MOUSEFIRST,WM_MOUSELAST,OnMouseEvent)
- 			MESSAGE_RANGE_HANDLER_EX(WM_KEYFIRST,WM_KEYLAST,OnKeyEvent)
- 			MESSAGE_RANGE_HANDLER_EX(WM_IME_STARTCOMPOSITION,WM_IME_KEYLAST,OnKeyEvent)
-		SOUI_MSG_MAP_END()
+		SOUI_MSG_MAP_DECL() 
 		
     protected:
         HRESULT OnAttrIndent(const SStringW & strValue,BOOL bLoading);
         
-        SOUI_ATTRS_BEGIN()
-            ATTR_CUSTOM(L"indent",OnAttrIndent)
-            ATTR_INT(L"wantTab", m_bWantTab,FALSE)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL() 
 	protected:
-        virtual UINT OnGetDlgCode();
-        virtual BOOL OnSetCursor(const CPoint &pt);
-        virtual BOOL OnUpdateToolTip(CPoint pt, SwndToolTipInfo & tipInfo);
-        virtual void OnColorize(COLORREF cr);
-		virtual void OnScaleChanged(int nScale);
-		virtual HRESULT OnLanguageChanged();
+        UINT OnGetDlgCode() override;
+        BOOL OnSetCursor(const CPoint &pt) override;
+        BOOL OnUpdateToolTip(CPoint pt, SwndToolTipInfo & tipInfo) override;
+        void OnColorize(COLORREF cr) override;
+		void OnScaleChanged(int nScale) override;
+		HRESULT OnLanguageChanged() override;
 
-		virtual BOOL OnScroll(BOOL bVertical,UINT uCode,int nPos);
-		virtual int  GetScrollLineSize(BOOL bVertical);
-		virtual BOOL CreateChildren(pugi::xml_node xmlNode);
+		BOOL OnScroll(BOOL bVertical,UINT uCode,int nPos) override;
+		int  GetScrollLineSize(BOOL bVertical) override;
+		BOOL CreateChildren(pugi::xml_node xmlNode) override;
 	
-		virtual void OnItemSetCapture(SItemPanel *pItem,BOOL bCapture); //ÉèÖÃorÊÍ·ÅÊó±ê²¶»ñ
-		virtual BOOL OnItemGetRect(SItemPanel *pItem,CRect &rcItem);    //»ñµÃ±íÏîµÄÏÔÊ¾Î»ÖÃ
-		virtual BOOL IsItemRedrawDelay();                               //Ö¸Ê¾±íÏîµÄ¸üĞÂ·½Ê½
-		virtual void OnItemRequestRelayout(SItemPanel *pItem);          //ÁĞ±íÏîÇëÇóÖØĞÂ²¼¾Ö
+		void OnItemSetCapture(SItemPanel *pItem,BOOL bCapture) override; //è®¾ç½®oré‡Šæ”¾é¼ æ ‡æ•è·
+		BOOL OnItemGetRect(SItemPanel *pItem,CRect &rcItem) override;    //è·å¾—è¡¨é¡¹çš„æ˜¾ç¤ºä½ç½®
+		BOOL IsItemRedrawDelay() override;                               //æŒ‡ç¤ºè¡¨é¡¹çš„æ›´æ–°æ–¹å¼
+		void OnItemRequestRelayout(SItemPanel *pItem) override;          //åˆ—è¡¨é¡¹è¯·æ±‚é‡æ–°å¸ƒå±€
 	protected:
 
 		void UpdateScrollBar();
@@ -196,8 +181,8 @@ namespace SOUI
             SItemPanel* pItem;
             int         nType;
         };
-        SArray<SList<SItemPanel*> *>    m_itemRecycle;//item»ØÊÕÕ¾,Ã¿Ò»ÖÖÑùÊ½ÔÚ»ØÊÕÕ¾ÖĞ±£³ÖÒ»¸öÁĞ±í£¬ÒÔ±ãÖØ¸´ÀûÓÃ
-		SList<ItemInfo> m_visible_items; //¿É¼ûÔªËØ
+        SArray<SList<SItemPanel*> *>    m_itemRecycle;//itemå›æ”¶ç«™,æ¯ä¸€ç§æ ·å¼åœ¨å›æ”¶ç«™ä¸­ä¿æŒä¸€ä¸ªåˆ—è¡¨ï¼Œä»¥ä¾¿é‡å¤åˆ©ç”¨
+		SList<ItemInfo> m_visible_items; //å¯è§å…ƒç´ 
 		
 		typedef SMap<HTREEITEM,ItemInfo> VISIBLEITEMSMAP;
 		VISIBLEITEMSMAP * m_pVisibleMap;
@@ -207,7 +192,7 @@ namespace SOUI
 		SItemPanel * m_itemCapture;
 		SItemPanel * m_pHoverItem;
         
-        HTREEITEM    m_hSelected;               /**< µ±Ç°Ñ¡ÔñÏî */ 
+        HTREEITEM    m_hSelected;               /**< å½“å‰é€‰æ‹©é¡¹ */ 
         
         BOOL            m_bWantTab;             /**< want tab */ 
     };

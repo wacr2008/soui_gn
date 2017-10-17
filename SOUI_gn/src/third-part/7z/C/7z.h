@@ -1,4 +1,4 @@
-/* 7z.h -- 7z interface
+﻿/* 7z.h -- 7z interface
 2015-11-18 : Igor Pavlov : Public domain */
 
 #ifndef __7Z_H

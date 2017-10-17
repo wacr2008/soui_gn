@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "interface/slayout-i.h"
 #include "SLinearLayoutParamStruct.h"
@@ -6,50 +6,33 @@
 namespace SOUI
 {
 
-	class SLinearLayoutParam : public SObjectImpl<TObjRefImpl<ILayoutParam>>
+	class SOUI_EXP SLinearLayoutParam : public SObjectImpl<TObjRefImpl<ILayoutParam>>
 							 , protected SLinearLayoutParamStruct
     {
-        SOUI_CLASS_NAME(SLinearLayoutParam,L"LinearLayoutParam")
+        SOUI_CLASS_NAME_DECL(SLinearLayoutParam,L"LinearLayoutParam")
 
 		friend class SLinearLayout;
     public:
 		SLinearLayoutParam();
 
-        virtual bool IsMatchParent(ORIENTATION orientation) const;
-		virtual bool IsWrapContent(ORIENTATION orientation) const;
+        bool IsMatchParent(ORIENTATION orientation) const override;
+		bool IsWrapContent(ORIENTATION orientation) const override;
 
-        virtual bool IsSpecifiedSize(ORIENTATION orientation) const;
+        bool IsSpecifiedSize(ORIENTATION orientation) const override;
 
-        virtual SLayoutSize GetSpecifiedSize(ORIENTATION orientation) const;
+        SLayoutSize GetSpecifiedSize(ORIENTATION orientation) const override;
 
-		virtual void Clear();
+		void Clear() override;
 
-		virtual void SetMatchParent(ORIENTATION orientation);
+		void SetMatchParent(ORIENTATION orientation) override;
 
-		virtual void SetWrapContent(ORIENTATION orientation);
+		void SetWrapContent(ORIENTATION orientation) override;
 
-		virtual void SetSpecifiedSize(ORIENTATION orientation, const SLayoutSize& layoutSize);
+		void SetSpecifiedSize(ORIENTATION orientation, const SLayoutSize& layoutSize) override;
 
-		virtual void * GetRawData();
+		void * GetRawData() override;
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_CUSTOM(L"width",OnAttrWidth)
-            ATTR_CUSTOM(L"height",OnAttrHeight)
-            ATTR_CUSTOM(L"size",OnAttrSize)
-            ATTR_FLOAT(L"weight",weight,FALSE)
-            ATTR_ENUM_BEGIN(L"layout_gravity",Gravity,FALSE)
-                ATTR_ENUM_VALUE(L"left",G_Left)
-                ATTR_ENUM_VALUE(L"top",G_Top)
-                ATTR_ENUM_VALUE(L"center",G_Center)
-                ATTR_ENUM_VALUE(L"right",G_Right)
-                ATTR_ENUM_VALUE(L"bottom",G_Bottom)
-            ATTR_ENUM_END(gravity)
-			ATTR_CUSTOM(L"extend",OnAttrExtend)
-			ATTR_LAYOUTSIZE(L"extend_left",extend_left,FALSE)
-			ATTR_LAYOUTSIZE(L"extend_top",extend_top,FALSE)
-			ATTR_LAYOUTSIZE(L"extend_right",extend_right,FALSE)
-			ATTR_LAYOUTSIZE(L"extend_bottom",extend_bottom,FALSE)
-        SOUI_ATTRS_BREAK()
+        SOUI_ATTRS_DECL() 
 
 
 	protected:
@@ -60,36 +43,20 @@ namespace SOUI
 
     };
 
-    class SLinearLayout : public SObjectImpl<TObjRefImpl<ILayout>>
+    class SOUI_EXP SLinearLayout : public SObjectImpl<TObjRefImpl<ILayout>>
     {
-		SOUI_CLASS_NAME_EX(SLinearLayout,L"linearLayout",Layout)
+		SOUI_CLASS_NAME_DECL_EX(SLinearLayout,L"linearLayout",Layout)
     public:
         SLinearLayout(void);
-        ~SLinearLayout(void);
+        ~SLinearLayout(void) override;
 
-		static HRESULT CreateLayoutParam(IObjRef ** ppObj);
-
-		virtual LayoutType GetLayoutType() const {return Layout_Linear;}
-        virtual void LayoutChildren(SWindow * pParent);
-        virtual ILayoutParam * CreateLayoutParam() const;
-		virtual CSize MeasureChildren(SWindow * pParent,int nWidth,int nHeight) const;
-		virtual bool IsParamAcceptable(ILayoutParam *pLayoutParam) const;
+        void LayoutChildren(SWindow * pParent) override;
+        ILayoutParam * CreateLayoutParam() const override;
+		CSize MeasureChildren(SWindow * pParent,int nWidth,int nHeight) const override;
+		bool IsParamAcceptable(ILayoutParam *pLayoutParam) const override;
 
         
-        SOUI_ATTRS_BEGIN()
-            ATTR_ENUM_BEGIN(L"orientation",ORIENTATION,FALSE)
-                ATTR_ENUM_VALUE(L"horizontal",Horz)
-                ATTR_ENUM_VALUE(L"vertical",Vert)
-            ATTR_ENUM_END(m_orientation)
-            ATTR_ENUM_BEGIN(L"gravity",Gravity,FALSE)
-                ATTR_ENUM_VALUE(L"left",G_Left)
-                ATTR_ENUM_VALUE(L"top",G_Top)
-                ATTR_ENUM_VALUE(L"center",G_Center)
-                ATTR_ENUM_VALUE(L"right",G_Right)
-                ATTR_ENUM_VALUE(L"bottom",G_Bottom)
-            ATTR_ENUM_END(m_gravity)
-
-        SOUI_ATTRS_BREAK()
+        SOUI_ATTRS_DECL() 
 
 
 	protected:
@@ -99,7 +66,7 @@ namespace SOUI
 
 	class SVBox : public SLinearLayout
 	{
-		SOUI_CLASS_NAME(SVBox,L"vbox")
+		SOUI_CLASS_NAME_DECL(SVBox,L"vbox")
 
 	public:
 		SVBox(){m_orientation = Vert;}
@@ -107,7 +74,7 @@ namespace SOUI
 
 	class SHBox : public SLinearLayout
 	{
-		SOUI_CLASS_NAME(SHBox,L"hbox")
+		SOUI_CLASS_NAME_DECL(SHBox,L"hbox")
 
 	public:
 		SHBox(){m_orientation = Horz;}

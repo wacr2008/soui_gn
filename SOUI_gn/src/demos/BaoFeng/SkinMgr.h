@@ -36,37 +36,10 @@ public:
 
 protected:
 	//按钮事件处理映射表
-	EVENT_MAP_BEGIN()
-		EVENT_NAME_COMMAND(L"btn_skin_close",OnClose)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_maxspeed",OnBtnMaxspeed)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_deepblue",OnBtnDeepblue)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_selfdefine",OnBtnSelfdefine)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_bigbang",OnBtnBigbang)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_prev",OnBtnPrev)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_choosing1",OnBtnChoosing1)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_choosing2",OnBtnChoosing2)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_next",OnBtnNext)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color1",OnBtnColor1)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color2",OnBtnColor2)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color3",OnBtnColor3)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color4",OnBtnColor4)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color5",OnBtnColor5)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color6",OnBtnColor6)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color7",OnBtnColor7)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color8",OnBtnColor8)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color9",OnBtnColor9)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color10",OnBtnColor10)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color11",OnBtnColor11)
-		EVENT_NAME_COMMAND(L"btn_skinmgr_color12",OnBtnColor12)
-		EVENT_MAP_END()    
+	EVENT_MAP_DECL() 
 
-		//窗口消息处理映射表
-		BEGIN_MSG_MAP_EX(CSkinMgr)
-		MSG_WM_INITDIALOG(OnInitDialog)
-		MSG_WM_CLOSE(OnClose)
-		CHAIN_MSG_MAP(SHostWnd)//注意将没有处理的消息交给基类处理
-		REFLECT_NOTIFICATIONS_EX()
-		END_MSG_MAP()
+	//窗口消息处理映射表
+	BEGIN_MSG_MAP_EX_DECL()
 private:
 	BOOL            m_bLayoutInited;
 };

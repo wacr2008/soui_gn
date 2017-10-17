@@ -1,4 +1,4 @@
-/* 7zBuf.h -- Byte Buffer
+﻿/* 7zBuf.h -- Byte Buffer
 2013-01-18 : Igor Pavlov : Public domain */
 
 #ifndef __7Z_BUF_H

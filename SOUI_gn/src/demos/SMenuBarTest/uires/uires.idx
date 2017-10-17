@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resource>
+  <UIDEF>
+    <file name="XML_INIT" path="uidef\init.xml"/>
+  </UIDEF>
+  <LAYOUT>
+    <file name="XML_MAINWND" path="xml\dlg_main.xml"/>
+  </LAYOUT>
+  
+  <values>
+  	<file name="string" path="values\string.xml"/>
+  	<file name="color" path="values\color.xml"/>
+  	<file name="skin" path="values\skin.xml"/>
+  </values>
+
+  <IMG>
+    <file name="PNG_TAB_LEFT" path="image\TAB_left.png" />
+          </IMG>
+  <MYMENU>
+    <file name="MENU_FILE" path="menu\menuex_file.xml" />
+    <file name="MENU_EDIT" path="menu\menuex_edit.xml" />
+    <file name="MENU_PROJ" path="menu\menuex_proj.xml" />
+  </MYMENU>
+  
+  
+  <SMENUEX>
+    <file name="menu_file" path="menu\menuex_file.xml"  /> 
+    <file name="menu_edit" path="menu\menuex_edit.xml"  />  
+    <file name="menu_project" path="menu\menuex_proj.xml"  />
+  </SMENUEX>
+
+  <ICON>
+    <file name="ICON_LOGO"  path="image\soui.ico"/>
+  </ICON>
+</resource>

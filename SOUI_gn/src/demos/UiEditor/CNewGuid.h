@@ -1,5 +1,4 @@
-using namespace SOUI;
-
+﻿using namespace SOUI;
 class CNewGuid
 {
 public:

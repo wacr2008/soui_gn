@@ -1,0 +1,70 @@
+import("//build_overrides/common.gni")
+ 
+
+executable("SLogViewer") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  configs -= [ "//build/config/win:console" ]
+  configs += [ "//build/config/win:windowed" ] 
+  
+  sources = [ 
+          "droptarget.h",
+          "FileHelper.h",
+          "FilterDlg.h",
+          "FindDlg.h",
+          "LogParser.h",
+          "MainDlg.h",
+          "resource.h",
+          "SColorizeText.h",
+          "SLogAdapter.h",
+          "whwindow.h",
+          "magnet/MagnetFrame.h",
+          "res/resource.h",
+          "../../controls.extend/SRealWndHandler_Scintilla.h",
+          "../../controls.extend/ScintillaWnd.h",
+
+          "FilterDlg.cpp",
+          "LogParser.cpp",
+          "FindDlg.cpp",
+          "MainDlg.cpp",
+          "SColorizeText.cpp",
+          "SLogAdapter.cpp",
+          "SLogViewer.cpp",
+          "magnet/MagnetFrame.cpp",
+          "../../controls.extend/SRealWndHandler_Scintilla.cpp",
+          "../../controls.extend/ScintillaWnd.cpp",
+
+    
+  ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+    "../../components",
+    "../../controls.extend",
+    "../../third-part/Scintilla/include",
+  ]
+
+  deps = [ 
+    "../../utilities",
+    "../../SOUI",
+    "../../third-part",
+    "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_SLogViewer_resource",
+  ]
+ 
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4201",
+      "/wd4239",
+    ]
+  }
+  
+  defines = ["_CRT_SECURE_NO_WARNINGS","_USE_UI_LIBRAY",] 
+
+} 

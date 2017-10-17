@@ -1,9 +1,31 @@
-#include "SWkeWebkit.h"
+ï»¿#include "SWkeWebkit.h"
 #include <Imm.h>
 #pragma comment(lib,"imm32.lib")
 #pragma comment(lib,"msimg32.lib")
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SWkeWebkit, L"wkeWebkit")
+
+	SOUI_ATTRS_BEGIN(SWkeWebkit)
+		ATTR_CUSTOM(L"url", OnAttrUrl)
+	SOUI_ATTRS_END()
+
+	SOUI_MSG_MAP_BEGIN(SWkeWebkit)
+		MSG_WM_PAINT_EX(OnPaint)
+		MSG_WM_CREATE(OnCreate)
+		MSG_WM_DESTROY(OnDestroy)
+		MSG_WM_SIZE(OnSize)
+		MSG_WM_TIMER_EX(OnTimer)
+		MSG_WM_SETFOCUS_EX(OnSetFocus)
+		MSG_WM_KILLFOCUS_EX(OnKillFocus)
+		MESSAGE_RANGE_HANDLER_EX(WM_MOUSEFIRST, 0x209, OnMouseEvent)
+		MESSAGE_HANDLER_EX(WM_MOUSEWHEEL, OnMouseWheel)
+		MESSAGE_HANDLER_EX(WM_KEYDOWN, OnKeyDown)
+		MESSAGE_HANDLER_EX(WM_KEYUP, OnKeyUp)
+		MESSAGE_HANDLER_EX(WM_CHAR, OnChar)
+		MESSAGE_HANDLER_EX(WM_IME_STARTCOMPOSITION, OnImeStartComposition)
+	SOUI_MSG_MAP_END()
+
     //////////////////////////////////////////////////////////////////////////
     // SWkeLoader
     SWkeLoader * SWkeLoader::s_pInst=0;
@@ -92,7 +114,7 @@ namespace SOUI
         if(!m_pWebView) return 1;
         m_pWebView->setBufHandler(this);
         m_pWebView->loadURL(m_strUrl);
-        SetTimer(TM_TICKER,50); //ÓÉÓÚtimer²»¹»¼°Ê±£¬idleÓÖÏŞÖÆÁËÖ»ÔÚµ±Ç°µÄÏûÏ¢Ñ­»·ÖĞÓĞĞ§£¬Ê¹ÓÃtimerºÍonidleÒ»Æğ¸üĞÂä¯ÀÀÆ÷
+        SetTimer(TM_TICKER,50); //ç”±äºtimerä¸å¤ŸåŠæ—¶ï¼Œidleåˆé™åˆ¶äº†åªåœ¨å½“å‰çš„æ¶ˆæ¯å¾ªç¯ä¸­æœ‰æ•ˆï¼Œä½¿ç”¨timerå’Œonidleä¸€èµ·æ›´æ–°æµè§ˆå™¨
         return 0;
 	}
 

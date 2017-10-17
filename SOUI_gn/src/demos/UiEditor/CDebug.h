@@ -1,4 +1,5 @@
 ﻿
+using namespace SOUI;
 class CDebug
 {
 public:
@@ -9,21 +10,21 @@ public:
 	{
 		pugi::xml_writer_buff writer;
 		xmlNode.print(writer,L"\t",pugi::format_default,pugi::encoding_utf16);
-		SOUI::SStringW *strDebug = new SOUI::SStringW(writer.buffer(), writer.size());
+		SStringW *strDebug= new SStringW(writer.buffer(),writer.size());
 		SMessageBox(NULL, *strDebug, _T("提示"), MB_OK);
 		delete strDebug;
 	};
 
-	static void Debug(SOUI::SStringT str)
+	static void Debug(SStringT str)
 	{
 	    SMessageBox(NULL, str, _T("提示"), MB_OK);
 	};
-	static SOUI::SStringT Debug1(pugi::xml_node xmlNode)
+	static SStringT Debug1(pugi::xml_node xmlNode)
 	{
 		pugi::xml_writer_buff writer;
 		xmlNode.print(writer,L"\t",pugi::format_default,pugi::encoding_utf16);
-		SOUI::SStringW *strDebug = new SOUI::SStringW(writer.buffer(), writer.size());
-		SOUI::SStringT strtemp = *strDebug;
+		SStringW *strDebug= new SStringW(writer.buffer(),writer.size());
+		SStringT strtemp = *strDebug;
 		delete strDebug;
 		return strtemp;
 	};

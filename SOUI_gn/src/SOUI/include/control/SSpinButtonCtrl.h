@@ -1,19 +1,19 @@
-#pragma once
+﻿#pragma once
 #include "core/SWnd.h"
 
 namespace SOUI
 {
     class SSpinButtonCtrl : public SWindow
     {
-    SOUI_CLASS_NAME(SSpinButtonCtrl,L"spinButton")
+    SOUI_CLASS_NAME_DECL(SSpinButtonCtrl,L"spinButton")
     public:
         SSpinButtonCtrl(void);
-        ~SSpinButtonCtrl(void);
+        ~SSpinButtonCtrl(void) override;
         
     protected:
-        virtual CSize GetDesiredSize(LPCRECT pRcContainer);
-        virtual void UpdateChildrenPosition();
-        virtual BOOL CreateChildren(pugi::xml_node xmlNode);
+        CSize GetDesiredSize(LPCRECT pRcContainer) override;
+        void UpdateChildrenPosition() override;
+        BOOL CreateChildren(pugi::xml_node xmlNode) override;
     protected:
         void OnValueChanged();
     
@@ -21,14 +21,7 @@ namespace SOUI
     protected:
         HRESULT OnAttrValue(const SStringW& strValue, BOOL bLoading);
         
-        SOUI_ATTRS_BEGIN()
-            ATTR_INT(L"max",m_nMax,FALSE)
-            ATTR_INT(L"min",m_nMin,FALSE)
-            ATTR_CUSTOM(L"value",OnAttrValue)
-            ATTR_UINT(L"step",m_uStep,FALSE)
-            ATTR_INT(L"circle",m_bCircle,FALSE)
-            ATTR_STRINGW(L"buddy",m_strBuddy,FALSE)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL() 
         
         int m_nMax;
         int m_nMin;

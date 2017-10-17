@@ -1,7 +1,6 @@
+﻿
 #include "helpapi.h"
-
 using namespace SOUI;
-
 bool FileIsExist(const SStringT &filepath)
 {
 	WIN32_FIND_DATA FindFileData;

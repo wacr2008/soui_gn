@@ -1,4 +1,4 @@
-// imgdecoder-gdip.h : Defines the exported functions for the DLL application.
+﻿// imgdecoder-gdip.h : Defines the exported functions for the DLL application.
 //
 
 
@@ -43,14 +43,11 @@ namespace SOUI
         int LoadFromFile(LPCWSTR pszFileName);
         int LoadFromFile(LPCSTR pszFileName);
 
-        IImgFrame * GetFrame(UINT iFrame){
-            if(iFrame >= GetFrameCount()) return NULL;
-            return m_pImgArray+iFrame;
-        }
+		IImgFrame * GetFrame(UINT iFrame) override;
         virtual UINT GetFrameCount();
     protected:
         SImgX_GDIP(BOOL bPremultiplied);
-        ~SImgX_GDIP(void);
+        ~SImgX_GDIP(void) override;
         
         int _InitFromGdipBitmap(Gdiplus::Bitmap * pSrcBmp);
         
@@ -66,11 +63,11 @@ namespace SOUI
         friend class SImgX_GDIP;
     public:
         SImgDecoderFactory_GDIP();
-        ~SImgDecoderFactory_GDIP();
+        ~SImgDecoderFactory_GDIP() override;
 
-        virtual BOOL CreateImgX(IImgX **ppImgDecoder);
-        virtual HRESULT SaveImage(IBitmap *pImg, LPCWSTR pszFileName, const LPVOID pFormat);
-        virtual LPCWSTR GetDescription() const;
+        BOOL CreateImgX(IImgX **ppImgDecoder) override;
+        HRESULT SaveImage(IBitmap *pImg, LPCWSTR pszFileName, const LPVOID pFormat) override;
+        LPCWSTR GetDescription() const override;
     protected:
     
         

@@ -1,7 +1,24 @@
+Ôªø
 #include "SScrollText.h"
 
 namespace SOUI
 {
+
+	SOUI_CLASS_NAME(SScrollText, L"scrolltext")
+	
+	SOUI_MSG_MAP_BEGIN(SScrollText)
+		MSG_WM_PAINT_EX(OnPaint)
+		MSG_WM_SIZE(OnSize)
+		MSG_WM_DESTROY(OnDestroy)
+		MSG_WM_SHOWWINDOW(OnShowWindow)
+	SOUI_MSG_MAP_END()
+
+	SOUI_ATTRS_BEGIN(SScrollText)
+		ATTR_INT(L"speed", m_nSpeed, FALSE)
+		ATTR_INT(L"rolltype", m_nRollType, FALSE)
+	SOUI_ATTRS_END()
+
+
     SScrollText::SScrollText(void):m_nSpeed(20),m_nOffset(0),m_nScrollWidth(0),m_nRollType(0)
     {
     }
@@ -67,7 +84,7 @@ namespace SOUI
     void SScrollText::SetWindowText(const SStringT & strText)
     {
 		__super::SetWindowText(strText);
-        UpdateScrollInfo(GetClientRect().Size());//÷ÿ–¬º∆À„πˆ∂Ø≥§∂»
+        UpdateScrollInfo(GetClientRect().Size());//ÈáçÊñ∞ËÆ°ÁÆóÊªöÂä®ÈïøÂ∫¶
     }
 
     void SScrollText::UpdateScrollInfo(CSize size)

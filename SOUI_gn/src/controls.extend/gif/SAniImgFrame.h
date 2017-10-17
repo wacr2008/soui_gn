@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <interface/render-i.h>
 namespace SOUI
@@ -12,7 +12,7 @@ namespace SOUI
 
     class SSkinAni : public SSkinObjBase
     {
-        SOUI_CLASS_NAME(SSkinAni,L"skinani")
+        SOUI_CLASS_NAME_DECL(SSkinAni,L"skinani")
     public:
         SSkinAni():m_nFrames(0),m_iFrame(0),m_pFrames(NULL)
         {
@@ -27,16 +27,16 @@ namespace SOUI
 
         /**
         * GetStates
-        * @brief    »ñµÃGIFÖ¡Êý
-        * @return   int -- Ö¡Êý
+        * @brief    èŽ·å¾—GIFå¸§æ•°
+        * @return   int -- å¸§æ•°
         * Describe  
         */    
         virtual int GetStates(){return m_nFrames;}
 
         /**
         * GetSkinSize
-        * @brief    »ñµÃÍ¼Æ¬´óÐ¡
-        * @return   SIZE -- Í¼Æ¬´óÐ¡
+        * @brief    èŽ·å¾—å›¾ç‰‡å¤§å°
+        * @return   SIZE -- å›¾ç‰‡å¤§å°
         * Describe  
         */    
         virtual SIZE GetSkinSize()
@@ -51,9 +51,9 @@ namespace SOUI
 
         /**
         * GetFrameDelay
-        * @brief    »ñµÃÖ¸¶¨Ö¡µÄÏÔÊ¾Ê±¼ä
-        * @param    int iFrame --  Ö¡ºÅ,Îª-1Ê±´ú±í»ñµÃµ±Ç°Ö¡µÄÑÓÊ±
-        * @return   long -- ÑÓÊ±Ê±¼ä(*10ms)
+        * @brief    èŽ·å¾—æŒ‡å®šå¸§çš„æ˜¾ç¤ºæ—¶é—´
+        * @param    int iFrame --  å¸§å·,ä¸º-1æ—¶ä»£è¡¨èŽ·å¾—å½“å‰å¸§çš„å»¶æ—¶
+        * @return   long -- å»¶æ—¶æ—¶é—´(*10ms)
         * Describe  
         */    
         long GetFrameDelay(int iFrame=-1)
@@ -70,7 +70,8 @@ namespace SOUI
         IBitmap * GetFrameImage(int iFrame=-1)
         {
             if(iFrame==-1) iFrame=m_iFrame;
-           // long nRet=-1;
+            long nRet=-1;
+			(void)nRet;
             if(m_nFrames>1 && iFrame>=0 && iFrame<m_nFrames)
             {
                 return m_pFrames[iFrame].pBmp;
@@ -83,7 +84,7 @@ namespace SOUI
 
         /**
         * ActiveNextFrame
-        * @brief    ¼¤»îÏÂÒ»Ö¡
+        * @brief    æ¿€æ´»ä¸‹ä¸€å¸§
         * @return   void 
         * Describe  
         */    
@@ -99,8 +100,8 @@ namespace SOUI
 
         /**
         * SelectActiveFrame
-        * @brief    ¼¤»îÖ¸¶¨Ö¡
-        * @param    int iFrame --  Ö¡ºÅ
+        * @brief    æ¿€æ´»æŒ‡å®šå¸§
+        * @param    int iFrame --  å¸§å·
         * @return   void
         * Describe  
         */    
@@ -118,11 +119,11 @@ namespace SOUI
     protected:
         /**
         * Draw
-        * @brief    »æÖÆÖ¸¶¨Ö¡µÄGIFÍ¼
-        * @param    IRenderTarget * pRT --  »æÖÆÄ¿±ê
-        * @param    LPCRECT rcDraw --  »æÖÆ·¶Î§
-        * @param    DWORD dwState --  »æÖÆ×´Ì¬£¬ÕâÀï±»½âÊÍÎªÖ¡ºÅ
-        * @param    BYTE byAlpha --  Í¸Ã÷¶È
+        * @brief    ç»˜åˆ¶æŒ‡å®šå¸§çš„GIFå›¾
+        * @param    IRenderTarget * pRT --  ç»˜åˆ¶ç›®æ ‡
+        * @param    LPCRECT rcDraw --  ç»˜åˆ¶èŒƒå›´
+        * @param    DWORD dwState --  ç»˜åˆ¶çŠ¶æ€ï¼Œè¿™é‡Œè¢«è§£é‡Šä¸ºå¸§å·
+        * @param    BYTE byAlpha --  é€æ˜Žåº¦
         * @return   void
         * Describe  
         */    

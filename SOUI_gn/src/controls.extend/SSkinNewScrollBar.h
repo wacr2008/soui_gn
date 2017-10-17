@@ -1,14 +1,14 @@
-#pragma once
+ï»¿#pragma once
 
 namespace SOUI{
-//ÊµÏÖÒ»¸öÖ»ÓĞ×İÏò¹ö¶¯ÌõÆ¤·ô
+//å®ç°ä¸€ä¸ªåªæœ‰çºµå‘æ»šåŠ¨æ¡çš®è‚¤
 /*img format: 1-normal, 2-hover, 3-pushdown, 4-disable
 1 2 3 4 //for thumb
 1 2 3 4 //for rail
 */
 class SSkinNewScrollbar : public SSkinScrollbar
 {
-    SOUI_CLASS_NAME(SSkinNewScrollbar, L"newScrollbar")
+    SOUI_CLASS_NAME_DECL(SSkinNewScrollbar, L"newScrollbar")
 
 public:
 
@@ -23,7 +23,7 @@ public:
         if(m_pImgHorz) m_pImgHorz->Release();
     }
 
-    //²»Ö§³ÖÏÔÊ¾ÉÏÏÂ¼ıÍ·
+    //ä¸æ”¯æŒæ˜¾ç¤ºä¸Šä¸‹ç®­å¤´
     virtual BOOL HasArrow(){return FALSE;}
     virtual int GetIdealSize(){
         SASSERT(m_pImgHorz && m_pImgVert);
@@ -57,7 +57,7 @@ protected:
     }
 
 
-    //·µ»ØÔ´Ö¸¶¨²¿·ÖÔÚÔ­Î»Í¼ÉÏµÄÎ»ÖÃ¡£
+    //è¿”å›æºæŒ‡å®šéƒ¨åˆ†åœ¨åŸä½å›¾ä¸Šçš„ä½ç½®ã€‚
     virtual CRect GetPartRect(int nSbCode, int nState,BOOL bVertical)
     {
         CRect rc;
@@ -96,13 +96,10 @@ protected:
         return rc;
     }
 
-    IBitmap *m_pImgVert,        //´¹Ö±¹ö¶¯ÌõÍ¼Æ¬,×ÓÍ¼´¹Ö±ÅÅÁĞ
-            *m_pImgHorz;        //Ë®Æ½¹ö¶¯ÌõÍ¼Æ¬,×ÓÍ¼Ë®Æ½ÅÅÁĞ
+    IBitmap *m_pImgVert,        //å‚ç›´æ»šåŠ¨æ¡å›¾ç‰‡,å­å›¾å‚ç›´æ’åˆ—
+            *m_pImgHorz;        //æ°´å¹³æ»šåŠ¨æ¡å›¾ç‰‡,å­å›¾æ°´å¹³æ’åˆ—
 
-    SOUI_ATTRS_BEGIN()
-        ATTR_IMAGE(L"srcVert", m_pImgVert,FALSE)    //skinObjÒıÓÃµÄÍ¼Æ¬ÎÄ¼ş¶¨ÒåÔÚuires.idxÖĞµÄnameÊôĞÔ¡£
-        ATTR_IMAGE(L"srcHorz", m_pImgHorz,FALSE)    //skinObjÒıÓÃµÄÍ¼Æ¬ÎÄ¼ş¶¨ÒåÔÚuires.idxÖĞµÄnameÊôĞÔ¡£
-    SOUI_ATTRS_END()
+    SOUI_ATTRS_DECL()
 };
 
 }

@@ -30,6 +30,7 @@ executable("uiresbuilder") {
   if (is_win) {
     cflags = [
       #"/W3",  # Warning level 3. 
+      "/wd4476",
     ]
   }
 

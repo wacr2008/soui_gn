@@ -1,20 +1,16 @@
-#include <interface/SScriptModule-i.h>
+﻿#pragma once
 
-BOOL ExpLua_ScriptModule(lua_State *L)
+#ifndef _EXP_SCRIPT_MODULE_H
+#define _EXP_SCRIPT_MODULE_H
+
+#include <windows.h>
+
+extern "C"
 {
-	try
-	{
-		lua_tinker::class_add<IScriptModule>(L,"IScriptModule");
-		lua_tinker::class_def<IScriptModule>(L,"GetScriptEngine",&IScriptModule::GetScriptEngine);
-		lua_tinker::class_def<IScriptModule>(L,"executeScriptFile",&IScriptModule::executeScriptFile);
-		lua_tinker::class_def<IScriptModule>(L,"executeString",&IScriptModule::executeString);
-		lua_tinker::class_def<IScriptModule>(L,"executeScriptedEventHandler",&IScriptModule::executeScriptedEventHandler);
-		lua_tinker::class_def<IScriptModule>(L,"getIdentifierString",&IScriptModule::getIdentifierString);
-		lua_tinker::class_def<IScriptModule>(L,"subscribeEvent",&IScriptModule::subscribeEvent);
-
-		return TRUE;
-	}catch(...)
-	{
-		return FALSE;
-	}
+#include "lua.h"
+#include "lstate.h"
 }
+
+BOOL ExpLua_ScriptModule(lua_State *L);
+
+#endif 

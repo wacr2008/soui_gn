@@ -10,7 +10,7 @@ class SRotateWindow :
 	public SWindow
 {
 public:
-	SOUI_CLASS_NAME(SRotateWindow,L"RotateWindow");
+	SOUI_CLASS_NAME_DECL(SRotateWindow,L"RotateWindow");
 	
 	enum {TIMER_REFRESH = 1};
 	enum {TURN_LEFT, TURN_RIGHT};
@@ -68,20 +68,9 @@ protected:
 		Invalidate();
 	}
 
-	SOUI_MSG_MAP_BEGIN()
-		MSG_WM_PAINT_EX(OnPaint)
-		MSG_WM_TIMER_EX(OnTimer)
-		MSG_WM_CREATE(OnCreate)
-	SOUI_MSG_MAP_END()
+	SOUI_MSG_MAP_DECL()
 
-	SOUI_ATTRS_BEGIN()
-		ATTR_IMAGEAUTOREF(L"AnimImg",   m_pAnimImg, TRUE)
-		ATTR_INT(L"speed", m_nSpeed,FALSE)
-		ATTR_ENUM_BEGIN(L"turn",DWORD,FALSE)
-			ATTR_ENUM_VALUE(L"left",TURN_LEFT)
-			ATTR_ENUM_VALUE(L"right",TURN_RIGHT)
-		ATTR_ENUM_END(m_nTurn)
-	SOUI_ATTRS_END()
+	SOUI_ATTRS_DECL()
 
 protected:
 	INT m_nSpeed;
@@ -91,5 +80,7 @@ private:
 	CAutoRefPtr<IBitmap> m_pAnimImg;
 	
 };
+
+
 
 }

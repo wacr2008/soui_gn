@@ -1,4 +1,4 @@
-#include "include\souistd.h"
+Ôªø#include "include\souistd.h"
 #include "res.mgr\SUiDef.h"
 #include "helper\SplitString.h"
 #include "helper\mybuffer.h"
@@ -11,7 +11,7 @@ namespace SOUI{
 	const static WCHAR KNodeSkin[]      = L"skin";
 	const static WCHAR KNodeStyle[]     = L"style";
 	const static WCHAR KNodeObjAttr[]   = L"objattr";
-	const static TCHAR KDefFontFace[]   = _T("ÀŒÃÂ");
+	const static TCHAR KDefFontFace[]   = _T("ÂÆã‰Ωì");
 
 
 	static pugi::xml_node GetSourceXmlNode(pugi::xml_node nodeRoot,pugi::xml_document &docInit,IResProvider *pResProvider, const wchar_t * pszName)
@@ -21,7 +21,7 @@ namespace SOUI{
 		{
 			pugi::xml_attribute attrSrc = nodeData.attribute(L"src",false);
 			if(attrSrc)
-			{//”≈œ»¥”src Ù–‘¿ÔªÒ»° ˝æ›
+			{//‰ºòÂÖà‰ªésrcÂ±ûÊÄßÈáåËé∑ÂèñÊï∞ÊçÆ
 				SStringT strSrc = S_CW2T(attrSrc.value());
 				SStringTList strList;
 				if(2==ParseResID(strSrc,strList))
@@ -44,12 +44,12 @@ namespace SOUI{
 	public:
 		SUiDefInfo(IResProvider *pResProvide,LPCTSTR pszUidef);
 
-		virtual SSkinPool * GetSkinPool() {return pSkinPool;}
-		virtual SStylePool * GetStylePool(){return pStylePool;}
-		virtual SNamedColor & GetNamedColor() {return namedColor;}
-		virtual SNamedString & GetNamedString() {return namedString;}
-		virtual SObjDefAttr & GetObjDefAttr(){return objDefAttr;}
-		virtual FontInfo & GetDefFontInfo() { return defFontInfo;}
+		SSkinPool * GetSkinPool()  override {return pSkinPool;}
+		SStylePool * GetStylePool() override {return pStylePool;}
+		SNamedColor & GetNamedColor()  override {return namedColor;}
+		SNamedString & GetNamedString()  override {return namedString;}
+		SObjDefAttr & GetObjDefAttr() override {return objDefAttr;}
+		FontInfo & GetDefFontInfo()  override { return defFontInfo;}
 
 	protected:
 
@@ -153,9 +153,10 @@ namespace SOUI{
 						pugi::xml_node     nodeData = GetSourceXmlNode(root,docData,pResProvider,KNodeSkin);
 						if(nodeData)
 						{
-							pSkinPool = new SSkinPool;
+							pSkinPool.Attach(new SSkinPool);
 							pSkinPool->LoadSkins(nodeData);
 							SSkinPoolMgr::getSingletonPtr()->PushSkinPool(pSkinPool);
+
 						}
 					}
 					//load named style
@@ -164,7 +165,7 @@ namespace SOUI{
 						pugi::xml_node     nodeData = GetSourceXmlNode(root,docData,pResProvider,KNodeStyle);
 						if(nodeData)
 						{
-							pStylePool = new SStylePool;
+							pStylePool.Attach(new SStylePool);
 							pStylePool->Init(nodeData);
 							SStylePoolMgr::getSingleton().PushStylePool(pStylePool);
 						}
@@ -186,7 +187,7 @@ namespace SOUI{
 
 	//////////////////////////////////////////////////////////////////////////
 
-	template<> SUiDef * SSingleton<SUiDef>::ms_Singleton = NULL;
+//	template<> SUiDef * SSingleton<SUiDef>::ms_Singleton = NULL;
 
 	#define HASFONT 2
 	int CALLBACK DefFontsEnumProc(  CONST LOGFONT *lplf,     // logical-font data
@@ -200,7 +201,7 @@ namespace SOUI{
 
 	static BOOL DefFontCheck(const SStringT & strFontName)
 	{
-		//»∑±£◊÷ÃÂ¥Ê‘⁄
+		//Á°Æ‰øùÂ≠ó‰ΩìÂ≠òÂú®
 		HDC hdc = GetDC(NULL);
 		int hasFont = EnumFonts(hdc,strFontName,DefFontsEnumProc,0);
 		ReleaseDC(NULL,hdc);

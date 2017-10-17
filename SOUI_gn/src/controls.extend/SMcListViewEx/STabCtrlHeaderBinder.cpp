@@ -1,4 +1,4 @@
-#include "STabCtrlHeaderBinder.h"
+﻿#include "STabCtrlHeaderBinder.h"
 using namespace SOUI;
 
 STabCtrlHeaderBinder::STabCtrlHeaderBinder(STabCtrl * _host) :m_pTabHost(_host)

@@ -1,6 +1,7 @@
 ﻿#include "NodeMgr.h"
 #include "ui/adapter/SimpleListDef.h"
 #include <Windows.h>
+#include <algorithm>
 
 NodeMgr::NodeMgr()
 {

@@ -1,4 +1,4 @@
-#include "DlgSkinSelect.h"
+ï»¿#include "DlgSkinSelect.h"
 #include "helper/SplitString.h"
 #include "CDebug.h"
 
@@ -9,6 +9,34 @@
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SDlgSkinSelect, L"dlgskinselect")
+
+	EVENT_MAP_BEGIN(SDlgSkinSelect)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_close", OnClose)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_min", OnMinimize)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_max", OnMaximize)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_restore", OnRestore)
+
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZYLX_new", OnZYLXNew)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZYLX_DEL", OnZYLXDel)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZY_NEW", OnZYNew)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZY_DEL", OnZYDel)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_new", OnSkinNew)
+		EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_DEL", OnSkinDel)
+
+		EVENT_NAME_COMMAND(L"btnOK", OnOK)
+
+		//EVENT_ID_COMMAND(IDOK,OnOK)
+		//EVENT_ID_COMMAND(IDCANCEL,OnCancel)
+	EVENT_MAP_END()
+
+	BEGIN_MSG_MAP_EX(SDlgSkinSelect)
+		MSG_WM_INITDIALOG(OnInitDialog)
+		//MSG_WM_CLOSE(OnCancel)
+		//MSG_WM_KEYDOWN(OnKeyDown)
+		CHAIN_MSG_MAP(SHostDialog)
+		REFLECT_NOTIFICATIONS_EX()
+	END_MSG_MAP()
 
 	SDlgSkinSelect::SDlgSkinSelect(LPCTSTR pszXmlName, SStringT strSkinName, SStringT strPath, BOOL bGetSkin):SHostDialog(pszXmlName)
 	{
@@ -22,7 +50,7 @@ namespace SOUI
 		m_bGetSkin = bGetSkin;
 	}
 
-	//TODO:ÏûÏ¢Ó³Éä
+	//TODO:æ¶ˆæ¯æ˜ å°„
 	void SDlgSkinSelect::OnClose()
 	{
 		SHostDialog::OnCancel();
@@ -50,7 +78,7 @@ namespace SOUI
 
 				if (m_lbRes->GetCurSel() < 0)
 				{
-					CDebug::Debug(_T("ÇëÑ¡ÔñÆäÖĞÒ»ÏîÏµÍ³×ÊÔ´"));
+					CDebug::Debug(_T("è¯·é€‰æ‹©å…¶ä¸­ä¸€é¡¹ç³»ç»Ÿèµ„æº"));
 					return;
 				}
 
@@ -59,7 +87,7 @@ namespace SOUI
 			{
 				if (m_lbSkin->GetCurSel() < 0)
 				{
-					CDebug::Debug(_T("ÇëÑ¡ÔñÆ¤·ô"));
+					CDebug::Debug(_T("è¯·é€‰æ‹©çš®è‚¤"));
 					return;
 				}
 
@@ -67,7 +95,7 @@ namespace SOUI
 				SplitString(GetLBCurSelText(m_lbSkin), _T(':'), strList);
 				if (strList.GetCount() != 2)
 				{
-					CDebug::Debug(_T("Æ¤·ôÃû²»ÕıÈ·!"));
+					CDebug::Debug(_T("çš®è‚¤åä¸æ­£ç¡®!"));
 					return;
 				}
 
@@ -117,7 +145,7 @@ namespace SOUI
 
 		if (!m_strSkinName.IsEmpty())
 		{  
-			//Èç¹û´«½øÁËµÄÆ¤·ôÃû²»Îª¿Õ£¬¶¨Î»µ½Æ¤·ô
+			//å¦‚æœä¼ è¿›äº†çš„çš®è‚¤åä¸ä¸ºç©ºï¼Œå®šä½åˆ°çš®è‚¤
 			GoToSkin();
 		}
 
@@ -131,7 +159,7 @@ namespace SOUI
 	{
 		if (!m_xmlDocUiRes.load_file(m_strUIResFile, pugi::parse_full))
 		{
-			CDebug::Debug(_T("¼ÓÔØuiresÎÄ¼şÊ§°Ü"));
+			CDebug::Debug(_T("åŠ è½½uiresæ–‡ä»¶å¤±è´¥"));
 			return;
 		}
 
@@ -205,7 +233,7 @@ namespace SOUI
 					result = m_xmlDocSkin.load_file(m_strSkinFile, pugi::parse_full);
 					if (!result)
 					{
-						SMessageBox(NULL, _T("¼ÓÔØskinÎÄ¼şÊ§°Ü"), _T("¼ÓÔØskinÎÄ¼şÊ§°Ü"), MB_OK);
+						SMessageBox(NULL, _T("åŠ è½½skinæ–‡ä»¶å¤±è´¥"), _T("åŠ è½½skinæ–‡ä»¶å¤±è´¥"), MB_OK);
 					}
 				}
 			}
@@ -215,7 +243,7 @@ namespace SOUI
 
 	void SDlgSkinSelect::InitResType()
 	{
-		m_lbResType->AddString(_T("ÄÚÖÃÆ¤·ô"));
+		m_lbResType->AddString(_T("å†…ç½®çš®è‚¤"));
 
 		pugi::xml_node xmlNode = m_xmlNodeUiRes.child(L"resource").first_child();
 
@@ -240,7 +268,7 @@ namespace SOUI
 		pugi::xml_parse_result resutl = m_xmlDocSysSkin.load_file(L"Config\\theme_sys_res\\sys_xml_skin.xml");
 		if (!resutl)
 		{
-			SMessageBox(NULL, _T("¼ÓÔØSysSkin.xmlÎÄ¼şÊ§°Ü"), _T("¼ÓÔØSysSkin.xmlÎÄ¼şÊ§°Ü"), MB_OK);
+			SMessageBox(NULL, _T("åŠ è½½SysSkin.xmlæ–‡ä»¶å¤±è´¥"), _T("åŠ è½½SysSkin.xmlæ–‡ä»¶å¤±è´¥"), MB_OK);
 			return;
 		}
 
@@ -490,7 +518,7 @@ namespace SOUI
 		pugi::xml_parse_result resutl = m_xmlDocSkinProperty.load_file(L"Config\\SkinProperty.xml");
 		if (!resutl)
 		{
-			SMessageBox(NULL, _T("¼ÓÔØSkinProperty.xmlÎÄ¼şÊ§°Ü"), _T("¼ÓÔØSkinProperty.xmlÎÄ¼şÊ§°Ü"), MB_OK);
+			SMessageBox(NULL, _T("åŠ è½½SkinProperty.xmlæ–‡ä»¶å¤±è´¥"), _T("åŠ è½½SkinProperty.xmlæ–‡ä»¶å¤±è´¥"), MB_OK);
 			return;
 		}
 	}
@@ -546,7 +574,7 @@ namespace SOUI
 		pugi::xml_node xmlNode = m_xmlNodeUiRes.child(L"resource");
 		if (xmlNode.child(strName))
 		{
-			CDebug::Debug(_T("¸Ã×ÊÔ´ÀàĞÍÒÑ´æÔÚ£¡"));
+			CDebug::Debug(_T("è¯¥èµ„æºç±»å‹å·²å­˜åœ¨ï¼"));
 			return;
 		}
 
@@ -560,19 +588,19 @@ namespace SOUI
 	{
 		if (m_lbResType->GetCurSel() < 0)
 		{
-			CDebug::Debug(_T("ÇëÑ¡Ôñ×ÊÔ´ÀàĞÍ"));
+			CDebug::Debug(_T("è¯·é€‰æ‹©èµ„æºç±»å‹"));
 			return;
 		}
 
 		if (m_lbResType->GetCurSel() == 0)
 		{
-			CDebug::Debug(_T("²»ÄÜÑ¡ÔñÄÚÖÃÆ¤·ôÀàĞÍ"));
+			CDebug::Debug(_T("ä¸èƒ½é€‰æ‹©å†…ç½®çš®è‚¤ç±»å‹"));
 			return;
 		}
 
 		if (m_lbRes->GetCount() > 0)
 		{
-			CDebug::Debug(_T("ÇëÏÈÉ¾³ı×ÊÔ´"));
+			CDebug::Debug(_T("è¯·å…ˆåˆ é™¤èµ„æº"));
 			return;
 		}
 
@@ -592,24 +620,24 @@ namespace SOUI
 	{
 		if (m_lbResType->GetCurSel() < 0)
 		{
-			CDebug::Debug(_T("ÇëÑ¡Ôñ×ÊÔ´ÀàĞÍ"));
+			CDebug::Debug(_T("è¯·é€‰æ‹©èµ„æºç±»å‹"));
 			return;
 		}
 
 		if (m_lbResType->GetCurSel() == 0)
 		{
-			CDebug::Debug(_T("²»ÄÜÑ¡ÔñÄÚÖÃÆ¤·ôÀàĞÍ"));
+			CDebug::Debug(_T("ä¸èƒ½é€‰æ‹©å†…ç½®çš®è‚¤ç±»å‹"));
 			return;
 		}
 
-		CFileDialogEx OpenDlg(TRUE, NULL, NULL, 6, _T("ËùÓĞÎÄ¼ş (*.*)\0*.*\0\0"));
+		CFileDialogEx OpenDlg(TRUE, NULL, NULL, 6, _T("æ‰€æœ‰æ–‡ä»¶ (*.*)\0*.*\0\0"));
 		if (IDOK ==OpenDlg.DoModal())
 		{
 			SStringT strFileName = OpenDlg.m_szFileName;
 			int n = strFileName.Find(m_strProPath);
 			if (n != 0)
 			{
-				SMessageBox(NULL, _T("Çë½«×ÊÔ´·Åµ½uiresÄ¿Â¼ÏÂ"), _T("ÌáÊ¾"), MB_OK);
+				SMessageBox(NULL, _T("è¯·å°†èµ„æºæ”¾åˆ°uiresç›®å½•ä¸‹"), _T("æç¤º"), MB_OK);
 				return;
 			}
 
@@ -640,7 +668,7 @@ namespace SOUI
 
 			if (!xmlNode)
 			{
-				// Èç¹û¸Ã²»´æÔÚ¸ÃÀàĞÍµÄ×ÊÔ´£¬ÔòÌí¼Ó	
+				// å¦‚æœè¯¥ä¸å­˜åœ¨è¯¥ç±»å‹çš„èµ„æºï¼Œåˆ™æ·»åŠ 	
 				xmlNewNode = m_xmlNodeUiRes.child(L"resource").child(strResType).append_child(L"file");
 
 				SStringT strResName = strFile;
@@ -655,7 +683,7 @@ namespace SOUI
 				//CDebug::Debug(xmlNewNode);
 			}
 
-			//¶¨Î»µ½×ÊÔ´
+			//å®šä½åˆ°èµ„æº
 			{
 				SStringT strResText;
 				for (int i = 0; i < m_lbRes->GetCount(); i++)
@@ -695,7 +723,7 @@ namespace SOUI
 	{
 		if (m_lbResType->GetCurSel() == 0)
 		{
-			CDebug::Debug(_T("ÄÚÖÃ×ÊÔ´²»ÄÜÉ¾³ı"));
+			CDebug::Debug(_T("å†…ç½®èµ„æºä¸èƒ½åˆ é™¤"));
 			return;
 		}
 
@@ -713,7 +741,7 @@ namespace SOUI
 		}
 
 
-		int nResult =  SMessageBox(NULL, _T("È·¶¨ÒªÉ¾³ı×ÊÔ´Âğ?"), _T("ÌáÊ¾"), MB_OKCANCEL);
+		int nResult =  SMessageBox(NULL, _T("ç¡®å®šè¦åˆ é™¤èµ„æºå—?"), _T("æç¤º"), MB_OKCANCEL);
 		if (nResult != 1)
 		{
 			return;
@@ -721,7 +749,7 @@ namespace SOUI
 
 		if (m_lbSkin->GetCount() > 0)
 		{
-			SMessageBox(NULL, _T("ÇëÏÈÒÆ³ıÆ¤·ô"), _T("ÌáÊ¾"), MB_OK);
+			SMessageBox(NULL, _T("è¯·å…ˆç§»é™¤çš®è‚¤"), _T("æç¤º"), MB_OK);
 			return;
 		}
 
@@ -746,25 +774,25 @@ namespace SOUI
 
 	}
 
-	//ĞÂ½¨Æ¤·ô
+	//æ–°å»ºçš®è‚¤
 	void SDlgSkinSelect::OnSkinNew()
 	{
 		if (m_lbResType->GetCurSel() == 0)
 		{
-			CDebug::Debug(_T("ÄÚÖÃÆ¤·ô²»ÄÜĞŞ¸Ä"));
+			CDebug::Debug(_T("å†…ç½®çš®è‚¤ä¸èƒ½ä¿®æ”¹"));
 			return;
 		}
 
 
 		if (m_lbRes->GetCurSel() < 0)
 		{
-			CDebug::Debug(_T("ÇëÏÈÑ¡Ôñ×ÊÔ´"));
+			CDebug::Debug(_T("è¯·å…ˆé€‰æ‹©èµ„æº"));
 			return;
 		}
 
 		if (m_lbSkin->GetCount() > 0)
 		{
-			CDebug::Debug(_T("Ò»¸ö×ÊÔ´Ö»ÄÜ¶ÔÓ¦Ò»¸öÆ¤·ô"));
+			CDebug::Debug(_T("ä¸€ä¸ªèµ„æºåªèƒ½å¯¹åº”ä¸€ä¸ªçš®è‚¤"));
 			return;
 		}
 
@@ -800,12 +828,12 @@ namespace SOUI
 		strSrc = strSrc + *s;
 
 
-		//ÅĞ¶Ïµ±Ç°×ÊÔ´ÒÑ±»ÆäËûÆ¤·ôÒıÓÃ
+		//åˆ¤æ–­å½“å‰èµ„æºå·²è¢«å…¶ä»–çš®è‚¤å¼•ç”¨
 		pugi::xml_node NodeTemp = xmlNode.find_child_by_attribute(_T("src"), strSrc);
 		if (NodeTemp)
 		{
 
-			CDebug::Debug(_T("µ±Ç°×ÊÔ´ÒÑ±»ÆäËûÆ¤·ôÒıÓÃ:") + CDebug::Debug1(NodeTemp));
+			CDebug::Debug(_T("å½“å‰èµ„æºå·²è¢«å…¶ä»–çš®è‚¤å¼•ç”¨:") + CDebug::Debug1(NodeTemp));
 			
 			return;
 
@@ -828,13 +856,13 @@ namespace SOUI
 
 	}
 
-	//É¾³ıÆ¤·ô
+	//åˆ é™¤çš®è‚¤
 	void SDlgSkinSelect::OnSkinDel()
 	{
 
 		if (m_lbResType->GetCurSel() == 0)
 		{
-			CDebug::Debug(_T("ÄÚÖÃÆ¤·ô²»ÄÜÉ¾³ı"));
+			CDebug::Debug(_T("å†…ç½®çš®è‚¤ä¸èƒ½åˆ é™¤"));
 			return;
 		}
 
@@ -843,7 +871,7 @@ namespace SOUI
 			return;
 		}
 
-		int nResult =  SMessageBox(NULL, _T("È·¶¨ÒªÉ¾³ıÆ¤·ôÂğ?"), _T("ÌáÊ¾"), MB_OKCANCEL);
+		int nResult =  SMessageBox(NULL, _T("ç¡®å®šè¦åˆ é™¤çš®è‚¤å—?"), _T("æç¤º"), MB_OKCANCEL);
 		if (nResult != 1)
 		{
 			return;
@@ -929,7 +957,7 @@ namespace SOUI
 
 	void SDlgSkinSelect::SelectLBItem(SListBox * lb, int nIndex)
 	{
-		//ÓÅÏÈ²éÕÒÏµÍ³Æ¤·ô
+		//ä¼˜å…ˆæŸ¥æ‰¾ç³»ç»Ÿçš®è‚¤
 		lb->SetCurSel(nIndex);
 		EventLBSelChanged evt(lb);
 		evt.nOldSel = lb->GetCurSel();
@@ -942,7 +970,7 @@ namespace SOUI
 
 	bool SDlgSkinSelect::OnReNotify(EventArgs *pEvt)
 	{
-		//¹ıÂËeditÊÂ¼şÍ¨Öª
+		//è¿‡æ»¤editäº‹ä»¶é€šçŸ¥
 
 		if (m_lbResType->GetCurSel() < 0)
 		{
@@ -1012,7 +1040,7 @@ namespace SOUI
 
 	void SDlgSkinSelect::GoToSkin()
 	{
-		//ÓÅÏÈ²éÕÒÏµÍ³×ÊÔ´
+		//ä¼˜å…ˆæŸ¥æ‰¾ç³»ç»Ÿèµ„æº
 		pugi::xml_node xmlNode = m_xmlDocSysSkin.child(L"skin").first_child();
 		while (xmlNode)
 		{
@@ -1048,7 +1076,7 @@ namespace SOUI
 
 		//if (m_xmlDocSysSkin.child(L"skin").child(m_strSkinName))
 		//{
-		//	//ÓÅÏÈ²éÕÒÏµÍ³Æ¤·ô
+		//	//ä¼˜å…ˆæŸ¥æ‰¾ç³»ç»Ÿçš®è‚¤
 
 		//	SelectLBItem(m_lbResType, 0);
 		//	SStringT strResText;
@@ -1094,7 +1122,7 @@ namespace SOUI
 
 			if (!xmlNode)
 			{
-				CDebug::Debug(m_strSkinName + _T("ÕÒ²»µ½!"));
+				CDebug::Debug(m_strSkinName + _T("æ‰¾ä¸åˆ°!"));
 				return;
 			}
 
@@ -1110,7 +1138,7 @@ namespace SOUI
 			int n = GetLbIndexFromText(m_lbResType, strList[0]);
 			if (n == -1)
 			{
-				CDebug::Debug(_T("Î´ÖªµÄ×ÊÔ´ÀàĞÍ!"));
+				CDebug::Debug(_T("æœªçŸ¥çš„èµ„æºç±»å‹!"));
 				return;
 			}
 
@@ -1139,14 +1167,14 @@ namespace SOUI
 
 			if (!xmlNode)
 			{
-				CDebug::Debug(_T("Î´ÖªµÄ×ÊÔ´Ãû³Æ"));
+				CDebug::Debug(_T("æœªçŸ¥çš„èµ„æºåç§°"));
 				return;
 			}
 
 			n = GetLbIndexFromText(m_lbRes, strPath);
 			if (n == -1)
 			{
-				CDebug::Debug(_T("Î´ÖªµÄ×ÊÔ´!"));
+				CDebug::Debug(_T("æœªçŸ¥çš„èµ„æº!"));
 				return;
 			}
 
@@ -1158,7 +1186,7 @@ namespace SOUI
 			//n = GetLbIndexFromText(m_lbRes, strList[1]);
 			//if (n == -1)
 			//{
-			// CDebug::Debug(_T("Î´ÖªµÄÆ¤·ô!"));
+			// CDebug::Debug(_T("æœªçŸ¥çš„çš®è‚¤!"));
 			// return;
 			//}
 
@@ -1228,11 +1256,11 @@ bool SDlgSkinSelect::OnPropGridValueChanged( EventArgs *pEvt )
 	pugi:: xml_node xmlNode;
 
 	IPropertyItem* pItem = ((EventPropGridValueChanged*)pEvt)->pItem;
-	SStringT s = pItem->GetName2();  //ÊôĞÔÃû£ºpos skin name id µÈµÈ
+	SStringT s = pItem->GetName2();  //å±æ€§åï¼špos skin name id ç­‰ç­‰
 
-	SStringT s1 = pItem->GetString();   //ÊôĞÔµÄÖµ
+	SStringT s1 = pItem->GetString();   //å±æ€§çš„å€¼
 
-	//ĞŞ¸ÄnameµÄÊ±ºòÅĞ¶ÏÊÇ·ñ´æÔÚ
+	//ä¿®æ”¹nameçš„æ—¶å€™åˆ¤æ–­æ˜¯å¦å­˜åœ¨
 	if (s.CompareNoCase(_T("name")) == 0)
 	{
 		pugi::xml_attribute attrScale = m_xmlNodeCurSkin.attribute(_T("scale"));
@@ -1245,13 +1273,13 @@ bool SDlgSkinSelect::OnPropGridValueChanged( EventArgs *pEvt )
 		if (ChekSkin(s1, strScale))
 		{
 			SStringT strError;
-			strError = strError.Format(_T("ÒÑ¾­´æÔÚÆ¤·ôÃû:%s Scale:%sµÄÆ¤·ô"), s1, strScale);
+			strError = strError.Format(_T("å·²ç»å­˜åœ¨çš®è‚¤å:%s Scale:%sçš„çš®è‚¤"), s1, strScale);
 			CDebug::Debug(strError);
 			return false;
 		}
 	}
 
-	//ĞŞ¸ÄscaleµÄÊ±ºòÅĞ¶ÏÊÇ·ñ´æÔÚ
+	//ä¿®æ”¹scaleçš„æ—¶å€™åˆ¤æ–­æ˜¯å¦å­˜åœ¨
 	if (s.CompareNoCase(_T("scale")) == 0)
 	{
 		pugi::xml_attribute attrName = m_xmlNodeCurSkin.attribute(_T("name"));
@@ -1264,7 +1292,7 @@ bool SDlgSkinSelect::OnPropGridValueChanged( EventArgs *pEvt )
 		if (ChekSkin(strName, s1))
 		{
 			SStringT strError;
-			strError = strError.Format(_T("ÒÑ¾­´æÔÚÆ¤·ôÃû:%s Scale:%sµÄÆ¤·ô"), strName, s1);
+			strError = strError.Format(_T("å·²ç»å­˜åœ¨çš®è‚¤å:%s Scale:%sçš„çš®è‚¤"), strName, s1);
 			CDebug::Debug(strError);
 			return false;
 		}

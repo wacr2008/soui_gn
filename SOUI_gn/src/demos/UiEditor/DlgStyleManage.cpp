@@ -1,11 +1,26 @@
-#include "DlgStyleManage.h"
+ï»¿#include "DlgStyleManage.h"
 #include "CDebug.h"
 #include "helper/SplitString.h"
 
 namespace SOUI
 {
+	SOUI_CLASS_NAME(SDlgStyleManage, L"dlgstylemanage")
 
-	SDlgStyleManage::SDlgStyleManage(SStringT strStyleName, SStringT strPath, BOOL bGetStyle):SHostDialog(_T("layout:ÑùÊ½¹ÜÀí"))
+	EVENT_MAP_BEGIN(SDlgStyleManage)
+		EVENT_NAME_COMMAND(L"btnClose", OnClose)
+		EVENT_NAME_COMMAND(L"btnOK", OnOK)
+		EVENT_NAME_COMMAND(L"btnAdd", OnBtnAdd)
+		EVENT_NAME_COMMAND(L"btnDel", OnBtnDel)
+		EVENT_NAME_COMMAND(L"btnSave", OnBtnSave)
+	EVENT_MAP_END()
+
+	BEGIN_MSG_MAP_EX(SDlgStyleManage)
+		MSG_WM_INITDIALOG(OnInitDialog)
+		CHAIN_MSG_MAP(SHostDialog)
+		REFLECT_NOTIFICATIONS_EX()
+	END_MSG_MAP()
+
+	SDlgStyleManage::SDlgStyleManage(SStringT strStyleName, SStringT strPath, BOOL bGetStyle):SHostDialog(_T("layout:æ ·å¼ç®¡ç†"))
 	{
 		m_strStyleName = strStyleName;
 	    m_strProPath = strPath.Mid(0, strPath.ReverseFind(_T('\\')));
@@ -14,7 +29,7 @@ namespace SOUI
 	}
 
 
-	//TODO:ÏûÏ¢Ó³Éä
+	//TODO:æ¶ˆæ¯æ˜ å°„
 	void SDlgStyleManage::OnClose()
 	{
 		SHostDialog::OnCancel();
@@ -27,7 +42,7 @@ namespace SOUI
 		{
 			if (m_lbStyle->GetCurSel() < 0)
 			{
-					CDebug::Debug(_T("ÇëÑ¡ÔñÆäÖÐÒ»ÏîÑùÊ½"));
+					CDebug::Debug(_T("è¯·é€‰æ‹©å…¶ä¸­ä¸€é¡¹æ ·å¼"));
 					return;
 			}else
 			{
@@ -78,7 +93,7 @@ namespace SOUI
 
 		if (!xmlDocUiRes.load_file(m_strUIResFile))
 		{
-			CDebug::Debug(_T("¼ÓÔØuiresÎÄ¼þÊ§°Ü"));
+			CDebug::Debug(_T("åŠ è½½uiresæ–‡ä»¶å¤±è´¥"));
 			return;
 		}
 
@@ -117,7 +132,7 @@ namespace SOUI
 					result = m_xmlDocStyle.load_file(m_strStyleFile);
 					if (!result)
 					{
-						SMessageBox(NULL, _T("¼ÓÔØskinÎÄ¼þÊ§°Ü"), _T("¼ÓÔØskinÎÄ¼þÊ§°Ü"), MB_OK);
+						SMessageBox(NULL, _T("åŠ è½½skinæ–‡ä»¶å¤±è´¥"), _T("åŠ è½½skinæ–‡ä»¶å¤±è´¥"), MB_OK);
 					}
 				}
 			}

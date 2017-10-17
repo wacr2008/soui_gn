@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 #include <control/SListbox.h>
 #include <souicoll.h>
@@ -7,13 +7,10 @@
 namespace SOUI
 {
     #define EVT_PG_VALUECHANGED (EVT_EXTERNAL_BEGIN+100)
-	//ADD
-    #define EVT_PG_ITEMCLICK (EVT_EXTERNAL_BEGIN+110)
-    #define EVT_PG_ITEMACTIVE (EVT_EXTERNAL_BEGIN+101)
 
     class EventPropGridValueChanged : public TplEventArgs<EventPropGridValueChanged>
     {
-        SOUI_CLASS_NAME(EventPropGridValueChanged,L"on_propgrid_value_changed")
+        SOUI_CLASS_NAME_DECL(EventPropGridValueChanged,L"on_propgrid_value_changed")
     public:
         EventPropGridValueChanged(SObject *pWnd):TplEventArgs<EventPropGridValueChanged>(pWnd){}
         enum{EventID=EVT_PG_VALUECHANGED};
@@ -21,33 +18,9 @@ namespace SOUI
         IPropertyItem * pItem;
     };
 
-
-
-	class EventPropGridItemClick : public TplEventArgs<EventPropGridItemClick>
-	{
-		SOUI_CLASS_NAME(EventPropGridItemClick,L"on_propgrid_item_click")
-	public:
-		EventPropGridItemClick(SObject *pWnd):TplEventArgs<EventPropGridItemClick>(pWnd){}
-		enum{EventID=EVT_PG_ITEMCLICK};
-
-		IPropertyItem * pItem;
-		SStringT strType;
-	};
-
-
-	class EventPropGridItemActive : public TplEventArgs<EventPropGridItemActive>
-	{
-		SOUI_CLASS_NAME(EventPropGridItemActive,L"on_propgrid_item_active")
-	public:
-		EventPropGridItemActive(SObject *pWnd):TplEventArgs<EventPropGridItemActive>(pWnd){}
-		enum{EventID=EVT_PG_ITEMACTIVE};
-
-		IPropertyItem * pItem;
-	};
-
     class SPropertyGroup : public SPropertyItemBase
     {
-        SOUI_CLASS_NAME(SPropertyGroup,L"propgroup")
+        SOUI_CLASS_NAME_DECL(SPropertyGroup,L"propgroup")
     public:
         virtual BOOL IsGroup() const {return TRUE;}
         virtual void DrawItem(IRenderTarget *pRT,CRect rc);
@@ -87,7 +60,7 @@ namespace SOUI
     
     class SPropertyGrid : public SListBox
     {
-        SOUI_CLASS_NAME(SPropertyGrid, L"propgrid")
+        SOUI_CLASS_NAME_DECL(SPropertyGrid, L"propgrid")
     public:
         enum EXPSTATE
         {
@@ -114,36 +87,10 @@ namespace SOUI
         void SortInsert(IPropertyItem *pItem);
         
         BOOL InsertGroup(SPropertyGroup * pGroup,SPropertyGroup* pInertAfter=IG_LAST);
-
-		//add
-		 BOOL AddGridItem(IPropertyItem* Item);
-		 BOOL RemoveGridItem(IPropertyItem *Item);
-		 BOOL RemoveAllGridItem();
-		 void ClearAllGridItemValue();
-		 IPropertyItem * GetGridItem(SStringT strName2);
-
-		 //SMap<SStringT, IPropertyItem*>* GetItemMap();
         
-        SOUI_ATTRS_BEGIN()
-            ATTR_INT(L"indent",m_nIndent,TRUE)
-            ATTR_INT(L"nameWidth",m_nNameWidth,TRUE)
-            ATTR_ENUM_BEGIN(L"orderType",ORDERTYPE,TRUE)
-                ATTR_ENUM_VALUE(L"null",OT_NULL)
-                ATTR_ENUM_VALUE(L"group",OT_GROUP)
-                ATTR_ENUM_VALUE(L"name",OT_NAME)
-            ATTR_ENUM_END(m_orderType)
-            ATTR_SKIN(L"switchSkin",m_switchSkin,TRUE)
-			ATTR_COLOR(L"ColorGroup",m_crGroup,FALSE)
-			ATTR_COLOR(L"ColorItem",m_crItem,FALSE)
-			ATTR_COLOR(L"ColorItemText",m_crItemText,FALSE)
-			ATTR_COLOR(L"ColorItemText",m_crItemText,FALSE)
-			ATTR_COLOR(L"ColorItemSel",m_crItemSel,FALSE)
-			ATTR_STRINGT(L"EditBkgndColor",m_strEditBkgndColor,FALSE)
-			ATTR_STRINGT(L"EditTextColor",m_strEditTextColor,FALSE)
-			ATTR_COLOR(L"ColorBorder",m_crBorder,FALSE)
-			ATTR_STRINGT(L"autoWordSel",m_strEnableAutoWordSel,FALSE)
-        SOUI_ATTRS_END()
-        
+        SOUI_ATTRS_DECL()
+		SOUI_MSG_MAP_DECL()
+
     protected:
         enum ITEMPART
         {
@@ -161,30 +108,19 @@ namespace SOUI
         virtual UINT OnGetDlgCode(){return SC_WANTALLKEYS;}
         virtual BOOL OnSetCursor(const CPoint &pt);
         virtual BOOL OnScroll(BOOL bVertical,UINT uCode,int nPos);
-
-
-
-
         
         void OnLButtonDown(UINT nFlags,CPoint pt);
         void OnLButtonUp(UINT nFlags,CPoint pt);
         void OnMouseMove(UINT nFlags,CPoint pt);
         void OnLButtonDbClick(UINT nFlags, CPoint point);
         void OnSize(UINT nType, CSize size);
-        SOUI_MSG_MAP_BEGIN()
-            MSG_WM_LBUTTONDOWN(OnLButtonDown)
-            MSG_WM_LBUTTONUP(OnLButtonUp)
-            MSG_WM_MOUSEMOVE(OnMouseMove)
-            MSG_WM_LBUTTONDBLCLK(OnLButtonDbClick)
-            MSG_WM_SIZE(OnSize)
-        SOUI_MSG_MAP_END()
+        
     public:
         void OnInplaceActiveWndCreate(IPropertyItem *pItem,SWindow *pWnd,pugi::xml_node xmlInit);
         void OnInplaceActiveWndDestroy(IPropertyItem *pItem,SWindow *pWnd);
         void OnItemValueChanged(IPropertyItem *pItem);
-        void OnItemButtonClick(IPropertyItem *pItem, SStringT strType);
     protected:
-        SWindow *   m_pInplaceActiveWnd;    // Ù–‘ƒ⁄«∂µƒ¥∞ø⁄
+        SWindow *   m_pInplaceActiveWnd;    //Â±ûÊÄßÂÜÖÂµåÁöÑÁ™óÂè£
         
     protected:
         bool OnSelChanged(EventArgs *pEvt);
@@ -197,27 +133,17 @@ namespace SOUI
         enum {CHILD_CMDBTN=1,CHILD_INPLACEWND=2};
         void UpdateChildrenPos(UINT childs=CHILD_CMDBTN|CHILD_INPLACEWND);
         
-        int m_nIndent;          //ÀıΩ¯¥Û–°
-        int m_nNameWidth;    // Ù–‘√˚’º”√ø’º‰
+        int m_nIndent;          //Áº©ËøõÂ§ßÂ∞è
+        int m_nNameWidth;    //Â±ûÊÄßÂêçÂç†Áî®Á©∫Èó¥
         ORDERTYPE   m_orderType;
-        SList<SPropertyGroup *> m_lstGroup; //∏˘∑÷¿‡¡–±Ì
+        SList<SPropertyGroup *> m_lstGroup; //Ê†πÂàÜÁ±ªÂàóË°®
         ISkinObj  *  m_switchSkin;
-        SWindow   *  m_pCmdBtn; //”–µØ≥ˆ∞¥≈•µƒ±ÌœÓ π”√µƒ∞¥≈•
+        SWindow   *  m_pCmdBtn; //ÊúâÂºπÂá∫ÊåâÈíÆÁöÑË°®È°π‰ΩøÁî®ÁöÑÊåâÈíÆ
                 
         CPoint      m_ptDrag;
         BOOL        m_bDraging;
-
-		COLORREF m_crGroup;       //Group±≥æ∞—’…´
-		COLORREF m_crItem;        //Item±≥æ∞—’…´
-		COLORREF m_crItemText;    //ItemŒƒ±æ—’…´
-		COLORREF m_crItemSel;     //Item—°÷– ±µƒ±≥æ∞…´
-		SStringT m_strEditBkgndColor; //editµƒ±≥æ∞…´;
-		SStringT m_strEditTextColor; //editµƒŒƒ±æ—’…´;
-		COLORREF m_crBorder;      //±ﬂøÚ—’…´
-		SStringT    m_strEnableAutoWordSel;    /**< enable Word style auto word selection?  */
         
-		//add
-        SMap<SStringT, IPropertyItem*> m_mapItem;
+        
         static SMap<SStringW, FunCreatePropItem> s_mapProps;
     };
     

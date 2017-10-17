@@ -1,4 +1,4 @@
-/* SfxSetup.c - 7z SFX Setup
+﻿/* SfxSetup.c - 7z SFX Setup
 2016-05-16 : Igor Pavlov : Public domain */
 
 #include "Precomp.h"

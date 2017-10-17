@@ -1,16 +1,15 @@
-#pragma once
+Ôªø#pragma once
 #include "core/shostwnd.h"
 #include "core/smsgloop.h"
 #include "core/SHostDialog.h"
 #include "control/SRichEdit.h"
 #include "SImgCanvas.h"
 #include "propgrid/SPropertyGrid.h"
-
 namespace SOUI
 {
 	class SDlgSkinSelect: public SHostDialog
 	{
-		SOUI_CLASS_NAME(SDlgSkinSelect,L"dlgskinselect")
+		SOUI_CLASS_NAME_DECL(SDlgSkinSelect,L"dlgskinselect")
 	public:
 		SDlgSkinSelect(LPCTSTR pszXmlName, SStringT strSkinName, SStringT strPath, BOOL bGetSkin = TRUE);
 
@@ -51,32 +50,9 @@ namespace SOUI
 		//void OnCancel();
 		//virtual SMessageLoop * GetMsgLoop(){return m_MsgLoop;}
 
-		EVENT_MAP_BEGIN()
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_close", OnClose)
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_min", OnMinimize)
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_max", OnMaximize)
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_restore", OnRestore)
+		EVENT_MAP_DECL()
 
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZYLX_new", OnZYLXNew)
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZYLX_DEL", OnZYLXDel)
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZY_NEW", OnZYNew)
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_ZY_DEL", OnZYDel)
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_new", OnSkinNew)
-			EVENT_NAME_COMMAND(L"NAME_UIDESIGNER_btn_SKIN_DEL", OnSkinDel)
-
-			EVENT_NAME_COMMAND(L"btnOK", OnOK)
-
-			//EVENT_ID_COMMAND(IDOK,OnOK)
-			//EVENT_ID_COMMAND(IDCANCEL,OnCancel)
-			EVENT_MAP_END()
-
-		BEGIN_MSG_MAP_EX(SDlgSkinSelect)
-			MSG_WM_INITDIALOG(OnInitDialog)
-			//MSG_WM_CLOSE(OnCancel)
-			//MSG_WM_KEYDOWN(OnKeyDown)
-			CHAIN_MSG_MAP(SHostDialog)
-			REFLECT_NOTIFICATIONS_EX()
-			END_MSG_MAP()
+		BEGIN_MSG_MAP_EX_DECL()
 
 	protected:
 		 void InitResType();
@@ -99,18 +75,18 @@ namespace SOUI
 
 	public:
 		SStringT m_strinput;
-		SStringT m_strSkinName;  //∆§∑Ù√˚
+		SStringT m_strSkinName;  //ÁöÆËÇ§Âêç
 
 
-		SStringT m_strUIResFile;   //uires.idxÕÍ’˚Œƒº˛√˚
+		SStringT m_strUIResFile;   //uires.idxÂÆåÊï¥Êñá‰ª∂Âêç
 
-		SStringT m_strSkinFile;   //skinÕÍ’˚Œƒº˛√˚
+		SStringT m_strSkinFile;   //skinÂÆåÊï¥Êñá‰ª∂Âêç
 
 		pugi::xml_node m_xmlNodeUiRes;
-	    SListBox *m_lbResType;  //◊ ‘¥¿‡–Õ
-		SListBox *m_lbRes;  //◊ ‘¥
-		SListBox *m_lbSkin;  //∆§∑Ù
-		SPropertyGrid *m_pgGrid;  //∆§∑Ù Ù–‘
+	    SListBox *m_lbResType;  //ËµÑÊ∫êÁ±ªÂûã
+		SListBox *m_lbRes;  //ËµÑÊ∫ê
+		SListBox *m_lbSkin;  //ÁöÆËÇ§
+		SPropertyGrid *m_pgGrid;  //ÁöÆËÇ§Â±ûÊÄß
 
 		//SButton *m_btnZYLXNew;
 		//SButton *m_btnZYLXDel;

@@ -1,10 +1,10 @@
-/********************************************************************
+ï»¿/********************************************************************
 	created:	2014/11/03
 	created:	3:11:2014   16:13
 	filename: 	SIPAddressCtrl.h
-	author:		±ù
+	author:		å†°
 	
-	purpose:	SOUI°æµÄIP¿Ø¼þ
+	purpose:	SOUIç‰ˆçš„IPæŽ§ä»¶
 *********************************************************************/
 #pragma once
 
@@ -16,7 +16,7 @@ namespace SOUI
 	class SIPAddressCtrl :
 		public SWindow
 	{
-		SOUI_CLASS_NAME(SIPAddressCtrl,L"ipctrl")
+		SOUI_CLASS_NAME_DECL(SIPAddressCtrl,L"ipctrl")
 	public:
 		SIPAddressCtrl(void);
 		~SIPAddressCtrl(void);
@@ -36,11 +36,7 @@ namespace SOUI
 		LRESULT OnCreate(LPVOID); 
 		void OnSize( UINT nType, CSize size );
 		
-		SOUI_MSG_MAP_BEGIN()
-		    MSG_WM_CREATE(OnCreate)
-			MSG_WM_SIZE(OnSize)
-			MSG_WM_PAINT_EX(OnPaint)
-		SOUI_MSG_MAP_END()
+		SOUI_MSG_MAP_DECL()
 	private:
 		SEditIP * m_editFields[4];
 	};

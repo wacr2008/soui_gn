@@ -1,0 +1,175 @@
+import("//build_overrides/common.gni")
+ 
+
+executable("SouiEditor") {
+  configs += [ "//build/config:precompiled_headers" ]
+
+  configs -= [ "//build/config/win:console" ]
+  configs += [ "//build/config/win:windowed" ] 
+  
+  sources = [ 
+            "Adapter.h",
+            "CDebug.h",
+            "Global.h",
+            "CmdLine.h",
+            "CNewGuid.h",
+            "DesignerView.h",
+            "FileHelper.h",
+            "helpapi.h",
+            "MainDlg.h",
+            "ResManger.h",
+            "pugixml_write.h",
+            "resource.h",
+            "ScintillaWnd.h",
+            "SDesignerRoot.h",
+            "SImageBtnEx.h",
+            "SImageSwitcher.h",
+            "SImgCanvas.h",
+            "SListBoxDrop.h",
+            "SMoveWnd.h",
+            "SouiRealWndHandler.h",
+            "SRotateWindow.h",
+            "SSwitch.h",
+            "SysdataMgr.h",
+            "xpm_icons.h",
+            "colorpicker/ColourPopup.h",
+            "colorpicker/SColorPicker.h",
+            "colorpicker/Tooltipctrl.h",
+            "Dialog/DlgAbout.h",
+            "Dialog/DlgCreatePro.h",
+            "Dialog/DlgFontSelect.h",
+            "Dialog/DlgInput.h",
+            "Dialog/DlgNewLayout.h",
+            "Dialog/DlgNewSkin.h",
+            "Dialog/DlgSkinSelect.h",
+            "Dialog/DlgStyleManage.h",
+            "propgrid/SPropertyEmbedWndHelper.hpp",
+            "propgrid/SPropertyGrid.h",
+            "propgrid/SPropertyItem-i.h",
+            "propgrid/SPropertyItemBase.h",
+            "res/resource.h",
+            "propgrid/propitem/SPropertyItem-Color.h",
+            "propgrid/propitem/SPropertyItem-Option.h",
+            "propgrid/propitem/SPropertyItem-Size.h",
+            "propgrid/propitem/SPropertyItem-Text.h",
+            "propgrid/SPropertyGrid.h",
+            "colorpicker/SColorPicker.h",
+            "colorpicker/ColourPopup.h",
+            "DragDownMgr.h",
+
+            "Adapter.cpp",    
+            "DesignerView.cpp",
+            "helpapi.cpp",
+            "MainDlg.cpp",
+            "ResManger.cpp",
+            "pugixml_write.cpp",
+            "ScintillaWnd.cpp",
+            "SDesignerRoot.cpp",
+            "SImageBtnEx.cpp",
+            "SImageSwitcher.cpp",
+            "SImgCanvas.cpp",
+            "SMoveWnd.cpp",
+            "SouiEditor.cpp",
+            "SouiRealWndHandler.cpp",
+            "SSwitch.cpp",
+            "SysdataMgr.cpp",
+            "colorpicker/ColourPopup.cpp",
+            "colorpicker/SColorPicker.cpp",
+            "Dialog/DlgAbout.cpp",
+            "Dialog/DlgCreatePro.cpp",
+            "Dialog/DlgFontSelect.cpp",
+            "Dialog/DlgInput.cpp",
+            "Dialog/DlgNewLayout.cpp",
+            "Dialog/DlgNewSkin.cpp",
+            "Dialog/DlgSkinSelect.cpp",
+            "Dialog/DlgStyleManage.cpp",
+            "propgrid/SPropertyGrid.cpp",
+            "propgrid/SPropertyItemBase.cpp",
+            "propgrid/propitem/SPropertyItem-Color.cpp",
+            "propgrid/propitem/SPropertyItem-Option.cpp",
+            "propgrid/propitem/SPropertyItem-Size.cpp",
+            "propgrid/propitem/SPropertyItem-Text.cpp",
+            
+
+
+            "../../controls.extend/image3d/3dlib.cpp",
+            "../../controls.extend/image3d/3dmatrix.cpp",
+            "../../controls.extend/image3d/3dtransform.cpp",
+            "../../controls.extend/ExtendSkins.cpp",
+            "../../controls.extend/SButtonEx.cpp",
+            "../../controls.extend/SChromeTabCtrl.cpp",
+            "../../controls.extend/SFreeMoveWindow.cpp",
+            "../../controls.extend/gif/SGifPlayer.cpp",
+            "../../controls.extend/SImageEx.cpp",
+            "../../controls.extend/SImageMaskWnd.cpp",
+            "../../controls.extend/gif/SSkinAPNG.cpp",
+            "../../controls.extend/gif/SSkinGif.cpp",
+            "../../controls.extend/SSkinMutiFrameImg.cpp",
+            "../../controls.extend/STabCtrl2.cpp",
+            "../../controls.extend/SText.cpp",
+            "../../controls.extend/STurn3DView.cpp",
+            "../../controls.extend/SScrollText.cpp",
+            "../../controls.extend/SIPAddressCtrl.cpp",
+            "../../controls.extend/SListCtrlEx.cpp",
+            "../../controls.extend/SRatingBar.cpp",
+            "../../controls.extend/SRadioBox2.cpp",
+            "../../controls.extend/SMcListViewEx/SHeaderCtrlEx.cpp",
+
+
+            "../../controls.extend/image3d/3dlib.h",
+            "../../controls.extend/image3d/3dmatrix.h",
+            "../../controls.extend/image3d/3dTransform.h",
+            "../../controls.extend/ExtendSkins.h",
+            "../../controls.extend/image3d/PerspectiveTransform.h",
+            "../../controls.extend/gif/SAniImgFrame.h",
+            "../../controls.extend/SButtonEx.h",
+            "../../controls.extend/SChromeTabCtrl.h",
+            "../../controls.extend/SFreeMoveWindow.h",
+            "../../controls.extend/gif/SGifPlayer.h",
+            "../../controls.extend/SImageEx.h",
+            "../../controls.extend/SImageMaskWnd.h",
+            "../../controls.extend/gif/SSkinAPNG.h",
+            "../../controls.extend/gif/SSkinGif.h",
+            "../../controls.extend/SSkinMutiFrameImg.h",
+            "../../controls.extend/STabCtrl2.h",
+            "../../controls.extend/SText.h",
+            "../../controls.extend/STurn3DView.h",
+            "../../controls.extend/SScrollText.h",
+            "../../controls.extend/SIPAddressCtrl.h",
+            "../../controls.extend/SListCtrlEx.h",
+            "../../controls.extend/SRatingBar.h",
+            "../../controls.extend/SMcListViewEx/SHeaderCtrlEx.h",
+   ]
+
+  include_dirs = [
+    ".",
+    "../../config",
+    "../../soui/include",
+    "../../utilities/include",
+    "../../components",
+    "../../controls.extend",    
+    "../../third-part/Scintilla/include",
+  ]
+
+  deps = [ 
+    "../../utilities",
+    "../../SOUI",
+    "../../third-part",
+    "../../components",
+    "../../soui-sys-resource",
+    "../../../:preBuild_SouiEditor_resource",
+  ]
+ 
+
+  if (is_win) {
+    cflags = [
+      #"/W3",  # Warning level 3.
+      "/wd4201",
+      "/wd4239",
+      "/wd4407",
+    ]
+  }
+  
+  defines = ["_CRT_SECURE_NO_WARNINGS","_USE_UI_LIBRAY",] 
+
+} 

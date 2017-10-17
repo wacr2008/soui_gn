@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "SPropertyItem-i.h"
 #include <sobject/sobject.hpp>
@@ -9,7 +9,7 @@ namespace SOUI
 {
     class SPropertyItemBase : public TObjRefImpl<IPropertyItem>
     {
-        SOUI_CLASS_NAME(SPropertyItemBase,L"propitembase")
+        SOUI_CLASS_NAME_DECL(SPropertyItemBase,L"propitembase")
     public:
         virtual ~SPropertyItemBase();
         virtual LPCWSTR GetItemClass() const {return GetClassName();}
@@ -28,19 +28,17 @@ namespace SOUI
         virtual BOOL RemoveChild(IPropertyItem * pChild);
         virtual int ChildrenCount() const;
 
-        virtual SStringW GetName2() const{return m_strName2;}
-        virtual SStringW GetName1() const{return m_strName;}
-        virtual void SetName1(const SStringW & strName){m_strName=strName;}
-        virtual void SetName2(const SStringW & strName){m_strName2=strName;}
+        virtual SStringW GetName2() const{return m_strName;}
+        virtual LPCWSTR GetName() const{return m_strName;}
+        virtual void SetName(const SStringW & strName){m_strName=strName;}
         virtual int GetID()const {return m_nID;}
         virtual void SetID(int nID) {m_nID = nID;}
         virtual SStringT GetDescription() const {return m_strDescription;}
         virtual void SetDescription(const SStringT & strDescription){m_strDescription =strDescription;}
         virtual SStringT GetString() const {return _T("");}
         virtual void SetString(const SStringT & strValue) {}
-
-		virtual void SetStringOnly(const SStringT & strValue){};
-
+        virtual const void* GetValue() const {return NULL;}
+        virtual void SetValue(void *pValue){}
 
         virtual void AdjustInplaceActiveWndRect(CRect & rc){rc.bottom--;}
         virtual void DrawItem(IRenderTarget *pRT,CRect rc){}
@@ -48,24 +46,15 @@ namespace SOUI
         virtual void OnInplaceActive(bool bActive){ m_bInplaceActive = bActive;}
         virtual void OnButtonClick(){}
         virtual void OnValueChanged();
-        virtual void OnChildValueChanged( IPropertyItem *pChild ){};
-		virtual SList<IPropertyItem*>* GetItemList(){return &m_childs;};
+        virtual void OnChildValueChanged( IPropertyItem *pChild ){}
 
-        SOUI_ATTRS_BEGIN()
-            ATTR_STRINGW(L"name",m_strName,FALSE)
-            ATTR_STRINGW(L"name2",m_strName2,FALSE)
-            ATTR_INT(L"id",m_nID,FALSE)
-            ATTR_STRINGT(L"description",m_strDescription,FALSE)
-            ATTR_INT(L"readOnly",m_bReadOnly,FALSE)
-            ATTR_CUSTOM(L"expanded",OnAttrExpanded)
-        SOUI_ATTRS_END()
+        SOUI_ATTRS_DECL()
 
         virtual BOOL InitFromXml(pugi::xml_node xmlNode);
     protected:
         HRESULT OnAttrExpanded(const SStringW &  strValue,BOOL bLoading);
 
         SStringW        m_strName;
-		SStringW        m_strName2;
         int             m_nID;
         SStringT        m_strDescription;
 
@@ -76,7 +65,7 @@ namespace SOUI
         typedef SList<IPropertyItemPtr> PropItemList;
         PropItemList    m_childs;
 
-        BOOL            m_bExpanded;  //ÕÛµþ»òÕ¹¿ª
+        BOOL            m_bExpanded;
         BOOL            m_bReadOnly;
         bool            m_bInplaceActive;
     protected:
