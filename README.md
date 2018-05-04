@@ -8,6 +8,12 @@ gn for soui &amp; gn demo,vs2013 and yasm
 5.支持protobuf类自动生成
 
 
+需要vs2013和vs2015的编绎相关工具的,请从我的网盘中直接下载
+https://pan.baidu.com/s/1dFF7kf3
+里面有两个vs2013_files.zip和vs2015_files.zip,解压到C盘即可(如果想放到其它盘需要修改build\win_toolchain.json相关配置).
+目前默认是使用vs2015编绎.如需要使用vs2013编绎,请修改build目录下面相关的文件,比如vs_toolchain.py
+
+
 
 目录说明
   gndemo
