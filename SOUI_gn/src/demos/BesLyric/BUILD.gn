@@ -10,7 +10,7 @@ executable("BesLyric") {
   sources = [ 
     "BesLyric.cpp",
     "BSMessageBox.h",
-    "resource.h", 
+    "Resource.h", 
 
     "FileHelper.cpp",
     "FileHelper.h",

@@ -5,22 +5,24 @@
 #include "SColorizeText.h"
 #include "com-cfg.h"
 #include "SRealWndHandler_Scintilla.h"
+#include "res/R.h"
 
 #ifdef _DEBUG
-#define RES_TYPE 0
+#define RES_TYPE 0 
 #else
-#define RES_TYPE 1
+#define RES_TYPE 0
 #endif
-#define SYS_NAMED_RESOURCE _T("soui-sys-resource.dll")
 
-using namespace SOUI;
+#define SYS_NAMED_RESOURCE _T("soui-sys-resource.dll")
+	
 //定义唯一的一个R,UIRES对象,ROBJ_IN_CPP是resource.h中定义的宏。
 	
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int /*nCmdShow*/)
 {
     HRESULT hRes = OleInitialize(NULL);
-    SASSERT(SUCCEEDED(hRes));
 	(void)hRes;
+    SASSERT(SUCCEEDED(hRes));
+
     int nRet = 0;
     
     SComMgr *pComMgr = new SComMgr;
@@ -29,7 +31,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
     TCHAR szCurrentDir[MAX_PATH] = { 0 };
     GetModuleFileName(NULL, szCurrentDir, sizeof(szCurrentDir));
     LPTSTR lpInsertPos = _tcsrchr(szCurrentDir, _T('\\'));
-    _tcscpy(lpInsertPos + 1, _T("..\\..\\src\\demos\\SLogViewer"));
+	wcscpy(lpInsertPos + 1, L"..\\..\\src\\demos\\SLogViewer");
     SetCurrentDirectory(szCurrentDir);
     {
         BOOL bLoaded=FALSE;
@@ -92,11 +94,10 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
             if(theApp->LoadXmlDocment(xmlLang,_T("lang_cn"),_T("languages")))
             {
                 CAutoRefPtr<ITranslator> langCN;
-                trans->CreateTranslator(&langCN);
+                trans->CreateTranslator(&langCN); 
 				pugi::xml_node node = xmlLang.child(L"language");
-				langCN->Load(&node, 1);//1=LD_XML
-				
-				trans->InstallTranslator(langCN);
+                langCN->Load(&node,1);//1=LD_XML
+                trans->InstallTranslator(langCN);
             }
         }
         

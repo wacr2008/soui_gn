@@ -122,10 +122,11 @@ public:
      * SComboBox::GetLBText
      * @brief    获取文本
      * @param    int iItem -- 索引值
+	 * @param    BOOL bRawText-- true:未经翻译的文字，false：翻译后的文字
      *
      * Describe  获取文本
      */
-	SStringT GetLBText(int iItem) override;
+    SStringT GetLBText(int iItem,BOOL bRawText = FALSE) override; 
     /**
      * SComboBox::GetListBox
      * @brief    获取下拉列表指针
@@ -144,6 +145,10 @@ protected:
      * Describe  此函数是消息响应函数
      */ 
     BOOL FireEvent(EventArgs &evt) override;
+
+    virtual void OnScaleChanged(int nScale);
+
+	virtual HRESULT OnLanguageChanged();
 
     /**
      * SComboBox::CreateListBox

@@ -235,9 +235,10 @@ int SListCtrl::GetSelectedItem()
 
 void SListCtrl::SetSelectedItem(int nItem)
 {
-    m_nSelectItem = nItem;
-    
-    Invalidate();
+	if (nItem != m_nSelectItem)
+	{
+		NotifySelChange(m_nSelectItem, nItem);
+	}
 }
 
 int SListCtrl::GetItemCount() const
@@ -357,12 +358,12 @@ void SListCtrl::UpdateScrollBar()
     SSendMessage(WM_NCCALCSIZE);
 
     //  根据需要调整原点位置
-    if (HasScrollBar(FALSE) && m_ptOrigin.x+(int)m_siHoz.nPage>szView.cx)
+    if (HasScrollBar(FALSE) && m_ptOrigin.x+m_siHoz.nPage>szView.cx)
     {
         m_ptOrigin.x = szView.cx-m_siHoz.nPage;
     }
 
-    if (HasScrollBar(TRUE) && m_ptOrigin.y+ (int)m_siVer.nPage>szView.cy)
+    if (HasScrollBar(TRUE) && m_ptOrigin.y+m_siVer.nPage>szView.cy)
     {
         m_ptOrigin.y = szView.cy-m_siVer.nPage;
     }
@@ -473,7 +474,7 @@ CRect SListCtrl::GetItemRect(int nItem, int nSubItem)
 
         m_pHeader->GetItem(nCol, &hdi);
         rcItem.left  = rcItem.right;
-        rcItem.right = rcItem.left+hdi.cx;
+        rcItem.right = rcItem.left+hdi.cx.toPixelSize(GetScale());
         if (hdi.iOrder == nSubItem)
             break;
     }
@@ -672,7 +673,7 @@ void SListCtrl::DrawItem(IRenderTarget * pRT, CRect rcItem, int nItem)
         hdi.mask=SHDI_WIDTH|SHDI_ORDER;
         m_pHeader->GetItem(nCol,&hdi);
         rcCol.left=rcCol.right;
-        rcCol.right = rcCol.left + hdi.cx;
+        rcCol.right = rcCol.left + hdi.cx.toPixelSize(GetScale());
 
         rcVisiblePart.IntersectRect(rcItem, rcCol);
 

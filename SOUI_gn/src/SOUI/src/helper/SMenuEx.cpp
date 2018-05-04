@@ -12,6 +12,7 @@ namespace SOUI
 #define WIDTH_MENU_MAX      2000
 #define WIDTH_MENU_MIN      100.f
 
+
 #define Y_MIDFLAG L"-1000"
 #define Y_IMIDFLAG (-1000)
 
@@ -85,7 +86,7 @@ namespace SOUI
 
 		//CRect GetMargin() const;
         CSize GetDesiredSize(LPCRECT pRcContainer) override
-        {
+		{
 			CSize szRet;
 			SWindow *pItem = GetWindow(GSW_FIRSTCHILD);
 			while (pItem)
@@ -206,14 +207,15 @@ namespace SOUI
 	HRESULT SMenuExRoot::OnAttrIconPos(const SStringW & strValue, BOOL bLoading)
 	{
 		SStringWList values;
-		if (1 == SplitString(strValue, L',', values))
+		SplitString(strValue, L',', values);
+		if (1 == values.GetCount())
 		{
 			//只设置X时，让Y方向自动居中
 			m_iconX.parseString(values[0]);
 			m_iconY.parseString(Y_MIDFLAG);
 			return S_OK;
 		}
-		else if (2 != SplitString(strValue, L',', values))
+		else if (2 != values.GetCount())
 			return E_INVALIDARG;
 		m_iconX.parseString(values[0]);
 		m_iconY.parseString(values[1]);
@@ -912,7 +914,7 @@ namespace SOUI
 
 			if (bMsgQuit)
 			{
-				PostQuitMessage(msg.wParam);
+				PostQuitMessage((int)msg.wParam);
 				break;
 			}
 		}
@@ -960,7 +962,7 @@ namespace SOUI
 		}
 		else if (s_MenuData && ::IsWindow(s_MenuData->GetOwner()))
 		{
-			return ::SendMessage(s_MenuData->GetOwner(), UM_MENUEVENT, 0, (LPARAM)pEvt);
+			return (BOOL)::SendMessage(s_MenuData->GetOwner(), UM_MENUEVENT, 0, (LPARAM)pEvt);
 		}
 		else
 		{
@@ -1136,26 +1138,29 @@ namespace SOUI
 		else//MF_BYCOMMAND
 		{
 			pItemRef = pMenuRoot->FindChildByID2<SMenuExItem>(uPos);
+		    if (!pItemRef) return FALSE;
 		}
 
-		if (!pItemRef) return FALSE;
-
+        //MF_BYPOSITION方式插入时,如果uPos大于菜单项总数,应在末尾插入,而此时pItemRef为NULL
+        //if (!pItemRef) return FALSE;
+        
 		SMenuExItem *pMenuItem = (SMenuExItem*)pMenuRoot->CreateMenuItem((uFlag & MF_SEPARATOR) ? SMenuExSep::GetClassName() : SMenuExItem::GetClassName());
-		if (pItemRef)
+
+        if (pItemRef)
 		{
 			SWindow *pRefPrev = pItemRef->GetWindow(GSW_PREVSIBLING);
 			if (pRefPrev)
 			{
-				InsertChild(pMenuItem, pRefPrev);
+				pRefPrev->GetParent()->InsertChild(pMenuItem, pRefPrev);
 			}
 			else
 			{
-				InsertChild(pMenuItem, ICWND_FIRST);
+				pItemRef->GetParent()->InsertChild(pMenuItem, ICWND_FIRST);
 			}
 		}
 		else
 		{
-			InsertChild(pMenuItem);
+			pMenuRoot->InsertChild(pMenuItem);
 		}
 		if (!(uFlag & MF_SEPARATOR))
 		{
@@ -1164,6 +1169,10 @@ namespace SOUI
 			{
 				pMenuItem->m_pSubMenu = new SMenuEx(pMenuItem);
 			}
+
+            SStringW strId;
+            strId.Format(L"%d", nId);
+            pMenuItem->SetAttribute(L"ID", strId);
 		}
 
 		return FALSE;

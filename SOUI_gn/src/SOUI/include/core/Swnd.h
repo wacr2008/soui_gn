@@ -154,14 +154,14 @@ namespace SOUI
 
 		void SetText(const SStringT& strText);
 
-		SStringT GetText() const;
+		SStringT GetText(BOOL bRawText=FALSE) const;
 
 		void TranslateText();
 
 	protected:
 		ITrCtxProvider * pTrCtxProvider;
 
-		SStringT strOrigin;	//原始字符串
+		SStringT strRaw;	//原始字符串
 		SStringT strTr;		//翻译后的字符串
 	};
 
@@ -249,7 +249,7 @@ namespace SOUI
         *
         * Describe  
         */
-        virtual SStringT GetWindowText();
+		virtual SStringT GetWindowText(BOOL bRawText = FALSE);
 
         /**
         * SetWindowText

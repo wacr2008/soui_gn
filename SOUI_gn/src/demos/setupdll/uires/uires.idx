@@ -56,7 +56,7 @@
   </SMENU>
 
   <rtf>
-    <file name="rtf_agreement"	path="rtf\软件协议.rtf"/>
+    <file name="rtf_agreement"	path="rtf\license.rtf"/>
   </rtf>
 
 </resource>

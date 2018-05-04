@@ -23,4 +23,5 @@
 #include "STileView.h"
 #include "STreeView.h"
 #include "SMenuBar.h"
+#include "SSpinButton.h"
 #include "SDateTimePicker.h"

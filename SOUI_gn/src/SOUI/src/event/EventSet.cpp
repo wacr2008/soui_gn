@@ -339,6 +339,7 @@ namespace SOUI
 
     SOUI_CLASS_NAME(EventSelectMenu, L"on_select_menu")
 
+    SOUI_CLASS_NAME(EventSetHotKey, L"on_hot_key_set_event")
 
 
 	EventTimer::EventTimer(SObject *pSender, UINT _uID) :TplEventArgs<EventTimer>(pSender), uID(_uID) 
@@ -592,4 +593,9 @@ namespace SOUI
 	EventSelectMenu::EventSelectMenu(SObject *pSender) :TplEventArgs<EventSelectMenu>(pSender)
 	{
 	}
+
+    EventSetHotKey::EventSetHotKey(SObject *pSender) :TplEventArgs<EventSetHotKey>(pSender) 
+    {
+
+    } 
 }//end of namespace

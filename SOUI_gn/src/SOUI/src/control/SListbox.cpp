@@ -5,6 +5,7 @@
 //     Version: 2012.12.18 - 1.0 - Create
 //////////////////////////////////////////////////////////////////////////
 
+#pragma  once
 #include "souistd.h"
 #include "control/Slistbox.h"
 #include "SApp.h"
@@ -15,7 +16,7 @@
 
 namespace SOUI
 {
-	tagLBITEM::tagLBITEM()
+	tagLBITEM::tagLBITEM(ITrCtxProvider * pTrCtx) :strText(pTrCtx)
 	{
 		nImage = -1;
 		lParam = NULL;
@@ -27,7 +28,7 @@ namespace SOUI
 	}
 
 	SOUI_ATTRS_BEGIN(SListBox)
-		ATTR_INT(L"itemHeight", m_nItemHei, FALSE)
+		ATTR_LAYOUTSIZE(L"itemHeight", m_itemHeight, FALSE)
 		ATTR_SKIN(L"itemSkin", m_pItemSkin, TRUE)
 		ATTR_SKIN(L"iconSkin", m_pIconSkin, TRUE)
 		ATTR_COLOR(L"colorItemBkgnd", m_crItemBg, FALSE)
@@ -36,10 +37,10 @@ namespace SOUI
 		ATTR_COLOR(L"colorItemHotBkgnd", m_crItemHotBg, FALSE)
 		ATTR_COLOR(L"colorText", m_crText, FALSE)
 		ATTR_COLOR(L"colorSelText", m_crSelText, FALSE)
-		ATTR_INT(L"icon-x", m_ptIcon.x, FALSE)
-		ATTR_INT(L"icon-y", m_ptIcon.y, FALSE)
-		ATTR_INT(L"text-x", m_ptText.x, FALSE)
-		ATTR_INT(L"text-y", m_ptText.y, FALSE)
+		ATTR_LAYOUTSIZE(L"icon-x", m_ptIcon[0], FALSE)
+		ATTR_LAYOUTSIZE(L"icon-y", m_ptIcon[1], FALSE)
+		ATTR_LAYOUTSIZE(L"text-x", m_ptText[0], FALSE)
+		ATTR_LAYOUTSIZE(L"text-y", m_ptText[1], FALSE)
 		ATTR_INT(L"hotTrack", m_bHotTrack, FALSE)
 	SOUI_ATTRS_END()
 
@@ -60,12 +61,10 @@ namespace SOUI
 	SOUI_CLASS_NAME(SListBox, L"listbox")
 
 SListBox::SListBox()
-		: m_nItemHei(20)
+		: m_itemHeight(20.f, SLayoutSize::dp)
 		, m_iSelItem(-1)
 		, m_iHoverItem(-1)
 		, m_bHotTrack(FALSE)
-		, m_ptIcon(-1, -1)
-		, m_ptText(-1, -1)
 		, m_crItemBg(CR_INVALID)
 		, m_crItemBg2(CR_INVALID)
 		, m_crItemSelBg(RGBA(57, 145, 209, 255))
@@ -76,6 +75,8 @@ SListBox::SListBox()
 		, m_pIconSkin(NULL)
 {
     m_bFocusable = TRUE;
+	m_ptIcon[0].fSize = m_ptIcon[1].fSize = SIZE_UNDEF;
+	m_ptText[0].fSize = m_ptText[1].fSize = SIZE_UNDEF;
     m_evtSet.addEvent(EVENTID(EventLBSelChanging));
     m_evtSet.addEvent(EVENTID(EventLBSelChanged));
 	m_evtSet.addEvent(EVENTID(EventLBDbClick));
@@ -118,7 +119,7 @@ BOOL SListBox::SetCurSel(int nIndex)
 
 int SListBox::GetTopIndex() const
 {
-    return m_ptOrigin.y / m_nItemHei;
+    return m_ptOrigin.y / m_itemHeight.toPixelSize(GetScale());
 }
 
 BOOL SListBox::SetTopIndex(int nIndex)
@@ -126,7 +127,7 @@ BOOL SListBox::SetTopIndex(int nIndex)
     if (nIndex < 0 || nIndex >= GetCount())
         return FALSE;
 
-    OnScroll(TRUE,SB_THUMBPOSITION, nIndex*m_nItemHei);
+    OnScroll(TRUE,SB_THUMBPOSITION, nIndex*m_itemHeight.toPixelSize(GetScale()));
     return TRUE;
 }
 
@@ -147,37 +148,17 @@ BOOL SListBox::SetItemData(int nIndex, LPARAM lParam)
     return TRUE;
 }
 
-int SListBox::GetText(int nIndex, LPTSTR lpszBuffer) const
+SStringT SListBox::GetText(int nIndex,BOOL bRawText) const
 {
-    int nRet = GetTextLen(nIndex);
+	if (nIndex < 0 || nIndex >= GetCount())
+		return SStringT();
 
-    if(nRet != LB_ERR)
-        _tcscpy(lpszBuffer, m_arrItems[nIndex]->strText);
-
-    return nRet;
+	return m_arrItems[nIndex]->strText.GetText(bRawText);
 }
-
-int SListBox::GetText(int nIndex, SStringT& strText) const
-{
-    int nRet = GetTextLen(nIndex);
-
-    if(nRet != LB_ERR)
-        strText = m_arrItems[nIndex]->strText;
-
-    return nRet;
-}
-
-int SListBox::GetTextLen(int nIndex) const
-{
-    if (nIndex < 0 || nIndex >= GetCount())
-        return LB_ERR;
-
-    return m_arrItems[nIndex]->strText.GetLength();
-}
-
+ 
 int SListBox::GetItemHeight(int nIndex) const
 {
-    return m_nItemHei;
+    return m_itemHeight.toPixelSize(GetScale());
 }
 
 BOOL SListBox::SetItemHeight(int nIndex, int cyItemHeight)
@@ -185,7 +166,7 @@ BOOL SListBox::SetItemHeight(int nIndex, int cyItemHeight)
     if (cyItemHeight < 0 || nIndex < 0 || nIndex >= GetCount())
         return FALSE;
 
-    m_nItemHei = cyItemHeight;
+	m_itemHeight = SLayoutSize((float)cyItemHeight,SLayoutSize::px);
     return TRUE;
 }
 
@@ -221,7 +202,7 @@ BOOL SListBox::DeleteString(int nIndex)
 
     CRect rcClient;
     SWindow::GetClientRect(&rcClient);
-    CSize szView(rcClient.Width(),GetCount()*m_nItemHei);
+    CSize szView(rcClient.Width(),GetCount()*m_itemHeight.toPixelSize(GetScale()));
     if(szView.cy>rcClient.Height()) szView.cx-=GetSbWidth();
     SetViewSize(szView);
 
@@ -237,8 +218,8 @@ int SListBox::InsertString(int nIndex, LPCTSTR lpszItem, int nImage,  LPARAM lPa
 {
     //SASSERT(lpszItem);
 
-    LPLBITEM pItem = new LBITEM;
-    pItem->strText = lpszItem;
+    LPLBITEM pItem = new LBITEM(this);
+    pItem->strText.SetText(lpszItem);
     pItem->nImage = nImage;
     pItem->lParam = lParam;
 
@@ -252,14 +233,15 @@ void SListBox::EnsureVisible(int nIndex)
     CRect rcClient;
     GetClientRect(&rcClient);
 
-    int iFirstVisible = (m_ptOrigin.y + m_nItemHei -1) / m_nItemHei;
-    int nVisibleItems = rcClient.Height() / m_nItemHei;
+	int nItemHei = m_itemHeight.toPixelSize(GetScale());
+    int iFirstVisible = (m_ptOrigin.y + nItemHei -1) / nItemHei;
+    int nVisibleItems = rcClient.Height() / nItemHei;
     if(nIndex < iFirstVisible || nIndex > iFirstVisible+nVisibleItems-1)
     {
         int nOffset = GetScrollPos(TRUE);
-        if(nIndex < iFirstVisible) nOffset = (nIndex-iFirstVisible)*m_nItemHei;
-        else nOffset=(nIndex - iFirstVisible-nVisibleItems +1)*m_nItemHei;
-        nOffset-=nOffset%m_nItemHei;//让当前行刚好显示
+        if(nIndex < iFirstVisible) nOffset = (nIndex-iFirstVisible)*nItemHei;
+        else nOffset=(nIndex - iFirstVisible-nVisibleItems +1)*nItemHei;
+        nOffset-=nOffset%nItemHei;//让当前行刚好显示
         OnScroll(TRUE,SB_THUMBPOSITION,nOffset + GetScrollPos(TRUE));
     }
 }
@@ -273,12 +255,13 @@ int SListBox::HitTest(CPoint &pt)
     
     CPoint pt2=pt;
     pt2.y -= rcClient.top - m_ptOrigin.y;
-    int nRet=pt2.y/m_nItemHei;
+	int nItemHei = m_itemHeight.toPixelSize(GetScale());
+    int nRet=pt2.y/nItemHei;
     if(nRet >= GetCount()) nRet=-1;
     else
     {
         pt.x-=rcClient.left;
-        pt.y=pt2.y%m_nItemHei;
+        pt.y=pt2.y%nItemHei;
     }
 
     return nRet;
@@ -294,7 +277,7 @@ BOOL SListBox::CreateChildren(pugi::xml_node xmlNode)
         pugi::xml_node xmlItem= xmlItems.child(L"item");
         while(xmlItem)
         {
-            LPLBITEM pItemObj = new LBITEM;
+            LPLBITEM pItemObj = new LBITEM(this);
             LoadItemAttribute(xmlItem, pItemObj);
             InsertItem(-1, pItemObj);
             xmlItem = xmlItem.next_sibling();
@@ -310,9 +293,9 @@ BOOL SListBox::CreateChildren(pugi::xml_node xmlNode)
 void SListBox::LoadItemAttribute(pugi::xml_node xmlNode, LPLBITEM pItem)
 {
     pItem->nImage=xmlNode.attribute(L"icon").as_int(pItem->nImage);
-    pItem->lParam=xmlNode.attribute(L"data").as_uint(pItem->lParam);
-    SStringW strText = tr(GETSTRING(xmlNode.attribute(L"text").value()));
-    pItem->strText =  S_CW2T(strText);
+    pItem->lParam=xmlNode.attribute(L"data").as_uint((UINT)pItem->lParam);
+    SStringW strText = GETSTRING(xmlNode.attribute(L"text").value());
+    pItem->strText.SetText(S_CW2T(strText));
 }
 
 int SListBox::InsertItem(int nIndex, LPLBITEM pItem)
@@ -331,7 +314,7 @@ int SListBox::InsertItem(int nIndex, LPLBITEM pItem)
 
     CRect rcClient;
     SWindow::GetClientRect(&rcClient);
-    CSize szView(rcClient.Width(),GetCount()*m_nItemHei);
+    CSize szView(rcClient.Width(),GetCount()*m_itemHeight.toPixelSize(GetScale()));
     if(szView.cy>rcClient.Height()) szView.cx-=GetSbWidth();
     SetViewSize(szView);
 
@@ -345,12 +328,13 @@ void SListBox::RedrawItem(int iItem)
     CRect rcClient;
     GetClientRect(&rcClient);
     int iFirstVisible = GetTopIndex();
-    int nPageItems=(rcClient.Height()+m_nItemHei-1)/m_nItemHei+1;
+	int nItemHei = m_itemHeight.toPixelSize(GetScale());
+    int nPageItems=(rcClient.Height()+nItemHei-1)/nItemHei+1;
 
     if(iItem>=iFirstVisible && iItem<GetCount() && iItem<iFirstVisible+nPageItems)
     {
-        CRect rcItem(0,0,rcClient.Width(),m_nItemHei);
-        rcItem.OffsetRect(0,m_nItemHei*iItem-m_ptOrigin.y);
+        CRect rcItem(0,0,rcClient.Width(),nItemHei);
+        rcItem.OffsetRect(0,nItemHei*iItem-m_ptOrigin.y);
         rcItem.OffsetRect(rcClient.TopLeft());
         IRenderTarget *pRT=GetRenderTarget(&rcItem,OLEDC_PAINTBKGND);
 
@@ -413,17 +397,18 @@ void SListBox::DrawItem(IRenderTarget * pRT, CRect & rc, int iItem)
         crOldText = pRT->SetTextColor(crText);
     }
 
+	int nItemHei = m_itemHeight.toPixelSize(GetScale());
     if (pItem->nImage != -1 && m_pIconSkin)
     {
-        int nOffsetX =m_ptIcon.x, nOffsetY = m_ptIcon.y;
+        int nOffsetX =m_ptIcon[0].toPixelSize(GetScale()), nOffsetY = m_ptIcon[1].toPixelSize(GetScale());
         CSize sizeSkin = m_pIconSkin->GetSkinSize();
         rcIcon.SetRect(0, 0, sizeSkin.cx, sizeSkin.cy);
 
-        if (m_ptIcon.x == -1)
-            nOffsetX =  m_nItemHei / 6;
+        if (!m_ptIcon[0].isValid())
+            nOffsetX =  nItemHei / 6;
 
-        if (m_ptIcon.y == -1)
-            nOffsetY = (m_nItemHei - sizeSkin.cy) / 2;    //y 默认居中
+        if (!m_ptIcon[1].isValid())
+            nOffsetY = (nItemHei - sizeSkin.cy) / 2;    //y 默认居中
 
         rcIcon.OffsetRect(rc.left + nOffsetX, rc.top + nOffsetY);
         m_pIconSkin->Draw(pRT, rcIcon, pItem->nImage);
@@ -432,17 +417,17 @@ void SListBox::DrawItem(IRenderTarget * pRT, CRect & rc, int iItem)
     UINT align = DT_SINGLELINE;
     rcText = rc;
 
-    if (m_ptText.x == -1)
-        rcText.left = rcIcon.Width() > 0 ? rcIcon.right + m_nItemHei / 6 : rc.left;
+    if (!m_ptText[0].isValid())
+        rcText.left = rcIcon.Width() > 0 ? rcIcon.right + nItemHei / 6 : rc.left;
     else
-        rcText.left = rc.left + m_ptText.x;
+        rcText.left = rc.left + m_ptText[0].toPixelSize(GetScale());
 
-    if (m_ptText.y == -1)
+    if (!m_ptText[1].isValid())
         align |= DT_VCENTER;
     else
-        rcText.top = rc.top + m_ptText.y;
+        rcText.top = rc.top + m_ptText[1].toPixelSize(GetScale());
 
-    pRT->DrawText(pItem->strText,-1,rcText,align);
+    pRT->DrawText(pItem->strText.GetText(FALSE),-1,rcText,align);
 
     if (bTextColorChanged)
         pRT->SetTextColor(crOldText);
@@ -476,13 +461,14 @@ void SListBox::OnPaint(IRenderTarget * pRT)
     SPainter painter;
     BeforePaint(pRT,painter);
 
+	int nItemHei = m_itemHeight.toPixelSize(GetScale());
     int iFirstVisible = GetTopIndex();
-    int nPageItems = (m_rcClient.Height()+m_nItemHei-1)/m_nItemHei+1;
+    int nPageItems = (m_rcClient.Height()+nItemHei-1)/nItemHei+1;
 
     for(int iItem = iFirstVisible; iItem<GetCount() && iItem <iFirstVisible+nPageItems; iItem++)
     {
-        CRect rcItem(0,0,m_rcClient.Width(),m_nItemHei);
-        rcItem.OffsetRect(0,m_nItemHei*iItem-m_ptOrigin.y);
+        CRect rcItem(0,0,m_rcClient.Width(),nItemHei);
+        rcItem.OffsetRect(0,nItemHei*iItem-m_ptOrigin.y);
         rcItem.OffsetRect(m_rcClient.TopLeft());
         DrawItem(pRT,rcItem,iItem);
     }
@@ -495,7 +481,7 @@ void SListBox::OnSize(UINT nType,CSize size)
     __super::OnSize(nType,size);
     CRect rcClient;
     SWindow::GetClientRect(&rcClient);
-    CSize szView(rcClient.Width(),GetCount()*m_nItemHei);
+    CSize szView(rcClient.Width(),GetCount()*m_itemHeight.toPixelSize(GetScale()));
     if(szView.cy>rcClient.Height()) szView.cx-=GetSbWidth();
     SetViewSize(szView);
 }
@@ -606,5 +592,17 @@ void SListBox::OnMouseLeave()
 		RedrawItem(nOldHover);
 	}
 }
+
+HRESULT SListBox::OnLanguageChanged()
+{
+	HRESULT hr = __super::OnLanguageChanged();
+	for(size_t i=0;i<m_arrItems.GetCount();i++)
+	{
+		m_arrItems[i]->strText.TranslateText();
+	}
+	Invalidate();
+	return hr;
+}
+
 
 }//namespace SOUI

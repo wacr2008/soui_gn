@@ -53,6 +53,7 @@ namespace SOUI
 		m_pResFileManger->LoadUIResFromFile(m_strUIResFile);
 		InitStyleLB();
 
+
 		return TRUE;
 	}
 
@@ -98,8 +99,7 @@ namespace SOUI
 			return s;
 		}
 
-		lb->GetText(n, s);
-		return s;
+		return lb->GetText(n);
 	}
 
 }

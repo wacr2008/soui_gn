@@ -7,7 +7,8 @@
 #include <souicoll.h>
 
 namespace SOUI
-{ 
+{
+	SOUI_CLASS_NAME(SMenuAttr, L"menuattr")
 
 	SOUI_ATTRS_BEGIN(SMenuAttr)
 		ATTR_SKIN(L"itemSkin", m_pItemSkin, FALSE)
@@ -26,19 +27,35 @@ namespace SOUI
 		ATTR_STRINGW(L"trCtx", m_strTrCtx, FALSE)
 	SOUI_ATTRS_END()
 
-	SOUI_CLASS_NAME(SMenuAttr, L"menuattr")
+	BEGIN_MSG_MAP_EX(SMenuODWnd)
+		MSG_WM_INITMENU(OnInitMenu)
+		MSG_WM_INITMENUPOPUP(OnInitMenuPopup)
+		MSG_WM_MENUSELECT(OnMenuSelect)
+		CHAIN_MSG_MAP(SOwnerDraw<SMenuODWnd>)
+		REFLECT_NOTIFICATIONS_EX()
+	END_MSG_MAP()
+
+
+	SMenuItemData::SMenuItemData() :iIcon(-1), vHotKey(0), dwUserData(0)
+	{
+
+	}
+	SMenuItemData::~SMenuItemData()
+	{
+
+	}
 
 SMenuAttr::SMenuAttr()
     :m_pItemSkin(GETBUILTINSKIN(SKIN_SYS_MENU_SKIN))
-		,m_pIconSkin(NULL)
-		, m_pSepSkin(GETBUILTINSKIN(SKIN_SYS_MENU_SEP))
-		, m_pCheckSkin(GETBUILTINSKIN(SKIN_SYS_MENU_CHECK))
-		,m_nItemHei(0)
-		,m_nIconMargin(2)
-		,m_nTextMargin(5)
-		,m_szIcon(CX_ICON,CY_ICON)
-		, m_hFont(0)
-		,m_nMaxWidth(-1)
+    ,m_pIconSkin(NULL)
+	, m_pSepSkin(GETBUILTINSKIN(SKIN_SYS_MENU_SEP))
+	, m_pCheckSkin(GETBUILTINSKIN(SKIN_SYS_MENU_CHECK))
+    ,m_nItemHei(0)
+    ,m_nIconMargin(2)
+    ,m_nTextMargin(5)
+    ,m_szIcon(CX_ICON,CY_ICON)
+	, m_hFont(0)
+    ,m_nMaxWidth(-1)
 {
     m_crTxtNormal=GetSysColor(COLOR_MENUTEXT)|0xff000000;
     m_crTxtSel=GetSysColor(COLOR_HIGHLIGHTTEXT)|0xff000000;
@@ -58,15 +75,7 @@ void SMenuAttr::OnInitFinished( pugi::xml_node xmlNode )
 
 //////////////////////////////////////////////////////////////////////////
 
-BEGIN_MSG_MAP_EX(SMenuODWnd)
-	MSG_WM_INITMENU(OnInitMenu)
-	MSG_WM_INITMENUPOPUP(OnInitMenuPopup)
-	MSG_WM_MENUSELECT(OnMenuSelect)
-	CHAIN_MSG_MAP(SOwnerDraw<SMenuODWnd>)
-	REFLECT_NOTIFICATIONS_EX()
-END_MSG_MAP()
-
-SMenuODWnd::SMenuODWnd(HWND hMenuOwner, SMenuAttr * pMenuAttr):m_hMenuOwner(hMenuOwner),m_attr(pMenuAttr)
+SMenuODWnd::SMenuODWnd(HWND hMenuOwner,SMenuAttr *pMenuAttr):m_hMenuOwner(hMenuOwner),m_attr(pMenuAttr)
 {
 
 }
@@ -85,25 +94,6 @@ void SMenuODWnd::OnInitMenuPopup( HMENU menuPopup, UINT nIndex, BOOL bSysMenu )
 {
     ::SendMessage(m_hMenuOwner,WM_INITMENUPOPUP,(WPARAM)menuPopup,MAKELPARAM(nIndex,bSysMenu));
 }
-
-SMenuItemData::SMenuItemData() :iIcon(-1), vHotKey(0), dwUserData(0)
-{
-
-}
-
-SMenuItemData::SMenuItemData(const SMenuItemData &other)
-{
-	this->iIcon = other.iIcon;
-	this->strText= other.strText;
-	this->vHotKey= other.vHotKey;
-	this->dwUserData= other.dwUserData;
-}
-
-SMenuItemData::~SMenuItemData()
-{
-
-}
-
 
 void SMenuODWnd::DrawItem( LPDRAWITEMSTRUCT lpDrawItemStruct )
 {
@@ -292,14 +282,6 @@ BOOL SMenu::LoadMenu(LPCTSTR pszResID)
     SStringTList strLst;
     if(2!=ParseResID(pszResID,strLst)) return FALSE;
     return LoadMenu(strLst[1],strLst[0]);
-}
-
-SMenu SMenu::GetSubMenu(int nPos)
-{
-    HMENU hSubMenu=::GetSubMenu(m_hMenu,nPos);
-    SMenu ret;
-    ret.m_hMenu=hSubMenu;
-    return ret;
 }
 
 void SMenu::InitMenuItemData(SMenuItemData * itemInfo, const SStringW & strTextW)

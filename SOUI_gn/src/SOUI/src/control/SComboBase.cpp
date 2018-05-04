@@ -78,36 +78,35 @@ namespace SOUI
 
     //////////////////////////////////////////////////////////////////////////
     // SComboBoxBase
-
-	SOUI_ATTRS_BEGIN(SComboBase)
-		ATTR_INT(L"dropDown", m_bDropdown, FALSE)
-		ATTR_INT(L"dropHeight", m_nDropHeight, FALSE)
-		ATTR_INT(L"curSel", m_iInitSel, FALSE)
-		ATTR_SKIN(L"btnSkin", m_pSkinBtn, FALSE)
-		ATTR_INT(L"animateTime", m_nAnimTime, FALSE)
-		ATTR_INT(L"autoFitDropBtn", m_bAutoFitDropBtn, FALSE)
-	SOUI_ATTRS_END()
-
-	SOUI_MSG_MAP_BEGIN(SComboBase)
-		MSG_WM_PAINT_EX(OnPaint)
-		MSG_WM_LBUTTONDOWN(OnLButtonDown)
-		MSG_WM_MOUSEMOVE(OnMouseMove)
-		MSG_WM_MOUSELEAVE(OnMouseLeave)
-		MSG_WM_KEYDOWN(OnKeyDown)
-		MSG_WM_CHAR(OnChar)
-		MSG_WM_DESTROY(OnDestroy)
-		MSG_WM_SETFOCUS_EX(OnSetFocus)
-		MSG_WM_KILLFOCUS_EX(OnKillFocus)
-	SOUI_MSG_MAP_END()
-
 	SOUI_CLASS_NAME(SComboBase, L"combobase")
 
+	SOUI_ATTRS_BEGIN(SComboBase)
+        ATTR_INT(L"dropDown", m_bDropdown, FALSE)
+        ATTR_LAYOUTSIZE(L"dropHeight", m_nDropHeight, FALSE)
+        ATTR_INT(L"curSel", m_iInitSel, FALSE)
+        ATTR_SKIN(L"btnSkin", m_pSkinBtn, FALSE)
+        ATTR_INT(L"animateTime", m_nAnimTime, FALSE)
+		ATTR_INT(L"autoFitDropBtn", m_bAutoFitDropBtn, FALSE)
+    SOUI_ATTRS_END()
+
+    SOUI_MSG_MAP_BEGIN(SComboBase)
+        MSG_WM_PAINT_EX(OnPaint)
+        MSG_WM_LBUTTONDOWN(OnLButtonDown)        
+        MSG_WM_MOUSEMOVE(OnMouseMove)
+        MSG_WM_MOUSELEAVE(OnMouseLeave)
+        MSG_WM_MOUSEWHEEL(OnMouseWheel)
+        MSG_WM_KEYDOWN(OnKeyDown) 
+        MSG_WM_CHAR(OnChar)
+        MSG_WM_DESTROY(OnDestroy)
+        MSG_WM_SETFOCUS_EX(OnSetFocus)
+        MSG_WM_KILLFOCUS_EX(OnKillFocus)
+    SOUI_MSG_MAP_END()
     SComboBase::SComboBase(void)
         :m_pEdit(NULL)
         ,m_dwBtnState(WndState_Normal)
 		, m_pSkinBtn(GETBUILTINSKIN(SKIN_SYS_DROPBTN))
 		, m_bDropdown(TRUE)
-		, m_nDropHeight(200)
+		, m_nDropHeight(200, SLayoutSize::dp)
         ,m_nAnimTime(200)
         ,m_iInitSel(-1)
 		, m_pDropDownWnd(NULL)
@@ -156,10 +155,10 @@ namespace SOUI
 
     void SComboBase::GetDropBtnRect(LPRECT prc)
     {
-		SIZE szBtn = m_pSkinBtn->GetSkinSize();
-		GetClientRect(prc);
+        SIZE szBtn=m_pSkinBtn->GetSkinSize();
+        GetClientRect(prc);
 		int nHei = prc->bottom - prc->top;
-		prc->left = prc->right - nHei*szBtn.cx / szBtn.cy;
+        prc->left= prc->right-nHei*szBtn.cx/szBtn.cy;
 		if (!m_bAutoFitDropBtn) {
 			prc->top += (prc->bottom - prc->top - szBtn.cy) / 2;
 			prc->left += (prc->right - prc->left - szBtn.cx) / 2;
@@ -243,8 +242,51 @@ namespace SOUI
 
     void SComboBase::OnKeyDown( TCHAR nChar, UINT nRepCnt, UINT nFlags )
     {    
-        if ( nChar == VK_DOWN)
-            DropDown();
+        //if ( nChar == VK_DOWN)
+        //    DropDown();
+		
+		//方向键改变当前选项
+        switch (nChar) 
+        {
+        case VK_DOWN:
+        case VK_RIGHT:
+            {
+                int iSel = GetCurSel();
+                iSel += 1;
+                if ( iSel < GetCount() )
+                    SetCurSel(iSel);
+            }
+            break;
+        case VK_UP:
+        case VK_LEFT:
+            {
+                int iSel = GetCurSel();
+                iSel -= 1;
+                if ( iSel < GetCount() && iSel >= 0 )
+                    SetCurSel(iSel);
+            }
+            break;
+        }
+    }
+
+    BOOL SComboBase::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+    {
+		//鼠标滚轮改变当前选项
+        if (zDelta > 0)			// 上滚 
+        {
+            int iSel = GetCurSel();
+            iSel -= 1;
+            if ( iSel < GetCount() && iSel >= 0 )
+                SetCurSel(iSel);
+        }
+        else					// 下滚 
+        {
+            int iSel = GetCurSel();
+            iSel += 1;
+            if ( iSel < GetCount() )
+                SetCurSel(iSel);
+        }
+        return TRUE;
     }
 
     void SComboBase::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -359,12 +401,13 @@ namespace SOUI
 
     void SComboBase::DropDown()
     {
-		if (m_dwBtnState == WndState_PushDown) return;
+        if(m_dwBtnState==WndState_PushDown) return;
 
 
-		if (!m_pDropDownWnd)
-		{
-			m_pDropDownWnd = new SDropDownWnd_ComboBox(this);
+        if(!m_pDropDownWnd)
+        {
+            m_pDropDownWnd = new SDropDownWnd_ComboBox(this);
+            m_pDropDownWnd->SDispatchMessage(UM_SETSCALE, GetScale(), 0);
 		}
 
 		EventCBDropdown evt(this);
@@ -372,16 +415,16 @@ namespace SOUI
 		FireEvent(evt);
 
 		CRect rcPopup;
-		BOOL bDown = CalcPopupRect(GetListBoxHeight(), rcPopup);
-		m_pDropDownWnd->Create(rcPopup, 0);
+		BOOL bDown=CalcPopupRect(GetListBoxHeight(),rcPopup);
+		m_pDropDownWnd->Create(rcPopup,0);
 
-		if (m_nAnimTime>0)
-			m_pDropDownWnd->AnimateHostWindow(m_nAnimTime, AW_SLIDE | (bDown ? AW_VER_POSITIVE : AW_VER_NEGATIVE));
+		if(m_nAnimTime>0)
+			m_pDropDownWnd->AnimateHostWindow(m_nAnimTime,AW_SLIDE|(bDown?AW_VER_POSITIVE:AW_VER_NEGATIVE));
 		else
-			m_pDropDownWnd->SetWindowPos(HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
+			m_pDropDownWnd->SetWindowPos(HWND_TOP,0,0,0,0,SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 
 		m_pDropDownWnd->CSimpleWnd::SetCapture();
-    }
+	}
 
     void SComboBase::CloseUp()
     {
@@ -432,21 +475,20 @@ namespace SOUI
     {
         for(int i=nAfter;i<GetCount();i++)
         {
-            SStringT strItem = GetLBText(i);
+            SStringT strItem = GetLBText(i,TRUE);
             if(strItem == pszFind) return i;
         }
         return -1;
     }
 
-    SStringT SComboBase::GetWindowText()
+    SStringT SComboBase::GetWindowText(BOOL bRawText/*=TRUE*/)
     {
         if(!m_bDropdown)
         {
             return GetEditText();
         }
         if(GetCurSel()==-1) return _T("");
-        SStringT text = GetLBText(GetCurSel());
-		return S_CW2T(tr(S_CT2W(text)));
+        return GetLBText(GetCurSel(),bRawText);
     }
 
     void SComboBase::SetWindowText(LPCTSTR pszText)
@@ -508,6 +550,7 @@ namespace SOUI
 		{
 			m_pDropDownWnd->SDispatchMessage(UM_SETSCALE, nScale, 0);
 		}
-	}
+        GetScaleSkin(m_pSkinBtn, nScale);
+    }
 
 }

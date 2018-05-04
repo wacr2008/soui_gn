@@ -167,13 +167,12 @@ namespace SOUI
 
         void SetViewOrigin(CPoint pt);
 
-		void UpdateLayout() override;
     protected:
         void OnSize(UINT nType,CSize size);
     protected:
         virtual void OnViewSizeChanged(CSize szOld,CSize szNew);
         virtual void OnViewOriginChanged(CPoint ptOld,CPoint ptNew);
-
+		virtual void UpdateChildrenPosition();
     protected:
         CRect GetChildrenLayoutRect() override;
 

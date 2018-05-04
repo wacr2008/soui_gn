@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 namespace SOUI
 {
@@ -37,6 +37,8 @@ namespace SOUI
 		void parseString(const SStringW & strSize);
 
 		SLayoutSize & operator = (const SLayoutSize & src);
+		
+		bool valueEqual(float value);
 
 		static SLayoutSize fromString(const SStringW & strSize);
 		static bool fequal(float a, float b);

@@ -1,4 +1,16 @@
 import("//build_overrides/common.gni")
+import("//build/config/win/manifest.gni") 
+
+ 
+
+# gives a default executable manifest 
+windows_manifest("SoTool_exe_manifest") {
+  sources = [
+    as_invoker_manifest,
+    common_controls_manifest,
+    default_compatibility_manifest, 
+  ] 
+}
  
 
 executable("SoTool") {
@@ -31,6 +43,8 @@ executable("SoTool") {
     "FolderHander.cpp",
     "FolderScanHandler.cpp",
     "ImageMergerHandler.cpp",
+    "CWindowHelperHander.cpp",
+    "CWindowHelperHander.h",
     "MainDlg.cpp",
     "MD5.cpp",
     "SEdit2.cpp",
@@ -38,11 +52,17 @@ executable("SoTool") {
     "SImgCanvas.cpp",
     "SoTool.cpp",
     "STreeList.cpp",
+    "STabCtrlEx.cpp",
+    "STabCtrlEx.h",
 
     "FileMap.cpp",
     "FileMap.h",
     "IconvWorker.cpp",
     "IconvWorker.h",
+    "SCaptureButton.cpp",
+    "SCaptureButton.h",
+    "SwndFrame.cpp",
+    "SwndFrame.h",
             
     "SoTool.rc",
     
@@ -63,6 +83,7 @@ executable("SoTool") {
     "../../third-part",
     "../../components",
     "../../soui-sys-resource",
+    ":SoTool_exe_manifest",
     "../../../:preBuild_SoTool_resource",
   ]
  

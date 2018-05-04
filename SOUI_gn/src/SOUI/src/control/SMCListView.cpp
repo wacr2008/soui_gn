@@ -7,6 +7,7 @@
 #define ITEM_MARGIN 4
 namespace SOUI
 {
+    
     class SMCListViewDataSetObserver : public TObjRefImpl<ILvDataSetObserver>
     {
     public:
@@ -33,29 +34,30 @@ namespace SOUI
 
 //////////////////////////////////////////////////////////////////////////
 //  SMCListView
-	SOUI_ATTRS_BEGIN(SMCListView)
-		ATTR_LAYOUTSIZE(L"headerHeight", m_nHeaderHeight, FALSE)
-		ATTR_INT(L"hotTrack", m_bHotTrack, FALSE)
-		ATTR_SKIN(L"dividerSkin", m_pSkinDivider, TRUE)
-		ATTR_LAYOUTSIZE(L"dividerSize", m_nDividerSize, FALSE)
-		ATTR_INT(L"wantTab", m_bWantTab, FALSE)
-	SOUI_ATTRS_END()
+	SOUI_CLASS_NAME(SMCListView, L"mclistview")
 
 	SOUI_MSG_MAP_BEGIN(SMCListView)
-		MSG_WM_PAINT_EX(OnPaint)
-		MSG_WM_SIZE(OnSize)
-		MSG_WM_DESTROY(OnDestroy)
-		MSG_WM_MOUSEWHEEL(OnMouseWheel)
-		MSG_WM_MOUSELEAVE(OnMouseLeave)
-		MSG_WM_KEYDOWN(OnKeyDown)
-		MSG_WM_SETFOCUS_EX(OnSetFocus)
-		MSG_WM_KILLFOCUS_EX(OnKillFocus)
-		MESSAGE_RANGE_HANDLER_EX(WM_MOUSEFIRST, WM_MOUSELAST, OnMouseEvent)
-		MESSAGE_RANGE_HANDLER_EX(WM_KEYFIRST, WM_KEYLAST, OnKeyEvent)
-		MESSAGE_RANGE_HANDLER_EX(WM_IME_STARTCOMPOSITION, WM_IME_KEYLAST, OnKeyEvent)
-	SOUI_MSG_MAP_END()
+            MSG_WM_PAINT_EX(OnPaint)
+            MSG_WM_SIZE(OnSize)
+            MSG_WM_DESTROY(OnDestroy)
+            MSG_WM_MOUSEWHEEL(OnMouseWheel)
+            MSG_WM_MOUSELEAVE(OnMouseLeave)
+            MSG_WM_KEYDOWN(OnKeyDown)
+            MSG_WM_SETFOCUS_EX(OnSetFocus)
+            MSG_WM_KILLFOCUS_EX(OnKillFocus)
+            MESSAGE_RANGE_HANDLER_EX(WM_MOUSEFIRST,WM_MOUSELAST,OnMouseEvent)
+            MESSAGE_RANGE_HANDLER_EX(WM_KEYFIRST,WM_KEYLAST,OnKeyEvent)
+            MESSAGE_RANGE_HANDLER_EX(WM_IME_STARTCOMPOSITION,WM_IME_KEYLAST,OnKeyEvent)
+    SOUI_MSG_MAP_END()
 
-	SOUI_CLASS_NAME(SMCListView, L"mclistview")
+    SOUI_ATTRS_BEGIN(SMCListView)
+        ATTR_LAYOUTSIZE(L"headerHeight", m_nHeaderHeight, FALSE)
+        ATTR_INT(L"hotTrack", m_bHotTrack, FALSE)
+        ATTR_SKIN(L"dividerSkin",m_pSkinDivider,TRUE)
+        ATTR_LAYOUTSIZE(L"dividerSize",m_nDividerSize,FALSE)
+        ATTR_INT(L"wantTab",m_bWantTab,FALSE)
+    SOUI_ATTRS_END()
+
 
     SMCListView::SMCListView()
         :m_iFirstVisible(-1)
@@ -601,7 +603,7 @@ void SMCListView::UpdateVisibleItems()
 				{
 					pColWnd->SetVisible(true);
 					rcSubItem.left = rcSubItem.right;
-					rcSubItem.right += hditem.cx;
+					rcSubItem.right += hditem.cx.toPixelSize(GetScale());
 					pColWnd->Move(rcSubItem);
 				}else
 				{
@@ -905,13 +907,13 @@ void SMCListView::OnKeyDown( TCHAR nChar, UINT nRepCnt, UINT nFlags )
         {
             if(!m_lstItems.IsEmpty())
             {
-                nNewSelItem = m_lstItems.GetHead().pItem->GetItemIndex();
+                nNewSelItem = (int)m_lstItems.GetHead().pItem->GetItemIndex();
             }
         }else if(nChar == VK_NEXT || nChar == VK_END)
         {
             if(!m_lstItems.IsEmpty())
             {
-                nNewSelItem = m_lstItems.GetTail().pItem->GetItemIndex();
+                nNewSelItem = (int)m_lstItems.GetTail().pItem->GetItemIndex();
             }
         }
     }

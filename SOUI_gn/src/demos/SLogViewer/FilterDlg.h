@@ -1,14 +1,13 @@
 ﻿#pragma once
 #include <souicoll.h>
-#include "res/R.h"
-using namespace SOUI;
 class CMainDlg;
+using namespace SOUI;
 
 interface IFilterChangeListener
 {
-	virtual void OnTagChange(const SArray<SStringW> & lstTags) PURE;
-	virtual void OnPidChange(const SArray<UINT> & lstPids) PURE;
-	virtual void OnTidChange(const SArray<UINT> & lstTids) PURE;
+	virtual void OnTagChange(const SArray<SStringW> & lstTags) =0;
+	virtual void OnPidChange(const SArray<UINT> & lstPids) = 0;
+	virtual void OnTidChange(const SArray<UINT> & lstTids) = 0;
 };
 
 class CFilterDlg : public SHostWnd , public IFilterChangeListener
@@ -28,7 +27,7 @@ protected:
 	void OnBtnSelectAll();
 	void OnBtnClearAll();
 
-	EVENT_MAP_DECL() 
+	EVENT_MAP_DECL()
 
 	virtual void OnFinalMessage(HWND hWnd);
 

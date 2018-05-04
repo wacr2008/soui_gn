@@ -15,6 +15,9 @@ namespace SOUI
 
 	SOUI_CLASS_NAME(EventChromeTabSelChanged, L"on_chrometab_sel_changed")
 
+	SOUI_CLASS_NAME(EventChromeTabDbClick, L"on_chrometab_dbclick")
+		
+
 	SOUI_CLASS_NAME(SChromeTabCtrl, L"chromeTabCtrl")
 
 	SOUI_MSG_MAP_BEGIN(SChromeTabCtrl)
@@ -51,7 +54,8 @@ namespace SOUI
         virtual void OnFinalRelease(){delete this;}
 		void OnMouseMove(UINT nFlags,CPoint pt);
 		void OnLButtonUp(UINT nFlags,CPoint pt);
-		void OnLButtonDown(UINT nFlags,CPoint pt);
+        void OnLButtonDown(UINT nFlags,CPoint pt);
+        void OnLButtonDbClick(UINT nFlags,CPoint pt);
 	
         CRect m_rcBegin, m_rcEnd;
         BOOL    m_bAllowClose;
@@ -72,6 +76,7 @@ namespace SOUI
 		MSG_WM_MOUSEMOVE(OnMouseMove)
 		MSG_WM_LBUTTONDOWN(OnLButtonDown)
 		MSG_WM_LBUTTONUP(OnLButtonUp)
+        MSG_WM_LBUTTONDBLCLK(OnLButtonDbClick)
 	SOUI_MSG_MAP_END()
     
     SChromeTab::SChromeTab(SChromeTabCtrl* pHost)
@@ -131,6 +136,14 @@ namespace SOUI
 	    m_bDrag  = false;
 	}
 
+    void SChromeTab::OnLButtonDbClick(UINT nFlags,CPoint pt)
+    {
+        EventChromeTabDbClick evt(this);
+        evt.iOrder = m_iOrder;
+        evt.iTabIndex = m_iTabIndex;
+
+        FireEvent(evt);        
+    }
 
     //////////////////////////////////////////////////////////////////////////
     //  SChromeBtnNew
@@ -379,7 +392,7 @@ namespace SOUI
 
         return true;
     }
-
+    
     BOOL SChromeTabCtrl::InsertTab( LPCTSTR pszTitle,int iPos )
     {
         SChromeTab *pNewTab = new SChromeTab(this);
@@ -398,7 +411,9 @@ namespace SOUI
         pNewTab->GetEventSet()->subscribeEvent(EventCmd::EventID,Subscriber(&SChromeTabCtrl::OnTabClick,this));
         
 
-        if(iPos<0) iPos = m_lstTabOrder.GetCount();
+        if(iPos<0 || iPos > (int)m_lstTabOrder.GetCount()) 
+            iPos = m_lstTabOrder.GetCount();
+
         pNewTab->m_iOrder = iPos;
         pNewTab->m_iTabIndex = m_lstTabOrder.GetCount();
 
@@ -520,4 +535,18 @@ namespace SOUI
         }
         return -1;
     }
+
+    int SChromeTabCtrl::GetTabCount() const
+    {
+        return m_lstTabOrder.GetCount();
+    }
+    
+    SWindow* SChromeTabCtrl::GetTabWindow(int iPos)
+    {
+        if(iPos >=0 && iPos < (int)m_lstTabOrder.GetCount())
+            return m_lstTabOrder[iPos];
+        else
+            return NULL;
+    }
 }
+

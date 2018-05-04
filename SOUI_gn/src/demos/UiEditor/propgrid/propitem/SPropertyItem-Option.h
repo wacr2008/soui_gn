@@ -28,7 +28,7 @@ namespace SOUI
         int      m_nDropHeight;
         int      m_nValue;
 		SStringT      m_strValue;
-		BOOL     m_bCanEmpty;
+		BOOL     m_bCanEmpty:  1;
 
 		SStringT m_strDisplay;
         //SArray<SStringT>    m_options;     

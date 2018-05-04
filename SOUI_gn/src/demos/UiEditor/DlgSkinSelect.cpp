@@ -320,8 +320,7 @@ namespace SOUI
 		}
 		else
 		{
-			SStringT strText;
-			listbox->GetText(pEvt->nNewSel, strText);
+			SStringT strText=listbox->GetText(pEvt->nNewSel);
 			m_lbRes->DeleteAll();
 			xmlNode = m_xmlNodeUiRes.child(L"resource").child(strText).first_child();
 			while(xmlNode)
@@ -375,9 +374,7 @@ namespace SOUI
 
 		int n = m_lbResType->GetCurSel();
 
-		SStringT strResName;
-
-		m_lbResType->GetText(n, strResName);
+		SStringT strResName=m_lbResType->GetText(n);
 
 		strTemp = strResName + _T(":") + strTemp;
 
@@ -450,9 +447,7 @@ namespace SOUI
 
 		SStringT strSrc(*sSrc);
 
-		SStringT strSkinName;
-
-		m_lbSkin->GetText(n, strSkinName);
+		SStringT strSkinName=m_lbSkin->GetText(n);
 
 		SStringTList strLst;
 		SplitString(strSkinName,_T(':'),strLst);
@@ -644,8 +639,7 @@ namespace SOUI
 			SStringT strFile = strFileName.Mid(m_strProPath.GetLength() + 1);
 
 			n = m_lbResType->GetCurSel();
-			SStringT strResType;
-			m_lbResType->GetText(n, strResType);
+			SStringT strResType=m_lbResType->GetText(n);
 
 			pugi::xml_node xmlNode = m_xmlNodeUiRes.child(L"resource").child(strResType).first_child();
 			pugi::xml_node xmlNewNode;
@@ -688,7 +682,7 @@ namespace SOUI
 				SStringT strResText;
 				for (int i = 0; i < m_lbRes->GetCount(); i++)
 				{
-					m_lbRes->GetText(i, strResText);
+					strResText = m_lbRes->GetText(i);
 					if (strResText.Compare(strFile) == 0)
 					{
 						m_lbRes->SetCurSel(i);
@@ -950,7 +944,7 @@ namespace SOUI
 			return s;
 		}
 
-		lb->GetText(n, s);
+		s = lb->GetText(n);
 		return s;
 	}
 
@@ -1056,7 +1050,7 @@ namespace SOUI
 
 				for (int i = 0; i < m_lbRes->GetCount(); i++)
 				{
-					m_lbRes->GetText(i, strResText);
+					strResText = m_lbRes->GetText(i);
 					if (m_strSkinName.CompareNoCase(strResText) == 0)
 					{
 						SelectLBItem(m_lbRes, i);
@@ -1210,7 +1204,7 @@ namespace SOUI
 		SStringT strLbText;
 		for (int i = 0; i < lb->GetCount(); i ++)
 		{
-			lb->GetText(i, strLbText);
+			strLbText = lb->GetText(i);
 			if (strLbText.CompareNoCase(strText) == 0)
 			{
 				n = i;

@@ -19,6 +19,8 @@
 #include "SInterpolatorView.h"
 #include "SPathView.h"
 
+#pragma warning(disable:4192)
+
 #include "skin/SSkinLoader.h"
 //#define SHOW_AERO //open aero for vista and win7
 
@@ -36,685 +38,86 @@ using namespace SOUI;
 #include "../controls.extend/SMcListViewEx/SMCListViewEx.h"
 #include "adapter.h"
 #include "trayicon/SShellNotifyIcon.h"
-class CTestDropTarget:public IDropTarget
+#include "CAdapter.h"
+#include "CDropTarget.h"
+
+
+bool SMusicListAdapter::IsColumnVisible(int iCol) const
 {
-public:
-    CTestDropTarget()
-    {
-        nRef=0;
-    }
-    
-    virtual ~CTestDropTarget(){}
-    
-    //////////////////////////////////////////////////////////////////////////
-    // IUnknown
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ __RPC__deref_out void __RPC_FAR *__RPC_FAR *ppvObject)
-    {
-        HRESULT hr=S_FALSE;
-        if(riid==__uuidof(IUnknown))
-            *ppvObject=(IUnknown*) this,hr=S_OK;
-        else if(riid==__uuidof(IDropTarget))
-            *ppvObject=(IDropTarget*)this,hr=S_OK;
-        if(SUCCEEDED(hr)) AddRef();
-        return hr;
-
-    }
-
-    virtual ULONG STDMETHODCALLTYPE AddRef( void){return ++nRef;}
-
-    virtual ULONG STDMETHODCALLTYPE Release( void) { 
-        ULONG uRet= -- nRef;
-        if(uRet==0) delete this;
-        return uRet;
-    }
-
-    //////////////////////////////////////////////////////////////////////////
-    // IDropTarget
-
-    virtual HRESULT STDMETHODCALLTYPE DragEnter( 
-        /* [unique][in] */ __RPC__in_opt IDataObject *pDataObj,
-        /* [in] */ DWORD grfKeyState,
-        /* [in] */ POINTL pt,
-        /* [out][in] */ __RPC__inout DWORD *pdwEffect)
-    {
-        *pdwEffect=DROPEFFECT_LINK;
-        return S_OK;
-    }
-
-    virtual HRESULT STDMETHODCALLTYPE DragOver( 
-        /* [in] */ DWORD grfKeyState,
-        /* [in] */ POINTL pt,
-        /* [out][in] */ __RPC__inout DWORD *pdwEffect)
-    {
-        *pdwEffect=DROPEFFECT_LINK;
-        return S_OK;
-    }
-
-    virtual HRESULT STDMETHODCALLTYPE DragLeave( void)
-    {
-        return S_OK;
-    }
-
-
-protected:
-    int nRef;
-};
-
-class CTestDropTarget1 : public CTestDropTarget
-{
-protected:
-    SWindow *m_pEdit;
-public:
-    CTestDropTarget1(SWindow *pEdit):m_pEdit(pEdit)
-    {
-        if(m_pEdit) m_pEdit->AddRef();
-    }
-    ~CTestDropTarget1()
-    {
-        if(m_pEdit) m_pEdit->Release();
-    }
-public:
-    virtual HRESULT STDMETHODCALLTYPE Drop( 
-        /* [unique][in] */ __RPC__in_opt IDataObject *pDataObj,
-        /* [in] */ DWORD grfKeyState,
-        /* [in] */ POINTL pt,
-        /* [out][in] */ __RPC__inout DWORD *pdwEffect)
-    {
-        FORMATETC format =
-        {
-            CF_HDROP, 0, DVASPECT_CONTENT, -1, TYMED_HGLOBAL
-        };
-        STGMEDIUM medium;
-        if(FAILED(pDataObj->GetData(&format, &medium)))
-        {
-            return S_FALSE;
-        }
-
-        HDROP hdrop = static_cast<HDROP>(GlobalLock(medium.hGlobal));
-
-        if(!hdrop)
-        {
-            return S_FALSE;
-        }
-
-        bool success = false;
-        TCHAR filename[MAX_PATH];
-        success=!!DragQueryFile(hdrop, 0, filename, MAX_PATH);
-        DragFinish(hdrop);
-        GlobalUnlock(medium.hGlobal);
-
-        if(success && m_pEdit)
-        {
-            m_pEdit->SetWindowText(filename);
-        }
-
-        *pdwEffect=DROPEFFECT_LINK;
-        return S_OK;
-    }
-};
-
-
-
-class CTestAdapterFix : public SAdapterBase
-{
-    int * m_pCbxSel;
-public:
-    
-    CTestAdapterFix()
-    {
-        m_pCbxSel = new int[getCount()];
-        memset(m_pCbxSel,0,sizeof(int)*getCount());
-    }
-    
-    ~CTestAdapterFix()
-    {
-        delete []m_pCbxSel;        
-    }
-    
-    virtual int getCount()
-    {
-        return 50000;
-    }   
-
-    virtual void getView(int position, SWindow * pItem,pugi::xml_node xmlTemplate)
-    {
-        if(pItem->GetChildrenCount()==0)
-        {
-            pItem->InitFromXml(xmlTemplate);
-        }
-
-        SButton *pBtn = pItem->FindChildByName2<SButton>(L"btn_test");
-        pBtn->SetWindowText(SStringT().Format(_T("button %d"),position));
-        pBtn->GetRoot()->SetUserData(position);
-
-        //由网友“从未来过” 修改的新事件订阅方式,采用模板函数从响应函数中自动提取事件类型，2016.12.13
-        pBtn->GetEventSet()->subscribeEvent(&CTestAdapterFix::OnButtonClick,this);
-
-        SComboBox * pCbx = pItem->FindChildByName2<SComboBox>(L"cbx_in_lv");
-        if(pCbx)
-        {
-            pCbx->SetCurSel(m_pCbxSel[position]);
-            pCbx->GetEventSet()->subscribeEvent(&CTestAdapterFix::OnCbxSelChange,this);
-        }
-    }
-    
-    bool OnCbxSelChange(EventCBSelChange *pEvt)
-    {
-        SComboBox *pCbx = sobj_cast<SComboBox>(pEvt->sender);
-        int iItem = pCbx->GetRoot()->GetUserData();
-        m_pCbxSel[iItem] = pCbx->GetCurSel();
-        return true;
-    }
-    
-    bool OnButtonClick(EventCmd *pEvt)
-    {
-        SButton *pBtn = sobj_cast<SButton>(pEvt->sender);
-        int iItem = pBtn->GetRoot()->GetUserData();
-        SMessageBox(NULL,SStringT().Format(_T("button of %d item was clicked"),iItem),_T("haha"),MB_OK);
-        return true;
-    }
-};
-
-
-const wchar_t * KAttrName_Height[] = {
-    L"oddHeight",
-    L"evenHeight",
-    L"evenSelHeight"
-};
-
-const wchar_t* KNodeName_Item[] = {
-    L"itemOdd",
-    L"itemEven",
-    L"itemEvenHover"
-};
-class CTestAdapterFlex : public SAdapterBase
-{
-public:
-    int m_nItemHeight[3];
-    
-    
-    CTestAdapterFlex()
-    {
-
-    }
-    
-    virtual void InitByTemplate(pugi::xml_node xmlTemplate)
-    {
-        m_nItemHeight[0] = xmlTemplate.attribute(KAttrName_Height[0]).as_int(50);
-        m_nItemHeight[1] = xmlTemplate.attribute(KAttrName_Height[1]).as_int(60);
-        m_nItemHeight[2] = xmlTemplate.attribute(KAttrName_Height[2]).as_int(70);
-    }
-    
-    virtual int getCount()
-    {
-        return 12340;
-    }   
-
-    virtual int getViewTypeCount(){return 3;}
-    
-    virtual int getItemViewType(int position,DWORD dwState)
-    {
-        if(position%2 == 0) 
-            return 0;//1,3,5,... odd lines
-        else if(dwState & WndState_Hover)
-            return 2;//even lines with check state
-        else
-            return 1;//even lines 
-    }
-    
-    virtual SIZE getViewDesiredSize(int position,SWindow *pItem, LPCRECT prcContainer)
-    {
-        DWORD dwState = pItem->GetState();
-        int viewType = getItemViewType(position,dwState);
-        return CSize(0,m_nItemHeight[viewType]);//cx在listview，mclistview中没有使用，不需要计算
-    }
-    
-    virtual void getView(int position, SWindow * pItem,pugi::xml_node xmlTemplate)
-    {
-        if(pItem->GetChildrenCount()==0)
-        {
-            int nViewType = getItemViewType(position,pItem->GetState());
-            pItem->InitFromXml(xmlTemplate.child(KNodeName_Item[nViewType]));
-        }
-        pItem->GetEventSet()->subscribeEvent(EventSwndStateChanged::EventID,Subscriber(&CTestAdapterFlex::OnItemStateChanged,this));
-        
-        SButton *pBtn = pItem->FindChildByName2<SButton>(L"btn_test");
-        pBtn->SetWindowText(SStringT().Format(_T("button %d"),position));
-        pBtn->SetUserData(position);
-        pBtn->GetEventSet()->subscribeEvent(EVT_CMD,Subscriber(&CTestAdapterFlex::OnButtonClick,this));
-    }
-    
-    bool OnItemStateChanged(EventArgs *e)
-    {
-        EventSwndStateChanged *e2 = sobj_cast<EventSwndStateChanged>(e);
-        if(!e2->CheckState(WndState_Hover)) return false;
-        //通知界面重绘
-        notifyDataSetInvalidated();
-        return true;
-    }
-    
-    bool OnButtonClick(EventArgs *pEvt)
-    {
-        SButton *pBtn = sobj_cast<SButton>(pEvt->sender);
-        int iItem = pBtn->GetUserData();
-        SMessageBox(NULL,SStringT().Format(_T("button of %d item was clicked"),iItem),_T("haha"),MB_OK);
-        return true;
-    }
-    
-};
-
-class CTestMcAdapterFix : public SMcAdapterBase
-{
-#define NUMSCALE 100000
-public:
-    struct SOFTINFO
-    {
-        const wchar_t * pszSkinName;
-		const wchar_t * pszName;
-		const wchar_t * pszDesc;
-        float     fScore;
-        DWORD     dwSize;
-		const wchar_t * pszInstallTime;
-		const wchar_t * pszUseTime;
-    };
-
-    SArray<SOFTINFO> m_softInfo;
-
-  bool IsColumnVisible(int iCol) const override
- {
 	return true;
- }
-
-public:
-    CTestMcAdapterFix()
-    {
-        SOFTINFO info[] =
-        {
-            {
-                L"skin_icon1",
-                L"鲁大师",
-                L"鲁大师是一款专业的硬件检测，驱动安装工具",
-                5.4f,
-                15*(1<<20),
-                L"2015-8-5",
-                L"今天"
-            },
-            {
-                L"skin_icon2",
-                L"PhotoShop",
-                L"强大的图片处理工具",
-                9.0f,
-                150*(1<<20),
-                L"2015-8-5",
-                L"今天"
-            },
-            {
-                L"skin_icon3",
-                L"QQ7.0",
-                L"腾讯公司出品的即时聊天工具",
-                8.0f,
-                40*(1<<20),
-                L"2015-8-5",
-                L"今天"
-            },
-            {
-                L"skin_icon4",
-                L"Visual Studio 2008",
-                L"Microsoft公司的程序开发套件",
-                9.0f,
-                40*(1<<20),
-                L"2015-8-5",
-                L"今天"
-            },
-            {
-                L"skin_icon5",
-                L"YY8",
-                L"YY语音",
-                9.0f,
-                20*(1<<20),
-                L"2015-8-5",
-                L"今天"
-            },
-            {
-                L"skin_icon6",
-                L"火狐浏览器",
-                L"速度最快的浏览器",
-                8.5f,
-                35*(1<<20),
-                L"2015-8-5",
-                L"今天"
-            },
-            {
-                L"skin_icon7",
-                L"迅雷",
-                L"迅雷下载软件",
-                7.3f,
-                17*(1<<20),
-                L"2015-8-5",
-                L"今天"
-            }
-        };
+}
 
 
-        for(int i=0;i<ARRAYSIZE(info);i++)
-        {
-            m_softInfo.Add(info[i]);
-        }
-    }
-
-    virtual int getCount()
-    {
-        return m_softInfo.GetCount()*NUMSCALE;
-    }   
-
-    SStringT getSizeText(DWORD dwSize)
-    {
-        int num1=dwSize/(1<<20);
-        dwSize -= num1 *(1<<20);
-        int num2 = dwSize*100/(1<<20);
-        return SStringT().Format(_T("%d.%02dM"),num1,num2);
-    }
-    
-    virtual void getView(int position, SWindow * pItem,pugi::xml_node xmlTemplate)
-    {
-        if(pItem->GetChildrenCount()==0)
-        {
-            pItem->InitFromXml(xmlTemplate);
-        }
-        
-        SOFTINFO *psi =m_softInfo.GetData()+position%m_softInfo.GetCount();
-        pItem->FindChildByName(L"img_icon")->SetAttribute(L"skin",psi->pszSkinName);
-        pItem->FindChildByName(L"txt_name")->SetWindowText(S_CW2T(psi->pszName));
-        pItem->FindChildByName(L"txt_desc")->SetWindowText(S_CW2T(psi->pszDesc));
-        pItem->FindChildByName(L"txt_score")->SetWindowText(SStringT().Format(_T("%1.2f 分"),psi->fScore));
-        pItem->FindChildByName(L"txt_installtime")->SetWindowText(S_CW2T(psi->pszInstallTime));
-        pItem->FindChildByName(L"txt_usetime")->SetWindowText(S_CW2T(psi->pszUseTime));
-        pItem->FindChildByName(L"txt_size")->SetWindowText(getSizeText(psi->dwSize));
-        pItem->FindChildByName2<SRatingBar>(L"rating_score")->SetValue(psi->fScore/2);
-        pItem->FindChildByName(L"txt_index")->SetWindowText(SStringT().Format(_T("第%d行"),position+1));
-        
-        SButton *pBtnUninstall = pItem->FindChildByName2<SButton>(L"btn_uninstall");
-        pBtnUninstall->SetUserData(position);
-        pBtnUninstall->GetEventSet()->subscribeEvent(EVT_CMD,Subscriber(&CTestMcAdapterFix::OnButtonClick,this));
-    }
-
-    bool OnButtonClick(EventArgs *pEvt)
-    {
-        SButton *pBtn = sobj_cast<SButton>(pEvt->sender);
-        int iItem = pBtn->GetUserData();
-        
-        if(SMessageBox(NULL,SStringT().Format(_T("Are you sure to uninstall the selected [%d] software?"),iItem),_T("uninstall"),MB_OKCANCEL|MB_ICONQUESTION)==IDOK)
-        {//删除一条记录
-            DeleteItem(iItem);
-        }
-        return true;
-    }
-    
-    //删除一行，提供外部调用。
-    void DeleteItem(int iPosition)
-    {
-        if(iPosition>=0 && iPosition<getCount())
-        {
-            int iItem = iPosition % m_softInfo.GetCount();
-            m_softInfo.RemoveAt(iItem);
-            notifyDataSetChanged();
-        }
-    }
-    
-    SStringW GetColumnName(int iCol) const{
-        return SStringW().Format(L"col%d",iCol+1);
-    }
-    
-    struct SORTCTX
-    {
-        int iCol;
-        SHDSORTFLAG stFlag;
-    };
-    
-    bool OnSort(int iCol,SHDSORTFLAG * stFlags,int nCols)
-    {
-        if(iCol==5) //最后一列“操作”不支持排序
-            return false;
-        
-        SHDSORTFLAG stFlag = stFlags[iCol];
-        switch(stFlag)
-        {
-            case ST_NULL:stFlag = ST_UP;break;
-            case ST_DOWN:stFlag = ST_UP;break;
-            case ST_UP:stFlag = ST_DOWN;break;
-        }
-        for(int i=0;i<nCols;i++)
-        {
-            stFlags[i]=ST_NULL;
-        }
-        stFlags[iCol]=stFlag;
-        
-        SORTCTX ctx={iCol,stFlag};
-        qsort_s(m_softInfo.GetData(),m_softInfo.GetCount(),sizeof(SOFTINFO),SortCmp,&ctx);
-        return true;
-    }
-    
-    static int __cdecl SortCmp(void *context,const void * p1,const void * p2)
-    {
-        SORTCTX *pctx = (SORTCTX*)context;
-        const SOFTINFO *pSI1=(const SOFTINFO*)p1;
-        const SOFTINFO *pSI2=(const SOFTINFO*)p2;
-        int nRet =0;
-        switch(pctx->iCol)
-        {
-            case 0://name
-                nRet = wcscmp(pSI1->pszName,pSI2->pszName);
-                break;
-            case 1://score
-                {
-                    float fCmp = (pSI1->fScore - pSI2->fScore);
-                    if(fabs(fCmp)<0.0000001) nRet = 0;
-                    else if(fCmp>0.0f) nRet = 1;
-                    else nRet = -1;
-                }
-                break;
-            case 2://size
-                nRet = (int)(pSI1->dwSize - pSI2->dwSize);
-                break;
-            case 3://install time
-                nRet = wcscmp(pSI1->pszInstallTime,pSI2->pszInstallTime);
-                break;
-            case 4://user time
-                nRet = wcscmp(pSI1->pszUseTime,pSI2->pszUseTime);
-                break;
-
-        }
-        if(pctx->stFlag == ST_UP)
-            nRet = -nRet;
-        return nRet;
-    }
-};
-
-
-
-SStringW skins[5] = {
-L"skin_icon1",
-L"skin_icon2",
-L"skin_icon3",
-L"skin_icon4",
-L"skin_icon5"
-};
-
-class CTestTileAdapter : public SAdapterBase
-{
-public:
-    CTestTileAdapter()
-    {
-
-    }
-    virtual int getCount()
-    {
-        return 50000;
-    }
-
-    virtual void getView(int position, SWindow *pItem, pugi::xml_node xmlTemplate)
-    {
-        if(pItem->GetChildrenCount() == 0)
-        {
-            pItem->InitFromXml(xmlTemplate);
-        }
-        SImageWnd *pImg = pItem->FindChildByName2<SImageWnd>(L"img_file_icon");
-        pImg->SetSkin(GETSKIN(skins[position % 5],pImg->GetScale()));
-        SButton *pBtn = pItem->FindChildByName2<SButton>(L"btn_test");
-        pBtn->SetWindowText(SStringT().Format(_T("btn %d"), position));
-        pBtn->GetRoot()->SetUserData(position);
-        pBtn->GetEventSet()->subscribeEvent(EVT_CMD, Subscriber(&CTestTileAdapter::OnButtonClick, this));
-    }
-
-    bool OnButtonClick(EventArgs *pEvt)
-    {
-        SButton *pBtn = sobj_cast<SButton>(pEvt->sender);
-        int iItem = pBtn->GetRoot()->GetUserData();
-        SMessageBox(NULL, SStringT().Format(_T("button of %d item was clicked"), iItem), _T("haha"), MB_OK);
-        return true;
-    }
-
-};
-
-
-struct TreeItemData
-{
-    SStringW strName;
-    int      nAge;
-    SStringT strTstLong;
-};
-
-class CTreeViewAdapter :public STreeAdapterBase<TreeItemData>
-{
-public:
-    
-	CTreeViewAdapter() {
-	    TreeItemData data;
-	    data.strName = L"name root";
-	    data.nAge = 100;
-	    
-	    HSTREEITEM hRoot = InsertItem(data);
-	    SetItemExpanded(hRoot,FALSE);
-	    for(int i=0;i<100;i++)
-	    {
-	         data.strName.Format(L"branch_%d",i);
-	         data.nAge ++;
-	         data.strTstLong=_T("red text");
-	         if(i==50) data.strTstLong = _T("Long Text Test. When this item is shown, the treeview size should be extended automatically.");
-	         InsertItem(data,hRoot);
-	    }
-	    //ExpandItem(hRoot,ITvAdapter::TV_TOGGLE);
-	}
-	
-	~CTreeViewAdapter() {}
-
-	virtual void getView(SOUI::HTREEITEM loc, SWindow * pItem, pugi::xml_node xmlTemplate) {
-		if(pItem->GetChildrenCount() == 0)
-		{
-			pItem->InitFromXml(xmlTemplate);
-		}
-		ItemInfo & ii = m_tree.GetItemRef((HSTREEITEM)loc);
-		SWindow * pWnd = pItem->FindChildByID(R.id.btn_test);
-		SASSERT(pWnd);
-		pWnd->SetWindowText(S_CW2T(ii.data.strName));
-		SWindow *pTxtRed = pItem->FindChildByID(R.id.txt_red);
-		SASSERT(pTxtRed);
-		pTxtRed->SetWindowText(ii.data.strTstLong);
-		
-		SToggle *pSwitch = pItem->FindChildByID2<SToggle>(R.id.tgl_switch);
-		SASSERT(pSwitch);
-		pSwitch->SetVisible(HasChildren(loc));
-		pSwitch->SetToggle(IsItemExpanded(loc));
-		pSwitch->GetEventSet()->subscribeEvent(EVT_CMD,Subscriber(&CTreeViewAdapter::OnSwitchClick,this));
-	}
-	
-	bool OnSwitchClick(EventArgs *pEvt)
-	{
-	    SToggle *pToggle = sobj_cast<SToggle>(pEvt->sender);
-	    SASSERT(pToggle);
-	    SItemPanel *pItem = sobj_cast<SItemPanel>(pToggle->GetRoot());
-	    SASSERT(pItem);
-	    SOUI::HTREEITEM loc = (SOUI::HTREEITEM)pItem->GetItemIndex();
-	    ExpandItem(loc,ITvAdapter::TVC_TOGGLE);
-	    return true;
-	}
-};
 
 SOUI_CLASS_NAME(EventThread, L"on_event_thread")
 SOUI_CLASS_NAME(EventThreadStart, L"on_event_thread_start")
 SOUI_CLASS_NAME(EventThreadStop, L"on_event_thread_stop")
 
 EVENT_MAP_BEGIN(CMainDlg)
-        EVENT_ID_COMMAND(1, OnClose)
-        EVENT_ID_COMMAND(2, OnMaximize)
-        EVENT_ID_COMMAND(3, OnRestore)
-        EVENT_ID_COMMAND(5, OnMinimize)
-        EVENT_ID_COMMAND(R.id.btn_tip,OnBtnTip)
-        EVENT_NAME_CONTEXTMENU(L"edit_1140",OnEditMenu)
-        EVENT_NAME_COMMAND(L"btn_msgbox",OnBtnMsgBox)
-        
-        //<--在新版本的uiresbuilder生成的resource.h中定义了R.id, R.name两个对象，可以使用如下方式来关联变量。
-        EVENT_ID_COMMAND(R.id.btnSelectGif,OnBtnSelectGIF)
-        EVENT_ID_RANGE_HANDLER(R.id.radio2_1,R.id.radio2_6,EventSwndStateChanged::EventID,OnTabPageRadioSwitch)    //10000-10005是XML中定义的radio2的ID
-        EVENT_NAME_COMMAND(R.name.btn_menu,OnBtnMenu)
-        EVENT_NAME_COMMAND(R.name.btn_webkit_go,OnBtnWebkitGo)
-        EVENT_ID_COMMAND(R.id.btn_createchildren,OnBtnCreateChildren)
-        EVENT_ID_COMMAND(R.id.btn_clock,OnBtnClock)
-        EVENT_ID_COMMAND(R.id.btn_init_listbox,OnInitListBox)
-        EVENT_ID_COMMAND(R.id.btn_skin,OnBtnSkin)
-        EVENT_ID_COMMAND(R.id.btn_start_notify_thread,OnBtnStartNotifyThread)
-        EVENT_ID_COMMAND(R.id.btn_stop_notify_thread,OnBtnStopNotifyThread)
-        EVENT_ID_COMMAND(R.id.btn_open_wrap_content,OnBtnOpenWrapContent)
-        EVENT_ID_HANDLER(R.id.cbx_interpolator,EventCBSelChange::EventID,OnCbxInterpolotorChange)
-	    EVENT_HANDLER(EventPath::EventID, OnEventPath)
-        //-->
-        //<--通知中心事件
-        EVENT_ID_HANDLER(SENDER_ID,EventThreadStart::EventID,OnEventThreadStart)
-        EVENT_ID_HANDLER(SENDER_ID,EventThreadStop::EventID,OnEventThreadStop)
-        EVENT_ID_HANDLER(SENDER_ID,EventThread::EventID,OnEventThread)
-        //-->
+    EVENT_HANDLER(EventPath::EventID,OnEventPath)
+    EVENT_ID_HANDLER(R.id.cbx_interpolator,EventCBSelChange::EventID,OnCbxInterpolotorChange)
+    EVENT_ID_COMMAND(1, OnClose)
+    EVENT_ID_COMMAND(2, OnMaximize)
+    EVENT_ID_COMMAND(3, OnRestore)
+    EVENT_ID_COMMAND(5, OnMinimize)
+    EVENT_ID_COMMAND(R.id.btn_tip,OnBtnTip)
+    EVENT_NAME_CONTEXTMENU(L"edit_1140",OnEditMenu)
+    EVENT_NAME_COMMAND(L"btn_msgbox",OnBtnMsgBox)
+    
+    //<--在新版本的uiresbuilder生成的resource.h中定义了R.id, R.name两个对象，可以使用如下方式来关联变量。
+    EVENT_ID_COMMAND(R.id.btnSelectGif,OnBtnSelectGIF)
+    EVENT_ID_RANGE_HANDLER(R.id.radio2_1,R.id.radio2_6,EventSwndStateChanged::EventID,OnTabPageRadioSwitch)    //10000-10005是XML中定义的radio2的ID
+    EVENT_NAME_COMMAND(R.name.btn_menu,OnBtnMenu)
+    EVENT_NAME_COMMAND(R.name.btn_webkit_go,OnBtnWebkitGo)
+    EVENT_ID_COMMAND(R.id.btn_createchildren,OnBtnCreateChildren)
+    EVENT_ID_COMMAND(R.id.btn_clock,OnBtnClock)
+    EVENT_ID_COMMAND(R.id.btn_init_listbox,OnInitListBox)
+    EVENT_ID_COMMAND(R.id.btn_skin,OnBtnSkin)
+    EVENT_ID_COMMAND(R.id.btn_start_notify_thread,OnBtnStartNotifyThread)
+    EVENT_ID_COMMAND(R.id.btn_stop_notify_thread,OnBtnStopNotifyThread)
+    EVENT_ID_COMMAND(R.id.btn_open_wrap_content,OnBtnOpenWrapContent)
+    //-->
+    //<--通知中心事件
+    EVENT_ID_HANDLER(SENDER_ID,EventThreadStart::EventID,OnEventThreadStart)
+    EVENT_ID_HANDLER(SENDER_ID,EventThreadStop::EventID,OnEventThreadStop)
+    EVENT_ID_HANDLER(SENDER_ID,EventThread::EventID,OnEventThread)
+    //-->
 
-        EVENT_NAME_COMMAND(L"btn_webkit_back",OnBtnWebkitBackward)
-        EVENT_NAME_COMMAND(L"btn_webkit_fore",OnBtnWebkitForeward)
-        EVENT_NAME_COMMAND(L"btn_webkit_refresh",OnBtnWebkitRefresh)
-        EVENT_NAME_COMMAND(L"btn_hidetst",OnBtnHideTest)
-        EVENT_NAME_COMMAND(L"btn_insert_gif",OnBtnInsertGif2RE)
-        EVENT_NAME_COMMAND(L"btn_append_msg",OnBtnAppendMsg)
-        EVENT_NAME_COMMAND(L"btn_richedit_save",OnBtnRtfSave)
-        EVENT_NAME_COMMAND(L"btn_richedit_open",OnBtnRtfOpen)
-        EVENT_NAME_COMMAND(L"btn_lrc",OnBtnLRC)
-        EVENT_NAME_HANDLER(L"chromeTab",EVT_CHROMETAB_NEW,OnChromeTabNew)
-        EVENT_NAME_COMMAND(L"btn_filewnd",OnBtnFileWnd)
-        EVENT_NAME_HANDLER(L"edit_url",EVT_RE_NOTIFY,OnUrlReNotify)
-        EVENT_NAME_HANDLER(L"mclv_test",EVT_CTXMENU,OnMclvCtxMenu)
-        EVENT_NAME_HANDLER(L"edit_rotate",EVT_RE_NOTIFY,OnMatrixWindowReNotify)
-        EVENT_NAME_HANDLER(L"edit_scale",EVT_RE_NOTIFY,OnMatrixWindowReNotify)
-        EVENT_NAME_HANDLER(L"edit_skew",EVT_RE_NOTIFY,OnMatrixWindowReNotify)
-        EVENT_NAME_HANDLER(L"edit_translate",EVT_RE_NOTIFY,OnMatrixWindowReNotify)
-        
-        EVENT_NAME_HANDLER(L"menu_slider",EventSliderPos::EventID,OnMenuSliderPos)
-    EVENT_MAP_END() 
+    EVENT_NAME_COMMAND(L"btn_webkit_back",OnBtnWebkitBackward)
+    EVENT_NAME_COMMAND(L"btn_webkit_fore",OnBtnWebkitForeward)
+    EVENT_NAME_COMMAND(L"btn_webkit_refresh",OnBtnWebkitRefresh)
+    EVENT_NAME_COMMAND(L"btn_hidetst",OnBtnHideTest)
+    EVENT_NAME_COMMAND(L"btn_insert_gif",OnBtnInsertGif2RE)
+    EVENT_NAME_COMMAND(L"btn_append_msg",OnBtnAppendMsg)
+    EVENT_NAME_COMMAND(L"btn_richedit_save",OnBtnRtfSave)
+    EVENT_NAME_COMMAND(L"btn_richedit_open",OnBtnRtfOpen)
+    EVENT_NAME_COMMAND(L"btn_lrc",OnBtnLRC)
+    EVENT_NAME_HANDLER(L"chromeTab",EVT_CHROMETAB_NEW,OnChromeTabNew)
+    EVENT_NAME_COMMAND(L"btn_filewnd",OnBtnFileWnd)
+    EVENT_NAME_HANDLER(L"edit_url",EVT_RE_NOTIFY,OnUrlReNotify)
+    EVENT_NAME_HANDLER(L"mclv_test",EVT_CTXMENU,OnMclvCtxMenu)
+    EVENT_NAME_HANDLER(L"edit_rotate",EVT_RE_NOTIFY,OnMatrixWindowReNotify)
+    EVENT_NAME_HANDLER(L"edit_scale",EVT_RE_NOTIFY,OnMatrixWindowReNotify)
+    EVENT_NAME_HANDLER(L"edit_skew",EVT_RE_NOTIFY,OnMatrixWindowReNotify)
+    EVENT_NAME_HANDLER(L"edit_translate",EVT_RE_NOTIFY,OnMatrixWindowReNotify)
+    
+    EVENT_NAME_HANDLER(L"menu_slider",EventSliderPos::EventID,OnMenuSliderPos)
+EVENT_MAP_END() 
 
-    //HOST消息及响应函数映射表
-    BEGIN_MSG_MAP_EX(CMainDlg)
-        MSG_WM_CREATE(OnCreate)
-        MSG_WM_INITDIALOG(OnInitDialog)
-        MSG_WM_DESTROY(OnDestory)
-        MSG_WM_CLOSE(OnClose)
-        MSG_WM_SIZE(OnSize)
-        MSG_WM_COMMAND(OnCommand)
-        MSG_WM_TIMER(OnTimer)
-        MESSAGE_HANDLER(g_dwSkinChangeMessage, OnSkinChangeMessage)
-        CHAIN_MSG_MAP(SHostWnd)
-        REFLECT_NOTIFICATIONS_EX()
-    END_MSG_MAP()
-
-bool SMusicListAdapter::IsColumnVisible(int iCol) const
-{
-	return true;
-}
+//HOST消息及响应函数映射表
+BEGIN_MSG_MAP_EX(CMainDlg)
+    MSG_WM_CREATE(OnCreate)
+    MSG_WM_INITDIALOG(OnInitDialog)
+    MSG_WM_DESTROY(OnDestory)
+    MSG_WM_CLOSE(OnClose)
+    MSG_WM_SIZE(OnSize)
+    MSG_WM_COMMAND(OnCommand)
+    MSG_WM_TIMER(OnTimer)
+    MESSAGE_HANDLER(g_dwSkinChangeMessage, OnSkinChangeMessage)
+    CHAIN_MSG_MAP(SHostWnd)
+    REFLECT_NOTIFICATIONS_EX()
+END_MSG_MAP()
+    
 int CMainDlg::OnCreate( LPCREATESTRUCT lpCreateStruct )
 {
 #ifdef SHOW_AERO
@@ -1057,9 +460,7 @@ LRESULT CMainDlg::OnInitDialog( HWND hWnd, LPARAM lParam )
 		pTreeViewAdapter->Release();
 	}
 
-	SShellNotifyIcon *pSShellNotifyIcon = FindChildByID2<SShellNotifyIcon>(8);
-	if(pSShellNotifyIcon)
-		pSShellNotifyIcon->StartAni();
+	FindChildByID2<SShellNotifyIcon>(8)->StartAni();
 
     return 0;
 }
@@ -1263,7 +664,7 @@ void CMainDlg::OnBtnMsgBox()
     SMessageBox(NULL,_T("this message box includes two buttons"),_T("haha"),MB_YESNO|MB_ICONQUESTION);
 
 	CSimpleWnd::SetTimer(TIMER_QUIT,3000,NULL);//3S后退出APP
-    SMessageBox(NULL,_T("this message box includes three buttons. \nthe app will quit after 3 seconds if you keep the msgbox open!"),L"Alarm",MB_ABORTRETRYIGNORE|MB_ICONSTOP);
+    SMessageBox(NULL,_T("this message box includes three buttons. \nthe app will quit after 3 seconds if you keep the msgbox open!"),_T("Alarm"),MB_ABORTRETRYIGNORE|MB_ICONSTOP);
 	CSimpleWnd::KillTimer(TIMER_QUIT);
 }
 
@@ -1276,7 +677,7 @@ public:
 protected:
 	void OnLButtonDown(UINT nFlags,CPoint pt)
 	{
-		SMessageBox(m_hWnd,L"test",L"msgbox",MB_OK);
+		SMessageBox(m_hWnd,_T("test"),_T("msgbox"),MB_OK);
 		SetMsgHandled(FALSE);
 	}
 BEGIN_MSG_MAP_EX(SSkiaTestWnd)
@@ -1625,7 +1026,7 @@ void CMainDlg::OnCbxInterpolotorChange(EventArgs *e)
 	{
 		SStringT str = pCbx->GetLBText(e2->nCurSel);
 		str=str.Mid(1,str.GetLength()-1-strlen("Interpolator"));
-		IInterpolator * pInterpolator = CREATEINTERPOLATOR(str);
+		IInterpolator * pInterpolator = CREATEINTERPOLATOR(S_CT2W(str));
 		if(pInterpolator)
 		{
 			SInterpolatorView *pView = FindChildByID2<SInterpolatorView>(R.id.view_interpolator);
@@ -1635,10 +1036,9 @@ void CMainDlg::OnCbxInterpolotorChange(EventArgs *e)
 	}
 }
 
-
 void CMainDlg::OnEventPath(EventArgs *e)
 {
 	EventPath * e2 = sobj_cast<EventPath>(e);
-	SStringT strLen = SStringT().Format(_T("%.2f"), e2->fLength);
+	SStringT strLen = SStringT().Format(_T("%.2f"),e2->fLength);
 	FindChildByID(R.id.txt_path_length)->SetWindowText(strLen);
 }

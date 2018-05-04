@@ -23,11 +23,11 @@ namespace SOUI
  */
 typedef struct tagLBITEM
 {
-    SStringT    strText;  /**< 文本 */
+	STrText     strText;  /**< 文本 */
     int         nImage;   /**< 图标 */
     LPARAM      lParam;   /**< 附加参数 */
 
-	tagLBITEM();
+	tagLBITEM(ITrCtxProvider * pTrCtx);
 	~tagLBITEM();
 
 } LBITEM, *LPLBITEM;
@@ -113,7 +113,7 @@ public:
      */
     int GetItemHeight() const
     {
-        return m_nItemHei;
+        return m_itemHeight.toPixelSize(GetScale());
     }
 
     /**
@@ -141,34 +141,14 @@ public:
      * SListBox::GetText
      * @brief    获取指定项文本
      * @param    int nIndex -- 选项索引
-     * @param    LPTSTR lpszBuffer -- 缓冲区
-     * @return   返回int 
+	 * @param    BOOL bRawText -- 原始数据标志
+     * @return   SStringT,列表项的原始字符串
      *
      * Describe  获取指定项文本
      */
-    int GetText(int nIndex, LPTSTR lpszBuffer) const;
+    SStringT GetText(int nIndex,BOOL bRawText=FALSE) const;
 
-    /**
-     * SListBox::GetText
-     * @brief    获取指定项文本
-     * @param    int nIndex -- 选项索引
-     * @param    SStringT& strText -- 缓冲区
-     * @return   返回int 
-     *
-     * Describe  获取指定项文本
-     */
-    int GetText(int nIndex, SStringT& strText) const;
-
-    /**
-     * SListBox::GetTextLen
-     * @brief    获取指定项文本长度
-     * @param    int nIndex -- 选项索引
-     * @return   返回int 
-     *
-     * Describe  获取文本长度
-     */
-    int GetTextLen(int nIndex) const;
-
+    
     /**
      * SListBox::GetItemHeight
      * @brief    获取指定项高度
@@ -261,6 +241,8 @@ public:
     int HitTest(CPoint &pt);
 
 protected:
+	virtual HRESULT OnLanguageChanged();
+
     /**
      * SListBox::CreateChildren
      * @brief    创建新项
@@ -427,14 +409,14 @@ protected:
 
     SArray<LPLBITEM>    m_arrItems;  /**< 保存item */
 
-    int     m_nItemHei;     /**< item高度 */
+    SLayoutSize   m_itemHeight;     /**< item高度 */
     int     m_iSelItem;     /**< 选中item */
     int     m_iHoverItem;   /**< Hover状态的item */
     int     m_iScrollSpeed; /**< 滚动速度 */
     BOOL    m_bHotTrack;    /**<  */
 
-    CPoint m_ptIcon;  /**< 图标坐标 */
-    CPoint m_ptText;  /**< 文本坐标 */
+	SLayoutSize m_ptIcon[2]; /**< 图标坐标 */
+    SLayoutSize m_ptText[2]; /**< 文本坐标 */
 
     COLORREF m_crItemBg;    /**< 背景色 */
     COLORREF m_crItemBg2;   /**< 背景色 */

@@ -126,8 +126,7 @@ public:
 		{
 			if (m_controlDb != NULL)
 			{
-				SStringT strText;
-				GetText(iHoverItem, strText);
+				SStringT strText = GetText(iHoverItem);
 				SMap<SStringT, pugi::xml_node>::CPair *p = m_controlDb->Lookup(strText);  //查找
 				if (p)
 				{
@@ -203,6 +202,7 @@ public:
 			m_pDesignerView->NewWnd(pt,(SMoveWnd*)pSChild);
 			((SMoveWnd*)pSChild)->m_pRealWnd->RequestRelayout();
 			((SMoveWnd*)pSChild)->m_pRealWnd->UpdateLayout();
+			m_pDesignerView->AddCodeToEditor(NULL);
 
 			m_pDesignerView->CreatePropGrid(m_pDesignerView->m_curSelXmlNode.name());
 			m_pDesignerView->UpdatePropGrid(m_pDesignerView->m_curSelXmlNode);

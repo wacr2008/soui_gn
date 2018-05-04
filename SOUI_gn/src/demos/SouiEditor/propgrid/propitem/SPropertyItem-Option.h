@@ -21,7 +21,7 @@ namespace SOUI
             ATTR_CUSTOM(L"options",OnAttrOptions)
             ATTR_INT(L"dropHeight",m_nDropHeight,FALSE)
             ATTR_INT(L"value",m_nValue,FALSE)
-			ATTR_INT(L"CanEmpty",m_bCanEmpty, FALSE)
+			ATTR_INT(L"CanEmpty",m_bCanEmpty,FALSE)
         SOUI_ATTRS_END()
 
     protected:
@@ -33,7 +33,7 @@ namespace SOUI
         int      m_nDropHeight;
         int      m_nValue;
 		SStringT      m_strValue;
-		BOOL     m_bCanEmpty;
+		bool     m_bCanEmpty:  1;
 
 		SStringT m_strDisplay;
         //SArray<SStringT>    m_options;     

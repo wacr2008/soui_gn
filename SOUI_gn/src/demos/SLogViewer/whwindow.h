@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+using namespace SOUI;
 
 template <class T>
 class CWHRoundRectFrameHelper
@@ -45,8 +46,7 @@ public:
 
     BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult, DWORD dwMsgMapID = 0)
     {
-        BOOL bHandled = TRUE;
-		(void)bHandled;
+       // BOOL bHandled = TRUE;
 
         switch(dwMsgMapID)
         {

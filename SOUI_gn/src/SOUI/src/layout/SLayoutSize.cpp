@@ -1,6 +1,10 @@
 ﻿#include "souistd.h"
 #include "layout/SLayoutSize.h"
 #include <math.h>
+#pragma warning (push)
+#pragma warning (disable: 4985) // disable the warning message during the include
+#include <math.h>               // this is where I would normally get the warning message
+#pragma warning (pop)
 
 namespace SOUI
 {
@@ -26,6 +30,11 @@ namespace SOUI
 	bool SLayoutSize::fequal(float a, float b)
 	{
 		return fabs(a-b)<0.00000001f;
+	}
+
+	bool SLayoutSize::valueEqual(float value)
+	{
+		return fequal(fSize,value);
 	}
 
 	SStringW SLayoutSize::toString() const

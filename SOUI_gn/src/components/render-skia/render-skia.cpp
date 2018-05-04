@@ -1078,46 +1078,6 @@ namespace SOUI
 	}
 
     
-
-
-	HRESULT SRenderTarget_Skia::ClipPath(const IPath * path, UINT mode, bool doAntiAlias /*= false*/)
-	{
-		const SPath_Skia * path2 = (const SPath_Skia *)path;
-		m_SkCanvas->clipPath(path2->m_skPath, SRegion_Skia::RGNMODE2SkRgnOP(mode), doAntiAlias);
-		return S_OK;
-	}
-
-	HRESULT SRenderTarget_Skia::DrawPath(const IPath * path, IPathEffect * pathEffect)
-	{
-		const SPath_Skia * path2 = (const SPath_Skia *)path;
-
-		SkPaint paint;
-		paint.setColor(SColor(m_curPen->GetColor()).toARGB());
-		SGetLineDashEffect skDash(m_curPen->GetStyle());
-		paint.setPathEffect(skDash.Get());
-		paint.setStyle(SkPaint::kStroke_Style);
-		if (m_bAntiAlias)
-		{
-			paint.setAntiAlias(true);
-			paint.setStrokeWidth((SkScalar)m_curPen->GetWidth() - 0.5f);
-		}
-		else
-		{
-			paint.setAntiAlias(false);
-			paint.setStrokeWidth((SkScalar)m_curPen->GetWidth());
-		}
-
-		if (pathEffect != NULL)
-		{
-			SkPathEffect * skPathEffect = (SkPathEffect*)pathEffect->GetRealPathEffect();
-			paint.setPathEffect(skPathEffect);
-		}
-		m_SkCanvas->drawPath(path2->m_skPath, paint);
-		return S_OK;
-	}
-
-
-
     HRESULT SRenderTarget_Skia::GradientFill( LPCRECT pRect,BOOL bVert,COLORREF crBegin,COLORREF crEnd,BYTE byAlpha/*=0xFF*/ )
     {
         SkRect skrc = toSkRect(pRect);
@@ -1356,15 +1316,54 @@ namespace SOUI
 		return crRet;
 	}
 
-
-    //////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////
 	// SBitmap_Skia
 	OBJTYPE SBitmap_Skia::ObjectType() const 
 	{
 		return OT_BITMAP;
 	}
 
+	HRESULT SRenderTarget_Skia::ClipPath(const IPath * path, UINT mode, bool doAntiAlias /*= false*/)
+	{
+		const SPath_Skia * path2 = (const SPath_Skia *)path;
+		m_SkCanvas->clipPath(path2->m_skPath,SRegion_Skia::RGNMODE2SkRgnOP(mode),doAntiAlias);
+		return S_OK;
+	}
 
+	HRESULT SRenderTarget_Skia::DrawPath(const IPath * path, IPathEffect * pathEffect)
+	{
+		const SPath_Skia * path2 = (const SPath_Skia *)path;
+
+		SkPaint paint;
+		paint.setColor(SColor(m_curPen->GetColor()).toARGB());
+		SGetLineDashEffect skDash(m_curPen->GetStyle());
+		paint.setPathEffect(skDash.Get());
+		paint.setStyle(SkPaint::kStroke_Style);
+		if(m_bAntiAlias)
+		{
+			paint.setAntiAlias(true);
+			paint.setStrokeWidth((SkScalar)m_curPen->GetWidth()-0.5f);
+		}else
+		{
+			paint.setAntiAlias(false);
+			paint.setStrokeWidth((SkScalar)m_curPen->GetWidth());
+		}
+
+		if(pathEffect!=NULL)
+		{
+			SkPathEffect * skPathEffect = (SkPathEffect*)pathEffect->GetRealPathEffect();
+			paint.setPathEffect(skPathEffect);
+		}
+		SkPath skPath;
+		path2->m_skPath.offset(m_ptOrg.fX,m_ptOrg.fY,&skPath);
+		m_SkCanvas->drawPath(skPath,paint);
+
+		return S_OK;
+	}
+
+
+    //////////////////////////////////////////////////////////////////////////
+	// SBitmap_Skia
     static int s_cBmp = 0;
     SBitmap_Skia::SBitmap_Skia( IRenderFactory *pRenderFac ) :TSkiaRenderObjImpl<IBitmap>(pRenderFac),m_hBmp(0)
     {

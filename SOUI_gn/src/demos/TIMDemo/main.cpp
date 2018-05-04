@@ -6,16 +6,13 @@
 #include "com-cfg.h"
 
 #ifdef _DEBUG
-	#define RES_TYPE 0
+	#define RES_TYPE 0 
 #else
 	#define RES_TYPE 0
 #endif
 
 #define SYS_NAMED_RESOURCE _T("soui-sys-resource.dll")
-
 #define RunOnce_PropName			
-
-SOUI_CLASS_NAME(SSkinVScrollbar, L"vscrollbar")
 
 // 此代码模块中包含的函数的前向声明:
 BOOL CALLBACK OnEnumWindowsProc(HWND hWnd, LPARAM lParam)
@@ -28,6 +25,8 @@ BOOL CALLBACK OnEnumWindowsProc(HWND hWnd, LPARAM lParam)
 	}
 	return TRUE;
 }
+
+SOUI_CLASS_NAME(SSkinVScrollbar, L"vscrollbar")
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -51,36 +50,20 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		return 0;
 	}
 	
-	 
+
 	//使用imgdecoder-png图片解码模块演示apng动画   
 	//SComMgr* pComMgr = new SComMgr(_T("imgdecoder-png"));
 	
 	SComMgr* pComMgr = new SComMgr(_T("imgdecoder-gdip"));
-
-	//将程序的运行路径修改到项目所在目录所在的目录
-	//TCHAR szCurrentDir[MAX_PATH] = { 0 };
-
-	//GetModuleFileName(NULL, szCurrentDir, sizeof(szCurrentDir));
-	//LPTSTR lpInsertPos = _tcsrchr(szCurrentDir, _T('\\'));
-	//_tcscpy(lpInsertPos + 1, _T("..\\..\\src\\demos\\TIMDemo"));
-	//SetCurrentDirectory(szCurrentDir);
-
-
 	{
 		CAutoRefPtr<SOUI::IImgDecoderFactory> pImgDecoderFactory;
 		CAutoRefPtr<SOUI::IRenderFactory> pRenderFactory;
 		if(!pComMgr->CreateRender_Skia((IObjRef**)&pRenderFactory))
 		{
-			if (!pComMgr->CreateRender_GDI((IObjRef**)&pRenderFactory))
-			{
-				delete pComMgr;
-				::MessageBox(NULL, _T("Load CreateRender_GDI Error!"), _T("提示"), MB_ICONINFORMATION);
-				return 0;
-			}			
+			delete pComMgr;
+			::MessageBox(NULL, _T("Load CreateRender_Skia Error!"), _T("提示"), MB_ICONINFORMATION);
+			return 0;
 		}
-		
-		
-
 		if(!pComMgr->CreateImgDecoder((IObjRef**)&pImgDecoderFactory))
 		{
 			delete pComMgr;
@@ -132,9 +115,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		PathRemoveFileSpec(lpResPath);
 		PathRemoveFileSpec(lpResPath);
 		PathAddBackslash(lpResPath);
-		// 这里用自己工程 名
-		
-		_tcscat_s(lpResPath, MAX_PATH, _T("..\\src\\demos\\TIMDemo\\uires"));
+		// 这里用自己工程 名 
+        _tcscat_s(lpResPath, MAX_PATH, _T("..\\src\\demos\\TIMDemo\\uires"));
 		if(!pResProvider->Init((LPARAM)lpResPath, 0))
 		{
 			SASSERT(0);

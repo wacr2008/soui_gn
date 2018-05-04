@@ -691,7 +691,7 @@ namespace SOUI
         *
         * Describe   获取窗口标题
         */
-        SStringT GetWindowText() override;
+        SStringT GetWindowText(BOOL bRawText=FALSE) override;
         /**
         * SRichEdit::GetWindowTextLength
         * @brief     获取窗口标题长度
@@ -1227,7 +1227,7 @@ namespace SOUI
         */
         SEdit();
         
-        SStringT GetCueText() const;
+        SStringT GetCueText(BOOL bRawText=FALSE) const;
         
         SOUI_ATTRS_DECL() 
 

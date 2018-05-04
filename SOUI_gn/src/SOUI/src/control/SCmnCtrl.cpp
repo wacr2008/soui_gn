@@ -154,6 +154,8 @@ void SStatic::DrawMultiLine(IRenderTarget *pRT,LPCTSTR pszBuf,int cchText,LPRECT
 // Usage: <link>inner text example</link>
 //
 
+SOUI_CLASS_NAME(SLink, L"link")
+
 SOUI_ATTRS_BEGIN(SLink)
 	ATTR_STRINGT(L"href", m_strLinkUrl, FALSE)
 SOUI_ATTRS_END()
@@ -165,7 +167,6 @@ SOUI_MSG_MAP_BEGIN(SLink)
 	MSG_WM_MOUSEHOVER(OnMouseHover)
 SOUI_MSG_MAP_END()
 
-SOUI_CLASS_NAME(SLink, L"link")
 
 SLink::SLink()
 {
@@ -221,7 +222,7 @@ void SLink::DrawText(IRenderTarget *pRT,LPCTSTR pszBuf,int cchText,LPRECT pRect,
 void SLink::OnInitFinished( pugi::xml_node xmlNode)
 {
     __super::OnInitFinished(xmlNode);
-    if(m_strToolTipText.GetText().IsEmpty()) m_strToolTipText.SetText(m_strLinkUrl);
+    if(m_strToolTipText.GetText(TRUE).IsEmpty()) m_strToolTipText.SetText(m_strLinkUrl);
 }
 
 BOOL SLink::OnSetCursor(const CPoint &pt)
@@ -277,22 +278,25 @@ void SLink::OnMouseHover( WPARAM wParam, CPoint pt )
 //
 // Usage: <button name=xx skin=xx>inner text example</button>
 //
+
+SOUI_CLASS_NAME(SButton, L"button")
+
 SOUI_ATTRS_BEGIN(SButton)
 	ATTR_CUSTOM(L"accel", OnAttrAccel)
 	ATTR_INT(L"animate", m_bAnimate, FALSE)
 SOUI_ATTRS_END()
 
-SOUI_MSG_MAP_BEGIN(SButton)
-	MSG_WM_PAINT_EX(OnPaint)
-	MSG_WM_ERASEBKGND_EX(OnEraseBkgnd)
-	MSG_WM_LBUTTONDBLCLK(OnLButtonDown) //将双击消息处理为单击
-	MSG_WM_KEYDOWN(OnKeyDown)
-	MSG_WM_KEYUP(OnKeyUp)
-	MSG_WM_DESTROY(OnDestroy)
-	MSG_WM_SIZE(OnSize)
-SOUI_MSG_MAP_END()
 
-SOUI_CLASS_NAME(SButton, L"button")
+SOUI_MSG_MAP_BEGIN(SButton)
+        MSG_WM_PAINT_EX(OnPaint)
+        MSG_WM_ERASEBKGND_EX(OnEraseBkgnd)
+        MSG_WM_LBUTTONDBLCLK(OnLButtonDown) //将双击消息处理为单击
+        MSG_WM_KEYDOWN(OnKeyDown)
+        MSG_WM_KEYUP(OnKeyUp)
+        MSG_WM_DESTROY(OnDestroy)
+        MSG_WM_SIZE(OnSize)
+SOUI_MSG_MAP_END()
+ 
 
 SButton::SButton() 
 :m_accel(0)
@@ -380,6 +384,29 @@ bool SButton::OnAcceleratorPressed( const CAccelerator& accelerator )
     return true;
 }
 
+BOOL SButton::InitFromXml(pugi::xml_node xmlNode)
+{
+	BOOL bRet=SWindow::InitFromXml(xmlNode);
+	SStringT strText = GetWindowText(TRUE);
+	
+	if (!strText.IsEmpty()&&(strText[strText.GetLength()-1]==_T(')')))
+	{
+		int pos=strText.ReverseFind(_T('('));
+		if ((pos != -1)&&(strText[++pos]==_T('&')))
+		{
+			SStringT strAccelT=_T("alt+");
+			strAccelT += strText[++pos];
+			m_accel = CAccelerator::TranslateAccelKey(strAccelT);
+			if (m_accel)
+			{
+				CAccelerator acc(m_accel);
+				GetContainer()->GetAcceleratorMgr()->RegisterAccelerator(acc, this);
+			}
+		}
+	}
+	return bRet;
+}
+
 void SButton::OnDestroy()
 {
     if(m_accel)
@@ -394,6 +421,11 @@ void SButton::OnDestroy()
 HRESULT SButton::OnAttrAccel( SStringW strAccel,BOOL bLoading )
 {
     SStringT strAccelT=S_CW2T(strAccel);
+	if(m_accel)
+	{
+		CAccelerator acc(m_accel);
+		GetContainer()->GetAcceleratorMgr()->UnregisterAccelerator(acc,this);
+	}
     m_accel=CAccelerator::TranslateAccelKey(strAccelT);
     if(m_accel)
     {
@@ -474,7 +506,6 @@ SOUI_MSG_MAP_BEGIN(SImageWnd)
 SOUI_MSG_MAP_END()
 
 SOUI_CLASS_NAME(SImageWnd, L"img")
-
 SImageWnd::SImageWnd()
     : m_iTile(0)
 	, m_bManaged(FALSE)
@@ -585,6 +616,8 @@ void SImageWnd::OnScaleChanged(int scale)
 }
 
 
+SOUI_CLASS_NAME(SAnimateImgWnd, L"animateimg")
+
 SOUI_ATTRS_BEGIN(SAnimateImgWnd)
 	ATTR_SKIN(L"skin", m_pSkin, TRUE)
 	ATTR_UINT(L"speed", m_nSpeed, FALSE)
@@ -598,7 +631,6 @@ SOUI_MSG_MAP_BEGIN(SAnimateImgWnd)
 	MSG_WM_SHOWWINDOW(OnShowWindow)
 SOUI_MSG_MAP_END()
 
-SOUI_CLASS_NAME(SAnimateImgWnd, L"animateimg")
 
 SAnimateImgWnd::SAnimateImgWnd()
 :m_pSkin(NULL)
@@ -848,6 +880,8 @@ void SProgress::OnColorize(COLORREF cr)
 // Simple HTML "HR" tag
 
 
+SOUI_CLASS_NAME(SLine, L"hr")
+
 SOUI_ATTRS_BEGIN(SLine)
 	ATTR_COLOR(L"colorLine", m_crLine, FALSE)
 	ATTR_INT(L"size", m_nLineSize, FALSE)
@@ -869,7 +903,6 @@ SOUI_MSG_MAP_BEGIN(SLine)
 	MSG_WM_PAINT_EX(OnPaint)
 SOUI_MSG_MAP_END()
 
-SOUI_CLASS_NAME(SLine, L"hr")
 
 SLine::SLine()
     : m_nLineStyle(PS_SOLID)
@@ -900,6 +933,8 @@ void SLine::OnPaint(IRenderTarget *pRT)
 //////////////////////////////////////////////////////////////////////////
 // Check Box
 
+SOUI_CLASS_NAME(SCheckBox, L"check")
+
 SOUI_ATTRS_BEGIN(SCheckBox)
 	ATTR_SKIN(L"skin", m_pSkin, FALSE)
 	ATTR_SKIN(L"focusSkin", m_pFocusSkin, FALSE)
@@ -913,7 +948,6 @@ SOUI_MSG_MAP_BEGIN(SCheckBox)
 	MSG_WM_KEYDOWN(OnKeyDown)
 SOUI_MSG_MAP_END()
 
-SOUI_CLASS_NAME(SCheckBox, L"check")
 
 SCheckBox::SCheckBox()
     : m_pSkin(GETBUILTINSKIN(SKIN_SYS_CHECKBOX))
@@ -1130,7 +1164,7 @@ SOUI_ATTRS_END()
 SOUI_MSG_MAP_BEGIN(SRadioBox)
 	MSG_WM_PAINT_EX(OnPaint)
 	MSG_WM_LBUTTONUP(OnLButtonUp)
-	MSG_WM_SETFOCUS_EX(OnSetFocus)
+	MSG_WM_SETFOCUS_EX2(OnSetFocus)
 SOUI_MSG_MAP_END()
 
 SOUI_CLASS_NAME(SRadioBox, L"radio")
@@ -1174,8 +1208,8 @@ void SRadioBox::OnPaint(IRenderTarget *pRT)
 
 void SRadioBox::DrawFocus(IRenderTarget *pRT)
 {
-    if(m_pFocusSkin)
-    {
+    if(m_pFocusSkin&& m_bDrawFocusRect&&IsFocusable())
+	{
         CRect rcCheckBox=GetRadioRect();
         m_pFocusSkin->Draw(pRT,rcCheckBox,0);
     }else
@@ -1242,9 +1276,12 @@ BOOL SRadioBox::NeedRedrawWhenStateChange()
     return TRUE;
 }
 
-void SRadioBox::OnSetFocus(SWND wndOld)
+void SRadioBox::OnSetFocus(SWND wndOld,CFocusManager::FocusChangeReason reason)
 {
-    if(!IsChecked()) SetCheck(TRUE);
+	if(reason != CFocusManager::kReasonFocusRestore)
+	{
+		if(!IsChecked()) SetCheck(TRUE);
+	}
     Invalidate();
 }
 
@@ -1412,7 +1449,7 @@ void SGroup::OnPaint(IRenderTarget *pRT)
     BeforePaint(pRT, painter);
 
     CSize szFnt;
-    pRT->MeasureText(m_strText.GetText(), m_strText.GetText().GetLength(),&szFnt);
+    pRT->MeasureText(m_strText.GetText(FALSE), m_strText.GetText(FALSE).GetLength(),&szFnt);
 
     CRect rcText=GetWindowRect();
     rcText.left+=GROUP_HEADER,rcText.right-=GROUP_HEADER;
@@ -1432,7 +1469,7 @@ void SGroup::OnPaint(IRenderTarget *pRT)
     }
 
     
-    if(!m_strText.GetText().IsEmpty())
+    if(!m_strText.GetText(FALSE).IsEmpty())
     {
         CRect rcClip=rcText;
         rcClip.InflateRect(5,5,5,5);
@@ -1442,7 +1479,7 @@ void SGroup::OnPaint(IRenderTarget *pRT)
     {
         CRect rcGroupBox = GetWindowRect();
 
-        if(!m_strText.GetText().IsEmpty()) rcGroupBox.top+=szFnt.cy/2;
+        if(!m_strText.GetText(FALSE).IsEmpty()) rcGroupBox.top+=szFnt.cy/2;
         rcGroupBox.DeflateRect(1,1,1,0);
         
         CAutoRefPtr<IPen> pen1,pen2,oldPen;
@@ -1460,10 +1497,10 @@ void SGroup::OnPaint(IRenderTarget *pRT)
         pRT->SelectObject(oldPen);
     }
 
-    if(!m_strText.GetText().IsEmpty())
+    if(!m_strText.GetText(FALSE).IsEmpty())
     {
         pRT->PopClip();
-        pRT->DrawText(m_strText.GetText(), m_strText.GetText().GetLength(), rcText, DT_SINGLELINE|DT_VCENTER);
+        pRT->DrawText(m_strText.GetText(FALSE), m_strText.GetText(FALSE).GetLength(), rcText, DT_SINGLELINE|DT_VCENTER);
     }
 
     AfterPaint(pRT, painter);

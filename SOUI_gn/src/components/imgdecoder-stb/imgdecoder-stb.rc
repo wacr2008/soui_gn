@@ -66,7 +66,7 @@ BEGIN
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "CompanyName", "Æô³ÌÈí¼þ"
+            VALUE "CompanyName", "SOUI"
             VALUE "FileDescription", "imgdecoder-stb"
             VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "imgdecoder-stb"

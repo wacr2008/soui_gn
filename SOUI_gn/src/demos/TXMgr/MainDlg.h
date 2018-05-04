@@ -7,6 +7,7 @@
 #define switch_mode_pioneer			102
 #define switch_mode_classic			103
 
+#include "TrayDlg.h"
 using namespace SOUI;
 class CMainDlg : public SHostWnd
 {
@@ -22,7 +23,6 @@ public:
 
 	void OnTimer(char nIDEvent);	
 
-	void OnBtnMsgBox();
 	int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	BOOL OnInitDialog(HWND wndFocus, LPARAM lInitParam);
 
@@ -42,4 +42,5 @@ private:
 	int				m_nCloseAnime;
 
 	int				m_nMoveNumber;
+	CTrayDlg	*   m_pTrayDlg;
 };

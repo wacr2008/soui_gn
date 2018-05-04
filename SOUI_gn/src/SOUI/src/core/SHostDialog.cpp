@@ -4,7 +4,7 @@
 
 namespace SOUI
 {
-    #define RC_INIT -1
+    #define RC_INIT 0xcccccccc
 
 	BEGIN_MSG_MAP_EX(SHostDialog)
 		MSG_WM_CLOSE(OnCancel)
@@ -90,6 +90,7 @@ namespace SOUI
 
     void SHostDialog::EndDialog( INT_PTR nResult )
     {
+		SASSERT(nResult!=RC_INIT);
 		if (m_nRetCode == RC_INIT)
 		{
 			m_nRetCode = nResult;
@@ -130,6 +131,4 @@ namespace SOUI
             }
         }
     }
-
-	
 }

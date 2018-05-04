@@ -109,7 +109,7 @@ public:
 	void SetTime(const SYSTEMTIME& sysTime);
 	void GetTime(SYSTEMTIME& sysTime);
 	void SetTime(WORD wYear, WORD wMonth, WORD wDay, WORD wHour, WORD wMinute, WORD wSecond);
-	SStringT GetWindowText() override;
+	SStringT GetWindowText(BOOL bRawText=FALSE) override;
 protected:		// 继承 
 	SWindow* GetDropDownOwner() override;
 	void OnCreateDropDown(SDropDownWnd* pDropDown) override;

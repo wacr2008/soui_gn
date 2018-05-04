@@ -6,8 +6,11 @@
 #include "FileHelper.h"
 #include "LogParser.h"
 #include <helper/SMenu.h>
-#include "Scintilla.h"
+#include <helper/mybuffer.h>
+#include "EditConfigDlg.h"
+#include "res/R.h"
 
+//soui消息
 EVENT_MAP_BEGIN(CMainDlg)
 	EVENT_NAME_COMMAND(L"btn_close", OnClose)
 	EVENT_NAME_COMMAND(L"btn_min", OnMinimize)
@@ -18,21 +21,26 @@ EVENT_MAP_BEGIN(CMainDlg)
 	EVENT_ID_COMMAND(R.id.btn_open_file, OnOpenFile)
 	EVENT_ID_COMMAND(R.id.btn_find, OnOpenFindDlg)
 	EVENT_ID_COMMAND(R.id.btn_clear, OnClear)
+	EVENT_ID_COMMAND(R.id.btn_edit_config, OnEditConfig)
+	EVENT_ID_COMMAND(R.id.btn_menu, OnMenu)
 	EVENT_ID_HANDLER(R.id.edit_filter, EventRENotify::EventID, OnFilterInputChange)
 	EVENT_ID_HANDLER(R.id.cbx_levels, EventCBSelChange::EventID, OnLevelsChange)
 	EVENT_ID_CONTEXTMENU(R.id.lv_log, OnLvContextMenu)
 EVENT_MAP_END()
+
+
 //HostWnd真实窗口消息处理
 BEGIN_MSG_MAP_EX(CMainDlg)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	MSG_WM_CLOSE(OnClose)
 	MSG_WM_SIZE(OnSize)
 	MSG_WM_CONTEXTMENU(OnContextMenu)
+	MSG_WM_NOTIFY(OnNotify)
 	CHAIN_MSG_MAP(CWHRoundRectFrameHelper<CMainDlg>)
 	CHAIN_MSG_MAP(SHostWnd)
 	REFLECT_NOTIFICATIONS_EX()
 END_MSG_MAP()
-
+ 
 CMainDlg::CMainDlg() 
 : SHostWnd(_T("LAYOUT:XML_MAINWND"))
 ,m_lvLogs(NULL)
@@ -40,15 +48,21 @@ CMainDlg::CMainDlg()
 ,m_pFindDlg(NULL)
 ,m_pFilterDlg(NULL)
 ,m_pSciter(NULL)
+,m_bFileOpening(FALSE)
 {
 	m_logAdapter.Attach(new SLogAdapter);
-	IParserFactory * pParserFactory = new CParseFactory;
-	m_logAdapter->SetParserFactory(pParserFactory);
-	pParserFactory->Release();
+	m_logAdapter->SetLogParserPool(&m_logParserPool);
 }
 
 CMainDlg::~CMainDlg()
 {
+	SPOSITION pos = m_logParserPool.GetHeadPosition();
+	while(pos)
+	{
+		ILogParse *pLogParser = m_logParserPool.GetNext(pos);
+		pLogParser->Release();
+	}
+	m_logParserPool.RemoveAll();
 }
 
 
@@ -56,6 +70,10 @@ BOOL CMainDlg::OnInitDialog(HWND hWnd, LPARAM lParam)
 {
 	//设置为磁吸主窗口
 	SetMainWnd(m_hWnd);
+
+	UpdateLogParser();
+
+
 
 	m_pFilterDlg = new CFilterDlg(this);
 	m_pFilterDlg->Create(m_hWnd);
@@ -106,7 +124,6 @@ void CMainDlg::OnLanguage(const SStringT & strLang)
 		pTransMgr->CreateTranslator(&lang);
 		pugi::xml_node node = xmlLang.child(L"language");
 		lang->Load(&node, 1);//1=LD_XML
-
 		pTransMgr->SetLanguage(lang->name());
 		pTransMgr->InstallTranslator(lang);
 		SDispatchMessage(UM_SETLANGUAGE,0,0);
@@ -213,42 +230,24 @@ void CMainDlg::OnFileDropdown(HDROP hDrop)
 
 void CMainDlg::OpenFile(LPCTSTR pszFileName)
 {
-	if(!m_logAdapter->Load(pszFileName)) return;
-	
+	m_bFileOpening = TRUE;
+	BOOL bRet =m_logAdapter->Load(pszFileName);
+	m_bFileOpening = FALSE;
+
+	if(!bRet)
+	{
+		SMessageBox(m_hWnd,GETSTRING(R.string.msg_open_failed),GETSTRING(R.string.title_no_name),MB_OK|MB_ICONSTOP);
+		return;
+	}
+
+	UpdateUI();
+
 	TCHAR szName[MAX_PATH];
 	_tsplitpath(pszFileName,NULL,NULL,szName,NULL);
 	SStringT strFmt = GETSTRING(R.string.title);
 	SStringT strTitle = SStringT().Format(S_CW2T(strFmt),szName);
 	FindChildByID(R.id.txt_title)->SetWindowText(strTitle);
 	CSimpleWnd::SetWindowText(strTitle);
-
-	ILogParse *pLogParser = m_logAdapter->GetLogParse();
-	if(pLogParser)
-	{
-		m_cbxLevels->ResetContent();
-		int nLevels = pLogParser->GetLevels();
-		wchar_t (*szLevels)[MAX_LEVEL_LENGTH] = new wchar_t[nLevels][MAX_LEVEL_LENGTH];
-		pLogParser->GetLevelText(szLevels);
-		for(int i=0;i<nLevels;i++)
-		{
-			m_cbxLevels->InsertItem(i,S_CW2T(szLevels[i]),0,i);
-		}
-		delete []szLevels;
-
-	}
-
-	SArray<SStringW> lstTags;
-	m_logAdapter->GetTags(lstTags);
-	m_pFilterDlg->UpdateTags(lstTags);
-
-
-	SArray<UINT> lstPid;
-	m_logAdapter->GetPids(lstPid);
-	m_pFilterDlg->UpdatePids(lstPid);
-
-	SArray<UINT> lstTid;
-	m_logAdapter->GetTids(lstTid);
-	m_pFilterDlg->UpdateTids(lstTid);
 
 }
 
@@ -333,6 +332,7 @@ void CMainDlg::OnOpenFindDlg()
 }
 
 
+
 int CMainDlg::FindInTarget(std::string findWhatText, int startPosition, int endPosition)
 {
 	int findStyle = 0;
@@ -357,7 +357,7 @@ int CMainDlg::FindInTarget(std::string findWhatText, int startPosition, int endP
 }
 
 
-std::string EncodeString(const std::string &s) 
+std::string EncodeString(const std::string &s)
 {
 	return s;
 }
@@ -522,7 +522,7 @@ Sci_CharacterRange CMainDlg::GetSelection()
 	crange.cpMin = m_pSciter->SendMessage(SCI_GETSELECTIONSTART);
 	crange.cpMax = m_pSciter->SendMessage(SCI_GETSELECTIONEND);
 	return crange;
-} 
+}
 
 int CMainDlg::LengthDocument()
 {
@@ -538,7 +538,7 @@ inline int Maximum(int a, int b) {
 	return (a > b) ? a : b;
 }
 
- 
+
 void CMainDlg::EnsureRangeVisible(int posStart, int posEnd, bool enforcePolicy)
 {
 	int lineStart = m_pSciter->SendMessage(SCI_LINEFROMPOSITION, Minimum(posStart, posEnd));
@@ -555,7 +555,7 @@ void CMainDlg::SetSelection(int anchor, int currentPos)
 }
 
 
-int CMainDlg::FindNext(const std::string &findWhat, bool bMatchCase, bool bMatchWholeWord,bool reverseDirection, bool showWarnings, bool allowRegExp)
+int CMainDlg::FindNext(const std::string &findWhat, bool bMatchCase, bool bMatchWholeWord, bool reverseDirection, bool showWarnings, bool allowRegExp)
 {
 	if (findWhat.length() == 0) {
 		return -1;
@@ -575,13 +575,13 @@ int CMainDlg::FindNext(const std::string &findWhat, bool bMatchCase, bool bMatch
 		startPosition = static_cast<int>(cr.cpMin);
 		endPosition = 0;
 	}
-	 
-	  
+
+
 	bool wrapFind = true;
 	bool wholeWord = bMatchWholeWord;
 	bool matchCase = bMatchCase;
 	bool havefound = false;
-	bool failedfind = false; 
+	bool failedfind = false;
 
 	bool regularExpressions = allowRegExp && regExp;
 	int nSearchFlags = (wholeWord ? SCFIND_WHOLEWORD : 0) |
@@ -589,7 +589,7 @@ int CMainDlg::FindNext(const std::string &findWhat, bool bMatchCase, bool bMatch
 		(regularExpressions ? SCFIND_REGEXP : 0) |
 		(0) |
 		(0);
-	 
+
 
 	m_pSciter->SendMessage(SCI_SETSEARCHFLAGS, nSearchFlags);
 	int posFind = FindInTarget(findTarget, startPosition, endPosition);
@@ -693,33 +693,10 @@ std::string UTF8FromUTF16(const std::wstring & utf16)
 
 bool CMainDlg::OnFind(const SStringT & strText, bool bFindNext, bool bMatchCase, bool bMatchWholeWord)
 {
-	std::string utf8_str =  UTF8FromUTF16((std::wstring)strText);
-	FindNext(utf8_str, bMatchCase,  bMatchWholeWord,false, true, false);
+	std::string utf8_str = UTF8FromUTF16((std::wstring)strText);
+	FindNext(utf8_str, bMatchCase, bMatchWholeWord, false, true, false);
 	m_pSciter->SetFocus();
 	return true;
-	/*
-	int flags = (bMatchCase?SCFIND_MATCHCASE:0) | (bMatchWholeWord?SCFIND_WHOLEWORD:0);
-	TextToFind ttf;
-	ttf.chrg.cpMin = m_pSciter->SendMessage(SCI_GETCURRENTPOS);
-	if(bFindNext)
-		ttf.chrg.cpMax = m_pSciter->SendMessage(SCI_GETLENGTH, 0, 0);
-	else
-		ttf.chrg.cpMax = 0;
-
-	SStringA strUtf8 = S_CT2A(strText,CP_UTF8);
-	ttf.lpstrText = (char *)(LPCSTR) strUtf8;
-	int nPos = m_pSciter->SendMessage(SCI_FINDTEXT,flags,(LPARAM)&ttf);
-	if(nPos==-1) return false;
-	
-	if(bFindNext)
-		m_pSciter->SendMessage(SCI_SETSEL,nPos,nPos + strUtf8.GetLength());
-	else
-		m_pSciter->SendMessage(SCI_SETSEL,nPos+ strUtf8.GetLength(),nPos);
-
-	m_pSciter->SetFocus();
-
-	return true;
-	*/
 }
 
 void CMainDlg::OnContextMenu(HWND hwnd, CPoint point)
@@ -767,3 +744,165 @@ void CMainDlg::OnContextMenu(HWND hwnd, CPoint point)
 	}
 }
 
+void CMainDlg::OnEditConfig()
+{
+	CEditConfigDlg editConfig;
+	if(IDOK==editConfig.DoModal())
+	{
+		UpdateLogParser();
+	}
+}
+
+void CMainDlg::UpdateLogParser()
+{
+	SStringW strAppDir = SApplication::getSingleton().GetAppDir();
+	strAppDir += L"\\config.xml";
+	pugi::xml_document doc;
+	if(!doc.load_file(strAppDir))
+	{
+		DWORD dwSize = SApplication::getSingleton().GetRawBufferSize(_T("xml"),_T("config"));
+		if(dwSize)
+		{
+			CMyBuffer<char> buf(dwSize);
+			SApplication::getSingleton().GetRawBuffer(_T("xml"),_T("config"),buf,dwSize);
+			FILE *f = _wfopen(strAppDir,L"w+b");
+			if(f)
+			{
+				fwrite(buf,1,dwSize,f);
+				fclose(f);
+			}
+			doc.load_buffer(buf,dwSize);
+		}
+	}
+
+	SPOSITION pos = m_logParserPool.GetHeadPosition();
+	while(pos)
+	{
+		ILogParse *pLogParser = m_logParserPool.GetNext(pos);
+		pLogParser->Release();
+	}
+	m_logParserPool.RemoveAll();
+
+	pugi::xml_node xmlLogParser = doc.child(L"logs").child(L"log");
+	while(xmlLogParser)
+	{
+		SStringW strName = xmlLogParser.attribute(L"name").as_string();
+		int nCodePage = xmlLogParser.attribute(L"codepage").as_int(CP_UTF8);
+		SStringW strLevels = xmlLogParser.child(L"levels").text().as_string();
+		strLevels.TrimBlank();
+		SStringW strFmt = xmlLogParser.child(L"format").text().as_string();
+		strFmt.TrimBlank();
+		CLogParse *pLogParser = new CLogParse(strName,strFmt,strLevels,nCodePage);
+		m_logParserPool.AddTail(pLogParser);
+		xmlLogParser = xmlLogParser.next_sibling(L"log");
+	}
+}
+
+void CMainDlg::OnAbout()
+{
+	SHostDialog dlgAbout(UIRES.LAYOUT.dlg_about);
+	dlgAbout.DoModal();
+}
+
+void CMainDlg::OnMenu()
+{
+	SMenu menu;
+	menu.LoadMenu(UIRES.smenu.menu_help);
+
+
+	ITranslatorMgr *pTransMgr = SApplication::getSingletonPtr()->GetTranslator();
+	SASSERT(pTransMgr);
+
+	SStringW strLang = pTransMgr->GetLanguage();
+	int langId = 0;
+	if(strLang== (L"chinese"))
+		langId=2020;
+	else
+		langId=2021;
+	HMENU menuLang = ::GetSubMenu(menu.m_hMenu,2);
+ 	CheckMenuItem(menuLang,langId,MF_BYCOMMAND|MF_CHECKED);
+
+	SWindow * pSender = FindChildByID(R.id.btn_menu);
+	CRect rc = pSender->GetWindowRect();
+	ClientToScreen(&rc);
+	UINT uCmd = menu.TrackPopupMenu(TPM_RETURNCMD,rc.left,rc.bottom,m_hWnd);
+	switch(uCmd)
+	{
+	case 200:
+		OnAbout();
+		break;
+	case 201:
+		OnHelp();
+		break;
+	case 2020:
+		OnLanguage(_T("lang_cn"));
+		break;
+	case 2021:
+		OnLanguage(_T("lang_en"));
+		break;
+	}
+}
+
+void CMainDlg::OnHelp()
+{
+	SStringT strUrl = S_CW2T(GETSTRING(R.string.url_help));
+	ShellExecute(m_hWnd,_T("open"),strUrl,NULL,NULL,SW_SHOW);
+}
+
+LRESULT CMainDlg::OnNotify(int idCtrl, LPNMHDR pnmh)
+{
+	if(idCtrl == m_pSciter->GetDlgCtrlID() && pnmh->code == SCN_MODIFIED && !m_bFileOpening)
+	{
+		SCNotification *pNotify = (SCNotification*)pnmh;
+		if(pNotify->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT))
+		{
+			int nLen = m_pSciter->SendMessage(SCI_GETTEXTLENGTH);
+			char * pBuf = (char *)malloc(nLen+1);
+			m_pSciter->SendMessage(SCI_GETTEXT,nLen,(LPARAM)pBuf);
+			SStringW strBuf = S_CA2W(pBuf,CP_UTF8);
+			free(pBuf);
+			m_pSciter->UpdateLineNumberWidth();
+
+			LPWSTR pBufw = strBuf.LockBuffer();
+			BOOL bOK = m_logAdapter->LoadMemory(pBufw);
+			(void)bOK;
+			strBuf.UnlockBuffer();
+
+			UpdateUI();
+		}
+	}
+	SetMsgHandled(FALSE);
+	return 0;
+}
+
+
+void CMainDlg::UpdateUI()
+{
+	ILogParse *pLogParser = m_logAdapter->GetLogParse();
+	if(pLogParser)
+	{
+		m_cbxLevels->ResetContent();
+		int nLevels = pLogParser->GetLevels();
+		wchar_t (*szLevels)[MAX_LEVEL_LENGTH] = new wchar_t[nLevels][MAX_LEVEL_LENGTH];
+		pLogParser->GetLevelText(szLevels);
+		for(int i=0;i<nLevels;i++)
+		{
+			m_cbxLevels->InsertItem(i,S_CW2T(szLevels[i]),0,i);
+		}
+		delete []szLevels;
+
+	}
+
+	SArray<SStringW> lstTags;
+	m_logAdapter->GetTags(lstTags);
+	m_pFilterDlg->UpdateTags(lstTags);
+
+
+	SArray<UINT> lstPid;
+	m_logAdapter->GetPids(lstPid);
+	m_pFilterDlg->UpdatePids(lstPid);
+
+	SArray<UINT> lstTid;
+	m_logAdapter->GetTids(lstTid);
+	m_pFilterDlg->UpdateTids(lstTid);
+}

@@ -8,6 +8,56 @@
 #include <vector>
 #include <tchar.h>
  
+std::string to_utf8(const wchar_t* buffer, int len)
+{
+	int nChars = ::WideCharToMultiByte(
+		CP_UTF8,
+		0,
+		buffer,
+		len,
+		NULL,
+		0,
+		NULL,
+		NULL);
+	if (nChars == 0) return "";
+
+	std::string newbuffer;
+	newbuffer.resize(nChars);
+	::WideCharToMultiByte(
+		CP_UTF8,
+		0,
+		buffer,
+		len,
+		const_cast< char* >(newbuffer.c_str()),
+		nChars,
+		NULL,
+		NULL);
+
+	return newbuffer;
+}
+
+std::string to_utf8(const std::wstring& str)
+{
+	return to_utf8(str.c_str(), (int)str.size());
+}
+
+std::wstring to_unicode(const char*lpcszString,int len)
+{ 
+    int unicodeLen = ::MultiByteToWideChar(CP_UTF8, 0, lpcszString, -1, NULL, 0);
+    wchar_t* pUnicode;
+    pUnicode = new wchar_t[unicodeLen + 1];
+    memset((void*)pUnicode, 0, (unicodeLen + 1) * sizeof(wchar_t));
+    ::MultiByteToWideChar(CP_UTF8, 0, lpcszString, -1, (LPWSTR)pUnicode, unicodeLen);
+    std::wstring wstrReturn(pUnicode);
+    delete [] pUnicode;
+    return wstrReturn;
+}
+
+std::wstring to_unicode(const std::string &utf8_str)
+{
+	return to_unicode(utf8_str.c_str(), utf8_str.length());
+}
+
 
 static bool bCheckResourction = true;
 
@@ -28,9 +78,7 @@ public:
 
 		wcscpy(m_szCurrentDir, strExe.c_str());
 
-#ifdef _DEBUG
 		wprintf(L"\n PrectectDir Current Dir %s\n", m_szCurrentDir);
-#endif
 
 	}
 
@@ -128,10 +176,10 @@ std::wstring toWideString(const char* str, size_t len, unsigned int code_page=CP
 } 
 
 const wchar_t  RB_HEADER_RC[] =
-L"/*<------------------------------------------------------------------------------------------------->*/\n /*该文件由uiresbuilder生成，请不要手动修改*/\n /*<------------------------------------------------------------------------------------------------->*/\n  #define DEFINE_UIRES(name, type, file_path)\n  name type file_path\n\n ";
+L"/*<------------------------------------------------------------------------------------------------->*/\n/*该文件由uiresbuilder生成，请不要手动修改*/\n/*<------------------------------------------------------------------------------------------------->*/\n#define DEFINE_UIRES(name, type, file_path)  name type file_path\n\n";
 
 const wchar_t  RB_HEADER_ID[] =
-L"/*<------------------------------------------------------------------------------------------------->*/\n /*该文件由uiresbuilder生成，请不要手动修改*/\n /*<------------------------------------------------------------------------------------------------->*/\n";
+L"/*<------------------------------------------------------------------------------------------------->*/\n/*该文件由uiresbuilder生成，请不要手动修改*/\n/*<------------------------------------------------------------------------------------------------->*/\n";
 
 
 const wchar_t ROBJ_DEF[] =
@@ -223,7 +271,7 @@ class FILEHEAD
 {
 public:
 	//char szBom[2];
-	WCHAR szHeadLine[ARRAYSIZE(STAMP_FORMAT)];
+	wchar_t szHeadLine[ARRAYSIZE(STAMP_FORMAT)];
 
 	FILEHEAD(__int64 ts=0)
 	{
@@ -238,7 +286,20 @@ public:
 		if(f)
 		{
 			FILEHEAD head;
-			fread(&head,sizeof(FILEHEAD),1,f);
+			 
+			char utf8_buffer[1024];
+			int i = 0;
+			char ch;
+			do
+			{
+				fread(&ch, 1, 1, f);
+				*(utf8_buffer + i) = ch;
+				i++;
+			} while (ch != 0x0D&& ch != 0x0A);
+
+			std::string utf8_s(utf8_buffer);
+			std::wstring unicode_s = to_unicode(utf8_s);
+			wcscpy(head.szHeadLine, unicode_s.c_str());
 			DWORD dHi=0,dLow=0;
 			if(wcsncmp(head.szHeadLine,STAMP_FORMAT2,8)==0)
 			{
@@ -263,16 +324,34 @@ void WriteFile(__int64 tmIdx, const std::string &strRes, const std::wstring &str
 		FILE * f=_tfopen(strRes.c_str(),_T("wb"));
 		if(f)
 		{
-			FILEHEAD tmStamp(tmIdx);
-			fwrite(&tmStamp,sizeof(FILEHEAD)-sizeof(WCHAR),1,f);//写UTF16文件头及时间。-sizeof(WCHAR)用来去除stamp最后一个\0
+			/*
+			unsigned char smarker[3]; 
+			smarker[0] = 0xEF;
+			smarker[1] = 0xBB;
+			smarker[2] = 0xBF;
+			fwrite(smarker, sizeof(char), 3, f);
+			不需要写utf8-bom
+			*/
+			
+			{
+				FILEHEAD tmStamp(tmIdx); 
+				std::wstring header_ts(tmStamp.szHeadLine);
+				std::string utf8_s = to_utf8(header_ts);  
+				fwrite(utf8_s.c_str(), sizeof(char), utf8_s.length(), f);//写utf8头中的时间
+			}	
 			if (bWithHead)
-				fwrite(RB_HEADER_RC,sizeof(WCHAR),wcslen(RB_HEADER_RC),f);
-			fwrite(strOut.c_str(),sizeof(WCHAR),strOut.length(),f);
+			{
+				std::wstring header(RB_HEADER_RC);
+				std::string utf8_s= to_utf8(header);
+				fwrite(utf8_s.c_str(), sizeof(char), utf8_s.length(), f);
+			}
+			{ 
+				std::string utf8_out = to_utf8(strOut);
+				fwrite(utf8_out.c_str(), sizeof(char), utf8_out.length(), f);
+			}
 			fclose(f);
 
-#ifdef _DEBUG
 			printf("build %s succeed!\n",strRes.c_str());
-#endif
 		}
 		else
 		{
@@ -280,9 +359,7 @@ void WriteFile(__int64 tmIdx, const std::string &strRes, const std::wstring &str
 		}
 	}else
 	{
-#ifdef _DEBUG
 		printf("%s no need to update\n",strRes.c_str());
-#endif
 	}
 }
 
@@ -710,9 +787,7 @@ int _tmain(int argc, _TCHAR* argv[])
     BOOL bBuildIDMap=FALSE;  //Build ID map
 	int c;
 
-#ifdef _DEBUG
 	printf("%s\n",GetCommandLineA());
-#endif
 
 	while ((c = getopt(argc, argv, _T("w:i:r:p:h:c:"))) != EOF || optarg!=NULL)
 	{
@@ -745,14 +820,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 1;
 	}
 	 
-#ifdef _DEBUG
 	printf("\tparam -w %s\n", strWorkingDir.c_str());
 	printf("\tparam -i %s\n", strIndexFile.c_str());
 	printf("\tparam -p %s\n", strSkinPath.c_str());
 	printf("\tparam -r %s\n", strRes.c_str());
 	printf("\tparam -h %s\n", strHeadFile.c_str());
 	printf("\tparam -c %s\n \n \n ", strCheckResourction.c_str());
-#endif
 
 	strWorkingDir = trim(strWorkingDir);
 	strIndexFile = trim(strIndexFile);
@@ -762,10 +835,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	strCheckResourction = trim(strCheckResourction);
 	bCheckResourction = (strCheckResourction == "true") ? true : false;
 	 
-#ifdef _DEBUG
-
 	printf(" \n strHeadFile: %s \n ", strHeadFile.c_str());
-#endif
 
 	std::wstring workingDir = toWideString(strWorkingDir.c_str(), strWorkingDir.length()); 
 	std::wstring indexName;
@@ -780,7 +850,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	//strRes = toNarrowString(obj.getWorkDir().c_str(), obj.getWorkDir().length()) + "\\" + strRes;		//rc2文件名
 	//strHeadFile = toNarrowString(obj.getWorkDir().c_str(), obj.getWorkDir().length()) + "\\" + strHeadFile; // head file
 
-#ifdef _DEBUG
 	wprintf(L"\n getWorkDir %s \n", obj.getWorkDir().c_str());
 	
 	wprintf(L"\n UIWorkDir %s \n", obj.getUIWorkDir().c_str());
@@ -788,8 +857,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	printf("\n strIndexFile %s \n", strIndexFile.c_str());
 
 	wprintf(L"\n indexName %s \n", indexName.c_str());
-
-#endif
 
 	//打开uirex.idx文件
 	TiXmlDocument xmlIndexFile;

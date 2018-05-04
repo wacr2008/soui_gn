@@ -11,20 +11,20 @@ namespace SOUI
 	// 一开始的初始化 
 	class EventStartInit : public TplEventArgs<EventStartInit>
 	{
-		SOUI_CLASS_NAME_DECL_EX(EventStartInit, L"on_event_startinit",0)
+		SOUI_CLASS_NAME_DECL_EX(EventStartInit, L"on_event_startinit", 0)
 	public:
 		EventStartInit(SObject *pSender)
 			: TplEventArgs<EventStartInit>(pSender)
 			, bSuccess(false)
 		{
-			
+
 		}
-		enum{EventID=EVT_EXTERNAL_BEGIN+10001};
+		enum { EventID = EVT_EXTERNAL_BEGIN + 10001 };
 		bool bSuccess;
-		
+
 		SStringT szErrorText;
 	};
-	
+
 	//通知中心  异步获取 未读消息 事件 
 	class EventGetUnreadMsg : public TplEventArgs<EventGetUnreadMsg>
 	{
@@ -35,7 +35,7 @@ namespace SOUI
 			, bSuccess(false)
 			, uSenderId(0)
 		{
-		
+
 		}
 		~EventGetUnreadMsg()
 		{
@@ -44,7 +44,7 @@ namespace SOUI
 				delete var;
 			}
 		}
-		enum{EventID=EVT_EXTERNAL_BEGIN+10003};
+		enum { EventID = EVT_EXTERNAL_BEGIN + 10003 };
 		bool bSuccess;
 		IMBodyContentList bodyList;
 		UINT uSenderId;
@@ -61,17 +61,17 @@ namespace SOUI
 			, uRecipierId(0)
 		{
 			bSuccess = false;
-			
+
 			lTime = 0;
 			lBodyId = 0;
 		}
-		enum{EventID=EVT_EXTERNAL_BEGIN+10004};
+		enum { EventID = EVT_EXTERNAL_BEGIN + 10004 };
 		bool bSuccess;
 		UINT uRecipierId;
 		SStringT szRichObjId;
 		__int64 lBodyId;
 		__int64 lTime;
-		
+
 	};
 
 	// 通知中心 上传附件 更新状态 
@@ -85,7 +85,7 @@ namespace SOUI
 			, nFileId(0)
 		{
 		}
-		enum{EventID=EVT_EXTERNAL_BEGIN+10005};
+		enum { EventID = EVT_EXTERNAL_BEGIN + 10005 };
 		UINT uRecipierId;
 		int nFileId;				// 大于0  成功 文件id  负数  -100 - 0  进度   -101 开始 表示错误
 	};
@@ -103,7 +103,7 @@ namespace SOUI
 			, nPercent(0)
 		{
 		}
-		enum{EventID=EVT_EXTERNAL_BEGIN+10006};
+		enum { EventID = EVT_EXTERNAL_BEGIN + 10006 };
 		UINT uRecipientId;
 		__int64 lBodyId;			// 那个  用来查找 界面元素 要更新界面
 		UINT nAttachId;
@@ -119,8 +119,8 @@ namespace SOUI
 			: TplEventArgs<EventSaveApprover>(pSender)
 		{
 		}
-		enum{EventID=EVT_EXTERNAL_BEGIN+10007};
-		
+		enum { EventID = EVT_EXTERNAL_BEGIN + 10007 };
+
 	};
 
 }

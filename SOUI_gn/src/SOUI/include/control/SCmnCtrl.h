@@ -14,6 +14,7 @@
 #pragma once
 #include "core/SWnd.h"
 #include "core/Accelerator.h"
+#include "core/FocusManager.h"
 
 namespace SOUI
 {
@@ -181,7 +182,7 @@ protected:
      * Describe  处理加速键响应消息
      */
     bool OnAcceleratorPressed(const CAccelerator& accelerator) override;
-
+	BOOL InitFromXml(pugi::xml_node xmlNode) override;
 protected:
     
     /**
@@ -816,7 +817,7 @@ protected:
 
 	void OnScaleChanged(int nScale) override;
 protected:
-    void OnSetFocus(SWND wndOld);
+    void OnSetFocus(SWND wndOld, CFocusManager::FocusChangeReason reason);
     
     void OnLButtonUp(UINT nFlags,CPoint pt);
 

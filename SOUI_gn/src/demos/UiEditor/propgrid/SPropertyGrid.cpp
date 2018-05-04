@@ -166,13 +166,14 @@ namespace SOUI
         SASSERT(idx != -1);
         int iTopIdx = GetTopIndex();
         
-        int nPageItems = (m_rcClient.Height()+m_nItemHei-1)/m_nItemHei+1;
+		int nItemHei = m_itemHeight.toPixelSize(GetScale());
+        int nPageItems = (m_rcClient.Height()+nItemHei-1)/nItemHei+1;
         if(iTopIdx + nPageItems > GetCount()) nPageItems = GetCount() - iTopIdx;
         CRect rcItem;
         if(idx >= iTopIdx && idx <= iTopIdx+nPageItems)
         {
-            rcItem = CRect(0,0,m_rcClient.Width(),m_nItemHei);
-            rcItem.OffsetRect(0,m_nItemHei*idx-m_ptOrigin.y);
+            rcItem = CRect(0,0,m_rcClient.Width(),nItemHei);
+            rcItem.OffsetRect(0,nItemHei*idx-m_ptOrigin.y);
             rcItem.OffsetRect(m_rcClient.TopLeft());
         }
         return rcItem;
@@ -433,8 +434,9 @@ namespace SOUI
     {
         CRect rcClient;
         GetClientRect(&rcClient);
-        if(pt.x-rcClient.left>=m_nItemHei+m_nNameWidth-1
-        && pt.x-rcClient.left<=m_nItemHei+m_nNameWidth+1)
+		int nItemHei = m_itemHeight.toPixelSize(GetScale());
+        if(pt.x-rcClient.left>=nItemHei+m_nNameWidth-1
+        && pt.x-rcClient.left<=nItemHei+m_nNameWidth+1)
         {
             SWindow::OnLButtonDown(nFlags,pt);
             m_ptDrag = pt;
@@ -508,18 +510,19 @@ namespace SOUI
     {
         CRect rcClient;
         GetClientRect(&rcClient);
+		int nItemHei = m_itemHeight.toPixelSize(GetScale());
         if(m_bDraging 
-        ||  (pt.x-rcClient.left>=m_nItemHei+m_nNameWidth-1
-            && pt.x-rcClient.left<=m_nItemHei+m_nNameWidth+1))
+        ||  (pt.x-rcClient.left>=nItemHei+m_nNameWidth-1
+            && pt.x-rcClient.left<=nItemHei+m_nNameWidth+1))
         {
-            SetCursor(SApplication::getSingleton().LoadCursor(IDC_SIZEWE));
+            SetCursor(SApplication::getSingleton().LoadCursor(MAKEINTRESOURCE(IDC_SIZEWE)));
         }else
         {
             int iItem = SListBox::HitTest(CPoint(pt));
             if(iItem<0) return FALSE;
             ITEMPART ip = HitTest(iItem,pt);
             if(ip==IP_SWITCH)
-                SetCursor(SApplication::getSingleton().LoadCursor(IDC_HAND));
+                SetCursor(SApplication::getSingleton().LoadCursor(MAKEINTRESOURCE(IDC_HAND)));
             else
                 return FALSE;            
         }

@@ -16,7 +16,7 @@ class SOUI_EXP STileView : public SPanel
     friend class STileViewDataSetObserver;
 public:
     STileView();
-    ~STileView() override;
+    ~STileView();
     
     BOOL SetAdapter(ILvAdapter *adapter);
     
@@ -42,10 +42,10 @@ public:
     SItemPanel *HitTest(CPoint &pt);
 
 protected:
-    void OnItemSetCapture(SItemPanel *pItem, BOOL bCapture) override;
-    BOOL OnItemGetRect(SItemPanel *pItem, CRect &rcItem) override;
-    BOOL IsItemRedrawDelay() override;
-    void OnItemRequestRelayout(SItemPanel *pItem) override;
+    virtual void OnItemSetCapture(SItemPanel *pItem, BOOL bCapture);
+    virtual BOOL OnItemGetRect(SItemPanel *pItem, CRect &rcItem);
+    virtual BOOL IsItemRedrawDelay();
+    virtual void OnItemRequestRelayout(SItemPanel *pItem);
     
 protected:
     void onDataSetChanged();
@@ -55,16 +55,16 @@ protected:
     bool OnItemClick(EventArgs *pEvt);
 
 protected:
-    BOOL OnScroll(BOOL bVertical, UINT uCode, int nPos) override;
-    int  GetScrollLineSize(BOOL bVertical) override;
-    BOOL CreateChildren(pugi::xml_node xmlNode) override;
+    virtual BOOL OnScroll(BOOL bVertical, UINT uCode, int nPos);
+    virtual int  GetScrollLineSize(BOOL bVertical);
+    virtual BOOL CreateChildren(pugi::xml_node xmlNode);
     
-    BOOL OnUpdateToolTip(CPoint pt, SwndToolTipInfo &tipInfo) override;
-    UINT OnGetDlgCode() override;
-    BOOL OnSetCursor(const CPoint &pt) override;
-    void OnColorize(COLORREF cr) override;
-	void OnScaleChanged(int nScale) override;
-	HRESULT OnLanguageChanged() override;
+    virtual BOOL OnUpdateToolTip(CPoint pt, SwndToolTipInfo &tipInfo);
+    virtual UINT OnGetDlgCode();
+    virtual BOOL OnSetCursor(const CPoint &pt);
+    virtual void OnColorize(COLORREF cr);
+	virtual void OnScaleChanged(int nScale);
+	virtual HRESULT OnLanguageChanged();
 protected:
     void DispatchMessage2Items(UINT uMsg,WPARAM wParam,LPARAM lParam);
     void UpdateScrollBar();
@@ -90,10 +90,12 @@ protected:
     void OnKillFocus(SWND wndFocus);
     
     void OnSetFocus(SWND wndOld);
+
+    LRESULT OnSetScale(UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+    SOUI_MSG_MAP_DECL()
     
-    SOUI_MSG_MAP_DECL() 
-    
-    SOUI_ATTRS_DECL() 
+    SOUI_ATTRS_DECL()
 protected:
     CAutoRefPtr<ILvAdapter>           m_adapter;
     CAutoRefPtr<ILvDataSetObserver>   m_observer;
@@ -114,7 +116,8 @@ protected:
     SArray<SList<SItemPanel *> *>    m_itemRecycle; //item回收站,每一种样式在回收站中保持一个列表，以便重复利用
     
     pugi::xml_document              m_xmlTemplate;
-    int                             m_nMarginSize;
+    SLayoutSize                     m_nMarginSize;
+    // int                             m_nMarginSize;
     BOOL                            m_bWantTab;
     BOOL                            m_bDatasetInvalidated;
 };

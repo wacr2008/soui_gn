@@ -1,5 +1,7 @@
 ﻿#include "SImgCanvas.h"
 
+#include "SaveToIcon.h"
+
 #define INITGUID
 #include <Guiddef.h>
 
@@ -87,6 +89,18 @@ namespace SOUI
         m_lstImg.RemoveAll();
         Invalidate();
     }
+
+	BOOL SImgCanvas::Save2IconFile(LPCWSTR pszFileName)
+	{
+		CRGBA2ICON iconfile;
+		SPOSITION pos = m_lstImg.GetHeadPosition();
+		while (pos)
+		{
+			IBitmap* pBmp = m_lstImg.GetNext(pos);
+			iconfile.AddBitmapToIco(pBmp);
+		}		
+		return iconfile.SaveIconFile(pszFileName);
+	}
 
     BOOL SImgCanvas::Save2File(LPCWSTR pszFileName,int nSplit)
     {

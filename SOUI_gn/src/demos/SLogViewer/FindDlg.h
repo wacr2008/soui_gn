@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "res/R.h"
+
 namespace SOUI
 {
 	struct IFindListener{

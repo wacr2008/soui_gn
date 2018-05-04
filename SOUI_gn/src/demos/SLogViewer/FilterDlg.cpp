@@ -1,6 +1,14 @@
 ﻿#include "FilterDlg.h"
 #include <helper/SAdapterBase.h>
 #include "MainDlg.h"
+#include "res/R.h"
+
+EVENT_MAP_BEGIN(CFilterDlg)
+	EVENT_ID_COMMAND(R.id.btn_select_all, OnBtnSelectAll)
+	EVENT_ID_COMMAND(R.id.btn_clear_all, OnBtnClearAll)
+	EVENT_HANDLER(EventTabSelChanged::EventID, OnTabChanged)
+	EVENT_HANDLER(EventInit::EventID, OnInit)
+EVENT_MAP_END()
 
 class SFilterAdapterBase : public SAdapterBase
 {
@@ -32,6 +40,7 @@ public:
 		}
 		qsort(m_lstTagCheck.GetData(),m_lstTagCheck.GetCount(),sizeof(TagCheck),TagCheckCmp);
 		notifyDataSetChanged();
+		NotifyListener();
 	}
 
 	void MarkAll(bool bSelected)
@@ -41,6 +50,7 @@ public:
 			m_lstTagCheck[i].bSelected = bSelected;
 		}
 		notifyDataSetChanged();
+		NotifyListener();
 	}
 
 	void ExcludeTag(const SStringW & strTag)
@@ -316,12 +326,7 @@ private:
 
 
 
-EVENT_MAP_BEGIN(CFilterDlg)
-	EVENT_ID_COMMAND(R.id.btn_select_all, OnBtnSelectAll)
-	EVENT_ID_COMMAND(R.id.btn_clear_all, OnBtnClearAll)
-	EVENT_HANDLER(EventTabSelChanged::EventID, OnTabChanged)
-	EVENT_HANDLER(EventInit::EventID, OnInit)
-EVENT_MAP_END()
+
 
 CFilterDlg::CFilterDlg(CMainDlg *pMainDlg):SHostWnd(UIRES.LAYOUT.dlg_filter),m_pMainDlg(pMainDlg),m_iTab(0)
 {

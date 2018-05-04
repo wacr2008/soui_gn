@@ -67,7 +67,7 @@ BEGIN
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "CompanyName", "Æô³ÌÈí¼þ"
+            VALUE "CompanyName", "SOUI"
             VALUE "FileDescription", "render-gdi"
             VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "render-g"

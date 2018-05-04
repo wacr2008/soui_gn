@@ -16,12 +16,12 @@ ApproverLayout::ApproverLayout(SWindow* pRoot, funApproverCallBack fun)
 	subscribeEvent(m_pBtnOK, &ApproverLayout::OnEventOKCmd, this);
 
 	m_pAdapter = new ApproverListAdapter(std::bind(&ApproverLayout::OnAdapterUpdate, this));
-	
+
 	SMCListView* pMcList;
 	InitWnd(pMcList, L"mclist_approver");
 	pMcList->SetAdapter(m_pAdapter);
 	m_pAdapter->Release();
-	
+
 	/*m_pAdapter->Add(121, L"aaad");
 	m_pAdapter->Add(121, L"aaad");
 	m_pAdapter->Add(121, L"aaad");
@@ -67,24 +67,24 @@ void ApproverLayout::AddApprover(UINT uId, LPCTSTR lpUserAlias)
 
 
 void ApproverLayout::OnAdapterUpdate()
-{		
+{
 	UINT uSelCount = 0;
 
 	UINT uCount = m_pAdapter->getCount();
-	for (UINT i=0; i<uCount; ++i)
+	for (UINT i = 0; i<uCount; ++i)
 	{
-		if(!m_pAdapter->IsChecked(i))
+		if (!m_pAdapter->IsChecked(i))
 			continue;
-			
+
 		++uSelCount;
 	}
-		
-	if(uSelCount == uCount)
+
+	if (uSelCount == uCount)
 		m_pCheckAllSel->SetCheck(TRUE);
-	else 
+	else
 		m_pCheckAllSel->SetCheck(FALSE);
 
-	if(uSelCount > 0)
+	if (uSelCount > 0)
 	{
 		m_pBtnOK->EnableWindow(TRUE, TRUE);
 	}
@@ -97,8 +97,8 @@ void ApproverLayout::OnAdapterUpdate()
 bool ApproverLayout::OnEventCheckCmd(EventCmd* pEvt)
 {
 	SCheckBox* pCheck = sobj_cast<SCheckBox>(pEvt->sender);
-	if(NULL == pCheck) return true;
-	
+	if (NULL == pCheck) return true;
+
 	bool bSel = TRUE == pCheck->IsChecked();
 
 	m_pAdapter->SetAllSelect(bSel);
@@ -108,9 +108,9 @@ bool ApproverLayout::OnEventCheckCmd(EventCmd* pEvt)
 
 bool ApproverLayout::OnEventOKCmd(EventCmd* pEvt)
 {
-	if(NULL == pEvt) return true;
+	if (NULL == pEvt) return true;
 
-	if(0 == m_lBodyId)
+	if (0 == m_lBodyId)
 	{
 		return true;
 	}
@@ -119,9 +119,9 @@ bool ApproverLayout::OnEventOKCmd(EventCmd* pEvt)
 	UINT uId;
 	SStringT sName;
 	UINT uCount = m_pAdapter->getCount();
-	for (UINT i=0; i<uCount; ++i)
+	for (UINT i = 0; i<uCount; ++i)
 	{
-		if(!m_pAdapter->IsChecked(i))
+		if (!m_pAdapter->IsChecked(i))
 			continue;
 
 		m_pAdapter->Get(i, uId, sName);
@@ -132,7 +132,7 @@ bool ApproverLayout::OnEventOKCmd(EventCmd* pEvt)
 	szApproverText.TrimRight(',');
 
 	m_funCallBack(m_lBodyId, szApproverText);
-		
+
 	ShowLayout(false);
 	return true;
 }

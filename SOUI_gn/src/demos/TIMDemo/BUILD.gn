@@ -100,7 +100,7 @@ executable("TIMDemo") {
     "../../soui/include",
     "../../utilities/include",
     "../../components",
-    "../../third-part/sqlite3",
+    "../../third-part",
   ]
 
   deps = [ 

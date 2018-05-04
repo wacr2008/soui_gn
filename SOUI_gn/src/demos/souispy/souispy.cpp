@@ -38,7 +38,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
         SApplication *theApp=new SApplication(pRenderFactory,hInstance);
         theApp->RegisterWindowClass<SCaptureButton>();
 
-        HMODULE hSysResource=LoadLibrary(SYS_NAMED_RESOURCE);
+		//直接从进程中加载资源
+		HMODULE hSysResource = hInstance;// LoadLibrary(SYS_NAMED_RESOURCE);
         if(hSysResource)
         {
             CAutoRefPtr<IResProvider> sysSesProvider;

@@ -198,6 +198,7 @@ protected:
 	void OnBtnOpenWrapContent();
 	
 	void OnCbxInterpolotorChange(EventArgs *e);
+
 	void OnEventPath(EventArgs *e);
 
 	HRESULT OnSkinChangeMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL bHandled);

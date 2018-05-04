@@ -1,5 +1,5 @@
-git archive -o hot-fix-20170816.zip HEAD $( git diff e8ee9351b761e6362d02f6c58d792d90eb6fde6a dfec69778ad81ca1b941895b1fbf4915f3d3f977 --name-only)
+git archive -o update.zip HEAD $( git diff 6829c81ccafca991ba7102a091d765d1674c37fb b79b272e4e63a055d2dc45b20ee8672fa5e7ccb3  --name-only)
 
 
-���ڰ汾
-266280ef105ca919e5b82a0ead4a7f3decb9f066
+基于版本
+6829c81ccafca991ba7102a091d765d1674c37fb

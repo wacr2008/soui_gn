@@ -8,28 +8,28 @@ namespace SOUI
     {
     public:
         SListViewItemLocatorFix(SLayoutSize nItemHei,SLayoutSize nDividerSize=SLayoutSize());
-		~SListViewItemLocatorFix() override;
+		virtual ~SListViewItemLocatorFix();
         void SetAdapter(ILvAdapter *pAdapter) override;
 
-		void OnDataSetChanged() override;
+		void OnDataSetChanged()  override;
 
-        bool IsFixHeight() const override;
+        bool IsFixHeight() const  override;
 
-        int GetItemHeight(int iItem) const override;
+        int GetItemHeight(int iItem) const  override;
 
-        void SetItemHeight(int iItem,int nHeight) override;
+        void SetItemHeight(int iItem,int nHeight)  override;
 
 
-        int GetTotalHeight() override;
-        int Item2Position(int iItem) override;
+        int GetTotalHeight()  override;
+        int Item2Position(int iItem)  override;
 
-        int Position2Item(int position) override;
+        int Position2Item(int position)  override;
 
-        int GetScrollLineSize() const override;
+        int GetScrollLineSize() const  override;
 
-		int GetDividerSize() const override;
+		int GetDividerSize() const  override;
 
-		void SetScale(int nScale) override;
+		void SetScale(int nScale)  override;
     protected:
 		int GetFixItemHeight() const;
 

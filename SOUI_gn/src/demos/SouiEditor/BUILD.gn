@@ -73,6 +73,8 @@ executable("SouiEditor") {
             "SouiRealWndHandler.cpp",
             "SSwitch.cpp",
             "SysdataMgr.cpp",
+            "SDemoSkin.cpp",
+            "SDemoSkin.h",
             "colorpicker/ColourPopup.cpp",
             "colorpicker/SColorPicker.cpp",
             "Dialog/DlgAbout.cpp",

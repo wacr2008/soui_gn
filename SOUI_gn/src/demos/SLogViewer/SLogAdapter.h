@@ -13,7 +13,6 @@ namespace SOUI
 	public:
 		SLogInfo():iSourceLine(0),iLine(0){}
 		int      iLine;
-		CTime    time;
 		SStringW strTime;
 		DWORD	 dwPid;
 		DWORD	 dwTid;
@@ -45,17 +44,20 @@ namespace SOUI
 
 	enum Field
 	{
+		col_invalid=-1,
 		col_line_index=0,
 		col_time,
 		col_pid,
 		col_tid,
 		col_level,
 		col_tag,
-		col_moduel,
+		col_module,
 		col_source_file,
 		col_source_line,
 		col_function,
-		col_content
+		col_content,
+		col_package,
+		col_unknown,
 	};
 
 	struct ILogParse : public IObjRef
@@ -63,18 +65,12 @@ namespace SOUI
 		virtual SStringW GetName() const PURE;
 		virtual int GetLevels() const PURE;			
 		virtual void GetLevelText(wchar_t szLevels[][MAX_LEVEL_LENGTH]) const PURE;
-		virtual BOOL ParseLine(LPCWSTR pszLine,SLogInfo **ppLogInfo) const PURE;
+		virtual BOOL ParseLine(LPCWSTR pszLine,int nLen,SLogInfo **ppLogInfo) const PURE;
 		virtual bool IsFieldValid(Field field) const PURE;
 		virtual int  GetCodePage() const PURE;
 		virtual BOOL TestLogBuffer(LPCSTR pszBuf, int nLength) PURE;
 	};
 	
-	struct IParserFactory: public IObjRef
-	{
-		virtual ILogParse * CreateLogParser(int iParser) const PURE;
-		virtual int GetLogParserCount() const PURE;
-	};
-
 
 	struct SRange
 	{
@@ -118,7 +114,7 @@ namespace SOUI
 
 		void ParseLog(LPWSTR pszBuffer);
 
-		SLogInfo * ParseLine(LPCWSTR pszLine);
+		SLogInfo * ParseLine(LPCWSTR pszLine,int nLen);
 
 		SLogBuffer & operator = (const SLogBuffer & src);
 
@@ -156,6 +152,8 @@ namespace SOUI
 		void SetScintillaWnd(CScintillaWnd *pWnd);
 
 		BOOL Load(const TCHAR *szFileName);
+		BOOL LoadMemory(LPWSTR buffer);
+	
 		void Clear();
 		void SetFilter(const SStringT& str);
 		void SetLevel(int nCurSel);
@@ -171,10 +169,11 @@ namespace SOUI
 		void SetFilterPids(const SArray<UINT> & lstPid);
 		void SetFilterTids(const SArray<UINT> & lstTid);
 
-		void SetParserFactory(IParserFactory *pParserFactory);
+		void SetLogParserPool(SList<ILogParse*> *pLogParserPool);
 		SLogInfo* GetLogInfo(int iItem) const;
 
 	protected:
+
 		const SArray<SLogInfo*> * GetLogList() const;
 
 		void doFilter();
@@ -198,8 +197,8 @@ namespace SOUI
 
 		COLORREF m_crLevels[Level_Count];
 
-		CAutoRefPtr<IParserFactory> m_parserFactory;
-
+		//CAutoRefPtr<IParserFactory> m_parserFactory;
+		SList<ILogParse*> *		 m_pLogPaserPool;
 		CScintillaWnd	*		 m_pScilexer;
 	};
 

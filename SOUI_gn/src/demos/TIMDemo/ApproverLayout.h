@@ -20,12 +20,12 @@ public:
 		: m_funItemClick(&ApproverListAdapter::OnItemClick, this)
 		, m_funUpdate(fun)
 	{
-	
+
 	}
 
-    ~ApproverListAdapter()
+	~ApproverListAdapter()
 	{
-		for (size_t i=0; i<m_ItemInfoArr.size(); ++i)
+		for (size_t i = 0; i<m_ItemInfoArr.size(); ++i)
 		{
 			delete m_ItemInfoArr[i];
 		}
@@ -34,7 +34,7 @@ public:
 public:
 	int Add(UINT uId, LPCTSTR lpName)
 	{
-		ApproItemInfo* pInfo =  new ApproItemInfo;
+		ApproItemInfo* pInfo = new ApproItemInfo;
 		pInfo->uId = uId;
 		pInfo->sName = lpName;
 		pInfo->bChecked = false;
@@ -45,18 +45,18 @@ public:
 
 		return m_ItemInfoArr.size() - 1;
 	}
-	
+
 	bool IsChecked(UINT nIndex)
 	{
-		if(nIndex >= m_ItemInfoArr.size())
+		if (nIndex >= m_ItemInfoArr.size())
 			return false;
-		
+
 		return m_ItemInfoArr[nIndex]->bChecked;
 	}
 
 	bool Get(UINT nIndex, UINT& uId, SStringT& sName)
 	{
-		if(nIndex >= m_ItemInfoArr.size())
+		if (nIndex >= m_ItemInfoArr.size())
 			return false;
 
 		auto pInfo = m_ItemInfoArr[nIndex];
@@ -77,7 +77,7 @@ public:
 
 	void DeleteAll()
 	{
-		for (size_t i=0; i<m_ItemInfoArr.size(); ++i)
+		for (size_t i = 0; i<m_ItemInfoArr.size(); ++i)
 		{
 			delete m_ItemInfoArr[i];
 		}
@@ -89,14 +89,14 @@ public:
 	{
 		return static_cast<int>(m_ItemInfoArr.size());
 	}
-protected:    
+protected:
 	virtual void InitByTemplate(pugi::xml_node xmlTemplate)
 	{
-		
-	}
-   
 
-  
+	}
+
+
+
 	//virtual SIZE getViewDesiredSize(int position, SOUI::SWindow *pItem, LPCRECT prcContainer)
 	//{
 
@@ -110,28 +110,28 @@ protected:
 		return L"col_nick";
 	}
 	virtual void getView(int nPosition, SWindow* pItem, pugi::xml_node xmlTemplate)
-	{		
-		if(0 == pItem->GetChildrenCount())
+	{
+		if (0 == pItem->GetChildrenCount())
 		{
 			pItem->InitFromXml(xmlTemplate);
 		}
 
 		int nCount = static_cast<int>(m_ItemInfoArr.size());
-		if(nPosition >= nCount)
-			return ;
+		if (nPosition >= nCount)
+			return;
 
 		auto pInfo = m_ItemInfoArr[nPosition];
-		if(NULL == pInfo)
-			return ;
+		if (NULL == pInfo)
+			return;
 
 		SImageWnd* pImg = pItem->FindChildByName2<SImageWnd>(L"ml_appro_check");
-		if(NULL != pImg)
+		if (NULL != pImg)
 		{
 			int nCheckIcon = pInfo->bChecked ? CBS_CHECKEDNORMAL : CBS_UNCHECKEDNORMAL;
 			--nCheckIcon;
 			pImg->SetIcon(nCheckIcon);
 		}
-			
+
 		SStatic* pName = pItem->FindChildByName2<SStatic>(L"ml_appro_name");
 		if (NULL != pName)
 		{
@@ -140,22 +140,22 @@ protected:
 
 		pItem->GetEventSet()->subscribeEvent(EVT_ITEMPANEL_CLICK, m_funItemClick);
 	}
-	
+
 	bool OnItemClick(EventArgs* e)
 	{
 		EventItemPanelClick* pEvt = sobj_cast<EventItemPanelClick>(e);
-		if(NULL == pEvt)
+		if (NULL == pEvt)
 			return true;
 
-		SItemPanel* pItem = sobj_cast<SItemPanel>(e->sender); 
+		SItemPanel* pItem = sobj_cast<SItemPanel>(e->sender);
 
 		int nIndex = static_cast<int>(pItem->GetItemIndex());
 		int nCount = static_cast<int>(m_ItemInfoArr.size());
-		if(nIndex >= nCount) 
+		if (nIndex >= nCount)
 			return true;
 
 		auto pInfo = m_ItemInfoArr[nIndex];
-		if(NULL == pInfo) return true;
+		if (NULL == pInfo) return true;
 
 		pInfo->bChecked = !pInfo->bChecked;
 		notifyDataSetChanged();
@@ -171,7 +171,7 @@ private:
 };
 
 typedef std::function<void(__int64, LPCTSTR)>			funApproverCallBack;  // 回调
-// 
+																			  // 
 class ApproverLayout : public VirtualDlgLayout
 {
 public:
@@ -181,7 +181,7 @@ public:
 
 	void Init(__int64 lBodyId);
 	void AddApprover(UINT uId, LPCTSTR lpUserAlias);
-	
+
 protected:
 	bool OnEventOKCmd(EventCmd* pEvt);
 	bool OnEventCheckCmd(EventCmd* pEvt);

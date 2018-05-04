@@ -55,8 +55,8 @@ namespace SOUI
 	{
 		//m_pSkinPrev = GETBUILTINSKIN(SKIN_SYS_BTN_NORMAL);
 		//m_pSkinNext = GETBUILTINSKIN(SKIN_SYS_BTN_NORMAL);
-		m_pSkinPrev = GETSKIN(_T("_skin.sys.btn.prev"), GetScale());
-		m_pSkinNext = GETSKIN(_T("_skin.sys.btn.next"), GetScale());
+		m_pSkinPrev = GETSKIN(L"_skin.sys.btn.prev", GetScale());
+		m_pSkinNext = GETSKIN(L"_skin.sys.btn.next", GetScale());
 
 		m_bFocusable = TRUE;
 		GetLocalTime(&m_Today);
@@ -274,7 +274,7 @@ namespace SOUI
 		{
 			pRT->SetTextColor(crTxt);
 
-			pRT->DrawText(m_strWeek[i].GetText(), m_strWeek[i].GetText().GetLength(), rcItem, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
+			pRT->DrawText(m_strWeek[i].GetText(FALSE), m_strWeek[i].GetText(FALSE).GetLength(), rcItem, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
 			rcItem.OffsetRect(nWid, 0);
 		}
 		pRT->SetTextColor(crTxt);
@@ -778,7 +778,7 @@ namespace SOUI
 		
 		rcText.left = rcText.right;
 		rcText.right = rcText.left + m_nCharWidth;
-		pRT->DrawText(L"-", -1, rcText, GetTextAlign());
+		pRT->DrawText(_T("-"), -1, rcText, GetTextAlign());
 		
 		//month
 		rcText.left = rcText.right;
@@ -788,7 +788,7 @@ namespace SOUI
 		
 		rcText.left = rcText.right;
 		rcText.right = rcText.left + m_nCharWidth;
-		pRT->DrawText(L"-", -1, rcText, GetTextAlign());
+		pRT->DrawText(_T("-"), -1, rcText, GetTextAlign());
 		
 		//day
 		rcText.left = rcText.right;
@@ -809,7 +809,7 @@ namespace SOUI
 
 			rcText.left = rcText.right;
 			rcText.right = rcText.left + m_nCharWidth;
-			pRT->DrawText(L":", -1, rcText, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			pRT->DrawText(_T(":"), -1, rcText, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 			// minute
 			rcText.left = rcText.right;
@@ -819,7 +819,7 @@ namespace SOUI
 
 			rcText.left = rcText.right;
 			rcText.right = rcText.left + m_nCharWidth;
-			pRT->DrawText(L":", -1, rcText, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			pRT->DrawText(_T(":"), -1, rcText, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 			// second
 			rcText.left = rcText.right;
@@ -937,8 +937,9 @@ namespace SOUI
 		sysTime = m_sysTime;
 	}
 
-	SStringT SDateTimePicker::GetWindowText()
+	SStringT SDateTimePicker::GetWindowText(BOOL bRawText)
 	{
+		(bRawText);
 		SStringT szText;
 		szText.Format(_T("%04d-%02d-%02d"), m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
 		if(m_bTimeEnable)
@@ -1240,9 +1241,7 @@ namespace SOUI
 		__super::OnKillFocus(wndFocus);
 		CloseUp();
 		return;
-
-		/*
-		m_wCharNum = 0;
+		/*m_wCharNum = 0;
 		if (eDT_NULL != m_eSelDateType)
 		{
 			m_eSelDateType = eDT_NULL;

@@ -2,13 +2,24 @@ import("//build_overrides/common.gni")
  
  
 source_set("sqlite3") {
-  sources = [   
-    "sqlite3.h", 
-    "sqlite3.c",  
+  sources = [    
+    "codec.h",
+    "rijndael.h",
+    "sqlite3ext.h",
+    "sqlite3userauth.h",
+    "sqlite3.h",
+    "sha2.h", 
+    "sqlite3secure.c",  
   ]
-
+ 
   allow_circular_includes_from = []
   defines  = [  "_CRT_NON_CONFORMING_SWPRINTFS",
+                "SQLITE_HAS_CODEC=1",
+                "CODEC_TYPE=CODEC_TYPE_AES128",
+                "SQLITE_CORE",
+                "THREADSAFE",
+                "SQLITE_SECURE_DELETE",
+                "SQLITE_SOUNDEX",
                 "_CRT_SECURE_NO_WARNINGS",
                 "__STDC_CONSTANT_MACROS",
                 "SQLITE_ENABLE_COLUMN_METADATA",
@@ -16,6 +27,6 @@ source_set("sqlite3") {
    
   libs = []  
    
-  cflags = ["/wd4005"]
+  cflags = ["/wd4005","/wd4389","/wd2220","/wd4701"]
 }  
  

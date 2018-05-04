@@ -1,9 +1,8 @@
 ﻿#pragma once
 #include <list>
 
-using namespace SOUI;
-
 #pragma pack(push, 1)
+using  namespace SOUI;
 
 struct UserInfo
 {

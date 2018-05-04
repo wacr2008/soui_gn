@@ -92,9 +92,10 @@ public:
      * @param    IRenderFactory * pRendFactory --  渲染模块
      * @param    HINSTANCE hInst --  应用程序句柄
      * @param    LPCTSTR pszHostClassName --  使用SOUI创建窗口时默认的窗口类名
+	 * @param    ISystemObjectRegister *pSysObjRegister -- 系统控件注册器
      *
      * Describe  
-     */
+	 */
     SApplication(IRenderFactory *pRendFactory,HINSTANCE hInst,LPCTSTR pszHostClassName=_T("SOUIHOST"), ISystemObjectRegister *pSysObjRegister = new SObjectDefaultRegister());
 
     ~SApplication(void)  override;

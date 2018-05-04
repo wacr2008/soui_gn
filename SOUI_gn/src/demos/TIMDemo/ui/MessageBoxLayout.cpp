@@ -1,5 +1,4 @@
 ﻿#include "MessageBoxLayout.h"
-using namespace SOUI;
 
 MessageBoxLayout::MessageBoxLayout(SWindow* pRoot)
 	: VirtualDlgLayout(pRoot, _T("layout:layout_asyncmsgbox"))

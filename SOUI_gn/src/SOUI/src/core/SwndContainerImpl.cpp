@@ -67,7 +67,7 @@ LRESULT SwndContainerImpl::DoFrameEvent(UINT uMsg,WPARAM wParam,LPARAM lParam)
         OnActivate(LOWORD(wParam));
         break;
     case WM_ACTIVATEAPP:
-        OnActivateApp(wParam,lParam);
+        OnActivateApp((BOOL)wParam,(DWORD)lParam);
         break;
     case WM_IME_STARTCOMPOSITION:
     case WM_IME_ENDCOMPOSITION:
@@ -336,6 +336,12 @@ void SwndContainerImpl::OnFrameMouseWheel( UINT uMsg,WPARAM wParam,LPARAM lParam
 
 void SwndContainerImpl::OnFrameKeyEvent(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
+	if(GetKeyState(VK_MENU)&0x80)
+	{//todo:处理alt+x的快捷键组合，暂时这样处理。应该还有更好的方法。
+		if(wParam>='a' && wParam <='z') wParam -= 0x20;//转换成VK
+		if(m_focusMgr.OnKeyDown(wParam)) return; //首先处理焦点切换
+	}
+
     SWindow *pFocus=SWindowMgr::GetWindow(m_focusMgr.GetFocusedHwnd());
     if(pFocus)
     {

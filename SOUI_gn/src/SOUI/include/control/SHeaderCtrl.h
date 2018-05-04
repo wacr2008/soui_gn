@@ -44,13 +44,13 @@ namespace SOUI
 	SHDITEM();
 	SHDITEM(const SHDITEM &other);
     
-	UINT    mask; 
-    int     cx; 
-	STrText text;
+	UINT    mask;
+    SLayoutSize     cx;
+	STrText strText;
     SHDSORTFLAG stFlag;
-    LPARAM  lParam; 
-    UINT   state;
-    int     iOrder;
+	LPARAM  lParam;
+	UINT   state;
+	int     iOrder;
 	bool    bVisible;
   }*LPSHDITEM;
 
@@ -94,6 +94,7 @@ namespace SOUI
        * Describe  插入新项  
        */      
       int InsertItem(int iItem,LPCTSTR pszText,int nWidth, SHDSORTFLAG stFlag,LPARAM lParam );
+      int InsertItem(int iItem,LPCTSTR pszText, int nWidth, SLayoutSize::Unit unit, SHDSORTFLAG stFlag,LPARAM lParam );
       /**
        * SHeaderCtrl::GetItem
        * @brief    获得新项
@@ -113,7 +114,6 @@ namespace SOUI
        * Describe  获取列表项个数  
        */      
       size_t GetItemCount() const{return m_arrItems.GetCount();}
-
       /**
        * SHeaderCtrl::GetTotalWidth
        * @brief    获得所有宽度

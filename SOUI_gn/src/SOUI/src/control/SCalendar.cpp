@@ -44,7 +44,7 @@ BOOL SCalendarCore::IsLeapYear(WORD wYear,BOOL &bLeapYear)
 	{
 		return FALSE;
 	}
-	if (((wYear%4==0)&&(wYear%100!=0))||(wYear%400==0))//判断闰年的条件
+	if (wYear%4==0&&wYear%100!=0||wYear%400==0)//判断闰年的条件
 	{
 		bLeapYear=TRUE;
 	}else
@@ -321,7 +321,7 @@ void SCalendar::DrawTitle(IRenderTarget *pRT)
        else
            pRT->SetTextColor(crTxt);
 
-       pRT->DrawText(m_strTitle[i].GetText(),m_strTitle[i].GetText().GetLength(),rcItem,DT_SINGLELINE|DT_VCENTER|DT_CENTER);
+       pRT->DrawText(m_strTitle[i].GetText(FALSE),m_strTitle[i].GetText(FALSE).GetLength(),rcItem,DT_SINGLELINE|DT_VCENTER|DT_CENTER);
        rcItem.OffsetRect(nWid,0);
    }
    pRT->SetTextColor(crTxt);
@@ -449,7 +449,7 @@ WORD SCalendar::HitTest(CPoint pt)
     endcol   = SCalendarCore::GetDayOfWeek(m_iYear, m_iMonth, SCalendarCore::GetDaysOfMonth(m_iYear,m_iMonth));
 
     endrow   = (SCalendarCore::GetDaysOfMonth(m_iYear, m_iMonth) + startcol -1)/7 ;
-    if((iRow == 0 && iCol < startcol) || (iRow == endrow && iCol > endcol) ||  iRow > endrow)
+    if(iRow == 0 && iCol < startcol || iRow == endrow && iCol > endcol ||  iRow > endrow)
         return 0;
     return iRow *7 + iCol + 1 - startcol ;
 }

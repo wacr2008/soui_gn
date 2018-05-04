@@ -26,6 +26,7 @@
 #include "../controls.extend/TipWnd.h"
 #include "../controls.extend/SMcListViewEx\SHeaderCtrlEx.h"
 #include "../controls.extend/SMcListViewEx\SMcListViewEx.h"
+#include "qrcode/SQrCtrl.h"
 
 #include "SInterpolatorView.h"
 #include "SPathView.h"
@@ -43,7 +44,7 @@
 //-->
 
 #include "MainDlg.h"
-
+ 
 //#define RES_TYPE 0      //从文件中加载资源，加载失败再从PE加载
 // #define RES_TYPE 1   //从PE资源中加载UI资源
 #define RES_TYPE 2   //从zip包中加载资源
@@ -188,7 +189,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
         theApp->RegisterWindowClass<SRatingBar>();//注册SRatingBar
 		theApp->RegisterWindowClass<SInterpolatorView>();
 		theApp->RegisterWindowClass<SPathView>();
-		if(SUCCEEDED(CUiAnimation::Init()))
+		theApp->RegisterWindowClass<SQrCtrl>();
+        if(SUCCEEDED(CUiAnimation::Init()))
         {
             theApp->RegisterWindowClass<SUiAnimationWnd>();//注册动画控件
         }

@@ -16,6 +16,7 @@ protected:
     virtual void OnFileDropdown(HDROP hDrop);
 
     void OnSave();
+	void OnSaveToIco();
     void OnClear();
     void OnModeHorz();
     void OnModeVert();

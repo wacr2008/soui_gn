@@ -2,8 +2,7 @@
 #include "resource.h"
 #include <functional>
 #include <map>
-using namespace SOUI;
-
+using namespace  SOUI;
 class CMsgToolTipWnd : public SHostWnd
 {
 public:
@@ -23,7 +22,6 @@ public:
 protected:
 	//事件处理映射表
 	EVENT_MAP_DECL()
-		 
 
 	//窗口消息处理映射表
 	BEGIN_MSG_MAP_EX_DECL()

@@ -39,7 +39,7 @@ namespace SOUI
         *
         * Describe  获取文本
         */
-        SStringT GetLBText(int iItem) override;
+        SStringT GetLBText(int iItem,BOOL bRawText=FALSE) override;
         
         /**
         * SComboView::GetListBox
@@ -59,6 +59,8 @@ namespace SOUI
         * Describe  此函数是消息响应函数
         */ 
         BOOL FireEvent(EventArgs &evt) override;
+
+        virtual void OnScaleChanged(int nScale);
 
         /**
         * SComboView::CreateListBox

@@ -106,6 +106,7 @@ namespace SOUI
         
         EVT_SPLIT_PANE_MOVED  = 22000,
         
+		EVT_HOT_KEY_SET = 23000,
 		//图片动画开始，结束事件
 		EVT_ANI_START	= 22100,
 		EVT_ANI_STOP,
@@ -822,5 +823,16 @@ namespace SOUI
 		UINT m_id;
 		SMenuEx *m_pMenu;
 	};
+
+    class SOUI_EXP EventSetHotKey :public TplEventArgs<EventSetHotKey> {
+        SOUI_CLASS_NAME_DECL(EventSetHotKey, L"on_hot_key_set_event")
+    public:
+		EventSetHotKey(SObject *pSender);
+        enum {
+            EventID = EVT_HOT_KEY_SET,
+        };
+        WORD vKey;
+        WORD wModifiers;
+    };
 
 } // End of  CEGUI namespace section

@@ -1,12 +1,10 @@
 ﻿#include "MsgToolTipWnd.h"
 
 EVENT_MAP_BEGIN(CMsgToolTipWnd)
-
 	EVENT_NAME_COMMAND(L"btn_ignore", OnBtnIgnore)
 	EVENT_NAME_COMMAND(L"btn_viewall", OnBtnViewAll)
 EVENT_MAP_END()
 
-//窗口消息处理映射表
 BEGIN_MSG_MAP_EX(CMsgToolTipWnd)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	CHAIN_MSG_MAP(SHostWnd)

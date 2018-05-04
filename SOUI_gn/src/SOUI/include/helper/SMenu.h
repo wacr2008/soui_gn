@@ -12,7 +12,7 @@ namespace SOUI
 
 class SMenuAttr:public SObject, public TObjRefImpl<IObjRef>
 {
-    friend class SMenu; 
+    friend class SMenu;
 	friend class SMenuODWnd;
     SOUI_CLASS_NAME_DECL(SMenuAttr, L"menuattr")
 public:
@@ -20,7 +20,7 @@ public:
 	~SMenuAttr() override;
     void OnInitFinished(pugi::xml_node xmlNode) override;
 
-    SOUI_ATTRS_DECL() 
+    SOUI_ATTRS_DECL()
     
 
 protected:
@@ -45,8 +45,7 @@ protected:
 struct SMenuItemData
 {
 	SMenuItemData();
-	~SMenuItemData();
-	SMenuItemData(const SMenuItemData &other);
+	virtual ~SMenuItemData();
 	int iIcon;
 	SStringT strText;
 	UINT vHotKey;
@@ -58,7 +57,7 @@ class SOwnerDraw
 {
 public:
     // Message map and handlers
-    BEGIN_MSG_MAP_EX_TEMPLATE(SOwnerDraw< T >)
+	BEGIN_MSG_MAP_EX_TEMPLATE(SOwnerDraw< T >)
     MESSAGE_HANDLER(WM_DRAWITEM, OnDrawItem)
     MESSAGE_HANDLER(WM_MEASUREITEM, OnMeasureItem)
     MESSAGE_HANDLER(WM_COMPAREITEM, OnCompareItem)
@@ -211,8 +210,6 @@ public:
 
     void DestroyMenu();
 
-    SMenu GetSubMenu(int nPos);
-	
 	BOOL ModifyMenuString(UINT uPosition, UINT uFlags,LPCTSTR lpItemString);
 
 	BOOL SetMenuUserData(UINT uPosition, UINT uFlags,ULONG_PTR ulUserData);

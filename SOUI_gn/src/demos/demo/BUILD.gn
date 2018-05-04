@@ -14,6 +14,10 @@ executable("demo") {
         "resource.h",
         "adapter.h",
         "wtlhelper/whwindow.h",
+        "qrcode/SQrCtrl.cpp",
+        "qrcode/SQrCtrl.h",
+        "qrcode/QR_Encode.cpp",
+        "qrcode/QR_Encode.h",
         "../../controls.extend/SMcListViewEx/SHeaderCtrlEx.h",
         "../../controls.extend/SMcListViewEx/SMcListViewEx.h",
         "../../controls.extend/SWkeWebkit.h",
@@ -149,6 +153,7 @@ executable("demo") {
       "/wd4239",
       "/wd4702",
       "/wd4189",
+      "/wd4302",
     ]
   }
   

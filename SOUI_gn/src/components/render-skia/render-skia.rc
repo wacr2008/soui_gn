@@ -67,7 +67,7 @@ BEGIN
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "CompanyName", "Æô³ÌÈí¼þ"
+            VALUE "CompanyName", "SOUI"
             VALUE "FileDescription", "render-skia"
             VALUE "FileVersion", "1, 0, 0, 2"
             VALUE "InternalName", "render-skia"

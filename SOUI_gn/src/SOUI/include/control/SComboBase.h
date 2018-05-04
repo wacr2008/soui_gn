@@ -145,9 +145,9 @@ namespace SOUI
         *
         * Describe  获取文本位置
         */
-        SStringT GetWindowText() override;
+        SStringT GetWindowText(BOOL bRawText=FALSE) override;
 
-        virtual SStringT GetLBText(int iItem) =0;
+        virtual SStringT GetLBText(int iItem,BOOL bRawText=FALSE) =0;
         /**
         * FindString
         * @brief    查找字符串位置
@@ -334,6 +334,8 @@ namespace SOUI
         */
         void OnKeyDown( TCHAR nChar, UINT nRepCnt, UINT nFlags );
 
+        BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+
         /**
         * SComboBoxBase::OnChar
         * @brief    字符消息
@@ -400,7 +402,7 @@ namespace SOUI
         ISkinObj *m_pSkinBtn;    /**< 按钮资源      */
 
         BOOL m_bDropdown;        /**< 是否按下   */
-        int  m_nDropHeight;      /**< 下拉框高度 */
+        SLayoutSize  m_nDropHeight;      /**< 下拉框高度 */
         int  m_nAnimTime;        /**< 动画时间   */
         int  m_iInitSel;         /**< 默认选中索引 */
         SDropDownWnd *m_pDropDownWnd;  /**< DropDown指针 */

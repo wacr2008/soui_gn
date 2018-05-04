@@ -177,6 +177,7 @@ executable("UiEditor") {
       "/wd4201",
       "/wd4239",
       "/wd4407",
+      "/wd4302",
     ]
   }
  

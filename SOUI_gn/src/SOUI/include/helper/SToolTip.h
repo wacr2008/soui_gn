@@ -17,7 +17,7 @@ namespace SOUI
     public://IToolTip
         /*virtual*/ void RelayEvent(const MSG *pMsg) override;
 
-        /*virtual*/ void UpdateTip(const TIPID &id, CRect rc,LPCTSTR pszTip) override;
+        /*virtual*/ void UpdateTip(const TIPID &id, CRect rc,LPCTSTR pszTip,int nScale)  override;
 
         /*virtual*/ void ClearTip() override;
 
@@ -35,6 +35,7 @@ namespace SOUI
         int            m_nDelay;
         int            m_nShowSpan;
         SStringT       m_strTip;
+        int            m_nScale;
         CRect          m_rcTarget;
         HFONT          m_font;
 

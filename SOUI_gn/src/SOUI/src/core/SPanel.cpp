@@ -2,6 +2,7 @@
 //   File Name: SPanel.h
 //////////////////////////////////////////////////////////////////////////
 
+#pragma once
 #include "souistd.h"
 #include "core/Spanel.h"
 
@@ -297,7 +298,7 @@ CRect SPanel::GetScrollBarRect(BOOL bVertical)
 
 SBHITINFO SPanel::HitTest(CPoint pt)
 {
-    SBHITINFO hi= {(unsigned short)-1,(unsigned short)0};
+    SBHITINFO hi= {(DWORD)-1,(DWORD)0};
     CRect rcSbVer=GetScrollBarRect(TRUE);
     CRect rcSbHoz=GetScrollBarRect(FALSE);
     if(rcSbHoz.PtInRect(pt)) hi.bVertical=FALSE;
@@ -621,7 +622,7 @@ void SPanel::OnNcMouseLeave()
 {
     if(m_dragSb!=DSB_NULL || m_HitInfo.uSbCode==WORD(-1) || !IsVisible(TRUE)) return;
 
-    SBHITINFO uHit= {(unsigned short)-1,(unsigned short)0};
+    SBHITINFO uHit= {(DWORD)-1,(DWORD)0};
 
     if(IsScrollBarEnable(m_HitInfo.bVertical))
     {
@@ -962,6 +963,7 @@ void SScrollView::UpdateScrollBar()
 
     CSize size=rcClient.Size();
     m_wBarVisible=SSB_NULL;    //关闭滚动条
+	CPoint ptOrigin = m_ptOrigin;//backup
 
     if(size.cy<m_szView.cy || (size.cy<m_szView.cy+GetSbWidth() && size.cx<m_szView.cx))
     {
@@ -970,7 +972,11 @@ void SScrollView::UpdateScrollBar()
         m_siVer.nMin=0;
         m_siVer.nMax=m_szView.cy-1;
         m_siVer.nPage=size.cy;
-
+		if(m_siVer.nPos + (int)m_siVer.nPage > m_siVer.nMax)
+		{
+			m_siVer.nPos = m_siVer.nMax - m_siVer.nPage;
+			m_ptOrigin.y = m_siVer.nPos;
+		}
         if(size.cx<m_szView.cx+GetSbWidth())
         {
             //需要横向滚动条
@@ -980,6 +986,11 @@ void SScrollView::UpdateScrollBar()
             m_siHoz.nMin=0;
             m_siHoz.nMax=m_szView.cx-1;
             m_siHoz.nPage=size.cx-GetSbWidth() > 0 ? size.cx-GetSbWidth() : 0;
+			if(m_siHoz.nPos + (int)m_siHoz.nPage > m_siHoz.nMax)
+			{
+				m_siHoz.nPos = m_siHoz.nMax - m_siHoz.nPage;
+				m_ptOrigin.x = m_siHoz.nPos;
+			}
         }
         else
         {
@@ -1007,6 +1018,11 @@ void SScrollView::UpdateScrollBar()
             m_siHoz.nMin=0;
             m_siHoz.nMax=m_szView.cx-1;
             m_siHoz.nPage=size.cx;
+			if(m_siHoz.nPos + (int)m_siHoz.nPage > m_siHoz.nMax)
+			{
+				m_siHoz.nPos = m_siHoz.nMax - m_siHoz.nPage;
+				m_ptOrigin.x = m_siHoz.nPos;
+			}
         }
         //不需要横向滚动条
         else
@@ -1024,6 +1040,10 @@ void SScrollView::UpdateScrollBar()
 
     SSendMessage(WM_NCCALCSIZE);
 
+	if(m_ptOrigin  != ptOrigin)
+	{
+		OnViewOriginChanged(ptOrigin,m_ptOrigin);
+	}
     Invalidate();
 }
 
@@ -1080,27 +1100,6 @@ HRESULT SScrollView::OnAttrViewSize(const SStringW & strValue,BOOL bLoading)
     return S_FALSE;
 }
 
-void SScrollView::UpdateLayout()
-{
-	if(m_bAutoViewSize)
-	{//计算viewSize
-		CSize szOld = m_szView;
-		CRect rcWnd = GetWindowRect();
-		CRect rcMargin = GetStyle().GetMargin();
-		rcWnd.DeflateRect(rcMargin);
-		rcWnd.DeflateRect(GetStyle().GetPadding());
-		m_szView = GetLayout()->MeasureChildren(this,rcWnd.Width(),rcWnd.Height());
-		m_szView.cx += rcMargin.left + rcMargin.right;
-		m_szView.cy += rcMargin.top + rcMargin.bottom;
-
-		if(szOld != m_szView)
-		{
-			OnViewSizeChanged(szOld,m_szView);
-		}
-		UpdateScrollBar();
-	}
-	__super::UpdateLayout();
-}
 
 CRect SScrollView::GetChildrenLayoutRect()
 {
@@ -1109,6 +1108,32 @@ CRect SScrollView::GetChildrenLayoutRect()
 	rcRet.right=rcRet.left+m_szView.cx;
 	rcRet.bottom=rcRet.top+m_szView.cy;
 	return rcRet;
+}
+
+void SScrollView::UpdateChildrenPosition()
+{
+	if(!m_bAutoViewSize)
+	{
+		__super::UpdateChildrenPosition();
+	}
+	else{//计算viewSize
+		CSize szOld = m_szView;
+		CRect rcWnd = GetClientRect();
+		CRect rcMargin = GetStyle().GetMargin();
+		rcWnd.DeflateRect(rcMargin);
+		rcWnd.DeflateRect(GetStyle().GetPadding());
+		m_szView = GetLayout()->MeasureChildren(this,rcWnd.Width(),rcWnd.Height());
+		m_szView.cx += rcMargin.left + rcMargin.right;
+		m_szView.cy += rcMargin.top + rcMargin.bottom;
+
+		__super::UpdateChildrenPosition();
+		UpdateScrollBar();
+
+		if(szOld != m_szView)
+		{
+			OnViewSizeChanged(szOld,m_szView);
+		}
+	}
 }
 
 }//namespace SOUI

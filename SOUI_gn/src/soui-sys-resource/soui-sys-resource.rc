@@ -63,7 +63,7 @@ BEGIN
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "CompanyName", "Æô³ÌÈí¼þ"
+            VALUE "CompanyName", "SOUI"
             VALUE "FileDescription", "soui-sys-resource"
             VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "soui-sys-resource"

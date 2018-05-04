@@ -62,12 +62,12 @@ namespace SOUI
 		return m_pListBox->DeleteAll();
 	}
 
-	SStringT SComboBox::GetLBText(int iItem)
+
+	SStringT SComboBox::GetLBText(int iItem,BOOL bRawText) 
 	{
-		SStringT strText;
-		m_pListBox->GetText(iItem, strText);
-		return strText;
+		return m_pListBox->GetText(iItem,bRawText);
 	}
+
 
 
 	int SComboBox::InsertItem(UINT iPos, LPCTSTR pszText, int iIcon, LPARAM lParam)
@@ -85,14 +85,18 @@ namespace SOUI
 	{
 		SASSERT(xmlNode);
 		//创建列表控件
-		m_pListBox=(SListBox*)SApplication::getSingleton().CreateWindowByName(SListBox::GetClassName());
-		m_pListBox->SetContainer(GetContainer());
+		pugi::xml_node listStyle = xmlNode.child(L"listStyle");
+		SStringW strListClass = listStyle.attribute(L"wndclass").as_string(SListBox::GetClassName());
+		m_pListBox=sobj_cast<SListBox>(SApplication::getSingleton().CreateWindowByName(strListClass));
+		SASSERT(m_pListBox);
 
-		m_pListBox->InitFromXml(xmlNode.child(L"liststyle"));
+		m_pListBox->SetContainer(GetContainer());
+		m_pListBox->InitFromXml(listStyle);
 		m_pListBox->SetAttribute(L"pos", L"0,0,-0,-0", TRUE);
 		m_pListBox->SetAttribute(L"hotTrack",L"1",TRUE);
 		m_pListBox->SetOwner(this);    //chain notify message to combobox
 		m_pListBox->SetID(IDC_DROPDOWN_LIST);
+        m_pListBox->SSendMessage(UM_SETSCALE, GetScale());
 
 		//初始化列表数据
 		pugi::xml_node xmlNode_Items=xmlNode.child(L"items");
@@ -102,10 +106,10 @@ namespace SOUI
 			while(xmlNode_Item)
 			{
 
-				SStringT strText=S_CW2T(tr(xmlNode_Item.attribute(L"text").value()));
+				SStringW strText=xmlNode_Item.attribute(L"text").value();
 				int iIcon=xmlNode_Item.attribute(L"icon").as_int(0);
 				LPARAM lParam=xmlNode_Item.attribute(L"data").as_int(0);
-				m_pListBox->AddString(strText,iIcon,lParam);
+				m_pListBox->AddString(S_CW2T(strText),iIcon,lParam);
 				xmlNode_Item=xmlNode_Item.next_sibling(L"item");
 			}
 		}
@@ -119,7 +123,7 @@ namespace SOUI
 
 	int SComboBox::GetListBoxHeight()
 	{
-		int nDropHeight=m_nDropHeight;
+		int nDropHeight=m_nDropHeight.toPixelSize(GetScale());
 		if(GetCount()) 
 		{
 			int nItemHeight=m_pListBox->GetItemHeight();
@@ -178,6 +182,21 @@ namespace SOUI
 			}
 		}
 		return SComboBase::FireEvent(evt);
+	}
+
+    void SComboBox::OnScaleChanged(int nScale)
+    {
+        __super::OnScaleChanged(nScale);
+        if(m_pListBox)
+            m_pListBox->SSendMessage(UM_SETSCALE, GetScale());
+    }
+
+	HRESULT SComboBox::OnLanguageChanged()
+	{
+		HRESULT hr = __super::OnLanguageChanged();
+		if(m_pListBox)
+			m_pListBox->SSendMessage(UM_SETLANGUAGE);
+		return hr;
 	}
 
 

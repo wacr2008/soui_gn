@@ -1,5 +1,5 @@
 ﻿#include "FindDlg.h"
-
+#include "res/R.h"
 namespace SOUI
 {
 	EVENT_MAP_BEGIN(CFindDlg)
@@ -8,7 +8,6 @@ namespace SOUI
 		EVENT_ID_COMMAND(R.id.btn_next, OnFindNext)
 		EVENT_ID_COMMAND(R.id.btn_prev, OnFindPrev)
 	EVENT_MAP_END()
-
 
 	CFindDlg::CFindDlg(IFindListener *pFindListener)
 		:SHostWnd(UIRES.LAYOUT.dlg_find)
